@@ -3,11 +3,20 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * DESIGN SYSTEM: Retro CRT Terminal
+ * - Background: Pure black (#0a0a0a)
+ * - Primary: Phosphor green (#33ff33)
+ * - Accent: Amber (#ffb000)
+ * - Font: JetBrains Mono (monospace)
+ * - Effects: Scan lines, phosphor glow, barrel distortion
+ */
+
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: 0px;
+  --radius-md: 2px;
+  --radius-lg: 4px;
+  --radius-xl: 6px;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -40,77 +49,51 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
+  --font-sans: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  --color-crt-green: oklch(0.85 0.25 145);
+  --color-crt-green-dim: oklch(0.55 0.18 145);
+  --color-crt-amber: oklch(0.80 0.18 80);
+  --color-crt-red: oklch(0.65 0.22 25);
+  --color-crt-blue: oklch(0.65 0.18 250);
+  --color-crt-purple: oklch(0.65 0.20 300);
+  --color-crt-gold: oklch(0.82 0.18 90);
 }
 
 :root {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-600);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --radius: 0.65rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.235 0.015 65);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.235 0.015 65);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.235 0.015 65);
-  --secondary: oklch(0.98 0.001 286.375);
-  --secondary-foreground: oklch(0.4 0.015 65);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.141 0.005 285.823);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.623 0.214 259.815);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.235 0.015 65);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.623 0.214 259.815);
-}
-
-.dark {
-  --primary: var(--color-blue-700);
-  --primary-foreground: var(--color-blue-50);
-  --sidebar-primary: var(--color-blue-500);
-  --sidebar-primary-foreground: var(--color-blue-50);
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.85 0.005 65);
-  --card: oklch(0.21 0.006 285.885);
-  --card-foreground: oklch(0.85 0.005 65);
-  --popover: oklch(0.21 0.006 285.885);
-  --popover-foreground: oklch(0.85 0.005 65);
-  --secondary: oklch(0.24 0.006 286.033);
-  --secondary-foreground: oklch(0.7 0.005 65);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground:  oklch(0.92 0.005 65);
-  --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0 0);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.488 0.243 264.376);
-  --chart-1: var(--color-blue-300);
-  --chart-2: var(--color-blue-500);
-  --chart-3: var(--color-blue-600);
-  --chart-4: var(--color-blue-700);
-  --chart-5: var(--color-blue-800);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.85 0.005 65);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground:  oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.488 0.243 264.376);
+  --radius: 2px;
+  --background: oklch(0.08 0.005 145);
+  --foreground: oklch(0.85 0.25 145);
+  --card: oklch(0.10 0.008 145);
+  --card-foreground: oklch(0.85 0.25 145);
+  --popover: oklch(0.10 0.008 145);
+  --popover-foreground: oklch(0.85 0.25 145);
+  --primary: oklch(0.85 0.25 145);
+  --primary-foreground: oklch(0.08 0.005 145);
+  --secondary: oklch(0.15 0.01 145);
+  --secondary-foreground: oklch(0.70 0.18 145);
+  --muted: oklch(0.15 0.01 145);
+  --muted-foreground: oklch(0.55 0.12 145);
+  --accent: oklch(0.80 0.18 80);
+  --accent-foreground: oklch(0.08 0.005 145);
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: oklch(0.95 0 0);
+  --border: oklch(0.25 0.08 145);
+  --input: oklch(0.12 0.01 145);
+  --ring: oklch(0.85 0.25 145);
+  --chart-1: oklch(0.65 0.22 25);
+  --chart-2: oklch(0.65 0.18 250);
+  --chart-3: oklch(0.65 0.20 300);
+  --chart-4: oklch(0.82 0.18 90);
+  --chart-5: oklch(0.85 0.25 145);
+  --sidebar: oklch(0.10 0.008 145);
+  --sidebar-foreground: oklch(0.85 0.25 145);
+  --sidebar-accent: oklch(0.15 0.01 145);
+  --sidebar-accent-foreground: oklch(0.85 0.25 145);
+  --sidebar-border: oklch(0.25 0.08 145);
+  --sidebar-ring: oklch(0.85 0.25 145);
+  --sidebar-primary: oklch(0.85 0.25 145);
+  --sidebar-primary-foreground: oklch(0.08 0.005 145);
 }
 
 @layer base {
@@ -119,6 +102,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: 'JetBrains Mono', monospace;
   }
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
@@ -134,24 +118,11 @@
 }
 
 @layer components {
-  /**
-   * Custom container utility that centers content and adds responsive padding.
-   *
-   * This overrides Tailwind's default container behavior to:
-   * - Auto-center content (mx-auto)
-   * - Add responsive horizontal padding
-   * - Set max-width for large screens
-   *
-   * Usage: <div className="container">...</div>
-   *
-   * For custom widths, use max-w-* utilities directly:
-   * <div className="max-w-6xl mx-auto px-4">...</div>
-   */
   .container {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
-    padding-left: 1rem; /* 16px - mobile padding */
+    padding-left: 1rem;
     padding-right: 1rem;
   }
 
@@ -162,16 +133,151 @@
 
   @media (min-width: 640px) {
     .container {
-      padding-left: 1.5rem; /* 24px - tablet padding */
+      padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
 
   @media (min-width: 1024px) {
     .container {
-      padding-left: 2rem; /* 32px - desktop padding */
+      padding-left: 2rem;
       padding-right: 2rem;
-      max-width: 1280px; /* Standard content width */
+      max-width: 900px;
     }
   }
+}
+
+/* CRT Scan Lines Overlay */
+.crt-scanlines {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.08) 2px,
+    rgba(0, 0, 0, 0.08) 4px
+  );
+}
+
+/* Phosphor Glow Effect */
+.glow-text {
+  text-shadow:
+    0 0 4px rgba(51, 255, 51, 0.6),
+    0 0 8px rgba(51, 255, 51, 0.3),
+    0 0 16px rgba(51, 255, 51, 0.15);
+}
+
+.glow-text-amber {
+  text-shadow:
+    0 0 4px rgba(255, 176, 0, 0.6),
+    0 0 8px rgba(255, 176, 0, 0.3),
+    0 0 16px rgba(255, 176, 0, 0.15);
+}
+
+.glow-border {
+  box-shadow:
+    0 0 4px rgba(51, 255, 51, 0.3),
+    0 0 8px rgba(51, 255, 51, 0.15),
+    inset 0 0 4px rgba(51, 255, 51, 0.1);
+}
+
+/* Blinking Cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Typewriter Effect */
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* CRT Flicker */
+@keyframes crt-flicker {
+  0% { opacity: 0.97; }
+  5% { opacity: 0.95; }
+  10% { opacity: 0.98; }
+  15% { opacity: 0.96; }
+  20% { opacity: 0.99; }
+  100% { opacity: 0.98; }
+}
+
+.crt-flicker {
+  animation: crt-flicker 0.15s infinite;
+}
+
+/* Glitch Effect for Legendary Reveal */
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+.glitch-effect {
+  animation: glitch 0.3s ease-in-out;
+}
+
+/* Shiny Sparkle */
+@keyframes sparkle {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.shiny-sparkle {
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+/* Stat Bar Animation */
+@keyframes fill-bar {
+  from { width: 0%; }
+}
+
+.stat-bar-animate {
+  animation: fill-bar 0.8s ease-out;
+}
+
+/* Rarity Colors */
+.rarity-common { color: oklch(0.70 0.05 145); }
+.rarity-uncommon { color: oklch(0.85 0.25 145); }
+.rarity-rare { color: oklch(0.65 0.18 250); }
+.rarity-epic { color: oklch(0.65 0.20 300); }
+.rarity-legendary { color: oklch(0.82 0.18 90); }
+
+.rarity-common-bg { background-color: oklch(0.70 0.05 145); }
+.rarity-uncommon-bg { background-color: oklch(0.85 0.25 145); }
+.rarity-rare-bg { background-color: oklch(0.65 0.18 250); }
+.rarity-epic-bg { background-color: oklch(0.65 0.20 300); }
+.rarity-legendary-bg { background-color: oklch(0.82 0.18 90); }
+
+/* Fade In */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out forwards;
+}
+
+/* Terminal prompt style */
+.terminal-prompt::before {
+  content: '> ';
+  color: oklch(0.85 0.25 145);
 }
