@@ -13,6 +13,7 @@ import BuddyResultCard from "@/components/BuddyResultCard";
 import TypewriterText from "@/components/TypewriterText";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useI18n } from "@/contexts/I18nContext";
+import WebAppSchema from "@/components/WebAppSchema";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp";
 const GRID_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/buddy-showcase-grid-dzj2bCjKycQ4bgSaUeRV58.webp";
@@ -86,6 +87,9 @@ export default function Home() {
 
   return (
     <div className="min-h-screen relative">
+      {/* JSON-LD Structured Data */}
+      <WebAppSchema />
+
       {/* CRT Scan Lines Overlay */}
       <div className="crt-scanlines" />
 
