@@ -172,6 +172,7 @@ export const zh: typeof en = {
     hatNote: "普通稀有度的 Buddy 没有帽子。其他稀有度从 8 种帽子中随机获得一种。",
     shinyNote: "1% 概率",
     viewSpecies: "查看",
+    faqNote: "以下常见问题基于 Claude Code Buddy 系统机制整理。",
     tryChecker: "查看你的 Buddy 是否是",
     tryCheckerBtn: "查询你的 BUDDY",
     categoryAnimal: "动物",

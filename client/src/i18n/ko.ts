@@ -172,6 +172,7 @@ export const ko: typeof en = {
     hatNote: "일반 희귀도 Buddy는 모자가 없습니다. 다른 희귀도는 8가지 모자 중 랜덤으로 하나를 받습니다.",
     shinyNote: "1% 확률",
     viewSpecies: "보기",
+    faqNote: "이 FAQ는 Claude Code Buddy 시스템 메커니즘을 기반으로 작성되었습니다.",
     tryChecker: "당신의 Buddy가",
     tryCheckerBtn: "BUDDY 확인하기",
     categoryAnimal: "동물",

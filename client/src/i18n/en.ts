@@ -170,6 +170,7 @@ export const en = {
     hatNote: "Common rarity buddies have no hat. All other rarities get a random hat from 8 options.",
     shinyNote: "1% chance",
     viewSpecies: "VIEW",
+    faqNote: "These FAQs are based on the Claude Code Buddy system mechanics.",
     tryChecker: "Check if your buddy is a",
     tryCheckerBtn: "CHECK YOUR BUDDY",
     categoryAnimal: "Animal",

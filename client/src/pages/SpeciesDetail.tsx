@@ -26,6 +26,9 @@ import ShareButton from "@/components/ShareButton";
 import ShareCardModal from "@/components/ShareCardModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import type { ShareCardSpeciesData } from "@/lib/share-card-renderer";
+import { SPECIES_FAQS } from "@/lib/species-faq";
+import FAQSection from "@/components/FAQSection";
+import FAQSchema from "@/components/FAQSchema";
 
 /** Build a synthetic BuddyResult for display purposes */
 function makeDemoBuddy(species: Species, info: SpeciesInfo): BuddyResult {
@@ -381,9 +384,19 @@ export default function SpeciesDetail() {
           </div>
         </section>
 
+        {/* FAQ Section */}
+        <section
+          className={`transition-all duration-700 delay-[350ms] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        >
+          <FAQSection
+            faqs={SPECIES_FAQS[slug]?.[locale as "en" | "zh" | "ko"] || SPECIES_FAQS[slug]?.en || []}
+            speciesName={speciesName}
+          />
+        </section>
+
         {/* CTA: Check Your Buddy */}
         <section
-          className={`transition-all duration-700 delay-[400ms] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+          className={`transition-all duration-700 delay-[450ms] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
           <div className="border border-[#33ff33]/30 bg-[#0d1a0d]/80 p-6 text-center">
             <p className="text-[#33ff33]/70 mb-4">
@@ -405,6 +418,13 @@ export default function SpeciesDetail() {
         <p className="text-[#33ff33]/30 text-xs">{t("footer.line1")}</p>
         <p className="text-[#33ff33]/20 text-xs mt-1">{t("footer.line2")}</p>
       </footer>
+
+      {/* FAQ Schema */}
+      <FAQSchema
+        faqs={SPECIES_FAQS[slug]?.[locale as "en" | "zh" | "ko"] || SPECIES_FAQS[slug]?.en || []}
+        pageUrl={`https://claudebuddy.art/species/${slug}`}
+        speciesName={speciesName}
+      />
 
       {/* Share Card Modal */}
       <ShareCardModal
