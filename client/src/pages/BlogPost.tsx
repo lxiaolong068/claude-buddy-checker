@@ -10,6 +10,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { getArticleBySlug, getAllArticles } from "@/lib/blog-data";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ArticleSchema from "@/components/ArticleSchema";
+import ScrollToTop from "@/components/ScrollToTop";
 
 export default function BlogPost() {
   const params = useParams<{ slug: string }>();
@@ -217,6 +218,9 @@ export default function BlogPost() {
           <p className="text-crt-green/40">{"> "}EOF</p>
         </footer>
       </div>
+
+      {/* Back to Top */}
+      <ScrollToTop />
     </div>
   );
 }

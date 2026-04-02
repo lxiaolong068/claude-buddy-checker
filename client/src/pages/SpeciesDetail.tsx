@@ -28,6 +28,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import type { ShareCardSpeciesData } from "@/lib/share-card-renderer";
 import { SPECIES_FAQS } from "@/lib/species-faq";
 import FAQSection from "@/components/FAQSection";
+import ScrollToTop from "@/components/ScrollToTop";
 import FAQSchema from "@/components/FAQSchema";
 
 /** Build a synthetic BuddyResult for display purposes */
@@ -431,6 +432,9 @@ export default function SpeciesDetail() {
         data={shareData}
         onClose={() => setShareData(null)}
       />
+
+      {/* Back to Top */}
+      <ScrollToTop />
     </div>
   );
 }
