@@ -30,6 +30,7 @@ import { SPECIES_FAQS } from "@/lib/species-faq";
 import FAQSection from "@/components/FAQSection";
 import ScrollToTop from "@/components/ScrollToTop";
 import FAQSchema from "@/components/FAQSchema";
+import SpeciesTooltip from "@/components/SpeciesTooltip";
 
 /** Build a synthetic BuddyResult for display purposes */
 function makeDemoBuddy(species: Species, info: SpeciesInfo): BuddyResult {
@@ -358,6 +359,7 @@ export default function SpeciesDetail() {
               {info.related.map((relSlug) => {
                 const relInfo = SPECIES_DATA[relSlug];
                 const relName = t(`speciesDetail.speciesNames.${relSlug}`);
+                const relDesc = t(`speciesDetail.speciesDesc.${relSlug}`);
                 const relFrames = BODIES[relSlug];
                 const relAscii = relFrames[0]
                   .map((line) => line.replaceAll("{E}", relInfo.defaultEye))
@@ -380,70 +382,77 @@ export default function SpeciesDetail() {
                 const peakColor = STAT_COLORS[relInfo.peakStat as keyof typeof STAT_COLORS] || "#33ff33";
 
                 return (
-                  <Link
+                  <SpeciesTooltip
                     key={relSlug}
-                    href={`/species/${relSlug}`}
-                    className="block border border-[#33ff33]/15 bg-[#0a0a0a]/50 p-4 hover:border-[#33ff33]/40 hover:bg-[#0d1a0d]/80 transition-all group relative overflow-hidden"
+                    relInfo={relInfo}
+                    relName={relName}
+                    relDesc={relDesc}
+                    currentTags={info.tags}
                   >
-                    {/* Subtle glow on hover */}
-                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(51,255,51,0.04)_0%,transparent_70%)]" />
+                    <Link
+                      href={`/species/${relSlug}`}
+                      className="block border border-[#33ff33]/15 bg-[#0a0a0a]/50 p-4 hover:border-[#33ff33]/40 hover:bg-[#0d1a0d]/80 transition-all group relative overflow-hidden"
+                    >
+                      {/* Subtle glow on hover */}
+                      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(51,255,51,0.04)_0%,transparent_70%)]" />
 
-                    {/* ASCII Art */}
-                    <pre className="text-[9px] leading-[11px] text-[#33ff33]/50 group-hover:text-[#33ff33]/80 transition-colors text-center mb-3">
-                      {relAscii}
-                    </pre>
+                      {/* ASCII Art */}
+                      <pre className="text-[9px] leading-[11px] text-[#33ff33]/50 group-hover:text-[#33ff33]/80 transition-colors text-center mb-3">
+                        {relAscii}
+                      </pre>
 
-                    {/* Species Name */}
-                    <p className="text-center text-sm font-bold text-[#33ff33]/80 group-hover:text-[#33ff33] transition-colors tracking-wider">
-                      {relName.toUpperCase()}
-                    </p>
+                      {/* Species Name */}
+                      <p className="text-center text-sm font-bold text-[#33ff33]/80 group-hover:text-[#33ff33] transition-colors tracking-wider">
+                        {relName.toUpperCase()}
+                      </p>
 
-                    {/* Category + Peak Stat row */}
-                    <div className="flex items-center justify-center gap-2 mt-2">
-                      <span className="px-1.5 py-0.5 border border-[#33ff33]/20 text-[#33ff33]/50 text-[9px] uppercase">
-                        {t(relCategoryKey)}
-                      </span>
-                      <span
-                        className="px-1.5 py-0.5 border text-[9px] uppercase"
-                        style={{ borderColor: `${peakColor}40`, color: peakColor }}
-                      >
-                        {t("speciesDetail.relatedPeakStat")}: {relInfo.peakStat}
-                      </span>
-                    </div>
-
-                    {/* Personality tags */}
-                    <div className="flex flex-wrap justify-center gap-1 mt-2">
-                      {relInfo.tags.map((tag) => {
-                        const isShared = info.tags.includes(tag);
-                        return (
-                          <span
-                            key={tag}
-                            className={`text-[8px] px-1 py-px ${
-                              isShared
-                                ? "text-[#33ff33]/80 border border-[#33ff33]/30 bg-[#33ff33]/5"
-                                : "text-[#33ff33]/30"
-                            }`}
-                          >
-                            #{tag}
-                          </span>
-                        );
-                      })}
-                    </div>
-
-                    {/* Similarity reasons */}
-                    {reasons.length > 0 && (
-                      <div className="mt-2 pt-2 border-t border-[#33ff33]/10">
-                        <p className="text-[8px] text-[#33ff33]/40 text-center leading-relaxed">
-                          {reasons.join(" · ")}
-                        </p>
+                      {/* Category + Peak Stat row */}
+                      <div className="flex items-center justify-center gap-2 mt-2">
+                        <span className="px-1.5 py-0.5 border border-[#33ff33]/20 text-[#33ff33]/50 text-[9px] uppercase">
+                          {t(relCategoryKey)}
+                        </span>
+                        <span
+                          className="px-1.5 py-0.5 border text-[9px] uppercase"
+                          style={{ borderColor: `${peakColor}40`, color: peakColor }}
+                        >
+                          {t("speciesDetail.relatedPeakStat")}: {relInfo.peakStat}
+                        </span>
                       </div>
-                    )}
 
-                    {/* View link */}
-                    <p className="text-center text-[10px] text-[#33ff33]/30 group-hover:text-[#33ff33]/60 transition-colors mt-2">
-                      {t("speciesDetail.viewSpecies")} →
-                    </p>
-                  </Link>
+                      {/* Personality tags */}
+                      <div className="flex flex-wrap justify-center gap-1 mt-2">
+                        {relInfo.tags.map((tag) => {
+                          const isShared = info.tags.includes(tag);
+                          return (
+                            <span
+                              key={tag}
+                              className={`text-[8px] px-1 py-px ${
+                                isShared
+                                  ? "text-[#33ff33]/80 border border-[#33ff33]/30 bg-[#33ff33]/5"
+                                  : "text-[#33ff33]/30"
+                              }`}
+                            >
+                              #{tag}
+                            </span>
+                          );
+                        })}
+                      </div>
+
+                      {/* Similarity reasons */}
+                      {reasons.length > 0 && (
+                        <div className="mt-2 pt-2 border-t border-[#33ff33]/10">
+                          <p className="text-[8px] text-[#33ff33]/40 text-center leading-relaxed">
+                            {reasons.join(" \u00b7 ")}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* View link */}
+                      <p className="text-center text-[10px] text-[#33ff33]/30 group-hover:text-[#33ff33]/60 transition-colors mt-2">
+                        {t("speciesDetail.viewSpecies")} \u2192
+                      </p>
+                    </Link>
+                  </SpeciesTooltip>
                 );
               })}
             </div>
