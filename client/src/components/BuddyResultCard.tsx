@@ -1,9 +1,11 @@
 /**
  * BuddyResultCard - Full buddy result display
  * Design: CRT Terminal card with glow borders
+ * i18n: All labels via useI18n()
  */
 
 import { type BuddyResult, RARITY_STARS, SPECIES_DISPLAY, STAT_NAMES } from "@/lib/buddy-engine";
+import { useI18n } from "@/contexts/I18nContext";
 import BuddySprite from "./BuddySprite";
 import StatBar from "./StatBar";
 
@@ -28,6 +30,10 @@ const RARITY_GLOW: Record<string, string> = {
 };
 
 export default function BuddyResultCard({ buddy }: BuddyResultCardProps) {
+  const { t } = useI18n();
+
+  const rarityDisplayName = t(`rarity.${buddy.rarity}`);
+
   return (
     <div
       className={`border border-border bg-card p-6 sm:p-8 animate-fade-in-up ${RARITY_GLOW[buddy.rarity]}`}
@@ -38,7 +44,7 @@ export default function BuddyResultCard({ buddy }: BuddyResultCardProps) {
         <span className="w-2.5 h-2.5 rounded-full bg-crt-amber" />
         <span className="w-2.5 h-2.5 rounded-full bg-crt-green" />
         <span className="ml-3 text-xs text-muted-foreground uppercase tracking-widest">
-          buddy_result.log
+          {t("result.terminalTitle")}
         </span>
       </div>
 
@@ -52,11 +58,11 @@ export default function BuddyResultCard({ buddy }: BuddyResultCardProps) {
             <span
               className={`text-xs uppercase tracking-widest px-2 py-0.5 border ${RARITY_LABEL_COLORS[buddy.rarity]}`}
             >
-              {RARITY_STARS[buddy.rarity]} {buddy.rarity}
+              {RARITY_STARS[buddy.rarity]} {rarityDisplayName}
             </span>
             {buddy.shiny && (
               <span className="text-xs uppercase tracking-widest px-2 py-0.5 border border-crt-gold/30 text-crt-gold shiny-sparkle">
-                ✦ SHINY
+                ✦ {t("result.shinyBadge")}
               </span>
             )}
           </div>
@@ -73,15 +79,21 @@ export default function BuddyResultCard({ buddy }: BuddyResultCardProps) {
         {/* Details */}
         <div className="space-y-3">
           <div className="text-xs text-muted-foreground uppercase tracking-widest mb-2">
-            // ATTRIBUTES
+            {t("result.attributes")}
           </div>
-          <DetailRow label="SPECIES" value={buddy.species} />
-          <DetailRow label="RARITY" value={buddy.rarity} />
-          <DetailRow label="EYES" value={buddy.eye} />
-          <DetailRow label="HAT" value={buddy.hat === "none" ? "none" : buddy.hat} />
-          <DetailRow label="SHINY" value={buddy.shiny ? "YES ✦" : "NO"} />
+          <DetailRow label={t("result.labelSpecies")} value={buddy.species} />
+          <DetailRow label={t("result.labelRarity")} value={rarityDisplayName} />
+          <DetailRow label={t("result.labelEyes")} value={buddy.eye} />
           <DetailRow
-            label="RARITY %"
+            label={t("result.labelHat")}
+            value={buddy.hat === "none" ? t("result.hatNone") : buddy.hat}
+          />
+          <DetailRow
+            label={t("result.labelShiny")}
+            value={buddy.shiny ? t("result.shinyYes") : t("result.shinyNo")}
+          />
+          <DetailRow
+            label={t("result.labelRarityPct")}
             value={
               buddy.rarity === "common"
                 ? "60%"
@@ -100,7 +112,7 @@ export default function BuddyResultCard({ buddy }: BuddyResultCardProps) {
       {/* Stats */}
       <div className="space-y-2">
         <div className="text-xs text-muted-foreground uppercase tracking-widest mb-3">
-          // STATS
+          {t("result.stats")}
         </div>
         {STAT_NAMES.map((name, i) => (
           <StatBar key={name} name={name} value={buddy.stats[name]} delay={i * 100} />
