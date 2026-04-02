@@ -6,6 +6,7 @@
  */
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import { Link } from "wouter";
 import { rollBuddy, type BuddyResult, SPECIES } from "@/lib/buddy-engine";
 import BuddyResultCard from "@/components/BuddyResultCard";
 import TypewriterText from "@/components/TypewriterText";
@@ -230,13 +231,22 @@ export default function Home() {
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
             {SPECIES.map((s) => (
-              <div
+              <Link
                 key={s}
+                href={`/species/${s}`}
                 className="text-center text-xs py-2 px-1 border border-border/30 bg-card/30 uppercase tracking-wider text-muted-foreground hover:text-crt-green hover:border-crt-green/30 transition-colors"
               >
                 {s}
-              </div>
+              </Link>
             ))}
+          </div>
+          <div className="mt-4 text-center">
+            <Link
+              href="/species"
+              className="inline-block text-xs text-crt-green/60 hover:text-crt-green border border-crt-green/20 hover:border-crt-green/40 px-4 py-2 transition-all"
+            >
+              {t("speciesIndex.viewDetails")} → /species
+            </Link>
           </div>
         </div>
 

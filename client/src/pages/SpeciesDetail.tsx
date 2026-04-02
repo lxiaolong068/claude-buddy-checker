@@ -1,0 +1,376 @@
+/**
+ * Species Detail Page - /species/:slug
+ * CRT Terminal Style | Programmatic SEO page for each of the 18 buddy species
+ * Design: Retro CRT terminal with phosphor green accents, scanline overlays
+ */
+
+import { useParams, Link } from "wouter";
+import { useEffect, useState, useMemo } from "react";
+import { useI18n } from "@/contexts/I18nContext";
+import { SPECIES_DATA, type SpeciesInfo } from "@/lib/species-data";
+import {
+  BODIES,
+  RARITIES,
+  RARITY_WEIGHTS,
+  RARITY_FLOOR,
+  RARITY_STARS,
+  STAT_NAMES,
+  STAT_COLORS,
+  type Species,
+  type BuddyResult,
+} from "@/lib/buddy-engine";
+import BuddySprite from "@/components/BuddySprite";
+import StatBar from "@/components/StatBar";
+
+/** Build a synthetic BuddyResult for display purposes */
+function makeDemoBuddy(species: Species, info: SpeciesInfo): BuddyResult {
+  const stats = {} as Record<(typeof STAT_NAMES)[number], number>;
+  for (const s of STAT_NAMES) {
+    stats[s] = s === info.peakStat ? 78 : 42;
+  }
+  return {
+    rarity: "rare",
+    species,
+    eye: info.defaultEye,
+    hat: "crown",
+    shiny: false,
+    stats,
+  };
+}
+
+export default function SpeciesDetail() {
+  const params = useParams<{ slug: string }>();
+  const slug = params.slug as Species;
+  const { t, locale } = useI18n();
+  const [mounted, setMounted] = useState(false);
+
+  const info = SPECIES_DATA[slug];
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Update document title for SEO
+  useEffect(() => {
+    if (info) {
+      const name = t(`speciesDetail.speciesNames.${slug}`);
+      document.title = `${name} ${t("speciesDetail.metaTitleSuffix")}`;
+      // Update meta description
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+        metaDesc.setAttribute(
+          "content",
+          `${t("speciesDetail.metaDescPrefix")} ${name} ${t("speciesDetail.metaDescSuffix")}`
+        );
+      }
+    }
+  }, [info, slug, t, locale]);
+
+  if (!info) {
+    return (
+      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-[#33ff33] font-mono text-xl mb-4">
+            ERROR 404: Species not found
+          </p>
+          <Link
+            href="/"
+            className="text-[#33ff33]/70 hover:text-[#33ff33] underline font-mono"
+          >
+            {t("speciesDetail.backToChecker")}
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const demoBuddy = useMemo(() => makeDemoBuddy(slug, info), [slug, info]);
+  const speciesName = t(`speciesDetail.speciesNames.${slug}`);
+  const speciesDesc = t(`speciesDetail.speciesDesc.${slug}`);
+  const categoryKey = `speciesDetail.category${info.category.charAt(0).toUpperCase() + info.category.slice(1)}` as string;
+  const categoryName = t(categoryKey);
+
+  return (
+    <div className="min-h-screen bg-[#0a0a0a] text-[#33ff33] font-mono relative overflow-hidden">
+      {/* Scanline overlay */}
+      <div className="pointer-events-none fixed inset-0 z-50 bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.15)_0px,rgba(0,0,0,0.15)_1px,transparent_1px,transparent_2px)]" />
+
+      {/* Navigation */}
+      <nav className="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur border-b border-[#33ff33]/20">
+        <div className="container max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <Link
+              href="/species"
+              className="text-[#33ff33]/60 hover:text-[#33ff33] transition-colors text-sm"
+            >
+              {t("speciesDetail.backToIndex")}
+            </Link>
+            <span className="text-[#33ff33]/30">|</span>
+            <Link
+              href="/"
+              className="text-[#33ff33]/60 hover:text-[#33ff33] transition-colors text-sm"
+            >
+              {t("speciesDetail.backToChecker")}
+            </Link>
+          </div>
+          <span className="text-[#33ff33]/40 text-xs">
+            /species/{slug}
+          </span>
+        </div>
+      </nav>
+
+      <main className="container max-w-5xl mx-auto px-4 py-8 space-y-10">
+        {/* Hero: Species Name + ASCII Art */}
+        <section
+          className={`transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        >
+          <h1 className="text-3xl md:text-4xl font-bold mb-2 tracking-wider">
+            <span className="text-[#33ff33]/50">{">"}</span> {speciesName.toUpperCase()}
+          </h1>
+          <div className="flex flex-wrap gap-2 mb-6">
+            <span className="px-2 py-0.5 border border-[#33ff33]/30 text-[#33ff33]/70 text-xs uppercase">
+              {categoryName}
+            </span>
+            {info.tags.map((tag) => (
+              <span
+                key={tag}
+                className="px-2 py-0.5 border border-[#33ff33]/15 text-[#33ff33]/50 text-xs"
+              >
+                #{tag}
+              </span>
+            ))}
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* ASCII Art Display */}
+            <div className="border border-[#33ff33]/20 bg-[#0d1a0d]/60 p-6 relative">
+              <div className="absolute top-0 left-0 right-0 h-6 bg-[#0d1a0d] border-b border-[#33ff33]/20 flex items-center px-3">
+                <span className="text-[#33ff33]/50 text-[10px]">
+                  {t("speciesDetail.sectionAscii")}
+                </span>
+              </div>
+              <div className="pt-6 flex items-center justify-center min-h-[200px]">
+                <div className="scale-150 md:scale-[1.8]">
+                  <BuddySprite buddy={demoBuddy} />
+                </div>
+              </div>
+              {/* Show all 3 animation frames */}
+              <div className="mt-6 pt-4 border-t border-[#33ff33]/10">
+                <p className="text-[10px] text-[#33ff33]/40 mb-2">ANIMATION FRAMES:</p>
+                <div className="flex justify-center gap-6">
+                  {BODIES[slug].map((frame, i) => (
+                    <pre
+                      key={i}
+                      className="text-[8px] leading-[10px] text-[#33ff33]/50"
+                    >
+                      {frame
+                        .map((line) => line.replaceAll("{E}", info.defaultEye))
+                        .join("\n")}
+                    </pre>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Overview */}
+            <div className="space-y-4">
+              <div className="border border-[#33ff33]/20 bg-[#0d1a0d]/60 p-5 relative">
+                <div className="absolute top-0 left-0 right-0 h-6 bg-[#0d1a0d] border-b border-[#33ff33]/20 flex items-center px-3">
+                  <span className="text-[#33ff33]/50 text-[10px]">
+                    {t("speciesDetail.sectionOverview")}
+                  </span>
+                </div>
+                <div className="pt-6">
+                  <p className="text-[#33ff33]/80 text-sm leading-relaxed mb-4">
+                    {speciesDesc}
+                  </p>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between border-b border-[#33ff33]/10 pb-1">
+                      <span className="text-[#33ff33]/50">{t("speciesDetail.labelCategory")}</span>
+                      <span className="text-[#33ff33]">{categoryName}</span>
+                    </div>
+                    <div className="flex justify-between border-b border-[#33ff33]/10 pb-1">
+                      <span className="text-[#33ff33]/50">{t("speciesDetail.labelPeakStat")}</span>
+                      <span style={{ color: STAT_COLORS[info.peakStat as keyof typeof STAT_COLORS] }}>
+                        {info.peakStat}
+                      </span>
+                    </div>
+                    <div className="flex justify-between border-b border-[#33ff33]/10 pb-1">
+                      <span className="text-[#33ff33]/50">{t("speciesDetail.labelTotalSpecies")}</span>
+                      <span className="text-[#33ff33]">18</span>
+                    </div>
+                    <div className="flex justify-between border-b border-[#33ff33]/10 pb-1">
+                      <span className="text-[#33ff33]/50">{t("speciesDetail.labelHatChance")}</span>
+                      <span className="text-[#33ff33]">40%</span>
+                    </div>
+                    <div className="flex justify-between pb-1">
+                      <span className="text-[#33ff33]/50">{t("speciesDetail.labelShinyChance")}</span>
+                      <span className="text-[#ffd700]">{t("speciesDetail.shinyNote")}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Stat Tendencies */}
+        <section
+          className={`transition-all duration-700 delay-100 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        >
+          <div className="border border-[#33ff33]/20 bg-[#0d1a0d]/60 p-5 relative">
+            <div className="absolute top-0 left-0 right-0 h-6 bg-[#0d1a0d] border-b border-[#33ff33]/20 flex items-center px-3">
+              <span className="text-[#33ff33]/50 text-[10px]">
+                {t("speciesDetail.sectionStats")}
+              </span>
+            </div>
+            <div className="pt-6 space-y-3">
+              {STAT_NAMES.map((stat, i) => (
+                <StatBar
+                  key={stat}
+                  name={stat}
+                  value={stat === info.peakStat ? 78 : 42}
+                  delay={i * 100}
+                />
+              ))}
+              <p className="text-[10px] text-[#33ff33]/40 mt-3">
+                * {t("speciesDetail.hatNote")}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Rarity Breakdown */}
+        <section
+          className={`transition-all duration-700 delay-200 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        >
+          <div className="border border-[#33ff33]/20 bg-[#0d1a0d]/60 p-5 relative">
+            <div className="absolute top-0 left-0 right-0 h-6 bg-[#0d1a0d] border-b border-[#33ff33]/20 flex items-center px-3">
+              <span className="text-[#33ff33]/50 text-[10px]">
+                {t("speciesDetail.sectionRarity")}
+              </span>
+            </div>
+            <div className="pt-6">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-[#33ff33]/20">
+                    <th className="text-left py-2 text-[#33ff33]/60 font-normal">
+                      {t("rarity.colRarity")}
+                    </th>
+                    <th className="text-center py-2 text-[#33ff33]/60 font-normal">
+                      {t("rarity.colChance")}
+                    </th>
+                    <th className="text-center py-2 text-[#33ff33]/60 font-normal">
+                      {t("rarity.colStatFloor")}
+                    </th>
+                    <th className="text-right py-2 text-[#33ff33]/60 font-normal">
+                      {t("rarity.colStars")}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {RARITIES.map((rarity) => {
+                    const colorMap: Record<string, string> = {
+                      common: "#33ff33",
+                      uncommon: "#58a6ff",
+                      rare: "#af87ff",
+                      epic: "#ff6b6b",
+                      legendary: "#ffd700",
+                    };
+                    return (
+                      <tr
+                        key={rarity}
+                        className="border-b border-[#33ff33]/10"
+                      >
+                        <td className="py-2" style={{ color: colorMap[rarity] }}>
+                          {t(`rarity.${rarity}`)}
+                        </td>
+                        <td className="py-2 text-center text-[#33ff33]/70">
+                          {RARITY_WEIGHTS[rarity]}%
+                        </td>
+                        <td className="py-2 text-center text-[#33ff33]/70">
+                          {RARITY_FLOOR[rarity]}
+                        </td>
+                        <td className="py-2 text-right" style={{ color: colorMap[rarity] }}>
+                          {RARITY_STARS[rarity]}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+              <p className="text-[10px] text-[#33ff33]/40 mt-3">
+                * {t("speciesDetail.rarityNote")}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Related Species */}
+        <section
+          className={`transition-all duration-700 delay-300 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        >
+          <div className="border border-[#33ff33]/20 bg-[#0d1a0d]/60 p-5 relative">
+            <div className="absolute top-0 left-0 right-0 h-6 bg-[#0d1a0d] border-b border-[#33ff33]/20 flex items-center px-3">
+              <span className="text-[#33ff33]/50 text-[10px]">
+                {t("speciesDetail.sectionRelated")}
+              </span>
+            </div>
+            <div className="pt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {info.related.map((relSlug) => {
+                const relInfo = SPECIES_DATA[relSlug];
+                const relName = t(`speciesDetail.speciesNames.${relSlug}`);
+                const relFrames = BODIES[relSlug];
+                const relAscii = relFrames[0]
+                  .map((line) => line.replaceAll("{E}", relInfo.defaultEye))
+                  .join("\n");
+
+                return (
+                  <Link
+                    key={relSlug}
+                    href={`/species/${relSlug}`}
+                    className="block border border-[#33ff33]/15 bg-[#0a0a0a]/50 p-4 hover:border-[#33ff33]/40 hover:bg-[#0d1a0d]/80 transition-all group"
+                  >
+                    <pre className="text-[9px] leading-[11px] text-[#33ff33]/50 group-hover:text-[#33ff33]/80 transition-colors text-center mb-2">
+                      {relAscii}
+                    </pre>
+                    <p className="text-center text-sm text-[#33ff33]/70 group-hover:text-[#33ff33] transition-colors">
+                      {relName}
+                    </p>
+                    <p className="text-center text-[10px] text-[#33ff33]/30 mt-1">
+                      {t("speciesDetail.viewSpecies")} →
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* CTA: Check Your Buddy */}
+        <section
+          className={`transition-all duration-700 delay-[400ms] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        >
+          <div className="border border-[#33ff33]/30 bg-[#0d1a0d]/80 p-6 text-center">
+            <p className="text-[#33ff33]/70 mb-4">
+              {t("speciesDetail.tryChecker")}{" "}
+              <span className="text-[#33ff33] font-bold">{speciesName}</span>?
+            </p>
+            <Link
+              href="/"
+              className="inline-block px-6 py-3 bg-[#33ff33] text-[#0a0a0a] font-bold text-sm hover:bg-[#44ff44] transition-colors tracking-wider"
+            >
+              {t("speciesDetail.tryCheckerBtn")}
+            </Link>
+          </div>
+        </section>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-[#33ff33]/10 mt-12 py-6 text-center">
+        <p className="text-[#33ff33]/30 text-xs">{t("footer.line1")}</p>
+        <p className="text-[#33ff33]/20 text-xs mt-1">{t("footer.line2")}</p>
+      </footer>
+    </div>
+  );
+}
