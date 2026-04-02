@@ -8,6 +8,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Link } from "wouter";
 import { rollBuddy, type BuddyResult, SPECIES } from "@/lib/buddy-engine";
+import { getAllArticles } from "@/lib/blog-data";
 import BuddyResultCard from "@/components/BuddyResultCard";
 import TypewriterText from "@/components/TypewriterText";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
@@ -91,8 +92,16 @@ export default function Home() {
       {/* Main Content */}
       <div className="relative z-10 max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
 
-        {/* Top Bar: Language Switcher */}
-        <div className="flex justify-end mb-4">
+        {/* Top Bar: Navigation + Language Switcher */}
+        <div className="flex items-center justify-between mb-4">
+          <nav className="flex items-center gap-4 text-xs">
+            <Link href="/species" className="text-muted-foreground hover:text-crt-green transition-colors uppercase tracking-wider">
+              /species
+            </Link>
+            <Link href="/blog" className="text-muted-foreground hover:text-crt-green transition-colors uppercase tracking-wider">
+              /blog
+            </Link>
+          </nav>
           <LanguageSwitcher />
         </div>
 
@@ -316,6 +325,50 @@ export default function Home() {
                 </p>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Blog Section */}
+        <div className="mb-12">
+          <h2 className="text-lg font-bold glow-text mb-4">
+            {t("blog.indexH1")}
+          </h2>
+          <div className="space-y-3">
+            {getAllArticles().slice(0, 2).map((article) => {
+              const ac = article.content[locale as keyof typeof article.content];
+              return (
+                <Link
+                  key={article.slug}
+                  href={`/blog/${article.slug}`}
+                  className="block border border-border/30 bg-card/50 p-4 hover:border-crt-green/30 transition-colors group"
+                >
+                  <div className="flex items-center gap-2 mb-2">
+                    {article.tags.slice(0, 3).map((tag) => (
+                      <span key={tag} className="text-[9px] uppercase tracking-wider px-1.5 py-0.5 border border-crt-green/15 text-crt-green/50">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                  <h3 className="text-sm font-semibold text-foreground group-hover:text-crt-green transition-colors mb-1">
+                    {ac.title}
+                  </h3>
+                  <p className="text-xs text-muted-foreground line-clamp-2">
+                    {ac.excerpt}
+                  </p>
+                  <span className="inline-block mt-2 text-[10px] text-crt-green/50 group-hover:text-crt-green transition-colors uppercase tracking-wider">
+                    {t("blog.readMore")} \u2192
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+          <div className="mt-4 text-center">
+            <Link
+              href="/blog"
+              className="inline-block text-xs text-crt-green/60 hover:text-crt-green border border-crt-green/20 hover:border-crt-green/40 px-4 py-2 transition-all"
+            >
+              {t("blog.readMore")} \u2192 /blog
+            </Link>
           </div>
         </div>
 
