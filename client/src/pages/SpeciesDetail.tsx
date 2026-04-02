@@ -2,10 +2,11 @@
  * Species Detail Page - /species/:slug
  * CRT Terminal Style | Programmatic SEO page for each of the 18 buddy species
  * Design: Retro CRT terminal with phosphor green accents, scanline overlays
+ * Includes: Share card generation via Canvas API
  */
 
 import { useParams, Link } from "wouter";
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 import { SPECIES_DATA, type SpeciesInfo } from "@/lib/species-data";
 import {
@@ -21,6 +22,10 @@ import {
 } from "@/lib/buddy-engine";
 import BuddySprite from "@/components/BuddySprite";
 import StatBar from "@/components/StatBar";
+import ShareButton from "@/components/ShareButton";
+import ShareCardModal from "@/components/ShareCardModal";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
+import type { ShareCardSpeciesData } from "@/lib/share-card-renderer";
 
 /** Build a synthetic BuddyResult for display purposes */
 function makeDemoBuddy(species: Species, info: SpeciesInfo): BuddyResult {
@@ -43,6 +48,7 @@ export default function SpeciesDetail() {
   const slug = params.slug as Species;
   const { t, locale } = useI18n();
   const [mounted, setMounted] = useState(false);
+  const [shareData, setShareData] = useState<ShareCardSpeciesData | null>(null);
 
   const info = SPECIES_DATA[slug];
 
@@ -55,7 +61,6 @@ export default function SpeciesDetail() {
     if (info) {
       const name = t(`speciesDetail.speciesNames.${slug}`);
       document.title = `${name} ${t("speciesDetail.metaTitleSuffix")}`;
-      // Update meta description
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {
         metaDesc.setAttribute(
@@ -66,7 +71,35 @@ export default function SpeciesDetail() {
     }
   }, [info, slug, t, locale]);
 
-  if (!info) {
+  const demoBuddy = useMemo(() => info ? makeDemoBuddy(slug, info) : null, [slug, info]);
+
+  const speciesName = info ? t(`speciesDetail.speciesNames.${slug}`) : "";
+  const speciesDesc = info ? t(`speciesDetail.speciesDesc.${slug}`) : "";
+  const categoryKey = info ? `speciesDetail.category${info.category.charAt(0).toUpperCase() + info.category.slice(1)}` as string : "";
+  const categoryName = info ? t(categoryKey) : "";
+
+  const handleShare = useCallback(() => {
+    if (!info || !demoBuddy) return;
+    const data: ShareCardSpeciesData = {
+      type: "species",
+      species: slug,
+      buddy: demoBuddy,
+      labels: {
+        title: t("share.speciesTitle"),
+        speciesName,
+        category: categoryName,
+        description: speciesDesc,
+        peakStat: t("share.labelPeakStat"),
+        peakStatValue: info.peakStat,
+        tags: info.tags.map((tag) => `#${tag}`),
+        watermark: t("share.watermark"),
+        checkYours: t("share.checkYours"),
+      },
+    };
+    setShareData(data);
+  }, [info, demoBuddy, slug, speciesName, categoryName, speciesDesc, t]);
+
+  if (!info || !demoBuddy) {
     return (
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="text-center">
@@ -83,12 +116,6 @@ export default function SpeciesDetail() {
       </div>
     );
   }
-
-  const demoBuddy = useMemo(() => makeDemoBuddy(slug, info), [slug, info]);
-  const speciesName = t(`speciesDetail.speciesNames.${slug}`);
-  const speciesDesc = t(`speciesDetail.speciesDesc.${slug}`);
-  const categoryKey = `speciesDetail.category${info.category.charAt(0).toUpperCase() + info.category.slice(1)}` as string;
-  const categoryName = t(categoryKey);
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-[#33ff33] font-mono relative overflow-hidden">
@@ -113,9 +140,12 @@ export default function SpeciesDetail() {
               {t("speciesDetail.backToChecker")}
             </Link>
           </div>
-          <span className="text-[#33ff33]/40 text-xs">
-            /species/{slug}
-          </span>
+          <div className="flex items-center gap-3">
+            <LanguageSwitcher />
+            <span className="text-[#33ff33]/40 text-xs hidden sm:inline">
+              /species/{slug}
+            </span>
+          </div>
         </div>
       </nav>
 
@@ -124,9 +154,13 @@ export default function SpeciesDetail() {
         <section
           className={`transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
-          <h1 className="text-3xl md:text-4xl font-bold mb-2 tracking-wider">
-            <span className="text-[#33ff33]/50">{">"}</span> {speciesName.toUpperCase()}
-          </h1>
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
+            <h1 className="text-3xl md:text-4xl font-bold tracking-wider">
+              <span className="text-[#33ff33]/50">{">"}</span> {speciesName.toUpperCase()}
+            </h1>
+            {/* Share Button */}
+            <ShareButton onClick={handleShare} variant="secondary" />
+          </div>
           <div className="flex flex-wrap gap-2 mb-6">
             <span className="px-2 py-0.5 border border-[#33ff33]/30 text-[#33ff33]/70 text-xs uppercase">
               {categoryName}
@@ -371,6 +405,12 @@ export default function SpeciesDetail() {
         <p className="text-[#33ff33]/30 text-xs">{t("footer.line1")}</p>
         <p className="text-[#33ff33]/20 text-xs mt-1">{t("footer.line2")}</p>
       </footer>
+
+      {/* Share Card Modal */}
+      <ShareCardModal
+        data={shareData}
+        onClose={() => setShareData(null)}
+      />
     </div>
   );
 }
