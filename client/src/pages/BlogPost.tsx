@@ -9,6 +9,7 @@ import { Link, useParams } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { getArticleBySlug, getAllArticles } from "@/lib/blog-data";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ArticleSchema from "@/components/ArticleSchema";
 
 export default function BlogPost() {
   const params = useParams<{ slug: string }>();
@@ -63,6 +64,11 @@ export default function BlogPost() {
   return (
     <div className="min-h-screen relative">
       <div className="crt-scanlines" />
+
+      {/* JSON-LD Article Schema */}
+      {content && (
+        <ArticleSchema article={article} content={content} locale={locale} />
+      )}
 
       <div className="relative z-10 max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* Top Bar */}
