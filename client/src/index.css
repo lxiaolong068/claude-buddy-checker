@@ -377,3 +377,9 @@
 .blog-content table tr:hover td {
   background-color: oklch(0.15 0.005 285);
 }
+
+/* Shimmer animation for lazy image skeleton placeholder */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}

@@ -14,6 +14,7 @@ import TypewriterText from "@/components/TypewriterText";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import { useI18n } from "@/contexts/I18nContext";
 import WebAppSchema from "@/components/WebAppSchema";
+import LazyImage from "@/components/LazyImage";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp";
 const GRID_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/buddy-showcase-grid-dzj2bCjKycQ4bgSaUeRV58.webp";
@@ -118,13 +119,12 @@ export default function Home() {
 
         {/* Hero Image */}
         <div className="mb-8 border border-border glow-border overflow-hidden">
-          <img
+          <LazyImage
             src={HERO_IMG}
             alt={t("hero.imgAlt")}
-            className="w-full h-auto opacity-90"
             width={2752}
             height={1536}
-            loading="eager"
+            priority={true}
           />
         </div>
 
@@ -233,13 +233,11 @@ export default function Home() {
             {t("species.title")}
           </h2>
           <div className="border border-border glow-border overflow-hidden mb-4">
-            <img
+            <LazyImage
               src={GRID_IMG}
               alt={t("species.gridAlt")}
-              className="w-full h-auto opacity-90"
               width={2528}
               height={1696}
-              loading="lazy"
             />
           </div>
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
