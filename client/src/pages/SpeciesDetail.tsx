@@ -344,7 +344,7 @@ export default function SpeciesDetail() {
           </div>
         </section>
 
-        {/* Related Species */}
+        {/* Related Species — Enhanced Recommendation Module */}
         <section
           className={`transition-all duration-700 delay-300 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
@@ -363,19 +363,84 @@ export default function SpeciesDetail() {
                   .map((line) => line.replaceAll("{E}", relInfo.defaultEye))
                   .join("\n");
 
+                // Compute similarity reasons
+                const reasons: string[] = [];
+                if (relInfo.category === info.category) {
+                  reasons.push(t("speciesDetail.relatedSameCategory"));
+                }
+                if (relInfo.peakStat === info.peakStat) {
+                  reasons.push(t("speciesDetail.relatedSamePeakStat"));
+                }
+                const sharedTags = info.tags.filter((tag) => relInfo.tags.includes(tag));
+                if (sharedTags.length > 0) {
+                  reasons.push(`${t("speciesDetail.relatedSharedTags")}: ${sharedTags.map(t => `#${t}`).join(" ")}`);
+                }
+
+                const relCategoryKey = `speciesDetail.category${relInfo.category.charAt(0).toUpperCase() + relInfo.category.slice(1)}` as string;
+                const peakColor = STAT_COLORS[relInfo.peakStat as keyof typeof STAT_COLORS] || "#33ff33";
+
                 return (
                   <Link
                     key={relSlug}
                     href={`/species/${relSlug}`}
-                    className="block border border-[#33ff33]/15 bg-[#0a0a0a]/50 p-4 hover:border-[#33ff33]/40 hover:bg-[#0d1a0d]/80 transition-all group"
+                    className="block border border-[#33ff33]/15 bg-[#0a0a0a]/50 p-4 hover:border-[#33ff33]/40 hover:bg-[#0d1a0d]/80 transition-all group relative overflow-hidden"
                   >
-                    <pre className="text-[9px] leading-[11px] text-[#33ff33]/50 group-hover:text-[#33ff33]/80 transition-colors text-center mb-2">
+                    {/* Subtle glow on hover */}
+                    <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-[radial-gradient(ellipse_at_center,rgba(51,255,51,0.04)_0%,transparent_70%)]" />
+
+                    {/* ASCII Art */}
+                    <pre className="text-[9px] leading-[11px] text-[#33ff33]/50 group-hover:text-[#33ff33]/80 transition-colors text-center mb-3">
                       {relAscii}
                     </pre>
-                    <p className="text-center text-sm text-[#33ff33]/70 group-hover:text-[#33ff33] transition-colors">
-                      {relName}
+
+                    {/* Species Name */}
+                    <p className="text-center text-sm font-bold text-[#33ff33]/80 group-hover:text-[#33ff33] transition-colors tracking-wider">
+                      {relName.toUpperCase()}
                     </p>
-                    <p className="text-center text-[10px] text-[#33ff33]/30 mt-1">
+
+                    {/* Category + Peak Stat row */}
+                    <div className="flex items-center justify-center gap-2 mt-2">
+                      <span className="px-1.5 py-0.5 border border-[#33ff33]/20 text-[#33ff33]/50 text-[9px] uppercase">
+                        {t(relCategoryKey)}
+                      </span>
+                      <span
+                        className="px-1.5 py-0.5 border text-[9px] uppercase"
+                        style={{ borderColor: `${peakColor}40`, color: peakColor }}
+                      >
+                        {t("speciesDetail.relatedPeakStat")}: {relInfo.peakStat}
+                      </span>
+                    </div>
+
+                    {/* Personality tags */}
+                    <div className="flex flex-wrap justify-center gap-1 mt-2">
+                      {relInfo.tags.map((tag) => {
+                        const isShared = info.tags.includes(tag);
+                        return (
+                          <span
+                            key={tag}
+                            className={`text-[8px] px-1 py-px ${
+                              isShared
+                                ? "text-[#33ff33]/80 border border-[#33ff33]/30 bg-[#33ff33]/5"
+                                : "text-[#33ff33]/30"
+                            }`}
+                          >
+                            #{tag}
+                          </span>
+                        );
+                      })}
+                    </div>
+
+                    {/* Similarity reasons */}
+                    {reasons.length > 0 && (
+                      <div className="mt-2 pt-2 border-t border-[#33ff33]/10">
+                        <p className="text-[8px] text-[#33ff33]/40 text-center leading-relaxed">
+                          {reasons.join(" · ")}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* View link */}
+                    <p className="text-center text-[10px] text-[#33ff33]/30 group-hover:text-[#33ff33]/60 transition-colors mt-2">
                       {t("speciesDetail.viewSpecies")} →
                     </p>
                   </Link>
