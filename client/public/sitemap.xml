@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- Homepage -->
+  <url>
+    <loc>https://claudebuddy.art/</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/" />
+  </url>
+
+  <!-- Species Index -->
+  <url>
+    <loc>https://claudebuddy.art/species</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species" />
+  </url>
+
+  <!-- Species Detail: Duck -->
+  <url>
+    <loc>https://claudebuddy.art/species/duck</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/duck" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/duck" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/duck" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/duck" />
+  </url>
+
+  <!-- Species Detail: Goose -->
+  <url>
+    <loc>https://claudebuddy.art/species/goose</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/goose" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/goose" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/goose" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/goose" />
+  </url>
+
+  <!-- Species Detail: Blob -->
+  <url>
+    <loc>https://claudebuddy.art/species/blob</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/blob" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/blob" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/blob" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/blob" />
+  </url>
+
+  <!-- Species Detail: Cat -->
+  <url>
+    <loc>https://claudebuddy.art/species/cat</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/cat" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/cat" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/cat" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/cat" />
+  </url>
+
+  <!-- Species Detail: Dragon -->
+  <url>
+    <loc>https://claudebuddy.art/species/dragon</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/dragon" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/dragon" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/dragon" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/dragon" />
+  </url>
+
+  <!-- Species Detail: Octopus -->
+  <url>
+    <loc>https://claudebuddy.art/species/octopus</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/octopus" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/octopus" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/octopus" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/octopus" />
+  </url>
+
+  <!-- Species Detail: Owl -->
+  <url>
+    <loc>https://claudebuddy.art/species/owl</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/owl" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/owl" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/owl" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/owl" />
+  </url>
+
+  <!-- Species Detail: Penguin -->
+  <url>
+    <loc>https://claudebuddy.art/species/penguin</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/penguin" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/penguin" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/penguin" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/penguin" />
+  </url>
+
+  <!-- Species Detail: Turtle -->
+  <url>
+    <loc>https://claudebuddy.art/species/turtle</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/turtle" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/turtle" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/turtle" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/turtle" />
+  </url>
+
+  <!-- Species Detail: Snail -->
+  <url>
+    <loc>https://claudebuddy.art/species/snail</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/snail" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/snail" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/snail" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/snail" />
+  </url>
+
+  <!-- Species Detail: Ghost -->
+  <url>
+    <loc>https://claudebuddy.art/species/ghost</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/ghost" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/ghost" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/ghost" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/ghost" />
+  </url>
+
+  <!-- Species Detail: Axolotl -->
+  <url>
+    <loc>https://claudebuddy.art/species/axolotl</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/axolotl" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/axolotl" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/axolotl" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/axolotl" />
+  </url>
+
+  <!-- Species Detail: Capybara -->
+  <url>
+    <loc>https://claudebuddy.art/species/capybara</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/capybara" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/capybara" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/capybara" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/capybara" />
+  </url>
+
+  <!-- Species Detail: Cactus -->
+  <url>
+    <loc>https://claudebuddy.art/species/cactus</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/cactus" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/cactus" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/cactus" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/cactus" />
+  </url>
+
+  <!-- Species Detail: Robot -->
+  <url>
+    <loc>https://claudebuddy.art/species/robot</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/robot" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/robot" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/robot" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/robot" />
+  </url>
+
+  <!-- Species Detail: Rabbit -->
+  <url>
+    <loc>https://claudebuddy.art/species/rabbit</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/rabbit" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/rabbit" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/rabbit" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/rabbit" />
+  </url>
+
+  <!-- Species Detail: Mushroom -->
+  <url>
+    <loc>https://claudebuddy.art/species/mushroom</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/mushroom" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/mushroom" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/mushroom" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/mushroom" />
+  </url>
+
+  <!-- Species Detail: Chonk -->
+  <url>
+    <loc>https://claudebuddy.art/species/chonk</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/species/chonk" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/species/chonk" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/species/chonk" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/species/chonk" />
+  </url>
+
+  <!-- Blog Index -->
+  <url>
+    <loc>https://claudebuddy.art/blog</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/blog" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/blog" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/blog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog" />
+  </url>
+
+  <!-- Blog: How to Find Your Claude Code Buddy -->
+  <url>
+    <loc>https://claudebuddy.art/blog/how-to-find-your-claude-code-buddy</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/blog/how-to-find-your-claude-code-buddy" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/blog/how-to-find-your-claude-code-buddy" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/blog/how-to-find-your-claude-code-buddy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/how-to-find-your-claude-code-buddy" />
+  </url>
+
+  <!-- Blog: Claude Code Buddy Rarity Guide -->
+  <url>
+    <loc>https://claudebuddy.art/blog/claude-code-buddy-rarity-guide</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/blog/claude-code-buddy-rarity-guide" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/blog/claude-code-buddy-rarity-guide" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/blog/claude-code-buddy-rarity-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/claude-code-buddy-rarity-guide" />
+  </url>
+
+  <!-- Blog: All 18 Claude Buddy Species Ranked -->
+  <url>
+    <loc>https://claudebuddy.art/blog/all-18-claude-buddy-species-ranked</loc>
+    <lastmod>2026-04-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/blog/all-18-claude-buddy-species-ranked" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/blog/all-18-claude-buddy-species-ranked" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/blog/all-18-claude-buddy-species-ranked" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/all-18-claude-buddy-species-ranked" />
+  </url>
+
+</urlset>
