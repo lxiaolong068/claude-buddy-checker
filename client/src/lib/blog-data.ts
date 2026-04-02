@@ -679,6 +679,476 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       },
     },
   },
+  {
+    slug: "all-18-claude-buddy-species-ranked",
+    publishedAt: "2026-04-02",
+    readingTime: 10,
+    tags: ["ranking", "species", "tier-list", "guide"],
+    content: {
+      en: {
+        title: "All 18 Claude Buddy Species Ranked",
+        metaTitle: "All 18 Claude Buddy Species Ranked - Definitive Tier List (2026)",
+        metaDescription: "Complete ranking of all 18 Claude Code Buddy species. Tier list with detailed analysis of stats, personality, ASCII art, and which species is the best for you.",
+        excerpt: "From the mighty Dragon to the lovable Chonk — we rank every Claude Code Buddy species across multiple dimensions. Find out where your companion stands.",
+        sections: [
+          {
+            heading: "How We Ranked the Species",
+            body: `<p>Ranking 18 unique species isn't straightforward — each buddy has different strengths depending on what you value. So instead of a single "best to worst" list, we evaluated every species across <strong>five dimensions</strong>:</p>
+<ul>
+<li><strong>Combat Power</strong> — How useful is the peak stat? Debugging and Wisdom score highest here because they map to practical coding utility.</li>
+<li><strong>Personality</strong> — How distinctive and entertaining is the species' character? Chaos and Snark species tend to be more memorable.</li>
+<li><strong>ASCII Art Quality</strong> — How recognizable and detailed is the 3-frame terminal animation? Some species have significantly more expressive sprites.</li>
+<li><strong>Flex Factor</strong> — How impressive is this species to show off on social media? Mythical and rare-feeling species score higher.</li>
+<li><strong>Community Love</strong> — Based on social media mentions, Reddit posts, and Twitter/X shares, which species generate the most excitement?</li>
+</ul>
+<p>Each species receives a <strong>tier rating</strong> from S (best) to C (average). Remember: there are no bad buddies — every species has unique charm. This ranking is for fun and to help you appreciate what makes your buddy special.</p>`
+          },
+          {
+            heading: "S-Tier: The Legends",
+            body: `<h4>#1 — <a href="/species/dragon">Dragon</a> 🏆</h4>
+<p><strong>Peak Stat:</strong> Debugging | <strong>Category:</strong> Mythical | <strong>Tags:</strong> powerful, ancient, majestic</p>
+<p>The undisputed champion. Dragon combines the most useful peak stat (Debugging) with the most impressive ASCII art in the entire system. Its 3-frame animation features wing flaps and fire breath effects that look stunning in the terminal. On social media, Dragon buddies consistently get the most engagement — a Legendary Shiny Dragon is the ultimate flex.</p>
+<p><strong>Why #1:</strong> Best peak stat + best visual impact + highest social currency. If you rolled a Dragon, you won the species lottery.</p>
+
+<h4>#2 — <a href="/species/axolotl">Axolotl</a></h4>
+<p><strong>Peak Stat:</strong> Debugging | <strong>Category:</strong> Animal | <strong>Tags:</strong> regenerative, aquatic, adorable</p>
+<p>The fan favorite. Axolotl shares Dragon's powerful Debugging peak stat but wraps it in an irresistibly cute package. Its ASCII art features distinctive gill fronds (<code>}~( )~{</code>) that wave in the animation — one of the most recognizable sprites. The axolotl has become a mascot of the developer community, and Claude's version is no exception.</p>
+<p><strong>Why #2:</strong> Top-tier utility + maximum cuteness factor. The perfect balance of power and personality.</p>
+
+<h4>#3 — <a href="/species/owl">Owl</a></h4>
+<p><strong>Peak Stat:</strong> Wisdom | <strong>Category:</strong> Animal | <strong>Tags:</strong> wise, nocturnal, observant</p>
+<p>The sage advisor. Owl's Wisdom peak stat makes it the ultimate knowledge companion — imagine a buddy with 100 Wisdom guiding your coding sessions. Its ASCII art with the distinctive double-circle eyes <code>(({E})({E}))</code> is instantly recognizable. Owl also has a winking animation frame that adds personality.</p>
+<p><strong>Why #3:</strong> Wisdom is the second most useful stat + iconic visual design + strong "wise mentor" narrative.</p>`
+          },
+          {
+            heading: "A-Tier: The Elite",
+            body: `<h4>#4 — <a href="/species/ghost">Ghost</a></h4>
+<p><strong>Peak Stat:</strong> Chaos | <strong>Category:</strong> Mythical | <strong>Tags:</strong> ethereal, spooky, playful</p>
+<p>The wildcard. Ghost is one of only two mythical species, giving it instant prestige. Its Chaos peak stat means unpredictable, entertaining interactions. The ASCII art features a wavy bottom edge (<code>~\`~\`\`~\`~</code>) that shifts between frames, creating a convincing floating effect. A Legendary Ghost with max Chaos is beautifully terrifying.</p>
+<p><strong>Standout trait:</strong> The only species whose animation genuinely looks like it's hovering in your terminal.</p>
+
+<h4>#5 — <a href="/species/robot">Robot</a></h4>
+<p><strong>Peak Stat:</strong> Debugging | <strong>Category:</strong> Object | <strong>Tags:</strong> logical, mechanical, efficient</p>
+<p>The workhorse. Robot is the third Debugging specialist, and its mechanical theme makes the stat feel perfectly aligned. The ASCII art with antenna (<code>.[||].</code>) and screen face (<code>[ ==== ]</code>) is clean and distinctive. High-rarity Robots are debugging machines with no weak spots — pure efficiency.</p>
+<p><strong>Standout trait:</strong> The most thematically consistent species — a robot that debugs your code just makes sense.</p>
+
+<h4>#6 — <a href="/species/cat">Cat</a></h4>
+<p><strong>Peak Stat:</strong> Snark | <strong>Category:</strong> Animal | <strong>Tags:</strong> independent, curious, elegant</p>
+<p>The personality king. Cat's Snark peak stat gives it the most attitude of any species. The classic <code>/\_/\</code> ears and <code>ω</code> mouth create one of the most beloved ASCII art designs. Cat buddies are the ones most likely to "judge your code" — and the community loves them for it. The tail-wag animation frame adds charm.</p>
+<p><strong>Standout trait:</strong> Highest entertainment value. A snarky cat reviewing your code is peak developer humor.</p>
+
+<h4>#7 — <a href="/species/mushroom">Mushroom</a></h4>
+<p><strong>Peak Stat:</strong> Wisdom | <strong>Category:</strong> Object | <strong>Tags:</strong> fungal, mysterious, forest</p>
+<p>The dark horse. Mushroom is unexpectedly one of the best species — Wisdom peak stat in a fungal package creates a unique "omniscient fungi" narrative. Its ASCII art with the spotted cap (<code>.-o-OO-o-.</code>) is highly detailed and distinctive. A Legendary Mushroom with 100 Wisdom is the all-knowing mycelium network of your terminal.</p>
+<p><strong>Standout trait:</strong> Most unique concept. Nobody expects the mushroom to be wise, which makes it memorable.</p>`
+          },
+          {
+            heading: "B-Tier: The Solid Picks",
+            body: `<h4>#8 — <a href="/species/octopus">Octopus</a></h4>
+<p><strong>Peak Stat:</strong> Wisdom | <strong>Category:</strong> Animal | <strong>Tags:</strong> intelligent, flexible, deep-sea</p>
+<p>The multitasker. Octopus shares Owl's Wisdom peak stat and adds a "flexible problem solver" flavor. Its tentacle animation (<code>/\/\/\/\</code> alternating with <code>\/\/\/\/</code>) is satisfyingly rhythmic. Octopus is the species that feels like it could handle eight tasks at once.</p>
+
+<h4>#9 — <a href="/species/capybara">Capybara</a></h4>
+<p><strong>Peak Stat:</strong> Patience | <strong>Category:</strong> Animal | <strong>Tags:</strong> chill, social, friendly</p>
+<p>The zen master. In an era of AI anxiety, a patient capybara companion feels deeply comforting. Its wide face ASCII art (<code>n______n</code>) radiates calm. Capybara has strong meme energy from its real-world internet fame, which translates well to social sharing.</p>
+
+<h4>#10 — <a href="/species/goose">Goose</a></h4>
+<p><strong>Peak Stat:</strong> Chaos | <strong>Category:</strong> Animal | <strong>Tags:</strong> chaotic, loud, fearless</p>
+<p>The troublemaker. Inspired by "Untitled Goose Game" energy, the Goose is pure chaotic fun. Its honking animation and upright posture (<code>({E}>  ||</code>) are instantly recognizable. A high-Chaos Goose is the buddy that "accidentally" deletes your production database — and you can't even be mad.</p>
+
+<h4>#11 — <a href="/species/rabbit">Rabbit</a></h4>
+<p><strong>Peak Stat:</strong> Chaos | <strong>Category:</strong> Animal | <strong>Tags:</strong> quick, fluffy, alert</p>
+<p>The speedster. Rabbit's Chaos peak stat combined with its "quick" and "alert" tags create a hyperactive companion that matches the energy of fast-paced coding sessions. The classic bunny ears (<code>(\\__/)</code>) and whiskers (<code>=(  ..  )=</code>) make for charming ASCII art.</p>`
+          },
+          {
+            heading: "B-Tier (continued): The Reliable Companions",
+            body: `<h4>#12 — <a href="/species/penguin">Penguin</a></h4>
+<p><strong>Peak Stat:</strong> Patience | <strong>Category:</strong> Animal | <strong>Tags:</strong> resilient, social, arctic</p>
+<p>The endurance runner. Penguin's Patience peak stat fits perfectly with its real-world reputation for surviving harsh conditions. The compact ASCII art with the distinctive beak (<code>({E}>{E})</code>) is clean and appealing. Penguin buddies are the ones that stick with you through long debugging sessions without complaint.</p>
+
+<h4>#13 — <a href="/species/turtle">Turtle</a></h4>
+<p><strong>Peak Stat:</strong> Patience | <strong>Category:</strong> Animal | <strong>Tags:</strong> steady, armored, ancient</p>
+<p>The tank. Turtle's shell pattern (<code>/[______]\</code>) is one of the most detailed ASCII designs, and its Patience peak stat means it's the ultimate "slow and steady wins the race" companion. The shell pattern changes between frames, adding visual interest.</p>
+
+<h4>#14 — <a href="/species/blob">Blob</a></h4>
+<p><strong>Peak Stat:</strong> Wisdom | <strong>Category:</strong> Creature | <strong>Tags:</strong> amorphous, calm, mysterious</p>
+<p>The shapeshifter. Blob is the only "creature" category species, making it unique by classification alone. Its Wisdom peak stat combined with the morphing animation (the blob literally changes shape between frames) creates a mysterious, all-knowing entity. Blob is the most abstract buddy — and that's its charm.</p>`
+          },
+          {
+            heading: "C-Tier: The Underdogs",
+            body: `<h4>#15 — <a href="/species/cactus">Cactus</a></h4>
+<p><strong>Peak Stat:</strong> Snark | <strong>Category:</strong> Object | <strong>Tags:</strong> prickly, resilient, desert</p>
+<p>The prickly friend. Cactus is the most literal interpretation of "snarky" — it's literally covered in spines. Its ASCII art with extending arms (<code>n |{E}  {E}| n</code>) is distinctive, and the arm-wave animation is surprisingly expressive for a plant. Cactus buddies have a dry, desert humor that grows on you.</p>
+
+<h4>#16 — <a href="/species/chonk">Chonk</a></h4>
+<p><strong>Peak Stat:</strong> Snark | <strong>Category:</strong> Animal | <strong>Tags:</strong> round, hefty, lovable</p>
+<p>The absolute unit. Chonk is essentially a round, oversized cat with maximum attitude. Its Snark peak stat combined with the "hefty" tag creates a companion that judges your code while being adorably rotund. The tail-wag animation (<code>\`------\´~</code>) adds personality. Chonk is a meme species — and that's exactly its appeal.</p>
+
+<h4>#17 — <a href="/species/duck">Duck</a></h4>
+<p><strong>Peak Stat:</strong> Patience | <strong>Category:</strong> Animal | <strong>Tags:</strong> friendly, aquatic, cheerful</p>
+<p>The rubber duck debugger. Duck's Patience peak stat and cheerful personality make it the perfect "rubber duck debugging" companion — a well-known programmer technique. Its ASCII art (<code><({E} )___</code>) is simple but charming, with a subtle tail-wag animation. Duck is the most wholesome buddy.</p>
+
+<h4>#18 — <a href="/species/snail">Snail</a></h4>
+<p><strong>Peak Stat:</strong> Patience | <strong>Category:</strong> Animal | <strong>Tags:</strong> slow, persistent, spiral</p>
+<p>The slow burner. Snail ranks last not because it's bad, but because Patience is its peak stat and its personality is the most subdued. However, Snail has a unique ASCII art advantage — its eye is on a stalk (<code>{E}    .--.</code>), making it the only species with asymmetric eye placement. Snail lovers appreciate the quiet persistence it represents.</p>
+<p><strong>Remember:</strong> Ranking last in a list of 18 amazing species doesn't mean Snail is bad. Every buddy is unique, and a Legendary Snail with 100 Patience is still an incredible companion. The ranking is subjective — your buddy is special regardless of where it falls on this list.</p>`
+          },
+          {
+            heading: "Species by Peak Stat",
+            body: `<p>Every species has one stat that tends to be highest. Here's the complete breakdown by stat alignment:</p>
+<table>
+<tr><th>Peak Stat</th><th>Species</th><th>Count</th><th>Playstyle</th></tr>
+<tr><td>🔴 Debugging</td><td><a href="/species/dragon">Dragon</a>, <a href="/species/axolotl">Axolotl</a>, <a href="/species/robot">Robot</a></td><td>3</td><td>The fixers — best at finding and squashing bugs</td></tr>
+<tr><td>🔵 Patience</td><td><a href="/species/duck">Duck</a>, <a href="/species/penguin">Penguin</a>, <a href="/species/turtle">Turtle</a>, <a href="/species/snail">Snail</a>, <a href="/species/capybara">Capybara</a></td><td>5</td><td>The calm ones — steady companions for long sessions</td></tr>
+<tr><td>🟣 Chaos</td><td><a href="/species/goose">Goose</a>, <a href="/species/ghost">Ghost</a>, <a href="/species/rabbit">Rabbit</a></td><td>3</td><td>The wildcards — unpredictable and entertaining</td></tr>
+<tr><td>🟡 Wisdom</td><td><a href="/species/blob">Blob</a>, <a href="/species/octopus">Octopus</a>, <a href="/species/owl">Owl</a>, <a href="/species/mushroom">Mushroom</a></td><td>4</td><td>The advisors — deep knowledge and insight</td></tr>
+<tr><td>🟢 Snark</td><td><a href="/species/cat">Cat</a>, <a href="/species/cactus">Cactus</a>, <a href="/species/chonk">Chonk</a></td><td>3</td><td>The critics — sharp-tongued code reviewers</td></tr>
+</table>
+<p><strong>Key insight:</strong> Patience has the most species (5), making it the most common peak stat alignment. Debugging has only 3 species but they occupy the top ranks because Debugging is the most practically useful stat for developers.</p>`
+          },
+          {
+            heading: "Species by Category",
+            body: `<p>The 18 species are divided into four categories, each with a different flavor:</p>
+<table>
+<tr><th>Category</th><th>Species</th><th>Count</th><th>Vibe</th></tr>
+<tr><td>🐾 Animal</td><td>Duck, Goose, Cat, Octopus, Owl, Penguin, Turtle, Snail, Axolotl, Capybara, Rabbit, Chonk</td><td>12</td><td>Familiar, relatable companions</td></tr>
+<tr><td>🔮 Mythical</td><td>Dragon, Ghost</td><td>2</td><td>Rare-feeling, prestigious</td></tr>
+<tr><td>🧪 Creature</td><td>Blob</td><td>1</td><td>Abstract, mysterious</td></tr>
+<tr><td>⚙️ Object</td><td>Cactus, Robot, Mushroom</td><td>3</td><td>Unconventional, surprising</td></tr>
+</table>
+<p><strong>Rarity perception:</strong> While all species have equal probability (1/18 ≈ 5.56%), the <strong>Mythical</strong> category (Dragon, Ghost) and the lone <strong>Creature</strong> (Blob) feel rarer because their categories have fewer members. This makes them more exciting to roll even though the math is identical.</p>`
+          },
+          {
+            heading: "The Tier List Summary",
+            body: `<p>Here's the complete tier list at a glance:</p>
+<table>
+<tr><th>Tier</th><th>Species</th><th>Why</th></tr>
+<tr><td><strong>S</strong></td><td><a href="/species/dragon">Dragon</a>, <a href="/species/axolotl">Axolotl</a>, <a href="/species/owl">Owl</a></td><td>Best stats + best visuals + highest community value</td></tr>
+<tr><td><strong>A</strong></td><td><a href="/species/ghost">Ghost</a>, <a href="/species/robot">Robot</a>, <a href="/species/cat">Cat</a>, <a href="/species/mushroom">Mushroom</a></td><td>Strong stats or personality with distinctive design</td></tr>
+<tr><td><strong>B</strong></td><td><a href="/species/octopus">Octopus</a>, <a href="/species/capybara">Capybara</a>, <a href="/species/goose">Goose</a>, <a href="/species/rabbit">Rabbit</a>, <a href="/species/penguin">Penguin</a>, <a href="/species/turtle">Turtle</a>, <a href="/species/blob">Blob</a></td><td>Solid all-rounders with good charm</td></tr>
+<tr><td><strong>C</strong></td><td><a href="/species/cactus">Cactus</a>, <a href="/species/chonk">Chonk</a>, <a href="/species/duck">Duck</a>, <a href="/species/snail">Snail</a></td><td>Lovable underdogs — great personality, lower stat utility</td></tr>
+</table>
+<p><strong>Final reminder:</strong> This tier list is subjective and meant for fun. Every buddy is unique, and rarity matters more than species for raw stat power. A Legendary Snail will always outperform a Common Dragon in total stats. The best buddy is the one you got — check yours now!</p>`
+          },
+          {
+            heading: "Check Your Species Now",
+            body: `<p>Curious where your buddy falls on this list? It takes 30 seconds to find out:</p>
+<ol>
+<li><strong>Get your UUID</strong> — Open Claude Code and type <code>What is my accountUuid?</code></li>
+<li><strong>Visit the checker</strong> — Go to our <a href="/">Buddy Checker</a> and paste your UUID</li>
+<li><strong>See your species</strong> — Your species, rarity, stats, and ASCII art are revealed instantly</li>
+<li><strong>Share your result</strong> — Generate a share card and post it with <code>#ClaudeBuddy</code></li>
+</ol>
+<p>Got a Dragon? Celebrate! Got a Snail? Embrace the slow life! Every species has its fans, and the community loves seeing all 18 represented. Browse the <a href="/species">complete species encyclopedia</a> to learn more about each one, or check the <a href="/blog/claude-code-buddy-rarity-guide">Rarity Guide</a> to understand how rarity affects your buddy's power.</p>`
+          },
+        ],
+      },
+      zh: {
+        title: "Claude Code Buddy 全部 18 种物种排名",
+        metaTitle: "Claude Code Buddy 全部 18 种物种排名 - 最全 Tier List (2026)",
+        metaDescription: "Claude Code Buddy 18 种物种完整排名。包含详细的 Tier List、属性分析、ASCII 艺术评价，帮你了解每个物种的优劣。",
+        excerpt: "从强大的龙到可爱的胖墩——我们从多个维度对 Claude Code Buddy 的全部 18 种物种进行排名。看看你的伙伴排在哪里。",
+        sections: [
+          {
+            heading: "排名方法论",
+            body: `<p>对 18 种独特物种进行排名并不简单——每个 Buddy 根据你看重的方面有不同的优势。因此，我们不是简单的"从好到差"排列，而是从<strong>五个维度</strong>评估每个物种：</p>
+<ul>
+<li><strong>战斗力</strong> — 主力属性有多实用？调试和智慧得分最高，因为它们对编程最有帮助。</li>
+<li><strong>个性</strong> — 物种的角色有多独特和有趣？混乱和毒舌类物种往往更令人难忘。</li>
+<li><strong>ASCII 艺术质量</strong> — 终端动画有多精致和辨识度高？有些物种的精灵图明显更有表现力。</li>
+<li><strong>炫耀指数</strong> — 在社交媒体上展示这个物种有多令人印象深刻？神话类和稀有感的物种得分更高。</li>
+<li><strong>社区人气</strong> — 基于社交媒体讨论、Reddit 帖子和 Twitter/X 分享，哪些物种最受欢迎？</li>
+</ul>
+<p>每个物种获得从 <strong>S（最佳）到 C（一般）</strong>的等级评定。记住：没有差的 Buddy——每个物种都有独特魅力。这个排名是为了好玩，也帮你了解你的 Buddy 有什么特别之处。</p>`
+          },
+          {
+            heading: "S 级：传说级物种",
+            body: `<h4>#1 — <a href="/species/dragon">龙 (Dragon)</a> 🏆</h4>
+<p><strong>主力属性：</strong>调试 | <strong>类别：</strong>神话 | <strong>标签：</strong>强大、古老、威严</p>
+<p>毫无争议的冠军。龙将最实用的主力属性（调试）与整个系统中最令人印象深刻的 ASCII 艺术结合在一起。它的 3 帧动画展现了翅膀拍动和火焰效果，在终端中非常惊艳。在社交媒体上，龙 Buddy 始终获得最高互动——传说级闪光龙是终极炫耀。</p>
+<p><strong>为什么是第一：</strong>最佳主力属性 + 最佳视觉效果 + 最高社交价值。如果你抽到了龙，你赢得了物种彩票。</p>
+
+<h4>#2 — <a href="/species/axolotl">美西螈 (Axolotl)</a></h4>
+<p><strong>主力属性：</strong>调试 | <strong>类别：</strong>动物 | <strong>标签：</strong>再生、水生、可爱</p>
+<p>粉丝最爱。美西螈与龙共享强大的调试主力属性，但包裹在一个不可抗拒的可爱外表中。它的 ASCII 艺术展现了独特的鳃须（<code>}~( )~{</code>），在动画中摆动——最具辨识度的精灵图之一。</p>
+<p><strong>为什么是第二：</strong>顶级实用性 + 最大可爱因子。力量与个性的完美平衡。</p>
+
+<h4>#3 — <a href="/species/owl">猫头鹰 (Owl)</a></h4>
+<p><strong>主力属性：</strong>智慧 | <strong>类别：</strong>动物 | <strong>标签：</strong>睿智、夜行、善于观察</p>
+<p>智者导师。猫头鹰的智慧主力属性使其成为终极知识伙伴——想象一个 100 智慧的 Buddy 指导你的编程。它的 ASCII 艺术中独特的双圆眼睛 <code>(({E})({E}))</code> 辨识度极高。猫头鹰还有一个眨眼动画帧，增添了个性。</p>
+<p><strong>为什么是第三：</strong>智慧是第二实用的属性 + 标志性视觉设计 + 强大的"智者导师"叙事。</p>`
+          },
+          {
+            heading: "A 级：精英物种",
+            body: `<h4>#4 — <a href="/species/ghost">幽灵 (Ghost)</a></h4>
+<p><strong>主力属性：</strong>混乱 | <strong>类别：</strong>神话 | <strong>标签：</strong>空灵、诡异、顽皮</p>
+<p>百搭牌。幽灵是仅有的两种神话物种之一，天生自带威望。它的混乱主力属性意味着不可预测的有趣互动。ASCII 艺术底部的波浪边缘在帧间变化，营造出令人信服的悬浮效果。</p>
+
+<h4>#5 — <a href="/species/robot">机器人 (Robot)</a></h4>
+<p><strong>主力属性：</strong>调试 | <strong>类别：</strong>物品 | <strong>标签：</strong>逻辑、机械、高效</p>
+<p>工作狂。机器人是第三个调试专家，其机械主题使该属性感觉完美契合。高稀有度的机器人是没有弱点的调试机器——纯粹的效率。</p>
+
+<h4>#6 — <a href="/species/cat">猫 (Cat)</a></h4>
+<p><strong>主力属性：</strong>毒舌 | <strong>类别：</strong>动物 | <strong>标签：</strong>独立、好奇、优雅</p>
+<p>个性之王。猫的毒舌主力属性赋予它所有物种中最多的态度。经典的 <code>/\_/\</code> 猫耳和 <code>ω</code> 嘴巴创造了最受喜爱的 ASCII 艺术设计之一。一只毒舌猫审查你的代码是开发者幽默的巅峰。</p>
+
+<h4>#7 — <a href="/species/mushroom">蘑菇 (Mushroom)</a></h4>
+<p><strong>主力属性：</strong>智慧 | <strong>类别：</strong>物品 | <strong>标签：</strong>真菌、神秘、森林</p>
+<p>黑马。蘑菇出人意料地是最好的物种之一——智慧主力属性配上真菌外表，创造了独特的"全知菌类"叙事。传说级蘑菇配上 100 智慧就是你终端中的全知菌丝网络。</p>`
+          },
+          {
+            heading: "B 级：稳健之选",
+            body: `<h4>#8 — <a href="/species/octopus">章鱼 (Octopus)</a></h4>
+<p><strong>主力属性：</strong>智慧 | <strong>类别：</strong>动物 | <strong>标签：</strong>聪明、灵活、深海</p>
+<p>多面手。章鱼与猫头鹰共享智慧主力属性，增添了"灵活解决问题"的风味。触手动画节奏感十足。</p>
+
+<h4>#9 — <a href="/species/capybara">水豚 (Capybara)</a></h4>
+<p><strong>主力属性：</strong>耐心 | <strong>类别：</strong>动物 | <strong>标签：</strong>佛系、社交、友好</p>
+<p>禅宗大师。在 AI 焦虑的时代，一个耐心的水豚伙伴让人深感安慰。水豚在现实世界的网络名气也为社交分享加分。</p>
+
+<h4>#10 — <a href="/species/goose">鹅 (Goose)</a></h4>
+<p><strong>主力属性：</strong>混乱 | <strong>类别：</strong>动物 | <strong>标签：</strong>混乱、吵闹、无畏</p>
+<p>捣蛋鬼。受"无题鹅游戏"启发，鹅是纯粹的混乱乐趣。高混乱鹅是那种"不小心"删除你生产数据库的 Buddy——而你甚至不能生气。</p>
+
+<h4>#11 — <a href="/species/rabbit">兔子 (Rabbit)</a></h4>
+<p><strong>主力属性：</strong>混乱 | <strong>类别：</strong>动物 | <strong>标签：</strong>敏捷、毛茸茸、警觉</p>
+<p>飞毛腿。兔子的混乱主力属性配合"敏捷"标签，创造了一个与快节奏编程完美匹配的活力伙伴。</p>
+
+<h4>#12 — <a href="/species/penguin">企鹅 (Penguin)</a></h4>
+<p><strong>主力属性：</strong>耐心 | <strong>类别：</strong>动物 | <strong>标签：</strong>坚韧、社交、极地</p>
+<p>耐力跑者。企鹅的耐心主力属性完美契合其在恶劣环境中生存的现实声誉。企鹅 Buddy 是陪你度过漫长调试会话的忠实伙伴。</p>
+
+<h4>#13 — <a href="/species/turtle">乌龟 (Turtle)</a></h4>
+<p><strong>主力属性：</strong>耐心 | <strong>类别：</strong>动物 | <strong>标签：</strong>稳重、装甲、古老</p>
+<p>坦克。乌龟的龟壳图案 (<code>/[______]\</code>) 是最精细的 ASCII 设计之一，耐心主力属性意味着它是"慢而稳赢得比赛"的终极伙伴。</p>
+
+<h4>#14 — <a href="/species/blob">果冻 (Blob)</a></h4>
+<p><strong>主力属性：</strong>智慧 | <strong>类别：</strong>生物 | <strong>标签：</strong>无定形、平静、神秘</p>
+<p>变形者。Blob 是唯一的"生物"类别物种，仅凭分类就独一无二。智慧主力属性配合变形动画，创造了一个神秘的全知实体。</p>`
+          },
+          {
+            heading: "C 级：潜力股",
+            body: `<h4>#15 — <a href="/species/cactus">仙人掌 (Cactus)</a></h4>
+<p><strong>主力属性：</strong>毒舌 | <strong>类别：</strong>物品 | <strong>标签：</strong>多刺、坚韧、沙漠</p>
+<p>扎人的朋友。仙人掌是"毒舌"最字面的诠释——它真的浑身是刺。手臂挥动动画对一株植物来说出奇地有表现力。</p>
+
+<h4>#16 — <a href="/species/chonk">胖墩 (Chonk)</a></h4>
+<p><strong>主力属性：</strong>毒舌 | <strong>类别：</strong>动物 | <strong>标签：</strong>圆滚滚、壮实、可爱</p>
+<p>绝对单位。胖墩本质上是一只圆滚滚的超大号猫，态度拉满。毒舌主力属性配合"壮实"标签，创造了一个一边审判你代码一边可爱到爆的伙伴。</p>
+
+<h4>#17 — <a href="/species/duck">鸭子 (Duck)</a></h4>
+<p><strong>主力属性：</strong>耐心 | <strong>类别：</strong>动物 | <strong>标签：</strong>友好、水生、开朗</p>
+<p>橡皮鸭调试器。鸭子的耐心主力属性和开朗个性使它成为完美的"橡皮鸭调试"伙伴——这是程序员中广为人知的调试技巧。鸭子是最治愈的 Buddy。</p>
+
+<h4>#18 — <a href="/species/snail">蜗牛 (Snail)</a></h4>
+<p><strong>主力属性：</strong>耐心 | <strong>类别：</strong>动物 | <strong>标签：</strong>缓慢、执着、螺旋</p>
+<p>慢热型。蜗牛排名最后不是因为它差，而是因为耐心是它的主力属性且个性最为内敛。然而，蜗牛有独特的 ASCII 艺术优势——它的眼睛在触角上，是唯一眼睛位置不对称的物种。</p>
+<p><strong>记住：</strong>在 18 种精彩物种中排名最后并不意味着蜗牛不好。每个 Buddy 都是独一无二的，传说级蜗牛的 100 耐心仍然是不可思议的伙伴。排名是主观的——无论排在哪里，你的 Buddy 都是特别的。</p>`
+          },
+          {
+            heading: "按主力属性分类",
+            body: `<p>每个物种都有一个倾向最高的属性。以下是按属性分组的完整列表：</p>
+<table>
+<tr><th>主力属性</th><th>物种</th><th>数量</th><th>风格</th></tr>
+<tr><td>🔴 调试</td><td><a href="/species/dragon">龙</a>、<a href="/species/axolotl">美西螈</a>、<a href="/species/robot">机器人</a></td><td>3</td><td>修复者——最擅长找到和消灭 Bug</td></tr>
+<tr><td>🔵 耐心</td><td><a href="/species/duck">鸭子</a>、<a href="/species/penguin">企鹅</a>、<a href="/species/turtle">乌龟</a>、<a href="/species/snail">蜗牛</a>、<a href="/species/capybara">水豚</a></td><td>5</td><td>沉稳者——长时间编程的稳定伙伴</td></tr>
+<tr><td>🟣 混乱</td><td><a href="/species/goose">鹅</a>、<a href="/species/ghost">幽灵</a>、<a href="/species/rabbit">兔子</a></td><td>3</td><td>百搭牌——不可预测且有趣</td></tr>
+<tr><td>🟡 智慧</td><td><a href="/species/blob">果冻</a>、<a href="/species/octopus">章鱼</a>、<a href="/species/owl">猫头鹰</a>、<a href="/species/mushroom">蘑菇</a></td><td>4</td><td>顾问——深度知识和洞察力</td></tr>
+<tr><td>🟢 毒舌</td><td><a href="/species/cat">猫</a>、<a href="/species/cactus">仙人掌</a>、<a href="/species/chonk">胖墩</a></td><td>3</td><td>评论家——犀利的代码审查员</td></tr>
+</table>
+<p><strong>关键洞察：</strong>耐心拥有最多物种（5 种），是最常见的主力属性。调试只有 3 种物种，但它们占据了排名前列，因为调试是对开发者最实用的属性。</p>`
+          },
+          {
+            heading: "按类别分类",
+            body: `<p>18 种物种分为四个类别，各有不同的风味：</p>
+<table>
+<tr><th>类别</th><th>物种</th><th>数量</th><th>氛围</th></tr>
+<tr><td>🐾 动物</td><td>鸭子、鹅、猫、章鱼、猫头鹰、企鹅、乌龟、蜗牛、美西螈、水豚、兔子、胖墩</td><td>12</td><td>熟悉、有亲和力的伙伴</td></tr>
+<tr><td>🔮 神话</td><td>龙、幽灵</td><td>2</td><td>稀有感、有威望</td></tr>
+<tr><td>🧪 生物</td><td>果冻</td><td>1</td><td>抽象、神秘</td></tr>
+<tr><td>⚙️ 物品</td><td>仙人掌、机器人、蘑菇</td><td>3</td><td>非传统、出人意料</td></tr>
+</table>
+<p><strong>稀有感知：</strong>虽然所有物种的概率相同（1/18 ≈ 5.56%），但<strong>神话</strong>类别（龙、幽灵）和唯一的<strong>生物</strong>（果冻）因为类别成员较少而感觉更稀有。</p>`
+          },
+          {
+            heading: "Tier List 总览",
+            body: `<p>完整 Tier List 一览：</p>
+<table>
+<tr><th>等级</th><th>物种</th><th>原因</th></tr>
+<tr><td><strong>S</strong></td><td><a href="/species/dragon">龙</a>、<a href="/species/axolotl">美西螈</a>、<a href="/species/owl">猫头鹰</a></td><td>最佳属性 + 最佳视觉 + 最高社区价值</td></tr>
+<tr><td><strong>A</strong></td><td><a href="/species/ghost">幽灵</a>、<a href="/species/robot">机器人</a>、<a href="/species/cat">猫</a>、<a href="/species/mushroom">蘑菇</a></td><td>强属性或个性 + 独特设计</td></tr>
+<tr><td><strong>B</strong></td><td><a href="/species/octopus">章鱼</a>、<a href="/species/capybara">水豚</a>、<a href="/species/goose">鹅</a>、<a href="/species/rabbit">兔子</a>、<a href="/species/penguin">企鹅</a>、<a href="/species/turtle">乌龟</a>、<a href="/species/blob">果冻</a></td><td>稳健的全能型 + 良好魅力</td></tr>
+<tr><td><strong>C</strong></td><td><a href="/species/cactus">仙人掌</a>、<a href="/species/chonk">胖墩</a>、<a href="/species/duck">鸭子</a>、<a href="/species/snail">蜗牛</a></td><td>可爱的潜力股——个性好，属性实用性稍低</td></tr>
+</table>
+<p><strong>最后提醒：</strong>这个 Tier List 是主观的，仅供娱乐。每个 Buddy 都是独一无二的，稀有度比物种对原始属性影响更大。传说级蜗牛的总属性永远超过普通级龙。最好的 Buddy 就是你抽到的那个——现在就来查看吧！</p>`
+          },
+          {
+            heading: "立即查看你的物种",
+            body: `<p>好奇你的 Buddy 在这个排名中处于什么位置？只需 30 秒就能知道：</p>
+<ol>
+<li><strong>获取 UUID</strong> — 打开 Claude Code 输入 <code>What is my accountUuid?</code></li>
+<li><strong>访问查询工具</strong> — 前往 <a href="/">Buddy 查询工具</a>粘贴你的 UUID</li>
+<li><strong>查看物种</strong> — 你的物种、稀有度、属性和 ASCII 艺术会立即显示</li>
+<li><strong>分享结果</strong> — 生成分享卡片并使用 <code>#ClaudeBuddy</code> 标签发布</li>
+</ol>
+<p>抽到了龙？庆祝吧！抽到了蜗牛？拥抱慢生活！每个物种都有自己的粉丝。浏览<a href="/species">完整物种百科</a>了解更多，或查看<a href="/blog/claude-code-buddy-rarity-guide">稀有度指南</a>了解稀有度如何影响你 Buddy 的实力。</p>`
+          },
+        ],
+      },
+      ko: {
+        title: "Claude Code Buddy 전체 18종 물종 랭킹",
+        metaTitle: "Claude Code Buddy 전체 18종 물종 랭킹 - 최종 티어 리스트 (2026)",
+        metaDescription: "Claude Code Buddy 18종 전체 랭킹. 스탯, 성격, ASCII 아트 분석이 포함된 상세 티어 리스트로 최고의 종을 확인하세요.",
+        excerpt: "강력한 드래곤부터 사랑스러운 뚱이까지 — Claude Code Buddy의 18종을 다양한 차원에서 랭킹합니다. 당신의 동반자가 어디에 위치하는지 확인하세요.",
+        sections: [
+          {
+            heading: "랭킹 방법론",
+            body: `<p>18종의 고유한 종을 랭킹하는 것은 간단하지 않습니다 — 각 버디는 무엇을 중시하느냐에 따라 다른 강점을 가집니다. 그래서 단순한 "최고에서 최악" 리스트 대신 <strong>다섯 가지 차원</strong>에서 평가했습니다:</p>
+<ul>
+<li><strong>전투력</strong> — 주력 스탯이 얼마나 유용한가? 디버깅과 지혜가 가장 높은 점수를 받습니다.</li>
+<li><strong>개성</strong> — 종의 캐릭터가 얼마나 독특하고 재미있는가? 혼돈과 독설 종이 더 기억에 남습니다.</li>
+<li><strong>ASCII 아트 품질</strong> — 터미널 애니메이션이 얼마나 정교하고 인식하기 쉬운가?</li>
+<li><strong>자랑 지수</strong> — 소셜 미디어에서 이 종을 보여주면 얼마나 인상적인가?</li>
+<li><strong>커뮤니티 인기</strong> — 소셜 미디어, Reddit, Twitter/X에서 어떤 종이 가장 많은 관심을 받는가?</li>
+</ul>
+<p>각 종은 <strong>S(최고)에서 C(보통)</strong>까지의 티어 등급을 받습니다. 기억하세요: 나쁜 버디는 없습니다 — 모든 종에는 고유한 매력이 있습니다.</p>`
+          },
+          {
+            heading: "S 티어: 전설급",
+            body: `<h4>#1 — <a href="/species/dragon">드래곤 (Dragon)</a> 🏆</h4>
+<p><strong>주력 스탯:</strong> 디버깅 | <strong>카테고리:</strong> 신화 | <strong>태그:</strong> 강력, 고대, 위엄</p>
+<p>논란의 여지 없는 챔피언. 드래곤은 가장 유용한 주력 스탯(디버깅)과 전체 시스템에서 가장 인상적인 ASCII 아트를 결합합니다. 3프레임 애니메이션은 날개 펄럭임과 불꽃 효과를 보여줍니다. 소셜 미디어에서 드래곤 버디는 항상 가장 높은 참여도를 기록합니다.</p>
+<p><strong>1위인 이유:</strong> 최고의 주력 스탯 + 최고의 시각적 임팩트 + 최고의 소셜 가치.</p>
+
+<h4>#2 — <a href="/species/axolotl">아홀로틀 (Axolotl)</a></h4>
+<p><strong>주력 스탯:</strong> 디버깅 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 재생, 수생, 사랑스러운</p>
+<p>팬 최애. 아홀로틀은 드래곤의 강력한 디버깅 주력 스탯을 공유하면서 거부할 수 없는 귀여운 패키지로 감쌉니다. 독특한 아가미(<code>}~( )~{</code>)가 애니메이션에서 흔들리는 것이 특징입니다.</p>
+<p><strong>2위인 이유:</strong> 최상위 실용성 + 최대 귀여움. 힘과 개성의 완벽한 균형.</p>
+
+<h4>#3 — <a href="/species/owl">올빼미 (Owl)</a></h4>
+<p><strong>주력 스탯:</strong> 지혜 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 현명, 야행성, 관찰력</p>
+<p>현자 멘토. 올빼미의 지혜 주력 스탯은 궁극의 지식 동반자로 만듭니다. 독특한 이중 원형 눈 <code>(({E})({E}))</code>은 즉시 알아볼 수 있습니다.</p>
+<p><strong>3위인 이유:</strong> 지혜는 두 번째로 유용한 스탯 + 상징적 시각 디자인 + 강력한 "현자 멘토" 서사.</p>`
+          },
+          {
+            heading: "A 티어: 엘리트",
+            body: `<h4>#4 — <a href="/species/ghost">유령 (Ghost)</a></h4>
+<p><strong>주력 스탯:</strong> 혼돈 | <strong>카테고리:</strong> 신화 | <strong>태그:</strong> 초월적, 으스스한, 장난스러운</p>
+<p>와일드카드. 유령은 두 신화 종 중 하나로 즉각적인 위신을 가집니다. 혼돈 주력 스탯은 예측 불가능하고 재미있는 상호작용을 의미합니다. 물결치는 하단 가장자리 애니메이션이 진짜 떠다니는 것처럼 보입니다.</p>
+
+<h4>#5 — <a href="/species/robot">로봇 (Robot)</a></h4>
+<p><strong>주력 스탯:</strong> 디버깅 | <strong>카테고리:</strong> 오브젝트 | <strong>태그:</strong> 논리적, 기계적, 효율적</p>
+<p>일꾼. 세 번째 디버깅 전문가로 기계적 테마가 스탯과 완벽하게 어울립니다. 고희귀도 로봇은 약점 없는 디버깅 머신입니다.</p>
+
+<h4>#6 — <a href="/species/cat">고양이 (Cat)</a></h4>
+<p><strong>주력 스탯:</strong> 독설 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 독립적, 호기심, 우아한</p>
+<p>개성의 왕. 고양이의 독설 주력 스탯은 모든 종 중 가장 많은 태도를 부여합니다. 클래식한 <code>/\_/\</code> 귀와 <code>ω</code> 입은 가장 사랑받는 ASCII 아트 디자인입니다.</p>
+
+<h4>#7 — <a href="/species/mushroom">버섯 (Mushroom)</a></h4>
+<p><strong>주력 스탯:</strong> 지혜 | <strong>카테고리:</strong> 오브젝트 | <strong>태그:</strong> 균류, 신비로운, 숲</p>
+<p>다크호스. 버섯은 예상외로 최고의 종 중 하나입니다 — 지혜 주력 스탯이 균류 패키지에 담겨 "전지전능한 균류" 서사를 만듭니다.</p>`
+          },
+          {
+            heading: "B 티어: 안정적인 선택",
+            body: `<h4>#8 — <a href="/species/octopus">문어 (Octopus)</a></h4>
+<p><strong>주력 스탯:</strong> 지혜 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 지능적, 유연한, 심해</p>
+<p>멀티태스커. 올빼미의 지혜 주력 스탯을 공유하며 "유연한 문제 해결사" 느낌을 더합니다.</p>
+
+<h4>#9 — <a href="/species/capybara">카피바라 (Capybara)</a></h4>
+<p><strong>주력 스탯:</strong> 인내 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 여유, 사교적, 친근한</p>
+<p>선(禪) 마스터. AI 불안의 시대에 인내심 있는 카피바라 동반자는 깊은 위안을 줍니다.</p>
+
+<h4>#10 — <a href="/species/goose">거위 (Goose)</a></h4>
+<p><strong>주력 스탯:</strong> 혼돈 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 혼돈, 시끄러운, 겁없는</p>
+<p>말썽꾸러기. "Untitled Goose Game" 에너지에서 영감을 받은 거위는 순수한 혼돈의 재미입니다.</p>
+
+<h4>#11 — <a href="/species/rabbit">토끼 (Rabbit)</a></h4>
+<p><strong>주력 스탯:</strong> 혼돈 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 빠른, 복슬복슬, 경계하는</p>
+<p>스피드스터. 혼돈 주력 스탯과 "빠른" 태그가 결합되어 빠른 코딩 세션에 어울리는 활력 넘치는 동반자입니다.</p>
+
+<h4>#12 — <a href="/species/penguin">펭귄 (Penguin)</a></h4>
+<p><strong>주력 스탯:</strong> 인내 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 회복력, 사교적, 극지</p>
+<p>지구력 러너. 인내 주력 스탯이 혹독한 환경에서 생존하는 현실 평판과 완벽하게 맞습니다.</p>
+
+<h4>#13 — <a href="/species/turtle">거북이 (Turtle)</a></h4>
+<p><strong>주력 스탯:</strong> 인내 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 꾸준한, 장갑, 고대</p>
+<p>탱크. 거북이의 등껍질 패턴은 가장 정교한 ASCII 디자인 중 하나이며, "느리지만 꾸준히 이기는" 궁극의 동반자입니다.</p>
+
+<h4>#14 — <a href="/species/blob">블롭 (Blob)</a></h4>
+<p><strong>주력 스탯:</strong> 지혜 | <strong>카테고리:</strong> 크리처 | <strong>태그:</strong> 무정형, 차분한, 신비로운</p>
+<p>변형자. 유일한 "크리처" 카테고리 종으로 분류만으로도 독보적입니다. 변형 애니메이션과 지혜 주력 스탯이 신비로운 전지적 존재를 만듭니다.</p>`
+          },
+          {
+            heading: "C 티어: 언더독",
+            body: `<h4>#15 — <a href="/species/cactus">선인장 (Cactus)</a></h4>
+<p><strong>주력 스탯:</strong> 독설 | <strong>카테고리:</strong> 오브젝트 | <strong>태그:</strong> 가시, 회복력, 사막</p>
+<p>가시 돋친 친구. "독설"의 가장 문자 그대로의 해석 — 말 그대로 가시로 덮여 있습니다. 팔 흔드는 애니메이션이 식물치고는 놀라울 정도로 표현력이 풍부합니다.</p>
+
+<h4>#16 — <a href="/species/chonk">뚱이 (Chonk)</a></h4>
+<p><strong>주력 스탯:</strong> 독설 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 둥근, 묵직한, 사랑스러운</p>
+<p>절대적 존재감. 뚱이는 본질적으로 둥글고 거대한 고양이로 태도가 최대치입니다. 코드를 심판하면서 사랑스럽게 뚱뚱한 동반자입니다.</p>
+
+<h4>#17 — <a href="/species/duck">오리 (Duck)</a></h4>
+<p><strong>주력 스탯:</strong> 인내 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 친근한, 수생, 명랑한</p>
+<p>러버덕 디버거. 오리의 인내 주력 스탯과 명랑한 성격은 프로그래머들 사이에서 유명한 "러버덕 디버깅" 기법의 완벽한 동반자입니다.</p>
+
+<h4>#18 — <a href="/species/snail">달팽이 (Snail)</a></h4>
+<p><strong>주력 스탯:</strong> 인내 | <strong>카테고리:</strong> 동물 | <strong>태그:</strong> 느린, 끈기, 나선형</p>
+<p>슬로우 버너. 달팽이가 마지막인 이유는 나빠서가 아니라 인내가 주력 스탯이고 성격이 가장 차분하기 때문입니다. 하지만 달팽이는 독특한 ASCII 아트 장점이 있습니다 — 눈이 더듬이 위에 있어 유일하게 비대칭 눈 배치를 가진 종입니다.</p>
+<p><strong>기억하세요:</strong> 18종의 놀라운 종 중 마지막이라고 달팽이가 나쁜 것은 아닙니다. 모든 버디는 고유하며, 전설 달팽이의 100 인내는 여전히 놀라운 동반자입니다. 랭킹은 주관적입니다 — 당신의 버디는 이 리스트 어디에 있든 특별합니다.</p>`
+          },
+          {
+            heading: "주력 스탯별 분류",
+            body: `<p>모든 종에는 가장 높은 경향이 있는 스탯이 하나 있습니다. 스탯별 완전한 분류입니다:</p>
+<table>
+<tr><th>주력 스탯</th><th>종</th><th>수</th><th>플레이스타일</th></tr>
+<tr><td>🔴 디버깅</td><td><a href="/species/dragon">드래곤</a>, <a href="/species/axolotl">아홀로틀</a>, <a href="/species/robot">로봇</a></td><td>3</td><td>수리공 — 버그를 찾고 잡는 데 최고</td></tr>
+<tr><td>🔵 인내</td><td><a href="/species/duck">오리</a>, <a href="/species/penguin">펭귄</a>, <a href="/species/turtle">거북이</a>, <a href="/species/snail">달팽이</a>, <a href="/species/capybara">카피바라</a></td><td>5</td><td>차분한 자 — 긴 세션의 안정적 동반자</td></tr>
+<tr><td>🟣 혼돈</td><td><a href="/species/goose">거위</a>, <a href="/species/ghost">유령</a>, <a href="/species/rabbit">토끼</a></td><td>3</td><td>와일드카드 — 예측 불가능하고 재미있는</td></tr>
+<tr><td>🟡 지혜</td><td><a href="/species/blob">블롭</a>, <a href="/species/octopus">문어</a>, <a href="/species/owl">올빼미</a>, <a href="/species/mushroom">버섯</a></td><td>4</td><td>조언자 — 깊은 지식과 통찰력</td></tr>
+<tr><td>🟢 독설</td><td><a href="/species/cat">고양이</a>, <a href="/species/cactus">선인장</a>, <a href="/species/chonk">뚱이</a></td><td>3</td><td>비평가 — 날카로운 코드 리뷰어</td></tr>
+</table>
+<p><strong>핵심 인사이트:</strong> 인내가 가장 많은 종(5종)을 보유하여 가장 흔한 주력 스탯입니다. 디버깅은 3종뿐이지만 개발자에게 가장 실용적이어서 상위 랭크를 차지합니다.</p>`
+          },
+          {
+            heading: "카테고리별 분류",
+            body: `<p>18종은 네 가지 카테고리로 나뉘며 각각 다른 느낌을 줍니다:</p>
+<table>
+<tr><th>카테고리</th><th>종</th><th>수</th><th>분위기</th></tr>
+<tr><td>🐾 동물</td><td>오리, 거위, 고양이, 문어, 올빼미, 펭귄, 거북이, 달팽이, 아홀로틀, 카피바라, 토끼, 뚱이</td><td>12</td><td>친숙하고 공감가는 동반자</td></tr>
+<tr><td>🔮 신화</td><td>드래곤, 유령</td><td>2</td><td>희귀한 느낌, 위신</td></tr>
+<tr><td>🧪 크리처</td><td>블롭</td><td>1</td><td>추상적, 신비로운</td></tr>
+<tr><td>⚙️ 오브젝트</td><td>선인장, 로봇, 버섯</td><td>3</td><td>비전통적, 놀라운</td></tr>
+</table>
+<p><strong>희귀도 인식:</strong> 모든 종의 확률은 동일하지만(1/18 ≈ 5.56%), <strong>신화</strong> 카테고리(드래곤, 유령)와 유일한 <strong>크리처</strong>(블롭)는 카테고리 멤버가 적어 더 희귀하게 느껴집니다.</p>`
+          },
+          {
+            heading: "티어 리스트 요약",
+            body: `<p>전체 티어 리스트 한눈에 보기:</p>
+<table>
+<tr><th>티어</th><th>종</th><th>이유</th></tr>
+<tr><td><strong>S</strong></td><td><a href="/species/dragon">드래곤</a>, <a href="/species/axolotl">아홀로틀</a>, <a href="/species/owl">올빼미</a></td><td>최고의 스탯 + 최고의 비주얼 + 최고의 커뮤니티 가치</td></tr>
+<tr><td><strong>A</strong></td><td><a href="/species/ghost">유령</a>, <a href="/species/robot">로봇</a>, <a href="/species/cat">고양이</a>, <a href="/species/mushroom">버섯</a></td><td>강한 스탯 또는 개성 + 독특한 디자인</td></tr>
+<tr><td><strong>B</strong></td><td><a href="/species/octopus">문어</a>, <a href="/species/capybara">카피바라</a>, <a href="/species/goose">거위</a>, <a href="/species/rabbit">토끼</a>, <a href="/species/penguin">펭귄</a>, <a href="/species/turtle">거북이</a>, <a href="/species/blob">블롭</a></td><td>안정적인 올라운더 + 좋은 매력</td></tr>
+<tr><td><strong>C</strong></td><td><a href="/species/cactus">선인장</a>, <a href="/species/chonk">뚱이</a>, <a href="/species/duck">오리</a>, <a href="/species/snail">달팽이</a></td><td>사랑스러운 언더독 — 좋은 개성, 낮은 스탯 실용성</td></tr>
+</table>
+<p><strong>마지막 알림:</strong> 이 티어 리스트는 주관적이며 재미를 위한 것입니다. 모든 버디는 고유하며, 희귀도가 종보다 원시 스탯에 더 큰 영향을 미칩니다. 전설 달팽이는 항상 일반 드래곤보다 총 스탯이 높습니다. 최고의 버디는 당신이 받은 버디입니다 — 지금 확인하세요!</p>`
+          },
+          {
+            heading: "지금 당신의 종을 확인하세요",
+            body: `<p>당신의 버디가 이 리스트에서 어디에 위치하는지 궁금하신가요? 30초면 알 수 있습니다:</p>
+<ol>
+<li><strong>UUID 찾기</strong> — Claude Code를 열고 <code>What is my accountUuid?</code>를 입력하세요</li>
+<li><strong>체커 방문</strong> — <a href="/">Buddy 체커</a>로 이동하여 UUID를 붙여넣으세요</li>
+<li><strong>종 확인</strong> — 종, 희귀도, 스탯, ASCII 아트가 즉시 표시됩니다</li>
+<li><strong>결과 공유</strong> — 공유 카드를 생성하고 <code>#ClaudeBuddy</code>로 게시하세요</li>
+</ol>
+<p>드래곤을 받았나요? 축하하세요! 달팽이를 받았나요? 느린 삶을 즐기세요! 모든 종에는 팬이 있습니다. <a href="/species">전체 종 백과사전</a>에서 더 알아보거나, <a href="/blog/claude-code-buddy-rarity-guide">희귀도 가이드</a>에서 희귀도가 버디의 힘에 어떤 영향을 미치는지 확인하세요.</p>`
+          },
+        ],
+      },
+    },
+  },
 ];
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
