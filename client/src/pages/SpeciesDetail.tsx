@@ -25,6 +25,7 @@ import StatBar from "@/components/StatBar";
 import ShareButton from "@/components/ShareButton";
 import ShareCardModal from "@/components/ShareCardModal";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ThemeToggle from "@/components/ThemeToggle";
 import type { ShareCardSpeciesData } from "@/lib/share-card-renderer";
 import { SPECIES_FAQS } from "@/lib/species-faq";
 import FAQSection from "@/components/FAQSection";
@@ -174,6 +175,7 @@ export default function SpeciesDetail() {
             </Link>
           </div>
           <div className="flex items-center gap-3">
+            <ThemeToggle />
             <LanguageSwitcher />
             <span className="text-[#33ff33]/40 text-xs hidden sm:inline">
               /species/{slug}

@@ -12,6 +12,7 @@ import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { getAllArticles, type BlogArticle } from "@/lib/blog-data";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ThemeToggle from "@/components/ThemeToggle";
 
 /* ── Sort/Filter Button Components ── */
 function SortButton({
@@ -206,7 +207,10 @@ export default function BlogIndex() {
               {t("blog.backToChecker")}
             </Link>
           </div>
-          <LanguageSwitcher />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <LanguageSwitcher />
+          </div>
         </div>
 
         {/* Header */}

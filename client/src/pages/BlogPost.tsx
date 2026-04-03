@@ -9,6 +9,7 @@ import { Link, useParams } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { getArticleBySlug, getAllArticles } from "@/lib/blog-data";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ThemeToggle from "@/components/ThemeToggle";
 import ArticleSchema from "@/components/ArticleSchema";
 import ScrollToTop from "@/components/ScrollToTop";
 
@@ -93,7 +94,10 @@ export default function BlogPost() {
             >
               {t("blog.backToBlog")}
             </Link>
-            <LanguageSwitcher />
+            <div className="flex items-center gap-2">
+              <ThemeToggle />
+              <LanguageSwitcher />
+            </div>
           </div>
           <div className="border border-border bg-card p-8 text-center">
             <p className="text-crt-red text-sm">{t("blog.errorNotFound")}</p>
@@ -147,7 +151,10 @@ export default function BlogPost() {
               {t("blog.backToBlog")}
             </Link>
           </div>
-          <LanguageSwitcher />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <LanguageSwitcher />
+          </div>
         </div>
 
         {/* Article Header */}

@@ -96,6 +96,114 @@
   --sidebar-primary-foreground: oklch(0.08 0.005 145);
 }
 
+/* Light "Paper Terminal" Theme — dark ink on warm ivory */
+:root:not(.dark) {
+  --background: oklch(0.97 0.008 80);
+  --foreground: oklch(0.18 0.12 145);
+  --card: oklch(0.93 0.012 80);
+  --card-foreground: oklch(0.18 0.12 145);
+  --popover: oklch(0.93 0.012 80);
+  --popover-foreground: oklch(0.18 0.12 145);
+  --primary: oklch(0.18 0.12 145);
+  --primary-foreground: oklch(0.97 0.008 80);
+  --secondary: oklch(0.88 0.015 80);
+  --secondary-foreground: oklch(0.30 0.10 145);
+  --muted: oklch(0.88 0.015 80);
+  --muted-foreground: oklch(0.45 0.08 145);
+  --accent: oklch(0.48 0.14 65);
+  --accent-foreground: oklch(0.97 0.008 80);
+  --destructive: oklch(0.50 0.20 25);
+  --destructive-foreground: oklch(0.97 0.008 80);
+  --border: oklch(0.68 0.06 145);
+  --input: oklch(0.91 0.010 80);
+  --ring: oklch(0.18 0.12 145);
+  --sidebar: oklch(0.93 0.012 80);
+  --sidebar-foreground: oklch(0.18 0.12 145);
+  --sidebar-accent: oklch(0.88 0.015 80);
+  --sidebar-accent-foreground: oklch(0.18 0.12 145);
+  --sidebar-border: oklch(0.68 0.06 145);
+  --sidebar-ring: oklch(0.18 0.12 145);
+  --sidebar-primary: oklch(0.18 0.12 145);
+  --sidebar-primary-foreground: oklch(0.97 0.008 80);
+}
+
+/* Light mode: remap phosphor green token to dark ink green */
+:root:not(.dark) {
+  --color-crt-green: oklch(0.22 0.14 145);
+  --color-crt-green-dim: oklch(0.42 0.10 145);
+  --color-crt-amber: oklch(0.48 0.14 65);
+}
+
+/* Light mode: suppress CRT scan lines overlay */
+:root:not(.dark) .crt-scanlines {
+  display: none;
+}
+
+/* Light mode: soften phosphor glow effects to ink shadow */
+:root:not(.dark) .glow-text {
+  text-shadow:
+    0 1px 2px rgba(30, 80, 30, 0.25);
+}
+
+:root:not(.dark) .glow-text-amber {
+  text-shadow:
+    0 1px 2px rgba(120, 80, 0, 0.25);
+}
+
+:root:not(.dark) .glow-border {
+  box-shadow:
+    0 0 0 1px oklch(0.68 0.06 145 / 0.4);
+}
+
+/* Light mode: fix hardcoded dark-bg nav in SpeciesIndex */
+:root:not(.dark) nav.sticky {
+  background-color: oklch(0.93 0.012 80 / 0.97) !important;
+  border-color: oklch(0.68 0.06 145) !important;
+}
+
+/* Light mode: fix hardcoded CRT green text for readability */
+:root:not(.dark) [class*="text-\[#33ff33\]"],
+:root:not(.dark) [class*="text-crt-green"] {
+  color: oklch(0.22 0.14 145);
+}
+
+/* Light mode: fix hardcoded dark backgrounds in SpeciesIndex */
+:root:not(.dark) [class*="bg-\[#0a0a0a\]"],
+:root:not(.dark) [class*="bg-\[#0a0a0"] {
+  background-color: oklch(0.88 0.015 80) !important;
+}
+
+/* Light mode: rarity colors adjusted for light bg */
+:root:not(.dark) .rarity-common { color: oklch(0.45 0.05 145); }
+:root:not(.dark) .rarity-uncommon { color: oklch(0.22 0.14 145); }
+:root:not(.dark) .rarity-rare { color: oklch(0.45 0.18 250); }
+:root:not(.dark) .rarity-epic { color: oklch(0.45 0.20 300); }
+:root:not(.dark) .rarity-legendary { color: oklch(0.50 0.18 60); }
+
+/* Light mode: blog content overrides */
+:root:not(.dark) .blog-content strong { color: oklch(0.25 0.05 80); }
+:root:not(.dark) .blog-content a { color: oklch(0.22 0.14 145); }
+:root:not(.dark) .blog-content a:hover { color: oklch(0.15 0.18 145); }
+:root:not(.dark) .blog-content code {
+  background-color: oklch(0.87 0.018 80);
+  color: oklch(0.35 0.12 65);
+}
+:root:not(.dark) .blog-content pre {
+  background-color: oklch(0.90 0.015 80);
+  border-color: oklch(0.70 0.06 145);
+}
+:root:not(.dark) .blog-content pre code { color: oklch(0.18 0.12 145); }
+:root:not(.dark) .blog-content h4 { color: oklch(0.40 0.12 65); }
+:root:not(.dark) .blog-content table th {
+  border-color: oklch(0.70 0.06 145);
+  color: oklch(0.18 0.12 145);
+}
+:root:not(.dark) .blog-content table td { border-color: oklch(0.82 0.015 80); }
+:root:not(.dark) .blog-content table tr:hover td { background-color: oklch(0.89 0.015 80); }
+
+/* Light mode: terminal-prompt color */
+:root:not(.dark) .terminal-prompt::before { color: oklch(0.22 0.14 145); }
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
