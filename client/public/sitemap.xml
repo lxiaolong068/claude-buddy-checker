@@ -314,4 +314,16 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/claude-buddy-cosmetics-guide-hats-eyes-shiny" />
   </url>
 
+  <!-- Blog: Claude Buddy Algorithm - FNV-1a & Mulberry32 PRNG -->
+  <url>
+    <loc>https://claudebuddy.art/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng</loc>
+    <lastmod>2026-04-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng" />
+  </url>
+
 </urlset>

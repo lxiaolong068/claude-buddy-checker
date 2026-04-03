@@ -1955,6 +1955,592 @@ P(전부) = 0.01 × 0.0556 × 0.1667 × 0.125 × 0.01
       },
     },
   },
+  // ── Article 6: Algorithm Deep Dive ──────────────────────────────────────
+  {
+    slug: "claude-buddy-algorithm-fnv1a-mulberry32-prng",
+    publishedAt: "2026-04-04",
+    readingTime: 10,
+    tags: ["algorithm", "technical", "fnv1a", "prng", "deep-dive"],
+    content: {
+      en: {
+        title: "The Algorithm Behind Claude Code Buddy \u2014 FNV-1a & Mulberry32 PRNG Explained",
+        metaTitle: "The Algorithm Behind Claude Code Buddy \u2014 FNV-1a & Mulberry32 PRNG Explained (2026)",
+        metaDescription: "Technical deep dive into how Claude Code Buddy generates deterministic pets from UUIDs. Covers FNV-1a hashing, Mulberry32 PRNG, weighted random selection, and the complete roll pipeline.",
+        excerpt: "How does a UUID turn into a unique terminal pet? The answer involves a 32-bit hash function from 1991, a lightweight PRNG, and a carefully ordered pipeline of random rolls. Let's trace the algorithm step by step.",
+        sections: [
+          {
+            heading: "From UUID to Buddy: The Big Picture",
+            body: `<p>Every Claude Code Buddy is <strong>deterministic</strong>. The same UUID always produces the same species, rarity, eyes, hat, shiny status, and stats. There's no server involved, no database lookup, no randomness from <code>Math.random()</code>. The entire generation happens client-side in a single function call.</p>
+<p>The pipeline is elegantly simple:</p>
+<pre><code>UUID string + SALT \u2192 FNV-1a hash \u2192 32-bit seed \u2192 Mulberry32 PRNG \u2192 sequential rolls</code></pre>
+<p>Let's break down each stage.</p>`
+          },
+          {
+            heading: "Stage 1: Salting the Input",
+            body: `<p>Before any hashing occurs, the system concatenates your UUID with a hardcoded <strong>salt string</strong>:</p>
+<pre><code>const rng = mulberry32(hashString(userId + SALT));
+// SALT = 'friend-2026-401'</code></pre>
+<p>The salt serves three purposes:</p>
+<table>
+<tr><th>Purpose</th><th>Explanation</th></tr>
+<tr><td><strong>Prevent reverse engineering</strong></td><td>Without knowing the salt, you can't predict which UUID maps to which buddy</td></tr>
+<tr><td><strong>Version control</strong></td><td>Changing the salt in a future update would reshuffle all buddies \u2014 a \"season reset\"</td></tr>
+<tr><td><strong>Namespace isolation</strong></td><td>The same UUID used in a different system wouldn't produce the same hash</td></tr>
+</table>
+<p>The salt <code>'friend-2026-401'</code> hints at its origin: \"friend\" (buddy), \"2026\" (year), \"401\" (possibly April 1st, the launch date).</p>`
+          },
+          {
+            heading: "Stage 2: FNV-1a Hash \u2014 Turning Strings into Numbers",
+            body: `<p><strong>FNV-1a</strong> (Fowler\u2013Noll\u2013Vo, variant 1a) is a non-cryptographic hash function created in 1991. It's chosen here for three reasons: it's fast, it has excellent distribution for short strings, and it fits in a single function.</p>
+<p>Here's the exact implementation:</p>
+<pre><code>function hashString(s: string): number {
+  let h = 2166136261;          // FNV offset basis
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);      // XOR with byte
+    h = Math.imul(h, 16777619); // multiply by FNV prime
+  }
+  return h >>> 0;               // convert to unsigned 32-bit
+}</code></pre>
+<p>Let's decode the magic numbers:</p>
+<table>
+<tr><th>Constant</th><th>Hex</th><th>Role</th></tr>
+<tr><td><strong>2166136261</strong></td><td><code>0x811c9dc5</code></td><td>FNV-1a 32-bit offset basis \u2014 the initial hash value</td></tr>
+<tr><td><strong>16777619</strong></td><td><code>0x01000193</code></td><td>FNV-1a 32-bit prime \u2014 chosen for optimal bit diffusion</td></tr>
+</table>
+<p><strong>Why FNV-1a instead of FNV-1?</strong> The \"a\" variant XORs <em>before</em> multiplying, which produces better <strong>avalanche behavior</strong> \u2014 a single bit change in the input flips roughly half the output bits. FNV-1 multiplies first, which can leave the lower bits less mixed.</p>
+<p><strong>Why <code>Math.imul</code>?</strong> JavaScript numbers are 64-bit floats. Normal multiplication (<code>*</code>) would lose precision for large 32-bit integers. <code>Math.imul</code> performs true 32-bit integer multiplication, preserving the low 32 bits exactly as a C compiler would.</p>
+<p><strong>Why <code>>>> 0</code>?</strong> JavaScript's bitwise operators return signed 32-bit integers. The unsigned right shift by 0 converts the result to an <em>unsigned</em> 32-bit integer (0 to 4,294,967,295), which is what we need as a PRNG seed.</p>`
+          },
+          {
+            heading: "Stage 3: Mulberry32 PRNG \u2014 The Random Number Factory",
+            body: `<p><strong>Mulberry32</strong> is a 32-bit pseudorandom number generator designed by Tommy Ettinger. It has a period of 2<sup>32</sup> (about 4.3 billion values before repeating) and passes the gjrand testing suite for randomness quality.</p>
+<pre><code>function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0;                                         // ensure signed 32-bit
+    a = (a + 0x6d2b79f5) | 0;                       // increment state
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);        // mix: shift, XOR, multiply
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;  // further mixing
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;    // normalize to [0, 1)
+  };
+}</code></pre>
+<p>Let's trace through the algorithm step by step:</p>
+<table>
+<tr><th>Step</th><th>Operation</th><th>Purpose</th></tr>
+<tr><td><strong>1</strong></td><td><code>a = (a + 0x6d2b79f5) | 0</code></td><td>Advance state by a large odd constant (Knuth's multiplicative hash increment). The <code>| 0</code> keeps it as a signed 32-bit integer.</td></tr>
+<tr><td><strong>2</strong></td><td><code>a ^ (a >>> 15)</code></td><td>XOR the state with itself shifted right by 15 bits. This mixes the upper bits into the lower bits.</td></tr>
+<tr><td><strong>3</strong></td><td><code>Math.imul(..., 1 | a)</code></td><td>Multiply by an odd number derived from the state itself. The <code>1 | a</code> ensures the multiplier is always odd (never zero).</td></tr>
+<tr><td><strong>4</strong></td><td><code>t ^ (t >>> 7)</code></td><td>Another XOR-shift to further diffuse bits.</td></tr>
+<tr><td><strong>5</strong></td><td><code>Math.imul(..., 61 | t)</code></td><td>Second state-dependent multiplication. 61 is prime, and <code>61 | t</code> ensures the multiplier is always odd.</td></tr>
+<tr><td><strong>6</strong></td><td><code>t ^ (t >>> 14)</code></td><td>Final XOR-shift for output whitening.</td></tr>
+<tr><td><strong>7</strong></td><td><code>>>> 0 / 4294967296</code></td><td>Convert to unsigned integer, then divide by 2<sup>32</sup> to get a float in [0, 1).</td></tr>
+</table>
+<p><strong>Why not <code>Math.random()</code>?</strong> <code>Math.random()</code> is not seedable \u2014 you can't reproduce the same sequence. Mulberry32 is deterministic: the same seed always produces the same sequence, which is essential for making buddies reproducible.</p>
+<p><strong>Why not a cryptographic PRNG?</strong> Buddy generation doesn't need cryptographic security. Mulberry32 is orders of magnitude faster and produces statistically uniform output that's more than sufficient for game-like applications.</p>`
+          },
+          {
+            heading: "Stage 4: The Roll Pipeline \u2014 Order Matters",
+            body: `<p>With the PRNG initialized, <code>rollBuddy</code> makes a specific sequence of calls. <strong>The order is critical</strong> because each <code>rng()</code> call advances the internal state irreversibly:</p>
+<pre><code>export function rollBuddy(userId: string): BuddyResult {
+  const rng = mulberry32(hashString(userId + SALT));
+  const rarity  = rollRarity(rng);     // Step 1: 1+ RNG calls
+  const species = pick(rng, SPECIES);   // Step 2: 1 RNG call
+  const eye     = pick(rng, EYES);      // Step 3: 1 RNG call
+  const hat     = rarity === 'common'   // Step 4: 0 or 1 RNG call
+                  ? 'none'
+                  : pick(rng, HATS);
+  const shiny   = rng() < 0.01;        // Step 5: 1 RNG call
+  const stats   = rollStats(rng, rarity); // Step 6: 7+ RNG calls
+  return { rarity, species, eye, hat, shiny, stats };
+}</code></pre>
+<p><strong>The cascade effect:</strong> Because Common buddies skip the hat roll (0 RNG calls consumed), their shiny check uses a <em>different</em> RNG value than non-Common buddies. This means rarity doesn't just affect hat eligibility \u2014 it subtly shifts every subsequent roll. A buddy that would have been shiny as Uncommon might not be shiny as Common, even with the same UUID.</p>
+<p>Here's the exact RNG call count for each step:</p>
+<table>
+<tr><th>Step</th><th>Function</th><th>RNG Calls</th><th>Notes</th></tr>
+<tr><td>1</td><td><code>rollRarity</code></td><td>1</td><td>Single weighted random roll</td></tr>
+<tr><td>2</td><td><code>pick(SPECIES)</code></td><td>1</td><td>Uniform selection from 18 species</td></tr>
+<tr><td>3</td><td><code>pick(EYES)</code></td><td>1</td><td>Uniform selection from 6 eyes</td></tr>
+<tr><td>4</td><td>Hat</td><td>0 or 1</td><td>0 if Common, 1 otherwise</td></tr>
+<tr><td>5</td><td>Shiny check</td><td>1</td><td>Simple threshold: <code>rng() < 0.01</code></td></tr>
+<tr><td>6</td><td><code>rollStats</code></td><td>7\u201312</td><td>1 peak pick + 1\u20135 dump picks (with retries) + 5 stat rolls</td></tr>
+</table>
+<p><strong>Total: 11\u201317 RNG calls per buddy.</strong> The variance comes from <code>rollStats</code>, where the dump stat must differ from the peak stat \u2014 if they collide, the RNG is called again.</p>`
+          },
+          {
+            heading: "Deep Dive: Weighted Random Selection",
+            body: `<p>The rarity system uses <strong>weighted random selection</strong>, a classic algorithm:</p>
+<pre><code>function rollRarity(rng: () => number): Rarity {
+  const total = 60 + 25 + 10 + 4 + 1; // = 100
+  let roll = rng() * total;            // roll \u2208 [0, 100)
+  for (const rarity of RARITIES) {
+    roll -= RARITY_WEIGHTS[rarity];
+    if (roll < 0) return rarity;
+  }
+  return 'common'; // fallback (unreachable in practice)
+}</code></pre>
+<p>Visualized as a number line from 0 to 100:</p>
+<pre><code>0          60       85    95  99 100
+|  Common  | Uncomm | Rare |Ep|L|
+|   60%    |  25%   | 10%  |4%|1%|</code></pre>
+<p>The algorithm generates a random number in [0, 100), then walks through the rarities, subtracting each weight. The first rarity that drives the counter below zero wins. This guarantees exact probability distribution regardless of the order of iteration.</p>
+<p><strong>Why not use a lookup table?</strong> With only 5 rarities, the linear scan is negligible. A binary search or alias table would be over-engineering for this use case.</p>`
+          },
+          {
+            heading: "Deep Dive: The Stats Generation Algorithm",
+            body: `<p>Stats generation is the most complex part of the pipeline, using a <strong>peak/dump asymmetric model</strong>:</p>
+<pre><code>function rollStats(rng, rarity) {
+  const floor = RARITY_FLOOR[rarity];  // 5/15/25/35/50
+  const peak  = pick(rng, STAT_NAMES); // random best stat
+  let dump    = pick(rng, STAT_NAMES); // random worst stat
+  while (dump === peak) dump = pick(rng, STAT_NAMES); // must differ
+  
+  for (const name of STAT_NAMES) {
+    if (name === peak)
+      stats[name] = min(100, floor + 50 + random(0..29));
+    else if (name === dump)
+      stats[name] = max(1, floor - 10 + random(0..14));
+    else
+      stats[name] = floor + random(0..39);
+  }
+}</code></pre>
+<p>The three formulas create distinct stat distributions:</p>
+<table>
+<tr><th>Stat Type</th><th>Formula</th><th>Common Range</th><th>Legendary Range</th></tr>
+<tr><td><strong>Peak</strong></td><td><code>min(100, floor + 50 + rand(30))</code></td><td>55\u201384</td><td>100 (capped)</td></tr>
+<tr><td><strong>Dump</strong></td><td><code>max(1, floor - 10 + rand(15))</code></td><td>1\u20139</td><td>40\u201354</td></tr>
+<tr><td><strong>Normal</strong></td><td><code>floor + rand(40)</code></td><td>5\u201344</td><td>50\u201389</td></tr>
+</table>
+<p><strong>Key insight:</strong> Legendary buddies have such high floors that even their dump stat (40\u201354) exceeds most Common buddies' normal stats (5\u201344). And their peak stat is always capped at 100 because <code>50 + 50 + rand(30)</code> always exceeds 100.</p>
+<p><strong>The dump stat retry loop:</strong> The <code>while (dump === peak)</code> loop ensures every buddy has a distinct weakness. With 5 stats, there's a 20% chance of collision per attempt, meaning the expected number of extra RNG calls is 0.25 (geometric distribution).</p>`
+          },
+          {
+            heading: "Putting It All Together: A Worked Example",
+            body: `<p>Let's trace through a real example. Suppose your UUID is <code>abc-123</code>:</p>
+<pre><code>// Step 0: Salt
+input = 'abc-123' + 'friend-2026-401'
+      = 'abc-123friend-2026-401'
+
+// Step 1: FNV-1a Hash
+h = 2166136261
+h = (h ^ 97) * 16777619   // 'a' = 97
+h = (h ^ 98) * 16777619   // 'b' = 98
+h = (h ^ 99) * 16777619   // 'c' = 99
+... (continue for all 25 characters)
+seed = h >>> 0             // unsigned 32-bit result
+
+// Step 2: Initialize PRNG
+rng = mulberry32(seed)
+
+// Step 3: Roll sequence
+rng() \u2192 0.7234...  \u2192 rarity = 'uncommon' (falls in 60-85 range)
+rng() \u2192 0.4521...  \u2192 species = SPECIES[floor(0.4521 * 18)] = SPECIES[8] = 'turtle'
+rng() \u2192 0.8901...  \u2192 eye = EYES[floor(0.8901 * 6)] = EYES[5] = '\u00b0'
+rng() \u2192 0.3712...  \u2192 hat = HATS[floor(0.3712 * 8)] = HATS[2] = 'tophat'
+rng() \u2192 0.5623...  \u2192 shiny = false (0.5623 \u2265 0.01)
+rng() \u2192 ...        \u2192 stats = { DEBUGGING: 42, PATIENCE: 67, ... }</code></pre>
+<p><strong>Result:</strong> An Uncommon Turtle with \u00b0 (surprised) eyes, wearing a top hat, not shiny. Every time anyone enters <code>abc-123</code>, they get this exact same buddy.</p>
+<p><em>Note: The numbers above are illustrative. The actual RNG outputs depend on the precise hash value.</em></p>`
+          },
+          {
+            heading: "Why This Design Is Elegant",
+            body: `<p>The buddy generation system makes several clever engineering choices that are worth highlighting:</p>
+<table>
+<tr><th>Design Choice</th><th>Benefit</th></tr>
+<tr><td><strong>Client-side only</strong></td><td>Zero server load, instant results, works offline. No API calls, no database, no latency.</td></tr>
+<tr><td><strong>Deterministic from UUID</strong></td><td>No need to store buddy data anywhere. The buddy is \"computed\" from the UUID on demand.</td></tr>
+<tr><td><strong>Single PRNG stream</strong></td><td>One seed generates all attributes. No need for multiple hash functions or separate random sources.</td></tr>
+<tr><td><strong>Ordered pipeline</strong></td><td>The fixed call order means each attribute is determined by a specific position in the RNG sequence, making the system predictable and debuggable.</td></tr>
+<tr><td><strong>Salt-based versioning</strong></td><td>Changing the salt reshuffles all buddies without changing any code logic \u2014 perfect for seasonal events or resets.</td></tr>
+<tr><td><strong>Non-cryptographic hash</strong></td><td>FNV-1a is fast enough for real-time use. Cryptographic hashes (SHA-256) would be overkill and slower.</td></tr>
+</table>
+<p>The entire system fits in about 50 lines of code, yet produces 18 species \u00d7 5 rarities \u00d7 6 eyes \u00d7 8 hats \u00d7 2 shiny states \u00d7 billions of stat combinations = effectively infinite unique buddies.</p>
+<p>Want to see the algorithm in action? Head to the <a href=\"/\">Buddy Checker</a> and enter your UUID. The code running in your browser is the exact implementation described in this article.</p>`
+          }
+        ],
+      },
+      zh: {
+        title: "Claude Code Buddy \u80cc\u540e\u7684\u7b97\u6cd5 \u2014 FNV-1a \u4e0e Mulberry32 PRNG \u8be6\u89e3",
+        metaTitle: "Claude Code Buddy \u80cc\u540e\u7684\u7b97\u6cd5 \u2014 FNV-1a \u4e0e Mulberry32 PRNG \u8be6\u89e3 (2026)",
+        metaDescription: "\u6280\u672f\u6df1\u5ea6\u89e3\u6790 Claude Code Buddy \u5982\u4f55\u4ece UUID \u786e\u5b9a\u6027\u5730\u751f\u6210\u5ba0\u7269\u3002\u6db5\u76d6 FNV-1a \u54c8\u5e0c\u3001Mulberry32 \u4f2a\u968f\u673a\u6570\u751f\u6210\u5668\u3001\u52a0\u6743\u968f\u673a\u9009\u62e9\u548c\u5b8c\u6574\u7684\u751f\u6210\u7ba1\u7ebf\u3002",
+        excerpt: "\u4e00\u4e2a UUID \u662f\u5982\u4f55\u53d8\u6210\u72ec\u4e00\u65e0\u4e8c\u7684\u7ec8\u7aef\u5ba0\u7269\u7684\uff1f\u7b54\u6848\u6d89\u53ca\u4e00\u4e2a 1991 \u5e74\u7684 32 \u4f4d\u54c8\u5e0c\u51fd\u6570\u3001\u4e00\u4e2a\u8f7b\u91cf\u7ea7\u4f2a\u968f\u673a\u6570\u751f\u6210\u5668\uff0c\u4ee5\u53ca\u4e00\u4e2a\u7cbe\u5fc3\u6392\u5e8f\u7684\u968f\u673a\u6295\u63b7\u7ba1\u7ebf\u3002\u8ba9\u6211\u4eec\u9010\u6b65\u8ffd\u8e2a\u8fd9\u4e2a\u7b97\u6cd5\u3002",
+        sections: [
+          {
+            heading: "\u4ece UUID \u5230 Buddy\uff1a\u5168\u5c40\u89c6\u89d2",
+            body: `<p>\u6bcf\u4e2a Claude Code Buddy \u90fd\u662f<strong>\u786e\u5b9a\u6027</strong>\u7684\u3002\u76f8\u540c\u7684 UUID \u603b\u662f\u4ea7\u751f\u76f8\u540c\u7684\u7269\u79cd\u3001\u7a00\u6709\u5ea6\u3001\u773c\u775b\u3001\u5e3d\u5b50\u3001\u95ea\u5149\u72b6\u6001\u548c\u5c5e\u6027\u3002\u6ca1\u6709\u670d\u52a1\u5668\u53c2\u4e0e\uff0c\u6ca1\u6709\u6570\u636e\u5e93\u67e5\u8be2\uff0c\u4e5f\u6ca1\u6709\u6765\u81ea <code>Math.random()</code> \u7684\u968f\u673a\u6027\u3002\u6574\u4e2a\u751f\u6210\u8fc7\u7a0b\u5728\u5ba2\u6237\u7aef\u7684\u4e00\u6b21\u51fd\u6570\u8c03\u7528\u4e2d\u5b8c\u6210\u3002</p>
+<p>\u7ba1\u7ebf\u4f18\u96c5\u800c\u7b80\u6d01\uff1a</p>
+<pre><code>UUID \u5b57\u7b26\u4e32 + SALT \u2192 FNV-1a \u54c8\u5e0c \u2192 32 \u4f4d\u79cd\u5b50 \u2192 Mulberry32 PRNG \u2192 \u987a\u5e8f\u6295\u63b7</code></pre>
+<p>\u8ba9\u6211\u4eec\u9010\u4e00\u89e3\u6790\u6bcf\u4e2a\u9636\u6bb5\u3002</p>`
+          },
+          {
+            heading: "\u7b2c\u4e00\u9636\u6bb5\uff1a\u8f93\u5165\u52a0\u76d0",
+            body: `<p>\u5728\u4efb\u4f55\u54c8\u5e0c\u8ba1\u7b97\u4e4b\u524d\uff0c\u7cfb\u7edf\u5c06\u4f60\u7684 UUID \u4e0e\u4e00\u4e2a\u786c\u7f16\u7801\u7684<strong>\u76d0\u503c\u5b57\u7b26\u4e32</strong>\u62fc\u63a5\uff1a</p>
+<pre><code>const rng = mulberry32(hashString(userId + SALT));
+// SALT = 'friend-2026-401'</code></pre>
+<p>\u76d0\u503c\u6709\u4e09\u4e2a\u4f5c\u7528\uff1a</p>
+<table>
+<tr><th>\u4f5c\u7528</th><th>\u8bf4\u660e</th></tr>
+<tr><td><strong>\u9632\u6b62\u9006\u5411\u5de5\u7a0b</strong></td><td>\u4e0d\u77e5\u9053\u76d0\u503c\u5c31\u65e0\u6cd5\u9884\u6d4b\u54ea\u4e2a UUID \u5bf9\u5e94\u54ea\u4e2a Buddy</td></tr>
+<tr><td><strong>\u7248\u672c\u63a7\u5236</strong></td><td>\u672a\u6765\u66f4\u65b0\u4e2d\u66f4\u6539\u76d0\u503c\u4f1a\u91cd\u65b0\u6d17\u724c\u6240\u6709 Buddy \u2014\u2014 \u4e00\u79cd\u201c\u8d5b\u5b63\u91cd\u7f6e\u201d</td></tr>
+<tr><td><strong>\u547d\u540d\u7a7a\u95f4\u9694\u79bb</strong></td><td>\u76f8\u540c\u7684 UUID \u5728\u4e0d\u540c\u7cfb\u7edf\u4e2d\u4e0d\u4f1a\u4ea7\u751f\u76f8\u540c\u7684\u54c8\u5e0c</td></tr>
+</table>
+<p>\u76d0\u503c <code>'friend-2026-401'</code> \u6697\u793a\u4e86\u5176\u8d77\u6e90\uff1a\"friend\"\uff08\u4f19\u4f34\uff09\u3001\"2026\"\uff08\u5e74\u4efd\uff09\u3001\"401\"\uff08\u53ef\u80fd\u662f 4 \u6708 1 \u65e5\uff0c\u53d1\u5e03\u65e5\u671f\uff09\u3002</p>`
+          },
+          {
+            heading: "\u7b2c\u4e8c\u9636\u6bb5\uff1aFNV-1a \u54c8\u5e0c \u2014 \u5c06\u5b57\u7b26\u4e32\u8f6c\u4e3a\u6570\u5b57",
+            body: `<p><strong>FNV-1a</strong>\uff08Fowler\u2013Noll\u2013Vo\uff0c1a \u53d8\u4f53\uff09\u662f\u4e00\u4e2a 1991 \u5e74\u521b\u5efa\u7684\u975e\u52a0\u5bc6\u54c8\u5e0c\u51fd\u6570\u3002\u9009\u62e9\u5b83\u6709\u4e09\u4e2a\u539f\u56e0\uff1a\u901f\u5ea6\u5feb\u3001\u5bf9\u77ed\u5b57\u7b26\u4e32\u5206\u5e03\u4f18\u79c0\u3001\u5b9e\u73b0\u7b80\u6d01\u3002</p>
+<p>\u4ee5\u4e0b\u662f\u7cbe\u786e\u5b9e\u73b0\uff1a</p>
+<pre><code>function hashString(s: string): number {
+  let h = 2166136261;          // FNV \u504f\u79fb\u57fa\u7840
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);      // \u4e0e\u5b57\u8282\u5f02\u6216
+    h = Math.imul(h, 16777619); // \u4e58\u4ee5 FNV \u8d28\u6570
+  }
+  return h >>> 0;               // \u8f6c\u6362\u4e3a\u65e0\u7b26\u53f7 32 \u4f4d
+}</code></pre>
+<p>\u89e3\u7801\u9b54\u6cd5\u6570\u5b57\uff1a</p>
+<table>
+<tr><th>\u5e38\u91cf</th><th>\u5341\u516d\u8fdb\u5236</th><th>\u4f5c\u7528</th></tr>
+<tr><td><strong>2166136261</strong></td><td><code>0x811c9dc5</code></td><td>FNV-1a 32 \u4f4d\u504f\u79fb\u57fa\u7840 \u2014 \u521d\u59cb\u54c8\u5e0c\u503c</td></tr>
+<tr><td><strong>16777619</strong></td><td><code>0x01000193</code></td><td>FNV-1a 32 \u4f4d\u8d28\u6570 \u2014 \u4e3a\u6700\u4f18\u4f4d\u6269\u6563\u800c\u9009\u62e9</td></tr>
+</table>
+<p><strong>\u4e3a\u4ec0\u4e48\u662f FNV-1a \u800c\u4e0d\u662f FNV-1\uff1f</strong>\"a\" \u53d8\u4f53\u5148\u5f02\u6216<em>\u518d</em>\u4e58\u6cd5\uff0c\u4ea7\u751f\u66f4\u597d\u7684<strong>\u96ea\u5d29\u6548\u5e94</strong> \u2014 \u8f93\u5165\u4e2d\u7684\u5355\u4e2a\u4f4d\u53d8\u5316\u4f1a\u7ffb\u8f6c\u5927\u7ea6\u4e00\u534a\u7684\u8f93\u51fa\u4f4d\u3002</p>
+<p><strong>\u4e3a\u4ec0\u4e48\u7528 <code>Math.imul</code>\uff1f</strong>JavaScript \u6570\u5b57\u662f 64 \u4f4d\u6d6e\u70b9\u6570\u3002\u666e\u901a\u4e58\u6cd5\u4f1a\u5bf9\u5927\u578b 32 \u4f4d\u6574\u6570\u4e22\u5931\u7cbe\u5ea6\u3002<code>Math.imul</code> \u6267\u884c\u771f\u6b63\u7684 32 \u4f4d\u6574\u6570\u4e58\u6cd5\u3002</p>
+<p><strong>\u4e3a\u4ec0\u4e48\u7528 <code>>>> 0</code>\uff1f</strong>JavaScript \u7684\u4f4d\u8fd0\u7b97\u8fd4\u56de\u6709\u7b26\u53f7 32 \u4f4d\u6574\u6570\u3002\u65e0\u7b26\u53f7\u53f3\u79fb 0 \u4f4d\u5c06\u7ed3\u679c\u8f6c\u6362\u4e3a<em>\u65e0\u7b26\u53f7</em> 32 \u4f4d\u6574\u6570\uff080 \u5230 4,294,967,295\uff09\u3002</p>`
+          },
+          {
+            heading: "\u7b2c\u4e09\u9636\u6bb5\uff1aMulberry32 PRNG \u2014 \u968f\u673a\u6570\u5de5\u5382",
+            body: `<p><strong>Mulberry32</strong> \u662f Tommy Ettinger \u8bbe\u8ba1\u7684 32 \u4f4d\u4f2a\u968f\u673a\u6570\u751f\u6210\u5668\u3002\u5468\u671f\u4e3a 2<sup>32</sup>\uff08\u7ea6 43 \u4ebf\u4e2a\u503c\u540e\u91cd\u590d\uff09\uff0c\u901a\u8fc7\u4e86 gjrand \u968f\u673a\u6027\u6d4b\u8bd5\u5957\u4ef6\u3002</p>
+<pre><code>function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;                       // \u63a8\u8fdb\u72b6\u6001
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);        // \u6df7\u5408\u4f4d
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;  // \u8fdb\u4e00\u6b65\u6df7\u5408
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;    // \u5f52\u4e00\u5316\u5230 [0, 1)
+  };
+}</code></pre>
+<p>\u9010\u6b65\u8ffd\u8e2a\u7b97\u6cd5\uff1a</p>
+<table>
+<tr><th>\u6b65\u9aa4</th><th>\u64cd\u4f5c</th><th>\u76ee\u7684</th></tr>
+<tr><td><strong>1</strong></td><td><code>a = (a + 0x6d2b79f5) | 0</code></td><td>\u4ee5\u5927\u5947\u6570\u5e38\u91cf\u63a8\u8fdb\u72b6\u6001\uff08Knuth \u4e58\u6cd5\u54c8\u5e0c\u589e\u91cf\uff09</td></tr>
+<tr><td><strong>2</strong></td><td><code>a ^ (a >>> 15)</code></td><td>\u5c06\u9ad8\u4f4d\u6df7\u5165\u4f4e\u4f4d</td></tr>
+<tr><td><strong>3</strong></td><td><code>Math.imul(..., 1 | a)</code></td><td>\u4e0e\u72b6\u6001\u76f8\u5173\u7684\u5947\u6570\u76f8\u4e58</td></tr>
+<tr><td><strong>4</strong></td><td><code>t ^ (t >>> 7)</code></td><td>\u53e6\u4e00\u6b21\u5f02\u6216\u79fb\u4f4d\u4ee5\u8fdb\u4e00\u6b65\u6269\u6563\u4f4d</td></tr>
+<tr><td><strong>5</strong></td><td><code>Math.imul(..., 61 | t)</code></td><td>\u7b2c\u4e8c\u6b21\u72b6\u6001\u76f8\u5173\u4e58\u6cd5\uff0c61 \u662f\u8d28\u6570</td></tr>
+<tr><td><strong>6</strong></td><td><code>t ^ (t >>> 14)</code></td><td>\u6700\u7ec8\u8f93\u51fa\u767d\u5316</td></tr>
+<tr><td><strong>7</strong></td><td><code>>>> 0 / 4294967296</code></td><td>\u8f6c\u4e3a\u65e0\u7b26\u53f7\u6574\u6570\uff0c\u9664\u4ee5 2\u00b3\u00b2 \u5f97\u5230 [0, 1) \u6d6e\u70b9\u6570</td></tr>
+</table>
+<p><strong>\u4e3a\u4ec0\u4e48\u4e0d\u7528 <code>Math.random()</code>\uff1f</strong><code>Math.random()</code> \u4e0d\u53ef\u64ad\u79cd \u2014 \u65e0\u6cd5\u91cd\u73b0\u76f8\u540c\u5e8f\u5217\u3002Mulberry32 \u662f\u786e\u5b9a\u6027\u7684\uff1a\u76f8\u540c\u79cd\u5b50\u603b\u662f\u4ea7\u751f\u76f8\u540c\u5e8f\u5217\u3002</p>
+<p><strong>\u4e3a\u4ec0\u4e48\u4e0d\u7528\u52a0\u5bc6 PRNG\uff1f</strong>Buddy \u751f\u6210\u4e0d\u9700\u8981\u52a0\u5bc6\u5b89\u5168\u6027\u3002Mulberry32 \u901f\u5ea6\u5feb\u51e0\u4e2a\u6570\u91cf\u7ea7\uff0c\u7edf\u8ba1\u5747\u5300\u6027\u5bf9\u6e38\u620f\u5e94\u7528\u7efc\u7efc\u6709\u4f59\u3002</p>`
+          },
+          {
+            heading: "\u7b2c\u56db\u9636\u6bb5\uff1a\u6295\u63b7\u7ba1\u7ebf \u2014 \u987a\u5e8f\u81f3\u5173\u91cd\u8981",
+            body: `<p>PRNG \u521d\u59cb\u5316\u540e\uff0c<code>rollBuddy</code> \u6309\u7279\u5b9a\u987a\u5e8f\u8c03\u7528\u3002<strong>\u987a\u5e8f\u81f3\u5173\u91cd\u8981</strong>\uff0c\u56e0\u4e3a\u6bcf\u6b21 <code>rng()</code> \u8c03\u7528\u90fd\u4e0d\u53ef\u9006\u5730\u63a8\u8fdb\u5185\u90e8\u72b6\u6001\uff1a</p>
+<pre><code>export function rollBuddy(userId: string): BuddyResult {
+  const rng = mulberry32(hashString(userId + SALT));
+  const rarity  = rollRarity(rng);     // \u6b65\u9aa4 1: 1+ \u6b21 RNG \u8c03\u7528
+  const species = pick(rng, SPECIES);   // \u6b65\u9aa4 2: 1 \u6b21 RNG \u8c03\u7528
+  const eye     = pick(rng, EYES);      // \u6b65\u9aa4 3: 1 \u6b21 RNG \u8c03\u7528
+  const hat     = rarity === 'common'   // \u6b65\u9aa4 4: 0 \u6216 1 \u6b21
+                  ? 'none'
+                  : pick(rng, HATS);
+  const shiny   = rng() < 0.01;        // \u6b65\u9aa4 5: 1 \u6b21 RNG \u8c03\u7528
+  const stats   = rollStats(rng, rarity); // \u6b65\u9aa4 6: 7+ \u6b21
+  return { rarity, species, eye, hat, shiny, stats };
+}</code></pre>
+<p><strong>\u7ea7\u8054\u6548\u5e94\uff1a</strong>\u56e0\u4e3a\u666e\u901a Buddy \u8df3\u8fc7\u5e3d\u5b50\u6295\u63b7\uff080 \u6b21 RNG \u6d88\u8017\uff09\uff0c\u5b83\u4eec\u7684\u95ea\u5149\u68c0\u67e5\u4f7f\u7528\u4e86\u4e0e\u975e\u666e\u901a Buddy <em>\u4e0d\u540c</em>\u7684 RNG \u503c\u3002\u8fd9\u610f\u5473\u7740\u7a00\u6709\u5ea6\u4e0d\u4ec5\u5f71\u54cd\u5e3d\u5b50\u8d44\u683c \u2014 \u5b83\u5fae\u5999\u5730\u79fb\u4f4d\u4e86\u6bcf\u4e2a\u540e\u7eed\u6295\u63b7\u3002</p>
+<p>\u6bcf\u4e2a\u6b65\u9aa4\u7684\u7cbe\u786e RNG \u8c03\u7528\u6b21\u6570\uff1a</p>
+<table>
+<tr><th>\u6b65\u9aa4</th><th>\u51fd\u6570</th><th>RNG \u8c03\u7528</th><th>\u5907\u6ce8</th></tr>
+<tr><td>1</td><td><code>rollRarity</code></td><td>1</td><td>\u5355\u6b21\u52a0\u6743\u968f\u673a\u6295\u63b7</td></tr>
+<tr><td>2</td><td><code>pick(SPECIES)</code></td><td>1</td><td>\u4ece 18 \u4e2a\u7269\u79cd\u4e2d\u5747\u5300\u9009\u62e9</td></tr>
+<tr><td>3</td><td><code>pick(EYES)</code></td><td>1</td><td>\u4ece 6 \u79cd\u773c\u775b\u4e2d\u5747\u5300\u9009\u62e9</td></tr>
+<tr><td>4</td><td>\u5e3d\u5b50</td><td>0 \u6216 1</td><td>\u666e\u901a\u4e3a 0\uff0c\u5176\u4ed6\u4e3a 1</td></tr>
+<tr><td>5</td><td>\u95ea\u5149\u68c0\u67e5</td><td>1</td><td>\u7b80\u5355\u9608\u503c\uff1a<code>rng() < 0.01</code></td></tr>
+<tr><td>6</td><td><code>rollStats</code></td><td>7\u201312</td><td>1 \u6b21\u5cf0\u503c\u9009\u62e9 + 1\u20135 \u6b21\u4f4e\u8c37\u9009\u62e9 + 5 \u6b21\u5c5e\u6027\u6295\u63b7</td></tr>
+</table>
+<p><strong>\u603b\u8ba1\uff1a\u6bcf\u4e2a Buddy 11\u201317 \u6b21 RNG \u8c03\u7528\u3002</strong></p>`
+          },
+          {
+            heading: "\u6df1\u5165\uff1a\u52a0\u6743\u968f\u673a\u9009\u62e9",
+            body: `<p>\u7a00\u6709\u5ea6\u7cfb\u7edf\u4f7f\u7528<strong>\u52a0\u6743\u968f\u673a\u9009\u62e9</strong>\uff0c\u4e00\u4e2a\u7ecf\u5178\u7b97\u6cd5\uff1a</p>
+<pre><code>function rollRarity(rng) {
+  const total = 60 + 25 + 10 + 4 + 1; // = 100
+  let roll = rng() * total;            // roll \u2208 [0, 100)
+  for (const rarity of RARITIES) {
+    roll -= RARITY_WEIGHTS[rarity];
+    if (roll < 0) return rarity;
+  }
+  return 'common';
+}</code></pre>
+<p>\u53ef\u89c6\u5316\u4e3a 0 \u5230 100 \u7684\u6570\u8f74\uff1a</p>
+<pre><code>0          60       85    95  99 100
+|  \u666e\u901a  | \u975e\u51e1 | \u7a00\u6709 |\u53f2\u8bd7|\u4f20|
+|   60%    |  25%   | 10%  |4%|1%|</code></pre>
+<p>\u7b97\u6cd5\u751f\u6210 [0, 100) \u7684\u968f\u673a\u6570\uff0c\u7136\u540e\u904d\u5386\u7a00\u6709\u5ea6\uff0c\u9010\u4e2a\u51cf\u53bb\u6743\u91cd\u3002\u7b2c\u4e00\u4e2a\u5c06\u8ba1\u6570\u5668\u9a71\u52a8\u5230\u96f6\u4ee5\u4e0b\u7684\u7a00\u6709\u5ea6\u83b7\u80dc\u3002</p>`
+          },
+          {
+            heading: "\u6df1\u5165\uff1a\u5c5e\u6027\u751f\u6210\u7b97\u6cd5",
+            body: `<p>\u5c5e\u6027\u751f\u6210\u662f\u7ba1\u7ebf\u4e2d\u6700\u590d\u6742\u7684\u90e8\u5206\uff0c\u4f7f\u7528<strong>\u5cf0\u503c/\u4f4e\u8c37\u975e\u5bf9\u79f0\u6a21\u578b</strong>\uff1a</p>
+<pre><code>function rollStats(rng, rarity) {
+  const floor = RARITY_FLOOR[rarity];  // 5/15/25/35/50
+  const peak  = pick(rng, STAT_NAMES); // \u968f\u673a\u6700\u5f3a\u5c5e\u6027
+  let dump    = pick(rng, STAT_NAMES); // \u968f\u673a\u6700\u5f31\u5c5e\u6027
+  while (dump === peak) dump = pick(rng, STAT_NAMES);
+  
+  for (const name of STAT_NAMES) {
+    if (name === peak)
+      stats[name] = min(100, floor + 50 + random(0..29));
+    else if (name === dump)
+      stats[name] = max(1, floor - 10 + random(0..14));
+    else
+      stats[name] = floor + random(0..39);
+  }
+}</code></pre>
+<p>\u4e09\u79cd\u516c\u5f0f\u521b\u5efa\u4e86\u4e0d\u540c\u7684\u5c5e\u6027\u5206\u5e03\uff1a</p>
+<table>
+<tr><th>\u5c5e\u6027\u7c7b\u578b</th><th>\u516c\u5f0f</th><th>\u666e\u901a\u8303\u56f4</th><th>\u4f20\u8bf4\u8303\u56f4</th></tr>
+<tr><td><strong>\u5cf0\u503c</strong></td><td><code>min(100, floor+50+rand(30))</code></td><td>55\u201384</td><td>100\uff08\u5c01\u9876\uff09</td></tr>
+<tr><td><strong>\u4f4e\u8c37</strong></td><td><code>max(1, floor-10+rand(15))</code></td><td>1\u20139</td><td>40\u201354</td></tr>
+<tr><td><strong>\u666e\u901a</strong></td><td><code>floor+rand(40)</code></td><td>5\u201344</td><td>50\u201389</td></tr>
+</table>
+<p><strong>\u5173\u952e\u6d1e\u5bdf\uff1a</strong>\u4f20\u8bf4 Buddy \u7684\u5e95\u677f\u5982\u6b64\u4e4b\u9ad8\uff0c\u5373\u4f7f\u5176\u4f4e\u8c37\u5c5e\u6027\uff0840\u201354\uff09\u4e5f\u8d85\u8fc7\u4e86\u5927\u591a\u6570\u666e\u901a Buddy \u7684\u666e\u901a\u5c5e\u6027\uff085\u201344\uff09\u3002\u800c\u5176\u5cf0\u503c\u5c5e\u6027\u59cb\u7ec8\u5c01\u9876\u5728 100\u3002</p>`
+          },
+          {
+            heading: "\u5b9e\u4f8b\u6f14\u7ec3\uff1a\u5b8c\u6574\u8ffd\u8e2a",
+            body: `<p>\u5047\u8bbe\u4f60\u7684 UUID \u662f <code>abc-123</code>\uff1a</p>
+<pre><code>// \u6b65\u9aa4 0: \u52a0\u76d0
+input = 'abc-123' + 'friend-2026-401'
+      = 'abc-123friend-2026-401'
+
+// \u6b65\u9aa4 1: FNV-1a \u54c8\u5e0c
+h = 2166136261
+h = (h ^ 97) * 16777619   // 'a' = 97
+h = (h ^ 98) * 16777619   // 'b' = 98
+... (\u5bf9\u6240\u6709 25 \u4e2a\u5b57\u7b26\u7ee7\u7eed)
+seed = h >>> 0
+
+// \u6b65\u9aa4 2: \u521d\u59cb\u5316 PRNG
+rng = mulberry32(seed)
+
+// \u6b65\u9aa4 3: \u6295\u63b7\u5e8f\u5217
+rng() \u2192 0.7234...  \u2192 rarity = 'uncommon'
+rng() \u2192 0.4521...  \u2192 species = 'turtle'
+rng() \u2192 0.8901...  \u2192 eye = '\u00b0'
+rng() \u2192 0.3712...  \u2192 hat = 'tophat'
+rng() \u2192 0.5623...  \u2192 shiny = false
+rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
+<p><strong>\u7ed3\u679c\uff1a</strong>\u4e00\u53ea\u975e\u51e1\u7ea7\u4e4c\u9f9f\uff0c\u00b0\uff08\u60ca\u8bb6\uff09\u773c\uff0c\u6234\u793c\u5e3d\uff0c\u975e\u95ea\u5149\u3002\u4efb\u4f55\u4eba\u8f93\u5165 <code>abc-123</code> \u90fd\u4f1a\u5f97\u5230\u5b8c\u5168\u76f8\u540c\u7684 Buddy\u3002</p>
+<p><em>\u6ce8\uff1a\u4ee5\u4e0a\u6570\u5b57\u4ec5\u4e3a\u8bf4\u660e\u7528\u9014\u3002\u5b9e\u9645 RNG \u8f93\u51fa\u53d6\u51b3\u4e8e\u7cbe\u786e\u7684\u54c8\u5e0c\u503c\u3002</em></p>`
+          },
+          {
+            heading: "\u4e3a\u4ec0\u4e48\u8fd9\u4e2a\u8bbe\u8ba1\u5f88\u4f18\u96c5",
+            body: `<p>Buddy \u751f\u6210\u7cfb\u7edf\u505a\u51fa\u4e86\u51e0\u4e2a\u5de7\u5999\u7684\u5de5\u7a0b\u9009\u62e9\uff1a</p>
+<table>
+<tr><th>\u8bbe\u8ba1\u9009\u62e9</th><th>\u4f18\u52bf</th></tr>
+<tr><td><strong>\u7eaf\u5ba2\u6237\u7aef</strong></td><td>\u96f6\u670d\u52a1\u5668\u8d1f\u8f7d\uff0c\u5373\u65f6\u7ed3\u679c\uff0c\u79bb\u7ebf\u53ef\u7528</td></tr>
+<tr><td><strong>UUID \u786e\u5b9a\u6027</strong></td><td>\u65e0\u9700\u5b58\u50a8 Buddy \u6570\u636e\uff0c\u6309\u9700\u4ece UUID \u201c\u8ba1\u7b97\u201d</td></tr>
+<tr><td><strong>\u5355 PRNG \u6d41</strong></td><td>\u4e00\u4e2a\u79cd\u5b50\u751f\u6210\u6240\u6709\u5c5e\u6027\uff0c\u65e0\u9700\u591a\u4e2a\u54c8\u5e0c\u51fd\u6570</td></tr>
+<tr><td><strong>\u6709\u5e8f\u7ba1\u7ebf</strong></td><td>\u56fa\u5b9a\u8c03\u7528\u987a\u5e8f\u4f7f\u7cfb\u7edf\u53ef\u9884\u6d4b\u4e14\u53ef\u8c03\u8bd5</td></tr>
+<tr><td><strong>\u57fa\u4e8e\u76d0\u503c\u7684\u7248\u672c\u63a7\u5236</strong></td><td>\u66f4\u6539\u76d0\u503c\u5373\u53ef\u91cd\u65b0\u6d17\u724c\u6240\u6709 Buddy</td></tr>
+<tr><td><strong>\u975e\u52a0\u5bc6\u54c8\u5e0c</strong></td><td>FNV-1a \u8db3\u591f\u5feb\uff0c\u52a0\u5bc6\u54c8\u5e0c\u4f1a\u8fc7\u5ea6\u8bbe\u8ba1</td></tr>
+</table>
+<p>\u6574\u4e2a\u7cfb\u7edf\u53ea\u6709\u7ea6 50 \u884c\u4ee3\u7801\uff0c\u5374\u4ea7\u751f 18 \u7269\u79cd \u00d7 5 \u7a00\u6709\u5ea6 \u00d7 6 \u773c\u775b \u00d7 8 \u5e3d\u5b50 \u00d7 2 \u95ea\u5149 \u00d7 \u6570\u5341\u4ebf\u5c5e\u6027\u7ec4\u5408 = \u5b9e\u9645\u4e0a\u65e0\u9650\u7684\u72ec\u7279 Buddy\u3002</p>
+<p>\u60f3\u770b\u7b97\u6cd5\u5b9e\u9645\u8fd0\u884c\uff1f\u524d\u5f80 <a href=\"/\">Buddy \u67e5\u8be2\u5668</a>\u8f93\u5165\u4f60\u7684 UUID\u3002\u4f60\u6d4f\u89c8\u5668\u4e2d\u8fd0\u884c\u7684\u4ee3\u7801\u5c31\u662f\u672c\u6587\u63cf\u8ff0\u7684\u7cbe\u786e\u5b9e\u73b0\u3002</p>`
+          }
+        ],
+      },
+      ko: {
+        title: "Claude Code Buddy \ub4a4\uc758 \uc54c\uace0\ub9ac\uc998 \u2014 FNV-1a & Mulberry32 PRNG \uc0c1\uc138 \ud574\uc124",
+        metaTitle: "Claude Code Buddy \ub4a4\uc758 \uc54c\uace0\ub9ac\uc998 \u2014 FNV-1a & Mulberry32 PRNG \uc0c1\uc138 \ud574\uc124 (2026)",
+        metaDescription: "Claude Code Buddy\uac00 UUID\uc5d0\uc11c \uacb0\uc815\ub860\uc801\uc73c\ub85c \ud3ab\uc744 \uc0dd\uc131\ud558\ub294 \ubc29\ubc95\uc5d0 \ub300\ud55c \uae30\uc220 \uc2ec\uce35 \ubd84\uc11d. FNV-1a \ud574\uc2f1, Mulberry32 PRNG, \uac00\uc911 \ub79c\ub364 \uc120\ud0dd, \uc644\uc804\ud55c \ub864 \ud30c\uc774\ud504\ub77c\uc778\uc744 \ub2e4\ub8f9\ub2c8\ub2e4.",
+        excerpt: "UUID\uac00 \uc5b4\ub5bb\uac8c \uace0\uc720\ud55c \ud130\ubbf8\ub110 \ud3ab\uc73c\ub85c \ubcc0\ud558\ub098\uc694? \ub2f5\uc740 1991\ub144\uc758 32\ube44\ud2b8 \ud574\uc2dc \ud568\uc218, \uacbd\ub7c9 PRNG, \uadf8\ub9ac\uace0 \uc2e0\uc911\ud558\uac8c \uc815\ub82c\ub41c \ub79c\ub364 \ub864 \ud30c\uc774\ud504\ub77c\uc778\uc5d0 \uc788\uc2b5\ub2c8\ub2e4. \uc54c\uace0\ub9ac\uc998\uc744 \ub2e8\uacc4\ubcc4\ub85c \ucd94\uc801\ud574 \ubd05\uc2dc\ub2e4.",
+        sections: [
+          {
+            heading: "UUID\uc5d0\uc11c \ubc84\ub514\ub85c: \uc804\uccb4 \uadf8\ub9bc",
+            body: `<p>\ubaa8\ub4e0 Claude Code Buddy\ub294 <strong>\uacb0\uc815\ub860\uc801</strong>\uc785\ub2c8\ub2e4. \ub3d9\uc77c\ud55c UUID\ub294 \ud56d\uc0c1 \ub3d9\uc77c\ud55c \uc885, \ud76c\uadc0\ub3c4, \ub208, \ubaa8\uc790, \uc0e4\uc774\ub2c8 \uc0c1\ud0dc, \uc2a4\ud0ef\uc744 \uc0dd\uc131\ud569\ub2c8\ub2e4. \uc11c\ubc84 \uac1c\uc785 \uc5c6\uc774, \ub370\uc774\ud130\ubca0\uc774\uc2a4 \uc870\ud68c \uc5c6\uc774, <code>Math.random()</code>\uc758 \ub79c\ub364\uc131 \uc5c6\uc774 \ud074\ub77c\uc774\uc5b8\ud2b8 \uce21\uc5d0\uc11c \ub2e8\uc77c \ud568\uc218 \ud638\ucd9c\ub85c \uc644\ub8cc\ub429\ub2c8\ub2e4.</p>
+<p>\ud30c\uc774\ud504\ub77c\uc778\uc740 \uc6b0\uc544\ud558\uace0 \uac04\uacb0\ud569\ub2c8\ub2e4:</p>
+<pre><code>UUID \ubb38\uc790\uc5f4 + SALT \u2192 FNV-1a \ud574\uc2dc \u2192 32\ube44\ud2b8 \uc2dc\ub4dc \u2192 Mulberry32 PRNG \u2192 \uc21c\ucc28\uc801 \ub864</code></pre>
+<p>\uac01 \ub2e8\uacc4\ub97c \ud558\ub098\uc529 \ubd84\uc11d\ud574 \ubd05\uc2dc\ub2e4.</p>`
+          },
+          {
+            heading: "1\ub2e8\uacc4: \uc785\ub825 \uc194\ud305",
+            body: `<p>\ud574\uc2f1 \uc804\uc5d0 \uc2dc\uc2a4\ud15c\uc740 UUID\uc5d0 \ud558\ub4dc\ucf54\ub529\ub41c <strong>\uc194\ud2b8 \ubb38\uc790\uc5f4</strong>\uc744 \uc5f0\uacb0\ud569\ub2c8\ub2e4:</p>
+<pre><code>const rng = mulberry32(hashString(userId + SALT));
+// SALT = 'friend-2026-401'</code></pre>
+<p>\uc194\ud2b8\ub294 \uc138 \uac00\uc9c0 \ubaa9\uc801\uc744 \uc218\ud589\ud569\ub2c8\ub2e4:</p>
+<table>
+<tr><th>\ubaa9\uc801</th><th>\uc124\uba85</th></tr>
+<tr><td><strong>\uc5ed\uacf5\ud559 \ubc29\uc9c0</strong></td><td>\uc194\ud2b8\ub97c \ubaa8\ub974\uba74 \uc5b4\ub5a4 UUID\uac00 \uc5b4\ub5a4 \ubc84\ub514\uc5d0 \ub9e4\ud551\ub418\ub294\uc9c0 \uc608\uce21 \ubd88\uac00</td></tr>
+<tr><td><strong>\ubc84\uc804 \uad00\ub9ac</strong></td><td>\uc194\ud2b8 \ubcc0\uacbd\uc73c\ub85c \ubaa8\ub4e0 \ubc84\ub514 \uc7ac\ubc30\uce58 \uac00\ub2a5 \u2014 \"\uc2dc\uc98c \ub9ac\uc14b\"</td></tr>
+<tr><td><strong>\ub124\uc784\uc2a4\ud398\uc774\uc2a4 \uaca9\ub9ac</strong></td><td>\ub2e4\ub978 \uc2dc\uc2a4\ud15c\uc5d0\uc11c \ub3d9\uc77c UUID\uac00 \ub3d9\uc77c \ud574\uc2dc\ub97c \uc0dd\uc131\ud558\uc9c0 \uc54a\uc74c</td></tr>
+</table>
+<p>\uc194\ud2b8 <code>'friend-2026-401'</code>\uc740 \uadf8 \uae30\uc6d0\uc744 \uc554\uc2dc\ud569\ub2c8\ub2e4: \"friend\"(\ubc84\ub514), \"2026\"(\uc5f0\ub3c4), \"401\"(4\uc6d4 1\uc77c \ucd9c\uc2dc\uc77c \ucd94\uc815).</p>`
+          },
+          {
+            heading: "2\ub2e8\uacc4: FNV-1a \ud574\uc2dc \u2014 \ubb38\uc790\uc5f4\uc744 \uc22b\uc790\ub85c",
+            body: `<p><strong>FNV-1a</strong>(Fowler\u2013Noll\u2013Vo, 1a \ubcc0\ud615)\ub294 1991\ub144\uc5d0 \ub9cc\ub4e4\uc5b4\uc9c4 \ube44\uc554\ud638\ud654 \ud574\uc2dc \ud568\uc218\uc785\ub2c8\ub2e4. \uc120\ud0dd \uc774\uc720: \ube60\ub974\uace0, \uc9e7\uc740 \ubb38\uc790\uc5f4\uc5d0 \ub300\ud55c \ubd84\ud3ec\uac00 \uc6b0\uc218\ud558\uba70, \uad6c\ud604\uc774 \uac04\uacb0\ud569\ub2c8\ub2e4.</p>
+<pre><code>function hashString(s: string): number {
+  let h = 2166136261;          // FNV \uc624\ud504\uc14b \uae30\uc900
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);      // \ubc14\uc774\ud2b8\uc640 XOR
+    h = Math.imul(h, 16777619); // FNV \uc18c\uc218\ub85c \uacf1\uc148
+  }
+  return h >>> 0;               // \ubd80\ud638 \uc5c6\ub294 32\ube44\ud2b8\ub85c \ubcc0\ud658
+}</code></pre>
+<p>\ub9e4\uc9c1 \ub118\ubc84 \ud574\ub3c5:</p>
+<table>
+<tr><th>\uc0c1\uc218</th><th>16\uc9c4\uc218</th><th>\uc5ed\ud560</th></tr>
+<tr><td><strong>2166136261</strong></td><td><code>0x811c9dc5</code></td><td>FNV-1a 32\ube44\ud2b8 \uc624\ud504\uc14b \uae30\uc900 \u2014 \ucd08\uae30 \ud574\uc2dc \uac12</td></tr>
+<tr><td><strong>16777619</strong></td><td><code>0x01000193</code></td><td>FNV-1a 32\ube44\ud2b8 \uc18c\uc218 \u2014 \ucd5c\uc801 \ube44\ud2b8 \ud655\uc0b0\uc744 \uc704\ud574 \uc120\ud0dd</td></tr>
+</table>
+<p><strong>\uc65c FNV-1\uc774 \uc544\ub2cc FNV-1a?</strong> \"a\" \ubcc0\ud615\uc740 \uba3c\uc800 XOR\ud55c \ud6c4 \uacf1\uc148\ud558\uc5ec \ub354 \ub098\uc740 <strong>\ub208\uc0ac\ud0dc \ud6a8\uacfc</strong>\ub97c \ub9cc\ub4ed\ub2c8\ub2e4.</p>
+<p><strong><code>Math.imul</code>\uc744 \uc0ac\uc6a9\ud558\ub294 \uc774\uc720?</strong> JavaScript \uc22b\uc790\ub294 64\ube44\ud2b8 \ubd80\ub3d9\uc18c\uc218\uc810\uc785\ub2c8\ub2e4. \uc77c\ubc18 \uacf1\uc148\uc740 \ud070 32\ube44\ud2b8 \uc815\uc218\uc5d0\uc11c \uc815\ubc00\ub3c4\ub97c \uc783\uc2b5\ub2c8\ub2e4. <code>Math.imul</code>\uc740 \uc9c4\uc815\ud55c 32\ube44\ud2b8 \uc815\uc218 \uacf1\uc148\uc744 \uc218\ud589\ud569\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: "3\ub2e8\uacc4: Mulberry32 PRNG \u2014 \ub79c\ub364 \ub118\ubc84 \uacf5\uc7a5",
+            body: `<p><strong>Mulberry32</strong>\ub294 Tommy Ettinger\uac00 \uc124\uacc4\ud55c 32\ube44\ud2b8 \uc758\uc0ac \ub09c\uc218 \uc0dd\uc131\uae30\uc785\ub2c8\ub2e4. \uc8fc\uae30\ub294 2<sup>32</sup>(\uc57d 43\uc5b5 \uac12 \ud6c4 \ubc18\ubcf5)\uc774\uba70 gjrand \ud14c\uc2a4\ud2b8\ub97c \ud1b5\uacfc\ud569\ub2c8\ub2e4.</p>
+<pre><code>function mulberry32(seed: number): () => number {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;                       // \uc0c1\ud0dc \uc804\uc9c4
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);        // \ube44\ud2b8 \ud63c\ud569
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;  // \ucd94\uac00 \ud63c\ud569
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;    // [0, 1)\ub85c \uc815\uaddc\ud654
+  };
+}</code></pre>
+<p>\uc54c\uace0\ub9ac\uc998 \ub2e8\uacc4\ubcc4 \ucd94\uc801:</p>
+<table>
+<tr><th>\ub2e8\uacc4</th><th>\uc5f0\uc0b0</th><th>\ubaa9\uc801</th></tr>
+<tr><td><strong>1</strong></td><td><code>a = (a + 0x6d2b79f5) | 0</code></td><td>\ud070 \ud640\uc218 \uc0c1\uc218\ub85c \uc0c1\ud0dc \uc804\uc9c4 (Knuth \uc2b9\ubc95 \ud574\uc2dc \uc99d\ubd84)</td></tr>
+<tr><td><strong>2</strong></td><td><code>a ^ (a >>> 15)</code></td><td>\uc0c1\uc704 \ube44\ud2b8\ub97c \ud558\uc704\ub85c \ud63c\ud569</td></tr>
+<tr><td><strong>3</strong></td><td><code>Math.imul(..., 1 | a)</code></td><td>\uc0c1\ud0dc \uc758\uc874 \ud640\uc218\ub85c \uacf1\uc148</td></tr>
+<tr><td><strong>4</strong></td><td><code>t ^ (t >>> 7)</code></td><td>\ucd94\uac00 XOR-\uc2dc\ud504\ud2b8\ub85c \ube44\ud2b8 \ud655\uc0b0</td></tr>
+<tr><td><strong>5</strong></td><td><code>Math.imul(..., 61 | t)</code></td><td>\ub450 \ubc88\uc9f8 \uc0c1\ud0dc \uc758\uc874 \uacf1\uc148, 61\uc740 \uc18c\uc218</td></tr>
+<tr><td><strong>6</strong></td><td><code>t ^ (t >>> 14)</code></td><td>\ucd5c\uc885 \ucd9c\ub825 \ud654\uc774\ud2b8\ub2dd</td></tr>
+<tr><td><strong>7</strong></td><td><code>>>> 0 / 4294967296</code></td><td>\ubd80\ud638 \uc5c6\ub294 \uc815\uc218\ub85c \ubcc0\ud658 \ud6c4 2\u00b3\u00b2\ub85c \ub098\ub204\uc5b4 [0, 1) \ubd80\ub3d9\uc18c\uc218\uc810 \uc5bb\uae30</td></tr>
+</table>
+<p><strong><code>Math.random()</code>\uc744 \uc0ac\uc6a9\ud558\uc9c0 \uc54a\ub294 \uc774\uc720?</strong> <code>Math.random()</code>\uc740 \uc2dc\ub4dc \uc124\uc815\uc774 \ubd88\uac00\ub2a5\ud569\ub2c8\ub2e4. Mulberry32\ub294 \uacb0\uc815\ub860\uc801\uc785\ub2c8\ub2e4: \ub3d9\uc77c \uc2dc\ub4dc\ub294 \ud56d\uc0c1 \ub3d9\uc77c \uc2dc\ud000\uc2a4\ub97c \uc0dd\uc131\ud569\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: "4\ub2e8\uacc4: \ub864 \ud30c\uc774\ud504\ub77c\uc778 \u2014 \uc21c\uc11c\uac00 \uc911\uc694\ud569\ub2c8\ub2e4",
+            body: `<p>PRNG\uac00 \ucd08\uae30\ud654\ub418\uba74 <code>rollBuddy</code>\ub294 \ud2b9\uc815 \uc21c\uc11c\ub85c \ud638\ucd9c\ud569\ub2c8\ub2e4. <strong>\uc21c\uc11c\uac00 \uc911\uc694</strong>\ud55c \uc774\uc720\ub294 \uac01 <code>rng()</code> \ud638\ucd9c\uc774 \ub0b4\ubd80 \uc0c1\ud0dc\ub97c \ube44\uac00\uc5ed\uc801\uc73c\ub85c \uc804\uc9c4\uc2dc\ud0a4\uae30 \ub54c\ubb38\uc785\ub2c8\ub2e4:</p>
+<pre><code>export function rollBuddy(userId: string): BuddyResult {
+  const rng = mulberry32(hashString(userId + SALT));
+  const rarity  = rollRarity(rng);     // 1\ub2e8\uacc4: 1+ RNG \ud638\ucd9c
+  const species = pick(rng, SPECIES);   // 2\ub2e8\uacc4: 1 RNG \ud638\ucd9c
+  const eye     = pick(rng, EYES);      // 3\ub2e8\uacc4: 1 RNG \ud638\ucd9c
+  const hat     = rarity === 'common'   // 4\ub2e8\uacc4: 0 \ub610\ub294 1
+                  ? 'none'
+                  : pick(rng, HATS);
+  const shiny   = rng() < 0.01;        // 5\ub2e8\uacc4: 1 RNG \ud638\ucd9c
+  const stats   = rollStats(rng, rarity); // 6\ub2e8\uacc4: 7+
+  return { rarity, species, eye, hat, shiny, stats };
+}</code></pre>
+<p><strong>\uce90\uc2a4\ucf00\uc774\ub4dc \ud6a8\uacfc:</strong> Common \ubc84\ub514\ub294 \ubaa8\uc790 \ub864\uc744 \uac74\ub108\ub6f0\uae30 \ub54c\ubb38\uc5d0(0 RNG \uc18c\ube44) \uc0e4\uc774\ub2c8 \uccb4\ud06c\uc5d0 \ub2e4\ub978 RNG \uac12\uc744 \uc0ac\uc6a9\ud569\ub2c8\ub2e4. \ud76c\uadc0\ub3c4\ub294 \ubaa8\uc790 \uc790\uaca9\ub9cc \uc601\ud5a5\uc744 \uc8fc\ub294 \uac83\uc774 \uc544\ub2c8\ub77c \ubaa8\ub4e0 \ud6c4\uc18d \ub864\uc744 \ubbf8\ubb18\ud558\uac8c \uc774\ub3d9\uc2dc\ud0b5\ub2c8\ub2e4.</p>
+<table>
+<tr><th>\ub2e8\uacc4</th><th>\ud568\uc218</th><th>RNG \ud638\ucd9c</th><th>\ube44\uace0</th></tr>
+<tr><td>1</td><td><code>rollRarity</code></td><td>1</td><td>\ub2e8\uc77c \uac00\uc911 \ub79c\ub364 \ub864</td></tr>
+<tr><td>2</td><td><code>pick(SPECIES)</code></td><td>1</td><td>18\uc885\uc5d0\uc11c \uade0\ub4f1 \uc120\ud0dd</td></tr>
+<tr><td>3</td><td><code>pick(EYES)</code></td><td>1</td><td>6\uac00\uc9c0 \ub208\uc5d0\uc11c \uade0\ub4f1 \uc120\ud0dd</td></tr>
+<tr><td>4</td><td>\ubaa8\uc790</td><td>0 \ub610\ub294 1</td><td>Common\uc740 0, \ub098\uba38\uc9c0\ub294 1</td></tr>
+<tr><td>5</td><td>\uc0e4\uc774\ub2c8</td><td>1</td><td><code>rng() < 0.01</code></td></tr>
+<tr><td>6</td><td><code>rollStats</code></td><td>7\u201312</td><td>1 \ud53c\ud06c + 1\u20135 \ub364\ud504 + 5 \uc2a4\ud0ef \ub864</td></tr>
+</table>
+<p><strong>\ucd1d\uacc4: \ubc84\ub514\ub2f9 11\u201317\ud68c RNG \ud638\ucd9c.</strong></p>`
+          },
+          {
+            heading: "\uc2ec\uce35 \ubd84\uc11d: \uac00\uc911 \ub79c\ub364 \uc120\ud0dd",
+            body: `<p>\ud76c\uadc0\ub3c4 \uc2dc\uc2a4\ud15c\uc740 <strong>\uac00\uc911 \ub79c\ub364 \uc120\ud0dd</strong> \uc54c\uace0\ub9ac\uc998\uc744 \uc0ac\uc6a9\ud569\ub2c8\ub2e4:</p>
+<pre><code>function rollRarity(rng) {
+  const total = 60 + 25 + 10 + 4 + 1; // = 100
+  let roll = rng() * total;
+  for (const rarity of RARITIES) {
+    roll -= RARITY_WEIGHTS[rarity];
+    if (roll < 0) return rarity;
+  }
+  return 'common';
+}</code></pre>
+<p>0\uc5d0\uc11c 100\uae4c\uc9c0\uc758 \uc218\uc9c1\uc120\uc73c\ub85c \uc2dc\uac01\ud654:</p>
+<pre><code>0          60       85    95  99 100
+| Common  | Uncomm | Rare |Ep|L|
+|   60%    |  25%   | 10%  |4%|1%|</code></pre>
+<p>[0, 100) \ubc94\uc704\uc758 \ub09c\uc218\ub97c \uc0dd\uc131\ud55c \ud6c4 \ud76c\uadc0\ub3c4\ub97c \uc21c\ud68c\ud558\uba70 \uac01 \uac00\uc911\uce58\ub97c \ube84\ub2c8\ub2e4. \uce74\uc6b4\ud130\ub97c 0 \uc544\ub798\ub85c \ubab0\uace0 \uac00\ub294 \uccab \ubc88\uc9f8 \ud76c\uadc0\ub3c4\uac00 \uc2b9\ub9ac\ud569\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: "\uc2ec\uce35 \ubd84\uc11d: \uc2a4\ud0ef \uc0dd\uc131 \uc54c\uace0\ub9ac\uc998",
+            body: `<p>\uc2a4\ud0ef \uc0dd\uc131\uc740 \ud30c\uc774\ud504\ub77c\uc778\uc5d0\uc11c \uac00\uc7a5 \ubcf5\uc7a1\ud55c \ubd80\ubd84\uc73c\ub85c <strong>\ud53c\ud06c/\ub364\ud504 \ube44\ub300\uce6d \ubaa8\ub378</strong>\uc744 \uc0ac\uc6a9\ud569\ub2c8\ub2e4:</p>
+<pre><code>function rollStats(rng, rarity) {
+  const floor = RARITY_FLOOR[rarity];  // 5/15/25/35/50
+  const peak  = pick(rng, STAT_NAMES); // \ub79c\ub364 \ucd5c\uace0 \uc2a4\ud0ef
+  let dump    = pick(rng, STAT_NAMES); // \ub79c\ub364 \ucd5c\uc800 \uc2a4\ud0ef
+  while (dump === peak) dump = pick(rng, STAT_NAMES);
+  
+  for (const name of STAT_NAMES) {
+    if (name === peak)
+      stats[name] = min(100, floor + 50 + random(0..29));
+    else if (name === dump)
+      stats[name] = max(1, floor - 10 + random(0..14));
+    else
+      stats[name] = floor + random(0..39);
+  }
+}</code></pre>
+<table>
+<tr><th>\uc2a4\ud0ef \uc720\ud615</th><th>\uacf5\uc2dd</th><th>Common \ubc94\uc704</th><th>Legendary \ubc94\uc704</th></tr>
+<tr><td><strong>\ud53c\ud06c</strong></td><td><code>min(100, floor+50+rand(30))</code></td><td>55\u201384</td><td>100(\uc0c1\ud55c)</td></tr>
+<tr><td><strong>\ub364\ud504</strong></td><td><code>max(1, floor-10+rand(15))</code></td><td>1\u20139</td><td>40\u201354</td></tr>
+<tr><td><strong>\uc77c\ubc18</strong></td><td><code>floor+rand(40)</code></td><td>5\u201344</td><td>50\u201389</td></tr>
+</table>
+<p><strong>\ud575\uc2ec \ud1b5\ucc30:</strong> Legendary \ubc84\ub514\ub294 \ubc14\ub2e5\uc774 \ub108\ubb34 \ub192\uc544\uc11c \ub364\ud504 \uc2a4\ud0ef(40\u201354)\uc870\ucc28 \ub300\ubd80\ubd84\uc758 Common \ubc84\ub514 \uc77c\ubc18 \uc2a4\ud0ef(5\u201344)\uc744 \ucd08\uacfc\ud569\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: "\uc2e4\uc81c \uc608\uc81c: \uc644\uc804\ud55c \ucd94\uc801",
+            body: `<p>UUID\uac00 <code>abc-123</code>\uc778 \uacbd\uc6b0\ub97c \ucd94\uc801\ud574 \ubd05\uc2dc\ub2e4:</p>
+<pre><code>// 0\ub2e8\uacc4: \uc194\ud305
+input = 'abc-123' + 'friend-2026-401'
+      = 'abc-123friend-2026-401'
+
+// 1\ub2e8\uacc4: FNV-1a \ud574\uc2dc
+h = 2166136261
+h = (h ^ 97) * 16777619   // 'a' = 97
+h = (h ^ 98) * 16777619   // 'b' = 98
+... (25\uc790 \ubaa8\ub450 \uacc4\uc18d)
+seed = h >>> 0
+
+// 2\ub2e8\uacc4: PRNG \ucd08\uae30\ud654
+rng = mulberry32(seed)
+
+// 3\ub2e8\uacc4: \ub864 \uc2dc\ud000\uc2a4
+rng() \u2192 0.7234...  \u2192 rarity = 'uncommon'
+rng() \u2192 0.4521...  \u2192 species = 'turtle'
+rng() \u2192 0.8901...  \u2192 eye = '\u00b0'
+rng() \u2192 0.3712...  \u2192 hat = 'tophat'
+rng() \u2192 0.5623...  \u2192 shiny = false
+rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
+<p><strong>\uacb0\uacfc:</strong> Uncommon \uac70\ubd81\uc774, \u00b0(\ub180\ub780) \ub208, \uc2e4\ud06c\ud587 \ucc29\uc6a9, \uc0e4\uc774\ub2c8 \uc544\ub2d8. \ub204\uad6c\ub098 <code>abc-123</code>\uc744 \uc785\ub825\ud558\uba74 \uc815\ud655\ud788 \uac19\uc740 \ubc84\ub514\ub97c \uc5bb\uc2b5\ub2c8\ub2e4.</p>
+<p><em>\ucc38\uace0: \uc704 \uc22b\uc790\ub294 \uc124\uba85\uc6a9\uc785\ub2c8\ub2e4. \uc2e4\uc81c RNG \ucd9c\ub825\uc740 \uc815\ud655\ud55c \ud574\uc2dc \uac12\uc5d0 \ub530\ub77c \ub2ec\ub77c\uc9d1\ub2c8\ub2e4.</em></p>`
+          },
+          {
+            heading: "\uc774 \uc124\uacc4\uac00 \uc6b0\uc544\ud55c \uc774\uc720",
+            body: `<p>\ubc84\ub514 \uc0dd\uc131 \uc2dc\uc2a4\ud15c\uc758 \ub611\ub611\ud55c \uc5d4\uc9c0\ub2c8\uc5b4\ub9c1 \uc120\ud0dd:</p>
+<table>
+<tr><th>\uc124\uacc4 \uc120\ud0dd</th><th>\uc774\uc810</th></tr>
+<tr><td><strong>\ud074\ub77c\uc774\uc5b8\ud2b8 \uc804\uc6a9</strong></td><td>\uc11c\ubc84 \ubd80\ud558 \uc81c\ub85c, \uc989\uc2dc \uacb0\uacfc, \uc624\ud504\ub77c\uc778 \uc791\ub3d9</td></tr>
+<tr><td><strong>UUID \uacb0\uc815\ub860\uc801</strong></td><td>\ubc84\ub514 \ub370\uc774\ud130 \uc800\uc7a5 \ubd88\ud544\uc694, UUID\uc5d0\uc11c \uc8fc\ubb38\ud615 \"\uacc4\uc0b0\"</td></tr>
+<tr><td><strong>\ub2e8\uc77c PRNG \uc2a4\ud2b8\ub9bc</strong></td><td>\ud558\ub098\uc758 \uc2dc\ub4dc\ub85c \ubaa8\ub4e0 \uc18d\uc131 \uc0dd\uc131</td></tr>
+<tr><td><strong>\uc815\ub82c\ub41c \ud30c\uc774\ud504\ub77c\uc778</strong></td><td>\uace0\uc815 \ud638\ucd9c \uc21c\uc11c\ub85c \uc608\uce21 \uac00\ub2a5\ud558\uace0 \ub514\ubc84\uae45 \uc6a9\uc774</td></tr>
+<tr><td><strong>\uc194\ud2b8 \uae30\ubc18 \ubc84\uc804 \uad00\ub9ac</strong></td><td>\uc194\ud2b8 \ubcc0\uacbd\uc73c\ub85c \ubaa8\ub4e0 \ubc84\ub514 \uc7ac\ubc30\uce58</td></tr>
+<tr><td><strong>\ube44\uc554\ud638\ud654 \ud574\uc2dc</strong></td><td>FNV-1a\ub294 \ucda9\ubd84\ud788 \ube60\ub984, \uc554\ud638\ud654 \ud574\uc2dc\ub294 \uacfc\uc798</td></tr>
+</table>
+<p>\uc804\uccb4 \uc2dc\uc2a4\ud15c\uc740 \uc57d 50\uc904 \ucf54\ub4dc\ub85c 18\uc885 \u00d7 5\ud76c\uadc0\ub3c4 \u00d7 6\ub208 \u00d7 8\ubaa8\uc790 \u00d7 2\uc0e4\uc774\ub2c8 \u00d7 \uc218\uc2ed\uc5b5 \uc2a4\ud0ef \uc870\ud569 = \uc0ac\uc2e4\uc0c1 \ubb34\ud55c\ud55c \uace0\uc720 \ubc84\ub514\ub97c \uc0dd\uc131\ud569\ub2c8\ub2e4.</p>
+<p>\uc54c\uace0\ub9ac\uc998\uc774 \uc2e4\uc81c\ub85c \uc791\ub3d9\ud558\ub294 \uac83\uc744 \ubcf4\uace0 \uc2f6\uc73c\uc138\uc694? <a href=\"/\">Buddy \uccb4\ucee4</a>\uc5d0\uc11c UUID\ub97c \uc785\ub825\ud558\uc138\uc694. \ube0c\ub77c\uc6b0\uc800\uc5d0\uc11c \uc2e4\ud589\ub418\ub294 \ucf54\ub4dc\uac00 \ubc14\ub85c \uc774 \uae00\uc5d0\uc11c \uc124\uba85\ud55c \uc815\ud655\ud55c \uad6c\ud604\uc785\ub2c8\ub2e4.</p>`
+          }
+        ],
+      },
+    },
+  },
 ];
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {

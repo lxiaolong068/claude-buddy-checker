@@ -208,6 +208,14 @@ export const BLOG_OG: Record<string, BlogOgData> = {
     readingTime: 7,
     publishedAt: "2026-04-04",
   },
+  "claude-buddy-algorithm-fnv1a-mulberry32-prng": {
+    title: "The Algorithm Behind Claude Code Buddy — FNV-1a & Mulberry32 PRNG Explained",
+    metaDescription: "Technical deep dive into how Claude Code Buddy generates deterministic pets from UUIDs. Covers FNV-1a hashing, Mulberry32 PRNG, weighted random selection, and the complete roll pipeline.",
+    excerpt: "How does a UUID turn into a unique terminal pet? The answer involves a 32-bit hash function from 1991, a lightweight PRNG, and a carefully ordered pipeline of random rolls.",
+    tags: ["#algorithm", "#technical", "#fnv1a", "#prng", "#deep-dive"],
+    readingTime: 10,
+    publishedAt: "2026-04-04",
+  },
 };
 
 // ── OgMeta helper ─────────────────────────────────────────────────────────────
