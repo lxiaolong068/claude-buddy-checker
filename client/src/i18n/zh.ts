@@ -144,6 +144,9 @@ export const zh: typeof en = {
     clearFilter: "清除",
     errorNotFound: "错误：文章未找到",
     errorNotFoundDesc: "请求的文章不存在。",
+    latestTitle: "// 最新博客文章",
+    viewAll: "查看全部文章",
+    minRead: "分钟阅读",
   },
   comparePanel: {
     title: "compare_mode.sh",

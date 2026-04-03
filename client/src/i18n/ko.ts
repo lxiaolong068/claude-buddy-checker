@@ -144,6 +144,9 @@ export const ko: typeof en = {
     clearFilter: "초기화",
     errorNotFound: "오류: 글을 찾을 수 없습니다",
     errorNotFoundDesc: "요청한 글이 존재하지 않습니다.",
+    latestTitle: "// 최신 블로그 글",
+    viewAll: "전체 글 보기",
+    minRead: "분 읽기",
   },
   comparePanel: {
     title: "compare_mode.sh",

@@ -142,6 +142,9 @@ export const en = {
     clearFilter: "CLEAR",
     errorNotFound: "ERROR: Article not found",
     errorNotFoundDesc: "The requested post does not exist.",
+    latestTitle: "// LATEST FROM THE BLOG",
+    viewAll: "VIEW ALL POSTS",
+    minRead: "min read",
   },
   comparePanel: {
     title: "compare_mode.sh",

@@ -12,7 +12,9 @@ import { getAllArticles } from "@/lib/blog-data";
 import BuddyResultCard from "@/components/BuddyResultCard";
 import TypewriterText from "@/components/TypewriterText";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
+import ThemeToggle from "@/components/ThemeToggle";
 import { useI18n } from "@/contexts/I18nContext";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import WebAppSchema from "@/components/WebAppSchema";
 import LazyImage from "@/components/LazyImage";
 
@@ -78,6 +80,14 @@ export default function Home() {
     if (e.key === "Enter") handleCheck();
   };
 
+  // / — focus UUID input when not already typing
+  useKeyboardShortcuts({
+    "/": (e) => {
+      e.preventDefault();
+      inputRef.current?.focus();
+    },
+  });
+
   const rarityRows = [
     { name: t("rarity.common"), chance: "60%", floor: "5", stars: "★", cls: "rarity-common" },
     { name: t("rarity.uncommon"), chance: "25%", floor: "15", stars: "★★", cls: "rarity-uncommon" },
@@ -107,7 +117,10 @@ export default function Home() {
               /blog
             </Link>
           </nav>
-          <LanguageSwitcher />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <LanguageSwitcher />
+          </div>
         </div>
 
         {/* ASCII Logo */}
@@ -190,6 +203,12 @@ export default function Home() {
                   autoComplete="off"
                   spellCheck={false}
                 />
+                {/* Keyboard hint — shown only when input is empty */}
+                {!uuid && (
+                  <span className="pointer-events-none text-[10px] text-muted-foreground/25 font-mono select-none shrink-0 ml-1">
+                    [/]
+                  </span>
+                )}
               </div>
               <button
                 onClick={handleCheck}
@@ -330,47 +349,69 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Blog Section */}
+        {/* Latest Blog Posts */}
         <div className="mb-12">
-          <h2 className="text-lg font-bold glow-text mb-4">
-            {t("blog.indexH1")}
-          </h2>
-          <div className="space-y-3">
-            {getAllArticles().slice(0, 2).map((article) => {
+          {/* Section header */}
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-lg font-bold glow-text">
+              {t("blog.latestTitle")}
+            </h2>
+            <Link
+              href="/blog"
+              className="text-[10px] uppercase tracking-wider text-crt-green/50 hover:text-crt-green border border-crt-green/15 hover:border-crt-green/40 px-3 py-1.5 transition-all"
+            >
+              {t("blog.viewAll")} →
+            </Link>
+          </div>
+
+          <div className="space-y-4">
+            {getAllArticles().slice(0, 3).map((article, idx) => {
               const ac = article.content[locale as keyof typeof article.content];
+              const pubDate = new Date(article.publishedAt);
+              const dateStr = pubDate.toLocaleDateString(
+                locale === "zh" ? "zh-CN" : locale === "ko" ? "ko-KR" : "en-US",
+                { year: "numeric", month: "short", day: "numeric" }
+              );
               return (
                 <Link
                   key={article.slug}
                   href={`/blog/${article.slug}`}
-                  className="block border border-border/30 bg-card/50 p-4 hover:border-crt-green/30 transition-colors group"
+                  className="block border border-border bg-card p-4 sm:p-5 hover:border-crt-green/50 transition-all group"
                 >
-                  <div className="flex items-center gap-2 mb-2">
-                    {article.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="text-[9px] uppercase tracking-wider px-1.5 py-0.5 border border-crt-green/15 text-crt-green/50">
-                        #{tag}
-                      </span>
-                    ))}
+                  {/* Meta row */}
+                  <div className="flex items-center gap-3 mb-3 text-[10px] uppercase tracking-wider text-muted-foreground">
+                    <span className="text-crt-green/60">{idx === 0 ? "►" : "·"}</span>
+                    <time dateTime={article.publishedAt}>{dateStr}</time>
+                    <span className="text-border">·</span>
+                    <span>{article.readingTime} {t("blog.minRead")}</span>
+                    <span className="text-border">·</span>
+                    <div className="flex items-center gap-1.5">
+                      {article.tags.slice(0, 2).map((tag) => (
+                        <span key={tag} className="px-1.5 py-0.5 border border-crt-green/15 text-crt-green/50 group-hover:border-crt-green/30 group-hover:text-crt-green/70 transition-colors">
+                          #{tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <h3 className="text-sm font-semibold text-foreground group-hover:text-crt-green transition-colors mb-1">
+
+                  {/* Title */}
+                  <h3 className="text-sm font-bold text-foreground group-hover:text-crt-green transition-colors mb-2 leading-snug">
                     {ac.title}
                   </h3>
-                  <p className="text-xs text-muted-foreground line-clamp-2">
+
+                  {/* Excerpt */}
+                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
                     {ac.excerpt}
                   </p>
-                  <span className="inline-block mt-2 text-[10px] text-crt-green/50 group-hover:text-crt-green transition-colors uppercase tracking-wider">
-                    {t("blog.readMore")} \u2192
-                  </span>
+
+                  {/* Read more */}
+                  <div className="mt-3 flex items-center gap-1 text-[10px] uppercase tracking-wider text-crt-green/40 group-hover:text-crt-green transition-colors">
+                    <span>{t("blog.readMore")}</span>
+                    <span className="group-hover:translate-x-0.5 transition-transform">→</span>
+                  </div>
                 </Link>
               );
             })}
-          </div>
-          <div className="mt-4 text-center">
-            <Link
-              href="/blog"
-              className="inline-block text-xs text-crt-green/60 hover:text-crt-green border border-crt-green/20 hover:border-crt-green/40 px-4 py-2 transition-all"
-            >
-              {t("blog.readMore")} \u2192 /blog
-            </Link>
           </div>
         </div>
 
