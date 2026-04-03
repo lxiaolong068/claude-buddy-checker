@@ -179,6 +179,8 @@ export const ko: typeof en = {
     peakStatDEBUGGING: "디버깅",
     resultsCount: "종 발견",
     clearFilter: "초기화",
+    searchLabel: "검색",
+    searchPlaceholder: "이름으로 검색...",
     compareOpen: "비교하기 →",
     compareSelected: "선택됨",
     compareClearAll: "전체 초기화",

@@ -35,10 +35,10 @@ function CategoryButton({
   return (
     <button
       onClick={onClick}
-      className={`px-2.5 py-1 text-[10px] uppercase tracking-wider border transition-all whitespace-nowrap ${
+      className={`px-2.5 py-1.5 text-[10px] uppercase tracking-wider border transition-all whitespace-nowrap ${
         active
           ? "border-[#33ff33]/60 bg-[#33ff33]/15 text-[#33ff33]"
-          : "border-[#33ff33]/20 text-[#33ff33]/40 hover:border-[#33ff33]/35 hover:text-[#33ff33]/60"
+          : "border-[#33ff33]/20 text-[#33ff33]/40 hover:border-[#33ff33]/35 hover:text-[#33ff33]/60 active:border-[#33ff33]/50 active:text-[#33ff33]/80"
       }`}
     >
       {children}
@@ -58,10 +58,10 @@ function PeakStatButton({
   return (
     <button
       onClick={onClick}
-      className={`px-2 py-0.5 text-[10px] uppercase tracking-wider border transition-all whitespace-nowrap ${
+      className={`px-2 py-1 text-[10px] uppercase tracking-wider border transition-all whitespace-nowrap ${
         active
           ? "border-[#ffd700]/60 bg-[#ffd700]/10 text-[#ffd700]"
-          : "border-[#33ff33]/15 text-[#33ff33]/35 hover:border-[#ffd700]/30 hover:text-[#33ff33]/55"
+          : "border-[#33ff33]/15 text-[#33ff33]/35 hover:border-[#ffd700]/30 hover:text-[#33ff33]/55 active:border-[#ffd700]/40 active:text-[#33ff33]/70"
       }`}
     >
       {children}
@@ -73,6 +73,7 @@ export default function SpeciesIndex() {
   const { t, locale } = useI18n();
   const [filter, setFilter] = useState<CategoryFilter>("all");
   const [peakStatFilter, setPeakStatFilter] = useState<string>("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [mounted, setMounted] = useState(false);
   const [selectedSlugs, setSelectedSlugs] = useState<Species[]>([]);
   const [showCompare, setShowCompare] = useState(false);
@@ -104,7 +105,11 @@ export default function SpeciesIndex() {
     const matchCat = filter === "all" || SPECIES_DATA[s].category === filter;
     const matchStat =
       peakStatFilter === "all" || SPECIES_DATA[s].peakStat === peakStatFilter;
-    return matchCat && matchStat;
+    const speciesName = t(`speciesDetail.speciesNames.${s}`);
+    const matchSearch =
+      searchQuery === "" ||
+      speciesName.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchCat && matchStat && matchSearch;
   });
 
   return (
@@ -125,7 +130,7 @@ export default function SpeciesIndex() {
         </div>
       </nav>
 
-      <main className="container max-w-6xl mx-auto px-4 py-8">
+      <main className={`container max-w-6xl mx-auto px-4 pt-8 ${selectedSlugs.length > 0 ? "pb-28" : "pb-8"}`}>
         {/* Header */}
         <section
           className={`mb-8 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
@@ -203,6 +208,28 @@ export default function SpeciesIndex() {
                 </div>
               </div>
 
+              {/* Search Row */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[10px] text-[#33ff33]/50 uppercase tracking-wider font-semibold min-w-[60px]">
+                  {t("speciesIndex.searchLabel")}:
+                </span>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={t("speciesIndex.searchPlaceholder")}
+                  className="bg-transparent border border-[#33ff33]/20 text-[#33ff33]/80 text-[10px] px-2 py-1 outline-none placeholder:text-[#33ff33]/25 focus:border-[#33ff33]/50 transition-colors tracking-wider flex-1 min-w-[120px] sm:flex-none sm:w-40"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={() => setSearchQuery("")}
+                    className="text-[10px] text-[#ff5555]/60 hover:text-[#ff5555] uppercase tracking-wider transition-colors"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+
               {/* Results Count + Clear */}
               <div className="flex items-center justify-between pt-1 border-t border-[#33ff33]/10">
                 <span className="text-[10px] text-[#33ff33]/35 tracking-wider">
@@ -211,9 +238,9 @@ export default function SpeciesIndex() {
                   </span>{" "}
                   {t("speciesIndex.resultsCount")}
                 </span>
-                {peakStatFilter !== "all" && (
+                {(peakStatFilter !== "all" || searchQuery !== "") && (
                   <button
-                    onClick={() => setPeakStatFilter("all")}
+                    onClick={() => { setPeakStatFilter("all"); setSearchQuery(""); }}
                     className="text-[10px] text-[#ff5555]/60 hover:text-[#ff5555] uppercase tracking-wider transition-colors"
                   >
                     [{t("speciesIndex.clearFilter")}]
@@ -268,12 +295,12 @@ export default function SpeciesIndex() {
             {selectedSlugs.map((slug) => (
               <span
                 key={slug}
-                className="flex items-center gap-1 text-[9px] text-[#33ff33]/70 border border-[#33ff33]/30 px-1.5 py-0.5"
+                className="flex items-center gap-1 text-[9px] text-[#33ff33]/70 border border-[#33ff33]/30 px-1.5 py-1"
               >
                 {t(`speciesDetail.speciesNames.${slug}`)}
                 <button
                   onClick={() => toggleSelect(slug)}
-                  className="text-[#33ff33]/40 hover:text-[#ff5555] transition-colors ml-0.5"
+                  className="text-[#33ff33]/40 hover:text-[#ff5555] active:text-[#ff5555] transition-colors ml-0.5 p-1 -m-1"
                   aria-label="remove"
                 >
                   ×

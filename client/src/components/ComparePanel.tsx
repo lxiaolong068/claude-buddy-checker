@@ -59,7 +59,7 @@ export default function ComparePanel({ slugs, onClose }: ComparePanelProps) {
         if (e.target === e.currentTarget) onClose();
       }}
     >
-      <div className="max-w-4xl mx-auto my-8 px-4 pb-8">
+      <div className="max-w-4xl mx-auto my-4 sm:my-8 px-4 pb-8">
         <div className="border border-[#33ff33]/30 bg-[#0a0a0a]">
           {/* Terminal Header */}
           <div className="flex items-center gap-2 px-4 py-2.5 border-b border-[#33ff33]/20">
@@ -71,13 +71,16 @@ export default function ComparePanel({ slugs, onClose }: ComparePanelProps) {
             </span>
             <button
               onClick={onClose}
-              className="text-[10px] text-[#33ff33]/40 hover:text-[#33ff33] transition-colors uppercase tracking-wider"
+              className="text-[10px] text-[#33ff33]/40 hover:text-[#33ff33] active:text-[#33ff33] transition-colors uppercase tracking-wider px-2 py-1.5 -my-1.5 -mr-1"
             >
               [{t("comparePanel.close")}]
             </button>
           </div>
 
           {/* Comparison Table */}
+          <div className="relative">
+            {/* Right-fade scroll hint — visible on small screens to indicate horizontal scroll */}
+            <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 md:hidden" />
           <div className="overflow-x-auto p-4">
             <table className="w-full border-collapse">
               <colgroup>
@@ -234,6 +237,7 @@ export default function ComparePanel({ slugs, onClose }: ComparePanelProps) {
                 </tr>
               </tbody>
             </table>
+          </div>
           </div>
 
           {/* Footer Note */}

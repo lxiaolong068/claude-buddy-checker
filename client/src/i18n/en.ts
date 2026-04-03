@@ -177,6 +177,8 @@ export const en = {
     peakStatDEBUGGING: "DEBUGGING",
     resultsCount: "species found",
     clearFilter: "CLEAR",
+    searchLabel: "SEARCH",
+    searchPlaceholder: "search by name...",
     compareOpen: "COMPARE →",
     compareSelected: "SELECTED",
     compareClearAll: "CLEAR ALL",

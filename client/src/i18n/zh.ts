@@ -179,6 +179,8 @@ export const zh: typeof en = {
     peakStatDEBUGGING: "调试",
     resultsCount: "个物种",
     clearFilter: "清除",
+    searchLabel: "搜索",
+    searchPlaceholder: "按名称搜索...",
     compareOpen: "开始对比 →",
     compareSelected: "已选",
     compareClearAll: "清除全部",
