@@ -6,6 +6,21 @@
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <!--
+      Anti-FOUC: runs synchronously before any CSS is applied.
+      Restores theme (dark/light) and locale from localStorage so the
+      first paint already has the correct styles — no flash of wrong theme.
+      Default theme is "dark"; only suppress it when user explicitly chose "light".
+    -->
+    <script>
+      (function () {
+        var t = localStorage.getItem('theme');
+        if (t !== 'light') document.documentElement.classList.add('dark');
+        var l = localStorage.getItem('buddy-locale');
+        if (l === 'zh') document.documentElement.lang = 'zh-CN';
+        else if (l === 'ko') document.documentElement.lang = 'ko';
+      })();
+    </script>
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
