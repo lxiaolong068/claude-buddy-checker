@@ -4,12 +4,14 @@
  * Design: Grid of ASCII art cards with category filters
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { SPECIES_DATA, ALL_SPECIES_SLUGS } from "@/lib/species-data";
 import { BODIES, type Species } from "@/lib/buddy-engine";
 import ComparePanel from "@/components/ComparePanel";
+import ThemeToggle from "@/components/ThemeToggle";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 type CategoryFilter = "all" | "animal" | "creature" | "mythical" | "object";
 
@@ -77,6 +79,7 @@ export default function SpeciesIndex() {
   const [mounted, setMounted] = useState(false);
   const [selectedSlugs, setSelectedSlugs] = useState<Species[]>([]);
   const [showCompare, setShowCompare] = useState(false);
+  const searchRef = useRef<HTMLInputElement>(null);
 
   const toggleSelect = useCallback((slug: Species) => {
     setSelectedSlugs((prev) =>
@@ -91,6 +94,32 @@ export default function SpeciesIndex() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    // / — focus search input
+    "/": (e) => {
+      e.preventDefault();
+      searchRef.current?.focus();
+    },
+    // Esc — clear search first, then clear selection
+    // (ComparePanel handles its own Esc when open)
+    "Escape": () => {
+      if (showCompare) return;
+      if (searchQuery) {
+        setSearchQuery("");
+        searchRef.current?.blur();
+      } else if (selectedSlugs.length > 0) {
+        setSelectedSlugs([]);
+      }
+    },
+    // Enter — open compare panel when 2+ species selected
+    "Enter": () => {
+      if (!showCompare && selectedSlugs.length >= 2) {
+        setShowCompare(true);
+      }
+    },
+  });
 
   // Update document title
   useEffect(() => {
@@ -126,7 +155,10 @@ export default function SpeciesIndex() {
           >
             {t("speciesIndex.backHome")}
           </Link>
-          <span className="text-[#33ff33]/40 text-xs">/species</span>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <span className="text-[#33ff33]/40 text-xs">/species</span>
+          </div>
         </div>
       </nav>
 
@@ -213,13 +245,22 @@ export default function SpeciesIndex() {
                 <span className="text-[10px] text-[#33ff33]/50 uppercase tracking-wider font-semibold min-w-[60px]">
                   {t("speciesIndex.searchLabel")}:
                 </span>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={t("speciesIndex.searchPlaceholder")}
-                  className="bg-transparent border border-[#33ff33]/20 text-[#33ff33]/80 text-[10px] px-2 py-1 outline-none placeholder:text-[#33ff33]/25 focus:border-[#33ff33]/50 transition-colors tracking-wider flex-1 min-w-[120px] sm:flex-none sm:w-40"
-                />
+                <div className="relative flex items-center flex-1 min-w-[120px] sm:flex-none sm:w-44">
+                  <input
+                    ref={searchRef}
+                    type="text"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder={t("speciesIndex.searchPlaceholder")}
+                    className="w-full bg-transparent border border-[#33ff33]/20 text-[#33ff33]/80 text-[10px] px-2 py-1 pr-8 outline-none placeholder:text-[#33ff33]/25 focus:border-[#33ff33]/50 transition-colors tracking-wider"
+                  />
+                  {/* Keyboard hint — hidden when input has value or is focused */}
+                  {!searchQuery && (
+                    <span className="pointer-events-none absolute right-2 text-[9px] text-[#33ff33]/20 font-mono select-none">
+                      [/]
+                    </span>
+                  )}
+                </div>
                 {searchQuery && (
                   <button
                     onClick={() => setSearchQuery("")}
@@ -328,7 +369,7 @@ export default function SpeciesIndex() {
             >
               {selectedSlugs.length < 2
                 ? t("speciesIndex.compareSelectMore")
-                : t("speciesIndex.compareOpen")}
+                : <>{t("speciesIndex.compareOpen")} <span className="opacity-40 font-normal normal-case tracking-normal">[↵]</span></>}
             </button>
           </div>
         </div>

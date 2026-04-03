@@ -74,6 +74,7 @@ export default function ComparePanel({ slugs, onClose }: ComparePanelProps) {
               className="text-[10px] text-[#33ff33]/40 hover:text-[#33ff33] active:text-[#33ff33] transition-colors uppercase tracking-wider px-2 py-1.5 -my-1.5 -mr-1"
             >
               [{t("comparePanel.close")}]
+              <span className="ml-1 opacity-40 font-normal normal-case tracking-normal">ESC</span>
             </button>
           </div>
 
