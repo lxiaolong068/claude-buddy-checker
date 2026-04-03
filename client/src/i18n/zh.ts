@@ -142,6 +142,8 @@ export const zh: typeof en = {
     filterAll: "全部",
     resultsCount: "篇文章",
     clearFilter: "清除",
+    errorNotFound: "错误：文章未找到",
+    errorNotFoundDesc: "请求的文章不存在。",
   },
   comparePanel: {
     title: "compare_mode.sh",
@@ -217,6 +219,7 @@ export const zh: typeof en = {
     faqNote: "以下常见问题基于 Claude Code Buddy 系统机制整理。",
     tryChecker: "查看你的 Buddy 是否是",
     tryCheckerBtn: "查询你的 BUDDY",
+    errorNotFound: "错误 404：物种未找到",
     categoryAnimal: "动物",
     categoryCreature: "生物",
     categoryMythical: "神话",

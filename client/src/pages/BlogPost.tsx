@@ -30,12 +30,44 @@ export default function BlogPost() {
 
   useEffect(() => {
     if (content) {
+      const slug = params.slug || "";
+      const url = `https://claudebuddy.art/blog/${slug}`;
+
       document.title = content.metaTitle;
+
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) metaDesc.setAttribute("content", content.metaDescription);
+
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute("content", content.metaTitle);
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute("content", content.metaDescription);
+      const ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.setAttribute("content", url);
+
+      const twTitle = document.querySelector('meta[name="twitter:title"]');
+      if (twTitle) twTitle.setAttribute("content", content.metaTitle);
+      const twDesc = document.querySelector('meta[name="twitter:description"]');
+      if (twDesc) twDesc.setAttribute("content", content.metaDescription);
+
+      const canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) canonical.setAttribute("href", url);
+
+      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+      for (const loc of ["en", "zh", "ko", "x-default"]) {
+        const link = document.createElement("link");
+        link.rel = "alternate";
+        link.setAttribute("hreflang", loc);
+        link.href = url;
+        document.head.appendChild(link);
+      }
     }
     window.scrollTo(0, 0);
-  }, [content, locale]);
+
+    return () => {
+      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+    };
+  }, [content, locale, params.slug]);
 
   if (!article || !content) {
     return (
@@ -52,9 +84,9 @@ export default function BlogPost() {
             <LanguageSwitcher />
           </div>
           <div className="border border-border bg-card p-8 text-center">
-            <p className="text-crt-red text-sm">ERROR: Article not found</p>
+            <p className="text-crt-red text-sm">{t("blog.errorNotFound")}</p>
             <p className="text-xs text-muted-foreground mt-2">
-              The requested post does not exist.
+              {t("blog.errorNotFoundDesc")}
             </p>
           </div>
         </div>

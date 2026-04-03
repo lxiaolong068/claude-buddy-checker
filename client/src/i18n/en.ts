@@ -140,6 +140,8 @@ export const en = {
     filterAll: "ALL",
     resultsCount: "articles found",
     clearFilter: "CLEAR",
+    errorNotFound: "ERROR: Article not found",
+    errorNotFoundDesc: "The requested post does not exist.",
   },
   comparePanel: {
     title: "compare_mode.sh",
@@ -215,6 +217,7 @@ export const en = {
     faqNote: "These FAQs are based on the Claude Code Buddy system mechanics.",
     tryChecker: "Check if your buddy is a",
     tryCheckerBtn: "CHECK YOUR BUDDY",
+    errorNotFound: "ERROR 404: Species not found",
     categoryAnimal: "Animal",
     categoryCreature: "Creature",
     categoryMythical: "Mythical",

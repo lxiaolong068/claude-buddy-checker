@@ -142,6 +142,8 @@ export const ko: typeof en = {
     filterAll: "전체",
     resultsCount: "개 글",
     clearFilter: "초기화",
+    errorNotFound: "오류: 글을 찾을 수 없습니다",
+    errorNotFoundDesc: "요청한 글이 존재하지 않습니다.",
   },
   comparePanel: {
     title: "compare_mode.sh",
@@ -217,6 +219,7 @@ export const ko: typeof en = {
     faqNote: "이 FAQ는 Claude Code Buddy 시스템 메커니즘을 기반으로 작성되었습니다.",
     tryChecker: "당신의 Buddy가",
     tryCheckerBtn: "BUDDY 확인하기",
+    errorNotFound: "오류 404: 종을 찾을 수 없습니다",
     categoryAnimal: "동물",
     categoryCreature: "생물",
     categoryMythical: "신화",

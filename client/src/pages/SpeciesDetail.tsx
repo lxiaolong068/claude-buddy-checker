@@ -61,19 +61,47 @@ export default function SpeciesDetail() {
     setMounted(true);
   }, []);
 
-  // Update document title for SEO
+  // Update document title and meta for SEO
   useEffect(() => {
     if (info) {
       const name = t(`speciesDetail.speciesNames.${slug}`);
-      document.title = `${name} ${t("speciesDetail.metaTitleSuffix")}`;
+      const title = `${name} ${t("speciesDetail.metaTitleSuffix")}`;
+      const desc = `${t("speciesDetail.metaDescPrefix")} ${name} ${t("speciesDetail.metaDescSuffix")}`;
+      const url = `https://claudebuddy.art/species/${slug}`;
+
+      document.title = title;
+
       const metaDesc = document.querySelector('meta[name="description"]');
-      if (metaDesc) {
-        metaDesc.setAttribute(
-          "content",
-          `${t("speciesDetail.metaDescPrefix")} ${name} ${t("speciesDetail.metaDescSuffix")}`
-        );
+      if (metaDesc) metaDesc.setAttribute("content", desc);
+
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute("content", title);
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute("content", desc);
+      const ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.setAttribute("content", url);
+
+      const twTitle = document.querySelector('meta[name="twitter:title"]');
+      if (twTitle) twTitle.setAttribute("content", title);
+      const twDesc = document.querySelector('meta[name="twitter:description"]');
+      if (twDesc) twDesc.setAttribute("content", desc);
+
+      const canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) canonical.setAttribute("href", url);
+
+      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+      for (const loc of ["en", "zh", "ko", "x-default"]) {
+        const link = document.createElement("link");
+        link.rel = "alternate";
+        link.setAttribute("hreflang", loc);
+        link.href = url;
+        document.head.appendChild(link);
       }
     }
+
+    return () => {
+      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+    };
   }, [info, slug, t, locale]);
 
   const demoBuddy = useMemo(() => info ? makeDemoBuddy(slug, info) : null, [slug, info]);
@@ -109,7 +137,7 @@ export default function SpeciesDetail() {
       <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center">
         <div className="text-center">
           <p className="text-[#33ff33] font-mono text-xl mb-4">
-            ERROR 404: Species not found
+            {t("speciesDetail.errorNotFound")}
           </p>
           <Link
             href="/"
