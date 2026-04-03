@@ -20,9 +20,58 @@ const FILTERS: { key: CategoryFilter; labelKey: string }[] = [
   { key: "object", labelKey: "speciesIndex.filterObject" },
 ];
 
+const PEAK_STATS = ["PATIENCE", "CHAOS", "WISDOM", "SNARK", "DEBUGGING"] as const;
+
+function CategoryButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-2.5 py-1 text-[10px] uppercase tracking-wider border transition-all whitespace-nowrap ${
+        active
+          ? "border-[#33ff33]/60 bg-[#33ff33]/15 text-[#33ff33]"
+          : "border-[#33ff33]/20 text-[#33ff33]/40 hover:border-[#33ff33]/35 hover:text-[#33ff33]/60"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
+function PeakStatButton({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-2 py-0.5 text-[10px] uppercase tracking-wider border transition-all whitespace-nowrap ${
+        active
+          ? "border-[#ffd700]/60 bg-[#ffd700]/10 text-[#ffd700]"
+          : "border-[#33ff33]/15 text-[#33ff33]/35 hover:border-[#ffd700]/30 hover:text-[#33ff33]/55"
+      }`}
+    >
+      {children}
+    </button>
+  );
+}
+
 export default function SpeciesIndex() {
   const { t, locale } = useI18n();
   const [filter, setFilter] = useState<CategoryFilter>("all");
+  const [peakStatFilter, setPeakStatFilter] = useState<string>("all");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -38,10 +87,12 @@ export default function SpeciesIndex() {
     }
   }, [t, locale]);
 
-  const filtered =
-    filter === "all"
-      ? ALL_SPECIES_SLUGS
-      : ALL_SPECIES_SLUGS.filter((s) => SPECIES_DATA[s].category === filter);
+  const filtered = ALL_SPECIES_SLUGS.filter((s) => {
+    const matchCat = filter === "all" || SPECIES_DATA[s].category === filter;
+    const matchStat =
+      peakStatFilter === "all" || SPECIES_DATA[s].peakStat === peakStatFilter;
+    return matchCat && matchStat;
+  });
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-[#33ff33] font-mono relative overflow-hidden">
@@ -74,33 +125,89 @@ export default function SpeciesIndex() {
           </p>
         </section>
 
-        {/* Category Filters */}
+        {/* Filter Toolbar */}
         <section
           className={`mb-8 transition-all duration-700 delay-100 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
-          <div className="flex flex-wrap gap-2">
-            {FILTERS.map(({ key, labelKey }) => (
-              <button
-                key={key}
-                onClick={() => setFilter(key)}
-                className={`px-3 py-1.5 text-xs border transition-all ${
-                  filter === key
-                    ? "border-[#33ff33] bg-[#33ff33]/10 text-[#33ff33]"
-                    : "border-[#33ff33]/20 text-[#33ff33]/50 hover:border-[#33ff33]/40 hover:text-[#33ff33]/70"
-                }`}
-              >
-                {t(labelKey)}
-                <span className="ml-1 text-[#33ff33]/30">
-                  (
-                  {key === "all"
-                    ? ALL_SPECIES_SLUGS.length
-                    : ALL_SPECIES_SLUGS.filter(
-                        (s) => SPECIES_DATA[s].category === key
-                      ).length}
-                  )
+          <div className="border border-[#33ff33]/20 bg-[#0d1a0d]/30">
+            {/* Toolbar Header */}
+            <div className="flex items-center gap-2 px-3 py-1.5 border-b border-[#33ff33]/15">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#33ff33]/60" />
+              <span className="text-[9px] text-[#33ff33]/40 uppercase tracking-widest">
+                query_options
+              </span>
+            </div>
+
+            <div className="p-3 space-y-3">
+              {/* Category Row */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[10px] text-[#33ff33]/50 uppercase tracking-wider font-semibold min-w-[60px]">
+                  {t("speciesIndex.filterByCategory")}:
                 </span>
-              </button>
-            ))}
+                <div className="flex gap-1.5 flex-wrap">
+                  {FILTERS.map(({ key, labelKey }) => (
+                    <CategoryButton
+                      key={key}
+                      active={filter === key}
+                      onClick={() => setFilter(key)}
+                    >
+                      {t(labelKey)}
+                      <span className="ml-1 opacity-40">
+                        (
+                        {key === "all"
+                          ? ALL_SPECIES_SLUGS.length
+                          : ALL_SPECIES_SLUGS.filter(
+                              (s) => SPECIES_DATA[s].category === key
+                            ).length}
+                        )
+                      </span>
+                    </CategoryButton>
+                  ))}
+                </div>
+              </div>
+
+              {/* Peak Stat Row */}
+              <div className="flex items-center gap-2 flex-wrap">
+                <span className="text-[10px] text-[#ffd700]/50 uppercase tracking-wider font-semibold min-w-[60px]">
+                  {t("speciesIndex.filterByPeakStat")}:
+                </span>
+                <div className="flex gap-1.5 flex-wrap">
+                  <PeakStatButton
+                    active={peakStatFilter === "all"}
+                    onClick={() => setPeakStatFilter("all")}
+                  >
+                    {t("speciesIndex.peakStatAll")}
+                  </PeakStatButton>
+                  {PEAK_STATS.map((stat) => (
+                    <PeakStatButton
+                      key={stat}
+                      active={peakStatFilter === stat}
+                      onClick={() => setPeakStatFilter(stat)}
+                    >
+                      {t(`speciesIndex.peakStat${stat}`)}
+                    </PeakStatButton>
+                  ))}
+                </div>
+              </div>
+
+              {/* Results Count + Clear */}
+              <div className="flex items-center justify-between pt-1 border-t border-[#33ff33]/10">
+                <span className="text-[10px] text-[#33ff33]/35 tracking-wider">
+                  <span className="text-[#33ff33]/70 font-semibold">
+                    {filtered.length}
+                  </span>{" "}
+                  {t("speciesIndex.resultsCount")}
+                </span>
+                {peakStatFilter !== "all" && (
+                  <button
+                    onClick={() => setPeakStatFilter("all")}
+                    className="text-[10px] text-[#ff5555]/60 hover:text-[#ff5555] uppercase tracking-wider transition-colors"
+                  >
+                    [{t("speciesIndex.clearFilter")}]
+                  </button>
+                )}
+              </div>
+            </div>
           </div>
         </section>
 
