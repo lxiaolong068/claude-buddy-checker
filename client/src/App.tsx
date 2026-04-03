@@ -5,6 +5,7 @@ import { Route, Switch } from "wouter";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { I18nProvider } from "./contexts/I18nContext";
+import PageTransition from "./components/PageTransition";
 import Home from "./pages/Home";
 import SpeciesIndex from "./pages/SpeciesIndex";
 import SpeciesDetail from "./pages/SpeciesDetail";
@@ -13,15 +14,17 @@ import BlogPost from "./pages/BlogPost";
 
 function Router() {
   return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/species"} component={SpeciesIndex} />
-      <Route path={"/species/:slug"} component={SpeciesDetail} />
-      <Route path={"/blog"} component={BlogIndex} />
-      <Route path={"/blog/:slug"} component={BlogPost} />
-      <Route path={"/404"} component={NotFound} />
-      <Route component={NotFound} />
-    </Switch>
+    <PageTransition>
+      <Switch>
+        <Route path={"/"} component={Home} />
+        <Route path={"/species"} component={SpeciesIndex} />
+        <Route path={"/species/:slug"} component={SpeciesDetail} />
+        <Route path={"/blog"} component={BlogIndex} />
+        <Route path={"/blog/:slug"} component={BlogPost} />
+        <Route path={"/404"} component={NotFound} />
+        <Route component={NotFound} />
+      </Switch>
+    </PageTransition>
   );
 }
 
