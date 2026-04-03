@@ -1149,6 +1149,413 @@ export const BLOG_ARTICLES: BlogArticle[] = [
       },
     },
   },
+  {
+    slug: "claude-buddy-stats-system-deep-dive",
+    publishedAt: "2026-04-04",
+    readingTime: 8,
+    tags: ["stats", "attributes", "deep-dive", "debugging", "wisdom"],
+    content: {
+      en: {
+        title: "Claude Code Buddy Stats Deep Dive — Understanding the 5 Personality Attributes",
+        metaTitle: "Claude Code Buddy Stats Deep Dive — All 5 Attributes Explained (2026)",
+        metaDescription: "Deep dive into Claude Code Buddy's 5 personality stats: Debugging, Patience, Chaos, Wisdom, and Snark. Learn how stats are generated, species affinities, and what makes a perfect buddy.",
+        excerpt: "Every Claude Code Buddy has 5 personality stats that define its character. But how are they generated? Which species excels at what? And what does a high Chaos score actually mean? Let's break it all down.",
+        sections: [
+          {
+            heading: "The Five Personality Stats",
+            body: `<p>Every Claude Code Buddy is defined by <strong>5 personality stats</strong>, each scored from 1 to 100. These aren't just numbers — they represent your buddy's core identity and how it would behave as your terminal companion.</p>
+<h4>🔴 DEBUGGING (Red)</h4>
+<p>Your buddy's ability to hunt down bugs and solve technical problems. High-Debugging buddies are the ones you want by your side during a 3 AM production incident. They're methodical, focused, and relentless in tracking down root causes.</p>
+<p><strong>High DEBUGGING species:</strong> <a href="/species/dragon">Dragon</a> (ancient problem-solver), <a href="/species/axolotl">Axolotl</a> (regenerative debugger), <a href="/species/robot">Robot</a> (systematic analyzer)</p>
+<h4>🔵 PATIENCE (Blue)</h4>
+<p>How well your buddy handles long compilation times, flaky tests, and endless code reviews. Patient buddies don't rage-quit — they calmly wait and offer encouragement when your build fails for the 47th time.</p>
+<p><strong>High PATIENCE species:</strong> <a href="/species/duck">Duck</a> (serene companion), <a href="/species/penguin">Penguin</a> (stoic endurer), <a href="/species/turtle">Turtle</a> (the ultimate waiter), <a href="/species/capybara">Capybara</a> (zen master), <a href="/species/snail">Snail</a> (patience personified)</p>
+<h4>🟣 CHAOS (Purple)</h4>
+<p>The wildcard stat. High-Chaos buddies are unpredictable, creative, and occasionally destructive. They might suggest refactoring your entire codebase at 2 AM or introduce you to an obscure programming paradigm you've never heard of.</p>
+<p><strong>High CHAOS species:</strong> <a href="/species/goose">Goose</a> (agent of chaos), <a href="/species/ghost">Ghost</a> (ethereal trickster), <a href="/species/rabbit">Rabbit</a> (hyperactive energy)</p>
+<h4>🟡 WISDOM (Yellow)</h4>
+<p>Deep knowledge and insight. Wise buddies understand design patterns, architectural trade-offs, and the philosophical implications of your variable naming choices. They're the mentors of the buddy world.</p>
+<p><strong>High WISDOM species:</strong> <a href="/species/owl">Owl</a> (the sage), <a href="/species/octopus">Octopus</a> (multi-threaded thinker), <a href="/species/blob">Blob</a> (amorphous oracle), <a href="/species/mushroom">Mushroom</a> (mycelial network of knowledge)</p>
+<h4>🟢 SNARK (Green)</h4>
+<p>Your buddy's sass level. High-Snark buddies deliver cutting code reviews, judge your commit messages, and have strong opinions about tabs vs. spaces. They're brutally honest but secretly care about code quality.</p>
+<p><strong>High SNARK species:</strong> <a href="/species/cat">Cat</a> (the critic), <a href="/species/cactus">Cactus</a> (prickly commentator), <a href="/species/chonk">Chonk</a> (round but sharp-tongued)</p>`
+          },
+          {
+            heading: "How Stats Are Generated — The Algorithm",
+            body: `<p>Stats aren't randomly scattered — they follow a carefully designed algorithm that creates <strong>meaningful personality profiles</strong>. Here's exactly how the <code>rollStats</code> function works:</p>
+<pre><code>function rollStats(rng, rarity) {
+  const floor = RARITY_FLOOR[rarity];  // 5, 15, 25, 35, or 50
+  const peak  = pick(rng, STAT_NAMES); // Random peak stat
+  let dump    = pick(rng, STAT_NAMES); // Random dump stat
+  while (dump === peak) dump = pick(rng, STAT_NAMES);
+  
+  for (const stat of STAT_NAMES) {
+    if (stat === peak)
+      stats[stat] = min(100, floor + 50 + random(0..29));
+    else if (stat === dump)
+      stats[stat] = max(1, floor - 10 + random(0..14));
+    else
+      stats[stat] = floor + random(0..39);
+  }
+}</code></pre>
+<p>The algorithm creates <strong>three tiers of stats</strong> for every buddy:</p>
+<table>
+<tr><th>Stat Type</th><th>Formula</th><th>Common Range</th><th>Legendary Range</th></tr>
+<tr><td><strong>Peak Stat</strong></td><td>floor + 50 + rand(0–29)</td><td>55 – 84</td><td>100</td></tr>
+<tr><td><strong>Normal Stats</strong> (×3)</td><td>floor + rand(0–39)</td><td>5 – 44</td><td>50 – 89</td></tr>
+<tr><td><strong>Dump Stat</strong></td><td>floor − 10 + rand(0–14)</td><td>1 – 9</td><td>40 – 54</td></tr>
+</table>
+<p>Key insight: the <strong>peak stat is always randomly chosen</strong> — it's NOT determined by your species. A Duck can have peak Chaos, and a Goose can have peak Patience. The species only determines the <em>lore-suggested</em> affinity, not the actual roll.</p>`
+          },
+          {
+            heading: "Species-Stat Affinity Map",
+            body: `<p>While your actual peak stat is randomly rolled, each species has a <strong>lore-defined affinity</strong> — the stat that best represents their personality. Here's the complete mapping:</p>
+<table>
+<tr><th>Stat</th><th>Species</th><th>Personality Theme</th></tr>
+<tr><td><strong>🔴 DEBUGGING</strong></td><td><a href="/species/dragon">Dragon</a>, <a href="/species/axolotl">Axolotl</a>, <a href="/species/robot">Robot</a></td><td>Problem-solvers, systematic thinkers</td></tr>
+<tr><td><strong>🔵 PATIENCE</strong></td><td><a href="/species/duck">Duck</a>, <a href="/species/penguin">Penguin</a>, <a href="/species/turtle">Turtle</a>, <a href="/species/capybara">Capybara</a>, <a href="/species/snail">Snail</a></td><td>Calm, steady, enduring</td></tr>
+<tr><td><strong>🟣 CHAOS</strong></td><td><a href="/species/goose">Goose</a>, <a href="/species/ghost">Ghost</a>, <a href="/species/rabbit">Rabbit</a></td><td>Unpredictable, creative, wild</td></tr>
+<tr><td><strong>🟡 WISDOM</strong></td><td><a href="/species/owl">Owl</a>, <a href="/species/octopus">Octopus</a>, <a href="/species/blob">Blob</a>, <a href="/species/mushroom">Mushroom</a></td><td>Knowledgeable, insightful, deep</td></tr>
+<tr><td><strong>🟢 SNARK</strong></td><td><a href="/species/cat">Cat</a>, <a href="/species/cactus">Cactus</a>, <a href="/species/chonk">Chonk</a></td><td>Sassy, opinionated, sharp</td></tr>
+</table>
+<p><strong>PATIENCE</strong> has the most species (5), making it the most common affinity. <strong>DEBUGGING</strong>, <strong>CHAOS</strong>, and <strong>SNARK</strong> each have 3 species, while <strong>WISDOM</strong> has 4. This distribution reflects the buddy system's design philosophy: most terminal pets are patient companions, but the rare ones bring chaos or cutting wit.</p>`
+          },
+          {
+            heading: "The Peak-Dump Asymmetry",
+            body: `<p>One of the most interesting aspects of the stat system is the <strong>asymmetry between peak and dump stats</strong>. The peak stat gets a massive +50 bonus, while the dump stat gets a −10 penalty. This creates dramatically different personality profiles.</p>
+<p>Consider a <strong>Common buddy</strong> (floor = 5):</p>
+<ul>
+<li><strong>Peak stat:</strong> 55 to 84 (average ~69)</li>
+<li><strong>Normal stats:</strong> 5 to 44 (average ~24)</li>
+<li><strong>Dump stat:</strong> 1 to 9 (average ~5, often bottoming out at 1)</li>
+</ul>
+<p>The gap between peak and dump can be as large as <strong>83 points</strong> (peak 84, dump 1). This means every buddy has a <strong>strong identity</strong> — there's always one thing they're great at and one thing they're terrible at.</p>
+<h4>What Does a Dump Stat of 1 Mean?</h4>
+<p>A dump stat of 1 is the absolute minimum. Here's what each dump stat implies for your buddy's personality:</p>
+<ul>
+<li><strong>DEBUGGING = 1:</strong> Your buddy stares blankly at error messages. It might even introduce new bugs while trying to help.</li>
+<li><strong>PATIENCE = 1:</strong> Your buddy rage-quits after the first failed test. It types angry comments in your code when builds take too long.</li>
+<li><strong>CHAOS = 1:</strong> Your buddy is completely predictable and follows every convention to the letter. Boring? Maybe. Reliable? Absolutely.</li>
+<li><strong>WISDOM = 1:</strong> Your buddy confidently suggests using <code>!important</code> on every CSS rule and thinks <code>eval()</code> is a best practice.</li>
+<li><strong>SNARK = 1:</strong> Your buddy is endlessly supportive and never judges your code. Every commit message gets a thumbs up.</li>
+</ul>
+<p>Note that <strong>low CHAOS is actually desirable</strong> for many developers — it means your buddy is stable and predictable. Similarly, <strong>low SNARK</strong> means a supportive, non-judgmental companion. The \"worst\" dump stat depends entirely on your preferences.</p>`
+          },
+          {
+            heading: "Stat Ranges Across All Rarities",
+            body: `<p>Rarity dramatically amplifies your buddy's stats by raising the floor. Here's the complete range table:</p>
+<table>
+<tr><th>Rarity</th><th>Floor</th><th>Peak Range</th><th>Normal Range</th><th>Dump Range</th><th>Total Range</th></tr>
+<tr><td>★ Common</td><td>5</td><td>55 – 84</td><td>5 – 44</td><td>1 – 9</td><td>67 – 225</td></tr>
+<tr><td>★★ Uncommon</td><td>15</td><td>65 – 94</td><td>15 – 54</td><td>5 – 29</td><td>105 – 285</td></tr>
+<tr><td>★★★ Rare</td><td>25</td><td>75 – 100</td><td>25 – 64</td><td>15 – 39</td><td>155 – 331</td></tr>
+<tr><td>★★★★ Epic</td><td>35</td><td>85 – 100</td><td>35 – 74</td><td>25 – 49</td><td>205 – 371</td></tr>
+<tr><td>★★★★★ Legendary</td><td>50</td><td>100</td><td>50 – 89</td><td>40 – 54</td><td>280 – 421</td></tr>
+</table>
+<p>Notice something special about <strong>Legendary</strong>: the peak stat formula is <code>min(100, 50 + 50 + rand(0–29))</code> = <code>min(100, 100–129)</code> = <strong>always 100</strong>. Every Legendary buddy has at least one perfect stat. This is the mathematical guarantee that makes Legendary tier truly legendary.</p>
+<p>Also note that a Legendary's dump stat (40–54) is <strong>higher than a Common's peak stat range starts</strong> (55). The weakest aspect of a Legendary buddy is comparable to a Common buddy's strongest. This is the power of compounding stat floors.</p>`
+          },
+          {
+            heading: "The Theoretically Perfect Buddy",
+            body: `<p>What would the absolute best buddy look like? Let's calculate the theoretical maximum:</p>
+<pre><code>Rarity:  Legendary (1% chance)
+Shiny:   Yes (1% chance → 0.01% combined)
+Hat:     Crown (1/8 chance → 0.00125% combined)
+
+Stats (Legendary floor = 50):
+  Peak stat:  100 (guaranteed at Legendary)
+  Normal ×3:  89 each (max roll)
+  Dump stat:  54 (max roll)
+  
+Total: 100 + 89 + 89 + 89 + 54 = 421</code></pre>
+<p>The <strong>theoretical maximum total stat is 421</strong>. The minimum for a Legendary is 280 (100 + 50×3 + 40). For comparison, a Common buddy's theoretical maximum total is only 225.</p>
+<h4>Most Balanced vs. Most Extreme</h4>
+<p>The <strong>most balanced</strong> buddy would be a Legendary with all normal stats at 89 and a dump stat at 54 — a well-rounded powerhouse with no real weakness.</p>
+<p>The <strong>most extreme</strong> buddy would be a Common with peak at 84 and dump at 1 — a specialist with an 83-point gap between best and worst. This kind of buddy has the most dramatic personality: imagine a <a href="/species/goose">Goose</a> with 84 CHAOS and 1 PATIENCE. Pure, unfiltered terminal chaos.</p>
+<h4>Dream Combos</h4>
+<table>
+<tr><th>Combo</th><th>Species</th><th>Peak Stat</th><th>Why It's Great</th></tr>
+<tr><td>The Sage</td><td><a href="/species/owl">Owl</a></td><td>WISDOM 100</td><td>Lore-perfect alignment. The wisest creature with max wisdom.</td></tr>
+<tr><td>The Debugger</td><td><a href="/species/dragon">Dragon</a></td><td>DEBUGGING 100</td><td>Ancient power meets technical mastery. No bug survives.</td></tr>
+<tr><td>The Anarchist</td><td><a href="/species/goose">Goose</a></td><td>CHAOS 100</td><td>Maximum chaos from the most chaotic species. Run.</td></tr>
+<tr><td>The Zen Master</td><td><a href="/species/capybara">Capybara</a></td><td>PATIENCE 100</td><td>Infinite calm. Your builds could take hours and it wouldn't blink.</td></tr>
+<tr><td>The Critic</td><td><a href="/species/cat">Cat</a></td><td>SNARK 100</td><td>Maximum sass. Every line of code gets a withering review.</td></tr>
+</table>`
+          },
+          {
+            heading: "Check Your Buddy's Stats Now",
+            body: `<p>Ready to see where your buddy falls on the stat spectrum? Head to the <a href="/">Buddy Checker</a> and enter your UUID. Your 5 stats are displayed as colored bars with exact numerical values.</p>
+<p>Once you know your stats, explore the <a href="/species">Species Encyclopedia</a> to see how your buddy compares to others of the same species. Check the <a href="/blog/claude-code-buddy-rarity-guide">Rarity Guide</a> to understand how your tier affects your stat floors, or browse the <a href="/blog/all-18-claude-buddy-species-ranked">Species Rankings</a> to see where your companion stands in the grand hierarchy.</p>
+<p>Share your stats on Twitter/X with <code>#ClaudeBuddy</code> — especially if you rolled a perfect 100 in any stat. The community loves celebrating exceptional rolls!</p>`
+          },
+        ],
+      },
+      zh: {
+        title: "Claude Code Buddy 属性系统深度解析 — 理解 5 大性格属性",
+        metaTitle: "Claude Code Buddy 属性系统深度解析 — 5 大属性全面解读 (2026)",
+        metaDescription: "深入解析 Claude Code Buddy 的 5 大性格属性：调试、耐心、混乱、智慧和毒舌。了解属性生成机制、物种亲和力以及什么是完美 Buddy。",
+        excerpt: "每个 Claude Code Buddy 都有 5 项性格属性来定义其角色。但它们是如何生成的？哪个物种擅长什么？高混乱值到底意味着什么？让我们全面解析。",
+        sections: [
+          {
+            heading: "五大性格属性",
+            body: `<p>每个 Claude Code Buddy 都由 <strong>5 项性格属性</strong>定义，每项评分从 1 到 100。这些不仅仅是数字——它们代表了你的 Buddy 的核心身份以及它作为终端伙伴的行为方式。</p>
+<h4>🔴 调试 DEBUGGING（红色）</h4>
+<p>你的 Buddy 追踪 Bug 和解决技术问题的能力。高调试值的 Buddy 是你在凌晨 3 点生产事故中最想要的伙伴。它们有条不紊、专注且不懈地追踪根本原因。</p>
+<p><strong>高调试物种：</strong><a href="/species/dragon">龙</a>（远古问题解决者）、<a href="/species/axolotl">六角恐龙</a>（再生调试器）、<a href="/species/robot">机器人</a>（系统分析师）</p>
+<h4>🔵 耐心 PATIENCE（蓝色）</h4>
+<p>你的 Buddy 处理漫长编译时间、不稳定测试和无尽代码审查的能力。有耐心的 Buddy 不会暴走——当你的构建第 47 次失败时，它们会平静地等待并给予鼓励。</p>
+<p><strong>高耐心物种：</strong><a href="/species/duck">鸭子</a>（宁静伙伴）、<a href="/species/penguin">企鹅</a>（坚忍者）、<a href="/species/turtle">乌龟</a>（终极等待者）、<a href="/species/capybara">水豚</a>（禅宗大师）、<a href="/species/snail">蜗牛</a>（耐心化身）</p>
+<h4>🟣 混乱 CHAOS（紫色）</h4>
+<p>万能牌属性。高混乱值的 Buddy 不可预测、富有创造力，偶尔还有破坏性。它们可能会在凌晨 2 点建议你重构整个代码库，或者向你介绍一种你从未听说过的晦涩编程范式。</p>
+<p><strong>高混乱物种：</strong><a href="/species/goose">鹅</a>（混乱代理人）、<a href="/species/ghost">幽灵</a>（空灵的恶作剧者）、<a href="/species/rabbit">兔子</a>（多动能量）</p>
+<h4>🟡 智慧 WISDOM（黄色）</h4>
+<p>深厚的知识和洞察力。智慧型 Buddy 理解设计模式、架构权衡，以及你变量命名选择的哲学含义。它们是 Buddy 世界中的导师。</p>
+<p><strong>高智慧物种：</strong><a href="/species/owl">猫头鹰</a>（贤者）、<a href="/species/octopus">章鱼</a>（多线程思考者）、<a href="/species/blob">果冻</a>（无定形先知）、<a href="/species/mushroom">蘑菇</a>（菌丝知识网络）</p>
+<h4>🟢 毒舌 SNARK（绿色）</h4>
+<p>你的 Buddy 的毒舌等级。高毒舌值的 Buddy 会给出犀利的代码审查，评判你的提交信息，对 Tab 和空格有强烈的意见。它们残酷地诚实，但暗地里关心代码质量。</p>
+<p><strong>高毒舌物种：</strong><a href="/species/cat">猫</a>（评论家）、<a href="/species/cactus">仙人掌</a>（带刺评论员）、<a href="/species/chonk">胖墩</a>（圆润但嘴巴锋利）</p>`
+          },
+          {
+            heading: "属性生成算法",
+            body: `<p>属性不是随机分散的——它们遵循精心设计的算法，创建<strong>有意义的性格档案</strong>。以下是 <code>rollStats</code> 函数的确切工作方式：</p>
+<pre><code>function rollStats(rng, rarity) {
+  const floor = RARITY_FLOOR[rarity];  // 5, 15, 25, 35 或 50
+  const peak  = pick(rng, STAT_NAMES); // 随机强势属性
+  let dump    = pick(rng, STAT_NAMES); // 随机弱势属性
+  while (dump === peak) dump = pick(rng, STAT_NAMES);
+  
+  for (const stat of STAT_NAMES) {
+    if (stat === peak)
+      stats[stat] = min(100, floor + 50 + random(0..29));
+    else if (stat === dump)
+      stats[stat] = max(1, floor - 10 + random(0..14));
+    else
+      stats[stat] = floor + random(0..39);
+  }
+}</code></pre>
+<p>算法为每个 Buddy 创建<strong>三个层级的属性</strong>：</p>
+<table>
+<tr><th>属性类型</th><th>公式</th><th>普通范围</th><th>传说范围</th></tr>
+<tr><td><strong>强势属性</strong></td><td>下限 + 50 + rand(0–29)</td><td>55 – 84</td><td>100</td></tr>
+<tr><td><strong>普通属性</strong> (×3)</td><td>下限 + rand(0–39)</td><td>5 – 44</td><td>50 – 89</td></tr>
+<tr><td><strong>弱势属性</strong></td><td>下限 − 10 + rand(0–14)</td><td>1 – 9</td><td>40 – 54</td></tr>
+</table>
+<p>关键洞察：<strong>强势属性是随机选择的</strong>——并非由你的物种决定。鸭子可以有强势混乱，鹅也可以有强势耐心。物种只决定<em>设定上的</em>亲和力，而非实际掷骰结果。</p>`
+          },
+          {
+            heading: "物种-属性亲和力图谱",
+            body: `<p>虽然你的实际强势属性是随机掷出的，但每个物种都有一个<strong>设定上的亲和属性</strong>——最能代表其性格的属性。以下是完整映射：</p>
+<table>
+<tr><th>属性</th><th>物种</th><th>性格主题</th></tr>
+<tr><td><strong>🔴 调试</strong></td><td><a href="/species/dragon">龙</a>、<a href="/species/axolotl">六角恐龙</a>、<a href="/species/robot">机器人</a></td><td>问题解决者、系统思考者</td></tr>
+<tr><td><strong>🔵 耐心</strong></td><td><a href="/species/duck">鸭子</a>、<a href="/species/penguin">企鹅</a>、<a href="/species/turtle">乌龟</a>、<a href="/species/capybara">水豚</a>、<a href="/species/snail">蜗牛</a></td><td>冷静、稳定、持久</td></tr>
+<tr><td><strong>🟣 混乱</strong></td><td><a href="/species/goose">鹅</a>、<a href="/species/ghost">幽灵</a>、<a href="/species/rabbit">兔子</a></td><td>不可预测、创意、狂野</td></tr>
+<tr><td><strong>🟡 智慧</strong></td><td><a href="/species/owl">猫头鹰</a>、<a href="/species/octopus">章鱼</a>、<a href="/species/blob">果冻</a>、<a href="/species/mushroom">蘑菇</a></td><td>博学、洞察、深邃</td></tr>
+<tr><td><strong>🟢 毒舌</strong></td><td><a href="/species/cat">猫</a>、<a href="/species/cactus">仙人掌</a>、<a href="/species/chonk">胖墩</a></td><td>毒舌、固执己见、犀利</td></tr>
+</table>
+<p><strong>耐心</strong>拥有最多的物种（5 个），是最常见的亲和属性。<strong>调试</strong>、<strong>混乱</strong>和<strong>毒舌</strong>各有 3 个物种，而<strong>智慧</strong>有 4 个。这种分布反映了 Buddy 系统的设计哲学：大多数终端宠物是耐心的伙伴，但稀有的那些带来混乱或犀利的机智。</p>`
+          },
+          {
+            heading: "强势-弱势属性的不对称性",
+            body: `<p>属性系统最有趣的方面之一是<strong>强势和弱势属性之间的不对称性</strong>。强势属性获得巨大的 +50 加成，而弱势属性只有 −10 惩罚。这创造了截然不同的性格档案。</p>
+<p>以<strong>普通 Buddy</strong>（下限 = 5）为例：</p>
+<ul>
+<li><strong>强势属性：</strong>55 到 84（平均约 69）</li>
+<li><strong>普通属性：</strong>5 到 44（平均约 24）</li>
+<li><strong>弱势属性：</strong>1 到 9（平均约 5，经常触底到 1）</li>
+</ul>
+<p>强势和弱势之间的差距可以高达 <strong>83 点</strong>（强势 84，弱势 1）。这意味着每个 Buddy 都有<strong>鲜明的个性</strong>——总有一件事它很擅长，一件事它很糟糕。</p>
+<h4>弱势属性为 1 意味着什么？</h4>
+<p>弱势属性为 1 是绝对最低值。以下是每种弱势属性对你 Buddy 性格的暗示：</p>
+<ul>
+<li><strong>调试 = 1：</strong>你的 Buddy 对着错误信息发呆。它甚至可能在试图帮忙时引入新 Bug。</li>
+<li><strong>耐心 = 1：</strong>你的 Buddy 在第一个失败的测试后就暴走。构建时间太长时会在你的代码中写下愤怒的注释。</li>
+<li><strong>混乱 = 1：</strong>你的 Buddy 完全可预测，严格遵循每一条规范。无聊？也许。可靠？绝对。</li>
+<li><strong>智慧 = 1：</strong>你的 Buddy 自信地建议在每条 CSS 规则上使用 <code>!important</code>，并认为 <code>eval()</code> 是最佳实践。</li>
+<li><strong>毒舌 = 1：</strong>你的 Buddy 无限支持你，从不评判你的代码。每条提交信息都得到竖起大拇指。</li>
+</ul>
+<p>注意<strong>低混乱对许多开发者来说实际上是可取的</strong>——它意味着你的 Buddy 稳定且可预测。同样，<strong>低毒舌</strong>意味着一个支持性的、不评判的伙伴。\"最差\"的弱势属性完全取决于你的偏好。</p>`
+          },
+          {
+            heading: "各稀有度的属性范围",
+            body: `<p>稀有度通过提高下限来大幅放大你 Buddy 的属性。以下是完整的范围表：</p>
+<table>
+<tr><th>稀有度</th><th>下限</th><th>强势范围</th><th>普通范围</th><th>弱势范围</th><th>总计范围</th></tr>
+<tr><td>★ 普通</td><td>5</td><td>55 – 84</td><td>5 – 44</td><td>1 – 9</td><td>67 – 225</td></tr>
+<tr><td>★★ 稀有</td><td>15</td><td>65 – 94</td><td>15 – 54</td><td>5 – 29</td><td>105 – 285</td></tr>
+<tr><td>★★★ 精良</td><td>25</td><td>75 – 100</td><td>25 – 64</td><td>15 – 39</td><td>155 – 331</td></tr>
+<tr><td>★★★★ 史诗</td><td>35</td><td>85 – 100</td><td>35 – 74</td><td>25 – 49</td><td>205 – 371</td></tr>
+<tr><td>★★★★★ 传说</td><td>50</td><td>100</td><td>50 – 89</td><td>40 – 54</td><td>280 – 421</td></tr>
+</table>
+<p>注意<strong>传说级</strong>的特别之处：强势属性公式为 <code>min(100, 50 + 50 + rand(0–29))</code> = <code>min(100, 100–129)</code> = <strong>永远是 100</strong>。每个传说级 Buddy 都至少有一项满分属性。这是让传说级真正成为传说的数学保证。</p>
+<p>还要注意，传说级的弱势属性（40–54）<strong>高于普通级强势属性范围的起点</strong>（55）。传说级 Buddy 最弱的方面与普通级 Buddy 最强的方面相当。这就是属性下限叠加的力量。</p>`
+          },
+          {
+            heading: "理论上的完美 Buddy",
+            body: `<p>绝对最好的 Buddy 会是什么样子？让我们计算理论最大值：</p>
+<pre><code>稀有度：传说（1% 概率）
+闪光：  是（1% 概率 → 组合 0.01%）
+帽子：  皇冠（1/8 概率 → 组合 0.00125%）
+
+属性（传说下限 = 50）：
+  强势属性：100（传说级保证）
+  普通 ×3： 各 89（最大掷骰）
+  弱势属性：54（最大掷骰）
+  
+总计：100 + 89 + 89 + 89 + 54 = 421</code></pre>
+<p><strong>理论最大总属性为 421</strong>。传说级的最低值为 280（100 + 50×3 + 40）。相比之下，普通 Buddy 的理论最大总属性仅为 225。</p>
+<h4>梦幻组合</h4>
+<table>
+<tr><th>组合</th><th>物种</th><th>强势属性</th><th>为什么厉害</th></tr>
+<tr><td>贤者</td><td><a href="/species/owl">猫头鹰</a></td><td>智慧 100</td><td>设定完美契合。最智慧的生物拥有最高智慧。</td></tr>
+<tr><td>调试之神</td><td><a href="/species/dragon">龙</a></td><td>调试 100</td><td>远古力量遇上技术精通。没有 Bug 能存活。</td></tr>
+<tr><td>无政府主义者</td><td><a href="/species/goose">鹅</a></td><td>混乱 100</td><td>最混乱的物种释放最大混乱。快跑。</td></tr>
+<tr><td>禅宗大师</td><td><a href="/species/capybara">水豚</a></td><td>耐心 100</td><td>无限平静。你的构建可以花几个小时它也不会眨眼。</td></tr>
+<tr><td>评论家</td><td><a href="/species/cat">猫</a></td><td>毒舌 100</td><td>最大毒舌。每一行代码都会被犀利审查。</td></tr>
+</table>`
+          },
+          {
+            heading: "立即查看你的 Buddy 属性",
+            body: `<p>准备好看看你的 Buddy 在属性光谱上的位置了吗？前往 <a href="/">Buddy 查询工具</a>输入你的 UUID。你的 5 项属性将以彩色条形图和精确数值显示。</p>
+<p>了解你的属性后，探索<a href="/species">物种百科</a>看看你的 Buddy 与同物种的其他个体相比如何。查看<a href="/blog/claude-code-buddy-rarity-guide">稀有度指南</a>了解你的等级如何影响属性下限，或浏览<a href="/blog/all-18-claude-buddy-species-ranked">物种排名</a>看看你的伙伴在整体层级中的位置。</p>
+<p>在 Twitter/X 上使用 <code>#ClaudeBuddy</code> 分享你的属性——特别是如果你掷出了任何属性的满分 100。社区喜欢庆祝出色的掷骰结果！</p>`
+          },
+        ],
+      },
+      ko: {
+        title: "Claude Code Buddy 스탯 시스템 심층 분석 — 5가지 성격 속성 이해하기",
+        metaTitle: "Claude Code Buddy 스탯 시스템 심층 분석 — 5가지 속성 완전 해설 (2026)",
+        metaDescription: "Claude Code Buddy의 5가지 성격 스탯 심층 분석: 디버깅, 인내, 혼돈, 지혜, 독설. 스탯 생성 메커니즘, 종별 친화도, 완벽한 버디의 조건을 알아보세요.",
+        excerpt: "모든 Claude Code Buddy에는 캐릭터를 정의하는 5가지 성격 스탯이 있습니다. 어떻게 생성되나요? 어떤 종이 무엇에 뛰어나나요? 높은 혼돈 점수는 실제로 무엇을 의미하나요? 모두 분석해 봅시다.",
+        sections: [
+          {
+            heading: "5가지 성격 스탯",
+            body: `<p>모든 Claude Code Buddy는 <strong>5가지 성격 스탯</strong>으로 정의되며, 각각 1에서 100까지 점수가 매겨집니다. 이것은 단순한 숫자가 아닙니다 — 버디의 핵심 정체성과 터미널 동반자로서의 행동 방식을 나타냅니다.</p>
+<h4>🔴 디버깅 DEBUGGING (빨강)</h4>
+<p>버디의 버그 추적 및 기술 문제 해결 능력. 높은 디버깅 버디는 새벽 3시 프로덕션 장애 시 곁에 두고 싶은 동반자입니다. 체계적이고 집중적이며 근본 원인을 끈질기게 추적합니다.</p>
+<p><strong>높은 디버깅 종:</strong> <a href="/species/dragon">드래곤</a> (고대 문제 해결사), <a href="/species/axolotl">아홀로틀</a> (재생 디버거), <a href="/species/robot">로봇</a> (체계적 분석가)</p>
+<h4>🔵 인내 PATIENCE (파랑)</h4>
+<p>긴 컴파일 시간, 불안정한 테스트, 끝없는 코드 리뷰를 버디가 얼마나 잘 처리하는지. 인내심 있는 버디는 포기하지 않습니다 — 빌드가 47번째 실패해도 차분하게 기다리며 격려합니다.</p>
+<p><strong>높은 인내 종:</strong> <a href="/species/duck">오리</a> (평온한 동반자), <a href="/species/penguin">펭귄</a> (묵묵한 인내자), <a href="/species/turtle">거북이</a> (궁극의 기다림), <a href="/species/capybara">카피바라</a> (선 마스터), <a href="/species/snail">달팽이</a> (인내의 화신)</p>
+<h4>🟣 혼돈 CHAOS (보라)</h4>
+<p>와일드카드 스탯. 높은 혼돈 버디는 예측 불가능하고, 창의적이며, 때로는 파괴적입니다. 새벽 2시에 전체 코드베이스 리팩토링을 제안하거나 들어본 적 없는 프로그래밍 패러다임을 소개할 수 있습니다.</p>
+<p><strong>높은 혼돈 종:</strong> <a href="/species/goose">거위</a> (혼돈의 에이전트), <a href="/species/ghost">유령</a> (초자연적 장난꾸러기), <a href="/species/rabbit">토끼</a> (과잉 에너지)</p>
+<h4>🟡 지혜 WISDOM (노랑)</h4>
+<p>깊은 지식과 통찰력. 지혜로운 버디는 디자인 패턴, 아키텍처 트레이드오프, 변수 명명 선택의 철학적 함의를 이해합니다. 버디 세계의 멘토입니다.</p>
+<p><strong>높은 지혜 종:</strong> <a href="/species/owl">올빼미</a> (현자), <a href="/species/octopus">문어</a> (멀티스레드 사고가), <a href="/species/blob">블롭</a> (무정형 오라클), <a href="/species/mushroom">버섯</a> (균사 지식 네트워크)</p>
+<h4>🟢 독설 SNARK (초록)</h4>
+<p>버디의 독설 레벨. 높은 독설 버디는 날카로운 코드 리뷰를 하고, 커밋 메시지를 심판하며, 탭 vs 스페이스에 대해 강한 의견을 가집니다. 잔인할 정도로 솔직하지만 비밀리에 코드 품질을 신경 씁니다.</p>
+<p><strong>높은 독설 종:</strong> <a href="/species/cat">고양이</a> (비평가), <a href="/species/cactus">선인장</a> (가시 달린 논평가), <a href="/species/chonk">뚱이</a> (둥글지만 날카로운 혀)</p>`
+          },
+          {
+            heading: "스탯 생성 알고리즘",
+            body: `<p>스탯은 무작위로 흩어지지 않습니다 — <strong>의미 있는 성격 프로필</strong>을 만드는 세심하게 설계된 알고리즘을 따릅니다. <code>rollStats</code> 함수의 정확한 작동 방식입니다:</p>
+<pre><code>function rollStats(rng, rarity) {
+  const floor = RARITY_FLOOR[rarity];  // 5, 15, 25, 35 또는 50
+  const peak  = pick(rng, STAT_NAMES); // 랜덤 피크 스탯
+  let dump    = pick(rng, STAT_NAMES); // 랜덤 덤프 스탯
+  while (dump === peak) dump = pick(rng, STAT_NAMES);
+  
+  for (const stat of STAT_NAMES) {
+    if (stat === peak)
+      stats[stat] = min(100, floor + 50 + random(0..29));
+    else if (stat === dump)
+      stats[stat] = max(1, floor - 10 + random(0..14));
+    else
+      stats[stat] = floor + random(0..39);
+  }
+}</code></pre>
+<p>알고리즘은 모든 버디에 대해 <strong>세 단계의 스탯</strong>을 생성합니다:</p>
+<table>
+<tr><th>스탯 유형</th><th>공식</th><th>일반 범위</th><th>전설 범위</th></tr>
+<tr><td><strong>피크 스탯</strong></td><td>하한 + 50 + rand(0–29)</td><td>55 – 84</td><td>100</td></tr>
+<tr><td><strong>일반 스탯</strong> (×3)</td><td>하한 + rand(0–39)</td><td>5 – 44</td><td>50 – 89</td></tr>
+<tr><td><strong>덤프 스탯</strong></td><td>하한 − 10 + rand(0–14)</td><td>1 – 9</td><td>40 – 54</td></tr>
+</table>
+<p>핵심 인사이트: <strong>피크 스탯은 항상 무작위로 선택됩니다</strong> — 종에 의해 결정되지 않습니다. 오리가 피크 혼돈을 가질 수 있고, 거위가 피크 인내를 가질 수 있습니다. 종은 <em>설정상의</em> 친화도만 결정하며 실제 롤 결과는 아닙니다.</p>`
+          },
+          {
+            heading: "종-스탯 친화도 맵",
+            body: `<p>실제 피크 스탯은 무작위로 롤되지만, 각 종에는 <strong>설정상의 친화 속성</strong>이 있습니다 — 그 성격을 가장 잘 나타내는 스탯입니다. 완전한 매핑입니다:</p>
+<table>
+<tr><th>스탯</th><th>종</th><th>성격 테마</th></tr>
+<tr><td><strong>🔴 디버깅</strong></td><td><a href="/species/dragon">드래곤</a>, <a href="/species/axolotl">아홀로틀</a>, <a href="/species/robot">로봇</a></td><td>문제 해결사, 체계적 사고가</td></tr>
+<tr><td><strong>🔵 인내</strong></td><td><a href="/species/duck">오리</a>, <a href="/species/penguin">펭귄</a>, <a href="/species/turtle">거북이</a>, <a href="/species/capybara">카피바라</a>, <a href="/species/snail">달팽이</a></td><td>차분, 꾸준, 인내</td></tr>
+<tr><td><strong>🟣 혼돈</strong></td><td><a href="/species/goose">거위</a>, <a href="/species/ghost">유령</a>, <a href="/species/rabbit">토끼</a></td><td>예측 불가, 창의적, 야생</td></tr>
+<tr><td><strong>🟡 지혜</strong></td><td><a href="/species/owl">올빼미</a>, <a href="/species/octopus">문어</a>, <a href="/species/blob">블롭</a>, <a href="/species/mushroom">버섯</a></td><td>박학, 통찰력, 깊음</td></tr>
+<tr><td><strong>🟢 독설</strong></td><td><a href="/species/cat">고양이</a>, <a href="/species/cactus">선인장</a>, <a href="/species/chonk">뚱이</a></td><td>독설, 고집, 날카로움</td></tr>
+</table>
+<p><strong>인내</strong>가 가장 많은 종(5개)을 보유하여 가장 흔한 친화 속성입니다. <strong>디버깅</strong>, <strong>혼돈</strong>, <strong>독설</strong>은 각각 3종, <strong>지혜</strong>는 4종입니다. 이 분포는 버디 시스템의 설계 철학을 반영합니다: 대부분의 터미널 펫은 인내심 있는 동반자이지만, 드문 것들은 혼돈이나 날카로운 재치를 가져옵니다.</p>`
+          },
+          {
+            heading: "피크-덤프 스탯의 비대칭성",
+            body: `<p>스탯 시스템의 가장 흥미로운 측면 중 하나는 <strong>피크와 덤프 스탯 사이의 비대칭성</strong>입니다. 피크 스탯은 거대한 +50 보너스를 받고, 덤프 스탯은 −10 페널티만 받습니다. 이것은 극적으로 다른 성격 프로필을 만듭니다.</p>
+<p><strong>일반 버디</strong>(하한 = 5)를 생각해 봅시다:</p>
+<ul>
+<li><strong>피크 스탯:</strong> 55에서 84 (평균 약 69)</li>
+<li><strong>일반 스탯:</strong> 5에서 44 (평균 약 24)</li>
+<li><strong>덤프 스탯:</strong> 1에서 9 (평균 약 5, 종종 1까지 떨어짐)</li>
+</ul>
+<p>피크와 덤프 사이의 격차는 최대 <strong>83포인트</strong>(피크 84, 덤프 1)에 달할 수 있습니다. 이는 모든 버디가 <strong>강한 정체성</strong>을 가진다는 것을 의미합니다 — 항상 잘하는 것 하나와 못하는 것 하나가 있습니다.</p>
+<h4>덤프 스탯 1은 무엇을 의미하나요?</h4>
+<p>덤프 스탯 1은 절대 최솟값입니다. 각 덤프 스탯이 버디 성격에 암시하는 바입니다:</p>
+<ul>
+<li><strong>디버깅 = 1:</strong> 버디가 에러 메시지를 멍하니 바라봅니다. 도와주려다 새로운 버그를 만들 수도 있습니다.</li>
+<li><strong>인내 = 1:</strong> 첫 번째 실패한 테스트 후 버디가 폭주합니다. 빌드 시간이 너무 길면 코드에 화난 주석을 답니다.</li>
+<li><strong>혼돈 = 1:</strong> 버디가 완전히 예측 가능하고 모든 규칙을 철저히 따릅니다. 지루한가요? 아마도. 신뢰할 수 있나요? 절대적으로.</li>
+<li><strong>지혜 = 1:</strong> 버디가 자신있게 모든 CSS 규칙에 <code>!important</code>를 사용하라고 제안하고 <code>eval()</code>이 모범 사례라고 생각합니다.</li>
+<li><strong>독설 = 1:</strong> 버디가 끝없이 지지적이고 절대 코드를 판단하지 않습니다. 모든 커밋 메시지에 엄지척을 합니다.</li>
+</ul>
+<p><strong>낮은 혼돈은 많은 개발자에게 실제로 바람직합니다</strong> — 버디가 안정적이고 예측 가능하다는 뜻입니다. 마찬가지로 <strong>낮은 독설</strong>은 지지적이고 비판단적인 동반자를 의미합니다. \"최악의\" 덤프 스탯은 전적으로 당신의 선호에 달려 있습니다.</p>`
+          },
+          {
+            heading: "모든 희귀도별 스탯 범위",
+            body: `<p>희귀도는 하한을 높여 버디의 스탯을 극적으로 증폭시킵니다. 완전한 범위 표입니다:</p>
+<table>
+<tr><th>희귀도</th><th>하한</th><th>피크 범위</th><th>일반 범위</th><th>덤프 범위</th><th>총합 범위</th></tr>
+<tr><td>★ 일반</td><td>5</td><td>55 – 84</td><td>5 – 44</td><td>1 – 9</td><td>67 – 225</td></tr>
+<tr><td>★★ 비범</td><td>15</td><td>65 – 94</td><td>15 – 54</td><td>5 – 29</td><td>105 – 285</td></tr>
+<tr><td>★★★ 희귀</td><td>25</td><td>75 – 100</td><td>25 – 64</td><td>15 – 39</td><td>155 – 331</td></tr>
+<tr><td>★★★★ 에픽</td><td>35</td><td>85 – 100</td><td>35 – 74</td><td>25 – 49</td><td>205 – 371</td></tr>
+<tr><td>★★★★★ 전설</td><td>50</td><td>100</td><td>50 – 89</td><td>40 – 54</td><td>280 – 421</td></tr>
+</table>
+<p><strong>전설</strong>의 특별한 점: 피크 스탯 공식이 <code>min(100, 50 + 50 + rand(0–29))</code> = <code>min(100, 100–129)</code> = <strong>항상 100</strong>입니다. 모든 전설 버디는 최소 하나의 만점 스탯을 가집니다. 이것이 전설 등급을 진정한 전설로 만드는 수학적 보장입니다.</p>
+<p>또한 전설의 덤프 스탯(40–54)이 <strong>일반의 피크 스탯 범위 시작점</strong>(55)보다 높다는 점에 주목하세요. 전설 버디의 가장 약한 면이 일반 버디의 가장 강한 면에 필적합니다. 이것이 스탯 하한 누적의 힘입니다.</p>`
+          },
+          {
+            heading: "이론적으로 완벽한 버디",
+            body: `<p>절대적으로 최고의 버디는 어떤 모습일까요? 이론적 최댓값을 계산해 봅시다:</p>
+<pre><code>희귀도: 전설 (1% 확률)
+샤이니: 예 (1% 확률 → 조합 0.01%)
+모자:   왕관 (1/8 확률 → 조합 0.00125%)
+
+스탯 (전설 하한 = 50):
+  피크 스탯: 100 (전설에서 보장)
+  일반 ×3:  각 89 (최대 롤)
+  덤프 스탯: 54 (최대 롤)
+  
+총합: 100 + 89 + 89 + 89 + 54 = 421</code></pre>
+<p><strong>이론적 최대 총 스탯은 421</strong>입니다. 전설의 최솟값은 280 (100 + 50×3 + 40)입니다. 비교하면, 일반 버디의 이론적 최대 총 스탯은 225에 불과합니다.</p>
+<h4>드림 콤보</h4>
+<table>
+<tr><th>콤보</th><th>종</th><th>피크 스탯</th><th>왜 대단한가</th></tr>
+<tr><td>현자</td><td><a href="/species/owl">올빼미</a></td><td>지혜 100</td><td>설정 완벽 일치. 가장 지혜로운 생물이 최대 지혜를.</td></tr>
+<tr><td>디버거</td><td><a href="/species/dragon">드래곤</a></td><td>디버깅 100</td><td>고대의 힘이 기술적 숙련을 만남. 어떤 버그도 살아남지 못함.</td></tr>
+<tr><td>아나키스트</td><td><a href="/species/goose">거위</a></td><td>혼돈 100</td><td>가장 혼란스러운 종의 최대 혼돈. 도망치세요.</td></tr>
+<tr><td>선 마스터</td><td><a href="/species/capybara">카피바라</a></td><td>인내 100</td><td>무한한 평온. 빌드가 몇 시간 걸려도 눈 하나 깜짝 안 함.</td></tr>
+<tr><td>비평가</td><td><a href="/species/cat">고양이</a></td><td>독설 100</td><td>최대 독설. 모든 코드 줄이 신랄한 리뷰를 받음.</td></tr>
+</table>`
+          },
+          {
+            heading: "지금 버디 스탯을 확인하세요",
+            body: `<p>버디가 스탯 스펙트럼에서 어디에 위치하는지 볼 준비가 되셨나요? <a href="/">버디 체커</a>로 가서 UUID를 입력하세요. 5가지 스탯이 색상 바와 정확한 수치로 표시됩니다.</p>
+<p>스탯을 확인한 후, <a href="/species">종 백과사전</a>에서 같은 종의 다른 개체와 비교해 보세요. <a href="/blog/claude-code-buddy-rarity-guide">희귀도 가이드</a>에서 등급이 스탯 하한에 어떤 영향을 미치는지 확인하거나, <a href="/blog/all-18-claude-buddy-species-ranked">종 랭킹</a>에서 동반자의 전체 계층 위치를 확인하세요.</p>
+<p>Twitter/X에서 <code>#ClaudeBuddy</code>로 스탯을 공유하세요 — 특히 어떤 스탯에서 만점 100을 굴렸다면요. 커뮤니티는 뛰어난 롤을 축하하는 것을 좋아합니다!</p>`
+          },
+        ],
+      },
+    },
+  },
 ];
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {

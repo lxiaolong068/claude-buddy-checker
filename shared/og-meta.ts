@@ -192,6 +192,14 @@ export const BLOG_OG: Record<string, BlogOgData> = {
     readingTime: 10,
     publishedAt: "2026-04-02",
   },
+  "claude-buddy-stats-system-deep-dive": {
+    title: "Claude Code Buddy Stats Deep Dive — Understanding the 5 Personality Attributes",
+    metaDescription: "Deep dive into Claude Code Buddy's 5 personality stats: Debugging, Patience, Chaos, Wisdom, and Snark. Learn how stats are generated, species affinities, and what makes a perfect buddy.",
+    excerpt: "Every Claude Code Buddy has 5 personality stats that define its character. But how are they generated? Which species excels at what? Let's break it all down.",
+    tags: ["#stats", "#attributes", "#deep-dive", "#debugging", "#wisdom"],
+    readingTime: 8,
+    publishedAt: "2026-04-04",
+  },
 };
 
 // ── OgMeta helper ─────────────────────────────────────────────────────────────
