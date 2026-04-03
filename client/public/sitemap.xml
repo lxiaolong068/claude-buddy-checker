@@ -302,4 +302,16 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/claude-buddy-stats-system-deep-dive" />
   </url>
 
+  <!-- Blog: Claude Buddy Cosmetics Guide -->
+  <url>
+    <loc>https://claudebuddy.art/blog/claude-buddy-cosmetics-guide-hats-eyes-shiny</loc>
+    <lastmod>2026-04-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/blog/claude-buddy-cosmetics-guide-hats-eyes-shiny" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/blog/claude-buddy-cosmetics-guide-hats-eyes-shiny" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/blog/claude-buddy-cosmetics-guide-hats-eyes-shiny" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/claude-buddy-cosmetics-guide-hats-eyes-shiny" />
+  </url>
+
 </urlset>

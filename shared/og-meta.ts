@@ -200,6 +200,14 @@ export const BLOG_OG: Record<string, BlogOgData> = {
     readingTime: 8,
     publishedAt: "2026-04-04",
   },
+  "claude-buddy-cosmetics-guide-hats-eyes-shiny": {
+    title: "Claude Code Buddy Cosmetics Guide — Hats, Eyes & Shiny Effects",
+    metaDescription: "Complete guide to Claude Code Buddy cosmetics: 6 eye styles, 8 hat types, and the ultra-rare 1% shiny effect. Learn drop rates, visual previews, and how to get the rarest combinations.",
+    excerpt: "Your buddy's look is defined by three cosmetic layers: eyes, hats, and shiny status. Learn the exact probabilities and discover the rarest possible combinations.",
+    tags: ["#cosmetics", "#hats", "#eyes", "#shiny", "#probability"],
+    readingTime: 7,
+    publishedAt: "2026-04-04",
+  },
 };
 
 // ── OgMeta helper ─────────────────────────────────────────────────────────────

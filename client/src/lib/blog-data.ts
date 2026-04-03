@@ -1556,6 +1556,405 @@ Total: 100 + 89 + 89 + 89 + 54 = 421</code></pre>
       },
     },
   },
+  // ── Article 5: Cosmetics Guide ──────────────────────────────────────────
+  {
+    slug: "claude-buddy-cosmetics-guide-hats-eyes-shiny",
+    publishedAt: "2026-04-04",
+    readingTime: 7,
+    tags: ["cosmetics", "hats", "eyes", "shiny", "probability"],
+    content: {
+      en: {
+        title: "Claude Code Buddy Cosmetics Guide — Hats, Eyes & Shiny Effects",
+        metaTitle: "Claude Code Buddy Cosmetics Guide — Hats, Eyes & Shiny Effects (2026)",
+        metaDescription: "Complete guide to Claude Code Buddy cosmetics: 6 eye styles, 8 hat types, and the ultra-rare 1% shiny effect. Learn drop rates, visual previews, and how to get the rarest combinations.",
+        excerpt: "Your buddy's look is defined by three cosmetic layers: eyes, hats, and shiny status. Learn the exact drop rates for all 6 eye styles, 8 hat types, and the ultra-rare 1% shiny effect — plus the rarest possible combinations.",
+        sections: [
+          {
+            heading: "Beyond Species & Stats: The Cosmetic Layer",
+            body: `<p>Your Claude Code Buddy isn't just defined by its <a href="/blog/claude-buddy-stats-system-deep-dive">5 personality stats</a> or <a href="/blog/claude-code-buddy-rarity-guide">rarity tier</a>. Every buddy also has a unique <strong>cosmetic combination</strong> — a set of visual traits that make it truly one-of-a-kind in your terminal.</p>
+<p>The cosmetic system has three independent layers:</p>
+<table>
+<tr><th>Layer</th><th>Options</th><th>Selection Method</th></tr>
+<tr><td><strong>Eyes</strong></td><td>6 styles</td><td>Uniform random (1/6 each)</td></tr>
+<tr><td><strong>Hats</strong></td><td>8 types</td><td>Rarity-gated + uniform random</td></tr>
+<tr><td><strong>Shiny</strong></td><td>On/Off</td><td>1% flat chance</td></tr>
+</table>
+<p>Each layer is rolled independently using the <strong>Mulberry32 PRNG</strong> seeded from your UUID + salt hash. This means your cosmetics are deterministic — the same UUID always produces the same look.</p>`
+          },
+          {
+            heading: "The 6 Eye Styles",
+            body: `<p>Eyes are the first thing you notice on a buddy's ASCII face. There are exactly <strong>6 eye characters</strong>, each giving your buddy a distinct personality:</p>
+<table>
+<tr><th>Eye</th><th>Character</th><th>Vibe</th><th>Probability</th></tr>
+<tr><td><code>·</code></td><td>Middle Dot</td><td>Sleepy, calm, zen — your buddy is at peace with the codebase</td><td>16.67%</td></tr>
+<tr><td><code>✦</code></td><td>Four-pointed Star</td><td>Sparkly, excited, starry-eyed — sees magic in every function</td><td>16.67%</td></tr>
+<tr><td><code>×</code></td><td>Multiplication Sign</td><td>Dead, dizzy, overwhelmed — has seen too many segfaults</td><td>16.67%</td></tr>
+<tr><td><code>◉</code></td><td>Bullseye</td><td>Focused, intense, laser-locked — debugging with precision</td><td>16.67%</td></tr>
+<tr><td><code>@</code></td><td>At Sign</td><td>Digital, matrix-like, hacker — lives in the terminal</td><td>16.67%</td></tr>
+<tr><td><code>°</code></td><td>Degree Sign</td><td>Surprised, wide-eyed, curious — everything is new and exciting</td><td>16.67%</td></tr>
+</table>
+<p>The selection is perfectly uniform: <code>pick(rng, EYES)</code> gives each eye an equal <strong>1/6 ≈ 16.67%</strong> chance. No eye is rarer than another — it's pure aesthetic luck.</p>
+<p><strong>Fun fact:</strong> The <code>×</code> (dead eyes) combined with a Ghost species creates the most thematically consistent buddy. Meanwhile, <code>✦</code> (sparkly eyes) on a Dragon gives it a surprisingly cute look despite its fearsome ASCII art.</p>`
+          },
+          {
+            heading: "The 8 Hat Types",
+            body: `<p>Hats are the most <strong>rarity-gated</strong> cosmetic in the system. Here's the critical rule:</p>
+<blockquote><strong>Common buddies (60% of all buddies) NEVER get a hat.</strong> Only Uncommon and above can wear headgear.</blockquote>
+<p>The code is explicit: <code>hat = rarity === 'common' ? 'none' : pick(rng, HATS)</code>. If you're Common, you're hatless. Period.</p>
+<p>For non-Common buddies, the hat is selected uniformly from all 8 options (including 'none'):</p>
+<table>
+<tr><th>Hat</th><th>ASCII Preview</th><th>Description</th><th>P (if non-Common)</th><th>P (overall)</th></tr>
+<tr><td><strong>None</strong></td><td><em>(empty)</em></td><td>No hat — clean look</td><td>12.5%</td><td>65.0%</td></tr>
+<tr><td><strong>Crown</strong></td><td><code>\^^^/</code></td><td>Royal crown — for the king/queen of your terminal</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>Top Hat</strong></td><td><code>[___]</code></td><td>Gentleman's top hat — classy and distinguished</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>Propeller</strong></td><td><code>-+-</code></td><td>Propeller beanie — playful and childlike</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>Halo</strong></td><td><code>(   )</code></td><td>Angel's halo — pure and innocent</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>Wizard</strong></td><td><code>/^\</code></td><td>Wizard hat — mystical and wise</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>Beanie</strong></td><td><code>(___)</code></td><td>Cozy beanie — casual and comfortable</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>Tiny Duck</strong></td><td><code>,></code></td><td>A tiny duck sitting on your buddy's head — the meme pick</td><td>12.5%</td><td>5.0%</td></tr>
+</table>
+<p>The <strong>overall probability</strong> of having any specific hat is only <strong>5%</strong> (40% chance of being non-Common × 12.5% chance of that specific hat). This makes hatted buddies a genuine status symbol.</p>
+<p><strong>Best hat combos by species:</strong></p>
+<ul>
+<li><strong>Crown + Dragon</strong> — The undisputed king of terminal pets</li>
+<li><strong>Wizard + Owl</strong> — Maximum wisdom energy</li>
+<li><strong>Tiny Duck + Duck</strong> — Duck-ception! A duck with a duck on its head</li>
+<li><strong>Halo + Ghost</strong> — An angelic spirit watching over your code</li>
+<li><strong>Top Hat + Cat</strong> — Fancy feline with impeccable taste</li>
+<li><strong>Propeller + Chonk</strong> — Adorably ridiculous</li>
+</ul>`
+          },
+          {
+            heading: "The 1% Shiny Effect",
+            body: `<p>The <strong>shiny effect</strong> is the rarest cosmetic trait in the entire buddy system. With a flat <strong>1% probability</strong> (<code>rng() < 0.01</code>), shiny buddies are the equivalent of shiny Pokémon — identical in function but visually special.</p>
+<p>Key facts about shiny buddies:</p>
+<ul>
+<li><strong>Rarity-independent:</strong> Shiny rolls happen after rarity selection. A Common buddy can be shiny, and a Legendary can be non-shiny.</li>
+<li><strong>Visual indicator:</strong> Shiny buddies display a special sparkle marker (✨) in their terminal display, making them instantly recognizable.</li>
+<li><strong>Bragging rights:</strong> Only ~1 in 100 buddies will be shiny. If yours is, you're in an exclusive club.</li>
+</ul>
+<p>The probability math:</p>
+<table>
+<tr><th>Combination</th><th>Probability</th><th>Odds</th></tr>
+<tr><td>Shiny (any rarity)</td><td>1.00%</td><td>1 in 100</td></tr>
+<tr><td>Shiny + Uncommon or above</td><td>0.40%</td><td>1 in 250</td></tr>
+<tr><td>Shiny + Rare or above</td><td>0.15%</td><td>1 in 667</td></tr>
+<tr><td>Shiny + Epic</td><td>0.04%</td><td>1 in 2,500</td></tr>
+<tr><td>Shiny + Legendary</td><td>0.01%</td><td>1 in 10,000</td></tr>
+</table>
+<p>A <strong>Shiny Legendary</strong> buddy is a 1-in-10,000 event. If you have one, screenshot it immediately — it's the terminal equivalent of finding a four-leaf clover inside a winning lottery ticket.</p>`
+          },
+          {
+            heading: "How Cosmetics Are Generated: The Code",
+            body: `<p>Here's the exact sequence from the <code>rollBuddy</code> function that determines your buddy's appearance:</p>
+<pre><code>export function rollBuddy(userId: string): BuddyResult {
+  const rng = mulberry32(hashString(userId + SALT));
+  const rarity  = rollRarity(rng);           // Step 1
+  const species = pick(rng, SPECIES);         // Step 2
+  const eye     = pick(rng, EYES);            // Step 3
+  const hat     = rarity === 'common'         // Step 4
+                  ? 'none'
+                  : pick(rng, HATS);
+  const shiny   = rng() < 0.01;              // Step 5
+  const stats   = rollStats(rng, rarity);     // Step 6
+  return { rarity, species, eye, hat, shiny, stats };
+}</code></pre>
+<p>The order matters because each <code>rng()</code> call advances the PRNG state. The sequence is: rarity → species → eye → hat → shiny → stats. This means changing any earlier roll would cascade and change all subsequent rolls.</p>
+<p><strong>Why does order matter?</strong> The Mulberry32 PRNG is a deterministic sequence. Call #1 always returns the same value for a given seed. So your eye style is always determined by the 3rd+ RNG call (after rarity consumed 1+ calls and species consumed 1 call). This is why the same UUID always produces the exact same buddy.</p>`
+          },
+          {
+            heading: "The Rarest Possible Combinations",
+            body: `<p>Let's calculate the probability of some dream combinations:</p>
+<table>
+<tr><th>Dream Buddy</th><th>Requirements</th><th>Probability</th><th>Odds</th></tr>
+<tr><td>Crowned King</td><td>Legendary + Crown + any</td><td>0.0125%</td><td>1 in 8,000</td></tr>
+<tr><td>Sparkle Dragon</td><td>Dragon + ✦ eyes + any hat</td><td>0.926%</td><td>1 in 108</td></tr>
+<tr><td>Shiny Wizard Owl</td><td>Shiny + Owl + Wizard hat + any rarity</td><td>0.000347%</td><td>1 in 288,000</td></tr>
+<tr><td>Matrix Robot</td><td>Robot + @ eyes + any</td><td>0.926%</td><td>1 in 108</td></tr>
+<tr><td>Ultimate Duck</td><td>Shiny + Legendary + Duck + Tiny Duck hat + ✦ eyes</td><td>0.0000012%</td><td>1 in 86,400,000</td></tr>
+</table>
+<p>The <strong>Ultimate Duck</strong> — a Shiny Legendary Duck with a Tiny Duck hat and sparkly eyes — has odds of roughly <strong>1 in 86.4 million</strong>. To put that in perspective, you're about 3× more likely to be struck by lightning in a given year.</p>
+<p><strong>Probability breakdown for the Ultimate Duck:</strong></p>
+<pre><code>P(Legendary)  = 1/100   = 0.01
+P(Duck)       = 1/18    ≈ 0.0556
+P(✦ eyes)     = 1/6     ≈ 0.1667
+P(Tiny Duck)  = 1/8     = 0.125
+P(Shiny)      = 1/100   = 0.01
+
+P(all) = 0.01 × 0.0556 × 0.1667 × 0.125 × 0.01
+       ≈ 0.00000001157
+       ≈ 1 in 86,400,000</code></pre>`
+          },
+          {
+            heading: "Check Your Buddy's Cosmetics Now",
+            body: `<p>Ready to see what cosmetic combination fate assigned you? Head to the <a href="/">Buddy Checker</a> and enter your UUID. Your buddy's eye style, hat (if any), and shiny status will be displayed alongside its species, rarity, and stats.</p>
+<p>Already know your buddy? Visit the <a href="/species">Species Encyclopedia</a> to see how your buddy's ASCII art looks with different eye and hat combinations. Check the <a href="/blog/claude-buddy-stats-system-deep-dive">Stats Deep Dive</a> to understand your personality attributes, or browse the <a href="/blog/all-18-claude-buddy-species-ranked">Species Rankings</a> to see where your companion stands.</p>
+<p>Share your cosmetic combo on Twitter/X with <code>#ClaudeBuddy</code> — especially if you rolled a shiny or a rare hat. The community loves celebrating unique finds!</p>`
+          },
+        ],
+      },
+      zh: {
+        title: "Claude Code Buddy 外观装饰指南 — 帽子、眼睛与闪光效果",
+        metaTitle: "Claude Code Buddy 外观装饰指南 — 帽子、眼睛与闪光效果 (2026)",
+        metaDescription: "Claude Code Buddy 外观系统完全指南：6 种眼睛样式、8 种帽子类型和超稀有的 1% 闪光效果。了解掉落概率、视觉预览和最稀有的组合。",
+        excerpt: "你的 Buddy 外观由三个装饰层定义：眼睛、帽子和闪光状态。了解全部 6 种眼睛样式、8 种帽子类型和超稀有 1% 闪光效果的精确掉落概率，以及最稀有的可能组合。",
+        sections: [
+          {
+            heading: "不止物种与属性：外观装饰层",
+            body: `<p>你的 Claude Code Buddy 不仅仅由<a href="/blog/claude-buddy-stats-system-deep-dive">5 项性格属性</a>或<a href="/blog/claude-code-buddy-rarity-guide">稀有度等级</a>定义。每个 Buddy 还有一套独特的<strong>外观装饰组合</strong>——一组让它在你的终端中真正独一无二的视觉特征。</p>
+<p>外观系统有三个独立层：</p>
+<table>
+<tr><th>层级</th><th>选项</th><th>选择方式</th></tr>
+<tr><td><strong>眼睛</strong></td><td>6 种样式</td><td>均匀随机（各 1/6）</td></tr>
+<tr><td><strong>帽子</strong></td><td>8 种类型</td><td>稀有度门槛 + 均匀随机</td></tr>
+<tr><td><strong>闪光</strong></td><td>开/关</td><td>固定 1% 概率</td></tr>
+</table>
+<p>每个层级都使用基于你的 UUID + 盐值哈希的 <strong>Mulberry32 PRNG</strong> 独立掷骰。这意味着你的外观是确定性的——相同的 UUID 总是产生相同的外观。</p>`
+          },
+          {
+            heading: "6 种眼睛样式",
+            body: `<p>眼睛是你在 Buddy ASCII 面孔上最先注意到的东西。系统中恰好有 <strong>6 种眼睛字符</strong>，每种都赋予你的 Buddy 独特的个性：</p>
+<table>
+<tr><th>眼睛</th><th>字符名</th><th>氛围</th><th>概率</th></tr>
+<tr><td><code>·</code></td><td>中点</td><td>困倦、平静、禅意——你的 Buddy 与代码库和平共处</td><td>16.67%</td></tr>
+<tr><td><code>✦</code></td><td>四角星</td><td>闪亮、兴奋、星星眼——在每个函数中看到魔法</td><td>16.67%</td></tr>
+<tr><td><code>×</code></td><td>乘号</td><td>死亡、眩晕、崩溃——见过太多段错误</td><td>16.67%</td></tr>
+<tr><td><code>◉</code></td><td>靶心</td><td>专注、强烈、锁定——精确调试中</td><td>16.67%</td></tr>
+<tr><td><code>@</code></td><td>at 符号</td><td>数字化、矩阵风、黑客——活在终端里</td><td>16.67%</td></tr>
+<tr><td><code>°</code></td><td>度数符号</td><td>惊讶、瞪大眼、好奇——一切都是新鲜的</td><td>16.67%</td></tr>
+</table>
+<p>选择是完全均匀的：<code>pick(rng, EYES)</code> 给每种眼睛相等的 <strong>1/6 ≈ 16.67%</strong> 概率。没有哪种眼睛比其他的更稀有——纯粹是美学运气。</p>
+<p><strong>趣闻：</strong><code>×</code>（死亡眼）搭配幽灵物种创造了最具主题一致性的 Buddy。而 <code>✦</code>（闪亮眼）配龙则让它在凶猛的 ASCII 艺术下显得出奇地可爱。</p>`
+          },
+          {
+            heading: "8 种帽子类型",
+            body: `<p>帽子是系统中最受<strong>稀有度限制</strong>的外观装饰。关键规则：</p>
+<blockquote><strong>普通 Buddy（占所有 Buddy 的 60%）永远不会获得帽子。</strong>只有非凡及以上才能佩戴头饰。</blockquote>
+<p>代码很明确：<code>hat = rarity === 'common' ? 'none' : pick(rng, HATS)</code>。如果你是普通级，就没有帽子。就这样。</p>
+<p>对于非普通 Buddy，帽子从所有 8 个选项（包括"无"）中均匀选择：</p>
+<table>
+<tr><th>帽子</th><th>ASCII 预览</th><th>描述</th><th>非普通概率</th><th>总体概率</th></tr>
+<tr><td><strong>无</strong></td><td><em>（空）</em></td><td>无帽——干净的外观</td><td>12.5%</td><td>65.0%</td></tr>
+<tr><td><strong>皇冠</strong></td><td><code>\^^^/</code></td><td>皇家冠冕——终端之王/女王</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>礼帽</strong></td><td><code>[___]</code></td><td>绅士礼帽——优雅而尊贵</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>螺旋桨帽</strong></td><td><code>-+-</code></td><td>螺旋桨便帽——俏皮而童真</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>光环</strong></td><td><code>(   )</code></td><td>天使光环——纯洁而无辜</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>巫师帽</strong></td><td><code>/^\</code></td><td>巫师帽——神秘而睿智</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>毛线帽</strong></td><td><code>(___)</code></td><td>舒适毛线帽——休闲而舒适</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>小鸭子</strong></td><td><code>,></code></td><td>头顶小鸭子——梗图之选</td><td>12.5%</td><td>5.0%</td></tr>
+</table>
+<p>拥有任何特定帽子的<strong>总体概率</strong>仅为 <strong>5%</strong>（40% 非普通概率 × 12.5% 该帽子概率）。这使得戴帽 Buddy 成为真正的身份象征。</p>
+<p><strong>最佳帽子搭配：</strong></p>
+<ul>
+<li><strong>皇冠 + 龙</strong>——终端宠物界无可争议的王者</li>
+<li><strong>巫师帽 + 猫头鹰</strong>——智慧能量拉满</li>
+<li><strong>小鸭子 + 鸭子</strong>——套娃！头上有鸭子的鸭子</li>
+<li><strong>光环 + 幽灵</strong>——守护你代码的天使之灵</li>
+<li><strong>礼帽 + 猫</strong>——品味不凡的优雅猫咪</li>
+<li><strong>螺旋桨帽 + 胖墩</strong>——可爱到离谱</li>
+</ul>`
+          },
+          {
+            heading: "1% 闪光效果",
+            body: `<p><strong>闪光效果</strong>是整个 Buddy 系统中最稀有的外观特征。以固定 <strong>1% 概率</strong>（<code>rng() < 0.01</code>），闪光 Buddy 相当于宝可梦中的色违——功能相同但视觉上特别。</p>
+<p>关于闪光 Buddy 的关键事实：</p>
+<ul>
+<li><strong>与稀有度无关：</strong>闪光掷骰在稀有度选择之后进行。普通 Buddy 可以是闪光的，传说 Buddy 也可以不闪光。</li>
+<li><strong>视觉标识：</strong>闪光 Buddy 在终端显示中带有特殊的闪光标记（✨），一眼就能认出。</li>
+<li><strong>炫耀资本：</strong>大约每 100 个 Buddy 中只有 1 个是闪光的。如果你的是，你就进入了专属俱乐部。</li>
+</ul>
+<p>概率计算：</p>
+<table>
+<tr><th>组合</th><th>概率</th><th>赔率</th></tr>
+<tr><td>闪光（任何稀有度）</td><td>1.00%</td><td>1/100</td></tr>
+<tr><td>闪光 + 非凡及以上</td><td>0.40%</td><td>1/250</td></tr>
+<tr><td>闪光 + 稀有及以上</td><td>0.15%</td><td>1/667</td></tr>
+<tr><td>闪光 + 史诗</td><td>0.04%</td><td>1/2,500</td></tr>
+<tr><td>闪光 + 传说</td><td>0.01%</td><td>1/10,000</td></tr>
+</table>
+<p><strong>闪光传说</strong> Buddy 是万分之一的事件。如果你有一个，立刻截图——这相当于在中奖彩票里发现了四叶草。</p>`
+          },
+          {
+            heading: "外观生成代码解析",
+            body: `<p>以下是 <code>rollBuddy</code> 函数中决定你 Buddy 外观的精确序列：</p>
+<pre><code>export function rollBuddy(userId: string): BuddyResult {
+  const rng = mulberry32(hashString(userId + SALT));
+  const rarity  = rollRarity(rng);           // 第 1 步
+  const species = pick(rng, SPECIES);         // 第 2 步
+  const eye     = pick(rng, EYES);            // 第 3 步
+  const hat     = rarity === 'common'         // 第 4 步
+                  ? 'none'
+                  : pick(rng, HATS);
+  const shiny   = rng() < 0.01;              // 第 5 步
+  const stats   = rollStats(rng, rarity);     // 第 6 步
+  return { rarity, species, eye, hat, shiny, stats };
+}</code></pre>
+<p>顺序很重要，因为每次 <code>rng()</code> 调用都会推进 PRNG 状态。序列是：稀有度 → 物种 → 眼睛 → 帽子 → 闪光 → 属性。这意味着改变任何早期掷骰都会级联改变所有后续掷骰。</p>
+<p><strong>为什么顺序重要？</strong>Mulberry32 PRNG 是确定性序列。对于给定种子，第 1 次调用总是返回相同的值。所以你的眼睛样式总是由第 3+ 次 RNG 调用决定（在稀有度消耗 1+ 次调用和物种消耗 1 次调用之后）。这就是为什么相同的 UUID 总是产生完全相同的 Buddy。</p>`
+          },
+          {
+            heading: "最稀有的可能组合",
+            body: `<p>让我们计算一些梦想组合的概率：</p>
+<table>
+<tr><th>梦想 Buddy</th><th>要求</th><th>概率</th><th>赔率</th></tr>
+<tr><td>加冕之王</td><td>传说 + 皇冠 + 任意</td><td>0.0125%</td><td>1/8,000</td></tr>
+<tr><td>闪耀之龙</td><td>龙 + ✦ 眼 + 任意帽子</td><td>0.926%</td><td>1/108</td></tr>
+<tr><td>闪光巫师猫头鹰</td><td>闪光 + 猫头鹰 + 巫师帽 + 任意稀有度</td><td>0.000347%</td><td>1/288,000</td></tr>
+<tr><td>矩阵机器人</td><td>机器人 + @ 眼 + 任意</td><td>0.926%</td><td>1/108</td></tr>
+<tr><td>终极鸭子</td><td>闪光 + 传说 + 鸭子 + 小鸭子帽 + ✦ 眼</td><td>0.0000012%</td><td>1/86,400,000</td></tr>
+</table>
+<p><strong>终极鸭子</strong>——一只闪光传说级鸭子，头顶小鸭子帽，闪亮星星眼——概率约为 <strong>8640 万分之一</strong>。作为参考，你在一年内被闪电击中的概率大约是它的 3 倍。</p>
+<p><strong>终极鸭子概率分解：</strong></p>
+<pre><code>P(传说)    = 1/100   = 0.01
+P(鸭子)    = 1/18    ≈ 0.0556
+P(✦ 眼)    = 1/6     ≈ 0.1667
+P(小鸭子帽) = 1/8     = 0.125
+P(闪光)    = 1/100   = 0.01
+
+P(全部) = 0.01 × 0.0556 × 0.1667 × 0.125 × 0.01
+        ≈ 0.00000001157
+        ≈ 1/86,400,000</code></pre>`
+          },
+          {
+            heading: "现在就查看你的 Buddy 外观",
+            body: `<p>准备好看看命运给你分配了什么外观组合了吗？前往<a href="/">Buddy 查询器</a>输入你的 UUID。你的 Buddy 的眼睛样式、帽子（如果有的话）和闪光状态将与物种、稀有度和属性一起显示。</p>
+<p>已经知道你的 Buddy 了？访问<a href="/species">物种百科</a>看看你的 Buddy 的 ASCII 艺术在不同眼睛和帽子组合下的样子。查看<a href="/blog/claude-buddy-stats-system-deep-dive">属性深度解析</a>了解你的性格属性，或浏览<a href="/blog/all-18-claude-buddy-species-ranked">物种排名</a>看看你的同伴排在哪里。</p>
+<p>在 Twitter/X 上用 <code>#ClaudeBuddy</code> 分享你的外观组合——特别是如果你抽到了闪光或稀有帽子。社区喜欢庆祝独特的发现！</p>`
+          },
+        ],
+      },
+      ko: {
+        title: "Claude Code Buddy 코스메틱 가이드 — 모자, 눈, 샤이니 효과",
+        metaTitle: "Claude Code Buddy 코스메틱 가이드 — 모자, 눈, 샤이니 효과 (2026)",
+        metaDescription: "Claude Code Buddy 코스메틱 시스템 완전 가이드: 6가지 눈 스타일, 8가지 모자 유형, 초희귀 1% 샤이니 효과. 드롭률, 시각적 미리보기, 가장 희귀한 조합을 알아보세요.",
+        excerpt: "버디의 외모는 눈, 모자, 샤이니 상태의 세 가지 코스메틱 레이어로 정의됩니다. 6가지 눈 스타일, 8가지 모자 유형, 초희귀 1% 샤이니 효과의 정확한 드롭률과 가장 희귀한 조합을 알아보세요.",
+        sections: [
+          {
+            heading: "종과 스탯을 넘어서: 코스메틱 레이어",
+            body: `<p>Claude Code Buddy는 <a href="/blog/claude-buddy-stats-system-deep-dive">5가지 성격 스탯</a>이나 <a href="/blog/claude-code-buddy-rarity-guide">희귀도 등급</a>만으로 정의되지 않습니다. 모든 버디에는 터미널에서 진정으로 유일무이하게 만드는 고유한 <strong>코스메틱 조합</strong>이 있습니다.</p>
+<p>코스메틱 시스템에는 세 가지 독립 레이어가 있습니다:</p>
+<table>
+<tr><th>레이어</th><th>옵션</th><th>선택 방식</th></tr>
+<tr><td><strong>눈</strong></td><td>6가지 스타일</td><td>균일 랜덤 (각 1/6)</td></tr>
+<tr><td><strong>모자</strong></td><td>8가지 유형</td><td>희귀도 게이트 + 균일 랜덤</td></tr>
+<tr><td><strong>샤이니</strong></td><td>켜짐/꺼짐</td><td>고정 1% 확률</td></tr>
+</table>
+<p>각 레이어는 UUID + 솔트 해시에서 시드된 <strong>Mulberry32 PRNG</strong>를 사용하여 독립적으로 롤됩니다. 이는 코스메틱이 결정론적임을 의미합니다 — 같은 UUID는 항상 같은 외모를 생성합니다.</p>`
+          },
+          {
+            heading: "6가지 눈 스타일",
+            body: `<p>눈은 버디의 ASCII 얼굴에서 가장 먼저 눈에 띄는 것입니다. 정확히 <strong>6가지 눈 문자</strong>가 있으며, 각각 버디에게 독특한 개성을 부여합니다:</p>
+<table>
+<tr><th>눈</th><th>문자명</th><th>분위기</th><th>확률</th></tr>
+<tr><td><code>·</code></td><td>가운데점</td><td>졸린, 차분, 선 — 코드베이스와 평화로운 버디</td><td>16.67%</td></tr>
+<tr><td><code>✦</code></td><td>사각별</td><td>반짝이는, 흥분한, 별눈 — 모든 함수에서 마법을 봄</td><td>16.67%</td></tr>
+<tr><td><code>×</code></td><td>곱셈 기호</td><td>죽은, 어지러운, 압도된 — 세그폴트를 너무 많이 봄</td><td>16.67%</td></tr>
+<tr><td><code>◉</code></td><td>과녁</td><td>집중한, 강렬한, 레이저 잠금 — 정밀 디버깅 중</td><td>16.67%</td></tr>
+<tr><td><code>@</code></td><td>앳 기호</td><td>디지털, 매트릭스풍, 해커 — 터미널에 사는 존재</td><td>16.67%</td></tr>
+<tr><td><code>°</code></td><td>도 기호</td><td>놀란, 눈 큰, 호기심 — 모든 것이 새롭고 신나는</td><td>16.67%</td></tr>
+</table>
+<p>선택은 완벽하게 균일합니다: <code>pick(rng, EYES)</code>는 각 눈에 동일한 <strong>1/6 ≈ 16.67%</strong> 확률을 줍니다. 어떤 눈도 다른 것보다 희귀하지 않습니다 — 순수한 미적 운입니다.</p>
+<p><strong>재미있는 사실:</strong> <code>×</code>(죽은 눈)과 유령 종의 조합은 가장 테마적으로 일관된 버디를 만듭니다. 반면 <code>✦</code>(반짝이 눈)이 달린 드래곤은 무시무시한 ASCII 아트에도 불구하고 놀랍도록 귀여운 모습을 보여줍니다.</p>`
+          },
+          {
+            heading: "8가지 모자 유형",
+            body: `<p>모자는 시스템에서 가장 <strong>희귀도 제한이 강한</strong> 코스메틱입니다. 핵심 규칙:</p>
+<blockquote><strong>일반 버디(전체 버디의 60%)는 절대 모자를 얻지 못합니다.</strong> 비범 이상만 머리 장식을 착용할 수 있습니다.</blockquote>
+<p>코드는 명확합니다: <code>hat = rarity === 'common' ? 'none' : pick(rng, HATS)</code>. 일반이면 모자 없음. 끝.</p>
+<p>비일반 버디의 경우, 모자는 8가지 옵션(없음 포함)에서 균일하게 선택됩니다:</p>
+<table>
+<tr><th>모자</th><th>ASCII 미리보기</th><th>설명</th><th>비일반 확률</th><th>전체 확률</th></tr>
+<tr><td><strong>없음</strong></td><td><em>(비어있음)</em></td><td>모자 없음 — 깔끔한 외모</td><td>12.5%</td><td>65.0%</td></tr>
+<tr><td><strong>왕관</strong></td><td><code>\^^^/</code></td><td>왕관 — 터미널의 왕/여왕</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>실크햇</strong></td><td><code>[___]</code></td><td>신사의 실크햇 — 우아하고 고상함</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>프로펠러</strong></td><td><code>-+-</code></td><td>프로펠러 비니 — 장난스럽고 어린이같은</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>후광</strong></td><td><code>(   )</code></td><td>천사의 후광 — 순수하고 순진한</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>마법사</strong></td><td><code>/^\</code></td><td>마법사 모자 — 신비롭고 지혜로운</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>비니</strong></td><td><code>(___)</code></td><td>아늑한 비니 — 캐주얼하고 편안한</td><td>12.5%</td><td>5.0%</td></tr>
+<tr><td><strong>꼬마오리</strong></td><td><code>,></code></td><td>머리 위의 꼬마 오리 — 밈 픽</td><td>12.5%</td><td>5.0%</td></tr>
+</table>
+<p>특정 모자를 가질 <strong>전체 확률</strong>은 단 <strong>5%</strong>(40% 비일반 확률 × 12.5% 해당 모자 확률)입니다. 이것이 모자 쓴 버디를 진정한 지위의 상징으로 만듭니다.</p>
+<p><strong>종별 최고의 모자 조합:</strong></p>
+<ul>
+<li><strong>왕관 + 드래곤</strong> — 터미널 펫의 절대 왕자</li>
+<li><strong>마법사 + 올빼미</strong> — 최대 지혜 에너지</li>
+<li><strong>꼬마오리 + 오리</strong> — 오리셉션! 머리에 오리가 있는 오리</li>
+<li><strong>후광 + 유령</strong> — 코드를 지키는 천사의 영혼</li>
+<li><strong>실크햇 + 고양이</strong> — 완벽한 취향의 우아한 고양이</li>
+<li><strong>프로펠러 + 뚱이</strong> — 사랑스러울 정도로 우스꽝스러운</li>
+</ul>`
+          },
+          {
+            heading: "1% 샤이니 효과",
+            body: `<p><strong>샤이니 효과</strong>는 전체 버디 시스템에서 가장 희귀한 코스메틱 특성입니다. 고정 <strong>1% 확률</strong>(<code>rng() < 0.01</code>)로, 샤이니 버디는 포켓몬의 이로치와 같습니다 — 기능은 동일하지만 시각적으로 특별합니다.</p>
+<p>샤이니 버디에 대한 핵심 사실:</p>
+<ul>
+<li><strong>희귀도와 무관:</strong> 샤이니 롤은 희귀도 선택 후에 발생합니다. 일반 버디도 샤이니일 수 있고, 전설 버디도 비샤이니일 수 있습니다.</li>
+<li><strong>시각적 표시:</strong> 샤이니 버디는 터미널 디스플레이에 특별한 반짝임 마커(✨)를 표시하여 즉시 알아볼 수 있습니다.</li>
+<li><strong>자랑거리:</strong> 약 100마리 중 1마리만 샤이니입니다. 당신의 것이 그렇다면, 당신은 독점 클럽에 속합니다.</li>
+</ul>
+<p>확률 계산:</p>
+<table>
+<tr><th>조합</th><th>확률</th><th>배율</th></tr>
+<tr><td>샤이니 (모든 희귀도)</td><td>1.00%</td><td>1/100</td></tr>
+<tr><td>샤이니 + 비범 이상</td><td>0.40%</td><td>1/250</td></tr>
+<tr><td>샤이니 + 희귀 이상</td><td>0.15%</td><td>1/667</td></tr>
+<tr><td>샤이니 + 에픽</td><td>0.04%</td><td>1/2,500</td></tr>
+<tr><td>샤이니 + 전설</td><td>0.01%</td><td>1/10,000</td></tr>
+</table>
+<p><strong>샤이니 전설</strong> 버디는 만 분의 일 이벤트입니다. 하나 가지고 있다면 즉시 스크린샷을 찍으세요 — 당첨 복권 안에서 네잎 클로버를 찾은 것과 같습니다.</p>`
+          },
+          {
+            heading: "코스메틱 생성 코드 분석",
+            body: `<p>버디의 외모를 결정하는 <code>rollBuddy</code> 함수의 정확한 시퀀스입니다:</p>
+<pre><code>export function rollBuddy(userId: string): BuddyResult {
+  const rng = mulberry32(hashString(userId + SALT));
+  const rarity  = rollRarity(rng);           // 1단계
+  const species = pick(rng, SPECIES);         // 2단계
+  const eye     = pick(rng, EYES);            // 3단계
+  const hat     = rarity === 'common'         // 4단계
+                  ? 'none'
+                  : pick(rng, HATS);
+  const shiny   = rng() < 0.01;              // 5단계
+  const stats   = rollStats(rng, rarity);     // 6단계
+  return { rarity, species, eye, hat, shiny, stats };
+}</code></pre>
+<p>순서가 중요합니다. 각 <code>rng()</code> 호출이 PRNG 상태를 진행시키기 때문입니다. 시퀀스는: 희귀도 → 종 → 눈 → 모자 → 샤이니 → 스탯입니다. 이는 이전 롤을 변경하면 모든 후속 롤이 연쇄적으로 변경됨을 의미합니다.</p>
+<p><strong>왜 순서가 중요한가?</strong> Mulberry32 PRNG는 결정론적 시퀀스입니다. 주어진 시드에 대해 1번째 호출은 항상 같은 값을 반환합니다. 따라서 눈 스타일은 항상 3번째+ RNG 호출에 의해 결정됩니다(희귀도가 1+번 호출을 소비하고 종이 1번 호출을 소비한 후). 이것이 같은 UUID가 항상 정확히 같은 버디를 생성하는 이유입니다.</p>`
+          },
+          {
+            heading: "가장 희귀한 가능한 조합",
+            body: `<p>몇 가지 꿈의 조합 확률을 계산해 봅시다:</p>
+<table>
+<tr><th>꿈의 버디</th><th>요구 사항</th><th>확률</th><th>배율</th></tr>
+<tr><td>왕관의 왕</td><td>전설 + 왕관 + 아무거나</td><td>0.0125%</td><td>1/8,000</td></tr>
+<tr><td>반짝이 드래곤</td><td>드래곤 + ✦ 눈 + 아무 모자</td><td>0.926%</td><td>1/108</td></tr>
+<tr><td>샤이니 마법사 올빼미</td><td>샤이니 + 올빼미 + 마법사 모자 + 아무 희귀도</td><td>0.000347%</td><td>1/288,000</td></tr>
+<tr><td>매트릭스 로봇</td><td>로봇 + @ 눈 + 아무거나</td><td>0.926%</td><td>1/108</td></tr>
+<tr><td>궁극의 오리</td><td>샤이니 + 전설 + 오리 + 꼬마오리 모자 + ✦ 눈</td><td>0.0000012%</td><td>1/86,400,000</td></tr>
+</table>
+<p><strong>궁극의 오리</strong> — 꼬마오리 모자를 쓴 샤이니 전설 오리에 반짝이 눈 — 확률은 약 <strong>8640만 분의 1</strong>입니다. 참고로, 1년 동안 번개에 맞을 확률이 이것의 약 3배입니다.</p>
+<p><strong>궁극의 오리 확률 분해:</strong></p>
+<pre><code>P(전설)      = 1/100   = 0.01
+P(오리)      = 1/18    ≈ 0.0556
+P(✦ 눈)      = 1/6     ≈ 0.1667
+P(꼬마오리)   = 1/8     = 0.125
+P(샤이니)    = 1/100   = 0.01
+
+P(전부) = 0.01 × 0.0556 × 0.1667 × 0.125 × 0.01
+        ≈ 0.00000001157
+        ≈ 1/86,400,000</code></pre>`
+          },
+          {
+            heading: "지금 버디 코스메틱을 확인하세요",
+            body: `<p>운명이 어떤 코스메틱 조합을 배정했는지 볼 준비가 되셨나요? <a href="/">버디 체커</a>로 가서 UUID를 입력하세요. 버디의 눈 스타일, 모자(있다면), 샤이니 상태가 종, 희귀도, 스탯과 함께 표시됩니다.</p>
+<p>이미 버디를 알고 있나요? <a href="/species">종 백과사전</a>에서 다양한 눈과 모자 조합으로 버디의 ASCII 아트가 어떻게 보이는지 확인하세요. <a href="/blog/claude-buddy-stats-system-deep-dive">스탯 심층 분석</a>에서 성격 속성을 이해하거나, <a href="/blog/all-18-claude-buddy-species-ranked">종 랭킹</a>에서 동반자의 위치를 확인하세요.</p>
+<p>Twitter/X에서 <code>#ClaudeBuddy</code>로 코스메틱 조합을 공유하세요 — 특히 샤이니나 희귀 모자를 굴렸다면요. 커뮤니티는 독특한 발견을 축하하는 것을 좋아합니다!</p>`
+          },
+        ],
+      },
+    },
+  },
 ];
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
