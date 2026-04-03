@@ -2552,3 +2552,15 @@ export function getAllArticles(): BlogArticle[] {
     (a, b) => new Date(b.publishedAt).getTime() - new Date(a.publishedAt).getTime()
   );
 }
+
+export function getAdjacentArticles(slug: string): {
+  prev: BlogArticle | null;
+  next: BlogArticle | null;
+} {
+  const idx = BLOG_ARTICLES.findIndex((a) => a.slug === slug);
+  if (idx === -1) return { prev: null, next: null };
+  return {
+    prev: idx > 0 ? BLOG_ARTICLES[idx - 1] : null,
+    next: idx < BLOG_ARTICLES.length - 1 ? BLOG_ARTICLES[idx + 1] : null,
+  };
+}

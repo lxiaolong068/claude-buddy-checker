@@ -147,6 +147,9 @@ export const zh: typeof en = {
     latestTitle: "// 最新博客文章",
     viewAll: "查看全部文章",
     minRead: "分钟阅读",
+    seriesNav: "// 系列导航",
+    prevArticle: "← 上一篇",
+    nextArticle: "下一篇 →",
   },
   comparePanel: {
     title: "compare_mode.sh",

@@ -147,6 +147,9 @@ export const ko: typeof en = {
     latestTitle: "// 최신 블로그 글",
     viewAll: "전체 글 보기",
     minRead: "분 읽기",
+    seriesNav: "// 시리즈 탐색",
+    prevArticle: "← 이전",
+    nextArticle: "다음 →",
   },
   comparePanel: {
     title: "compare_mode.sh",

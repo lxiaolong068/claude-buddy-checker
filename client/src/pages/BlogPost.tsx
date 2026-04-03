@@ -7,7 +7,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
-import { getArticleBySlug, getAllArticles } from "@/lib/blog-data";
+import { getArticleBySlug, getAllArticles, getAdjacentArticles } from "@/lib/blog-data";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
 import ArticleSchema from "@/components/ArticleSchema";
@@ -36,10 +36,48 @@ export default function BlogPost() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Inject copy buttons into <pre> blocks after content renders
+  useEffect(() => {
+    const pres = document.querySelectorAll<HTMLElement>(".blog-content pre");
+    pres.forEach((pre) => {
+      if (pre.querySelector(".copy-btn")) return;
+      const btn = document.createElement("button");
+      btn.className = "copy-btn";
+      btn.textContent = "COPY";
+      btn.setAttribute("aria-label", "Copy code");
+      btn.addEventListener("click", async () => {
+        const code = pre.querySelector("code");
+        const text = (code?.textContent ?? pre.textContent ?? "").trim();
+        try {
+          await navigator.clipboard.writeText(text);
+          btn.textContent = "COPIED!";
+          btn.classList.add("copied");
+          setTimeout(() => {
+            btn.textContent = "COPY";
+            btn.classList.remove("copied");
+          }, 2000);
+        } catch {
+          btn.textContent = "ERR";
+          setTimeout(() => { btn.textContent = "COPY"; }, 2000);
+        }
+      });
+      pre.appendChild(btn);
+    });
+    return () => {
+      document.querySelectorAll(".blog-content pre .copy-btn").forEach((btn) => btn.remove());
+    };
+  }, [content]);
+
   // Related articles (exclude current)
   const relatedArticles = useMemo(() => {
     return allArticles.filter((a) => a.slug !== params.slug).slice(0, 3);
   }, [allArticles, params.slug]);
+
+  // Adjacent articles for series navigation
+  const { prev: prevArticle, next: nextArticle } = useMemo(
+    () => getAdjacentArticles(params.slug || ""),
+    [params.slug]
+  );
 
   useEffect(() => {
     if (content) {
@@ -233,6 +271,68 @@ export default function BlogPost() {
             ))}
           </div>
         </article>
+
+        {/* Series Navigation */}
+        {(prevArticle || nextArticle) && (
+          <nav className="mb-8" aria-label="series navigation">
+            <h2 className="text-xs font-bold text-crt-green uppercase tracking-widest mb-3">
+              {t("blog.seriesNav")}
+            </h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Prev */}
+              <div>
+                {prevArticle ? (
+                  <Link
+                    href={`/blog/${prevArticle.slug}`}
+                    className="flex flex-col gap-1 border border-border/40 bg-card/50 p-4 hover:border-crt-green/40 hover:bg-crt-green/5 transition-colors group h-full"
+                  >
+                    <span className="text-[10px] uppercase tracking-widest text-crt-green/50 group-hover:text-crt-green/80 transition-colors">
+                      {t("blog.prevArticle")}
+                    </span>
+                    <span className="text-sm font-semibold text-foreground group-hover:text-crt-green transition-colors line-clamp-2 leading-snug">
+                      {prevArticle.content[locale as keyof typeof prevArticle.content].title}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground/60 mt-auto pt-1">
+                      {prevArticle.publishedAt}
+                    </span>
+                  </Link>
+                ) : (
+                  <div className="border border-border/20 bg-card/20 p-4 h-full flex items-center justify-center">
+                    <span className="text-[10px] text-muted-foreground/30 uppercase tracking-widest">
+                      — {t("blog.prevArticle")} —
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Next */}
+              <div>
+                {nextArticle ? (
+                  <Link
+                    href={`/blog/${nextArticle.slug}`}
+                    className="flex flex-col gap-1 border border-border/40 bg-card/50 p-4 hover:border-crt-green/40 hover:bg-crt-green/5 transition-colors group h-full sm:items-end sm:text-right"
+                  >
+                    <span className="text-[10px] uppercase tracking-widest text-crt-green/50 group-hover:text-crt-green/80 transition-colors">
+                      {t("blog.nextArticle")}
+                    </span>
+                    <span className="text-sm font-semibold text-foreground group-hover:text-crt-green transition-colors line-clamp-2 leading-snug">
+                      {nextArticle.content[locale as keyof typeof nextArticle.content].title}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground/60 mt-auto pt-1">
+                      {nextArticle.publishedAt}
+                    </span>
+                  </Link>
+                ) : (
+                  <div className="border border-border/20 bg-card/20 p-4 h-full flex items-center justify-center">
+                    <span className="text-[10px] text-muted-foreground/30 uppercase tracking-widest">
+                      — {t("blog.nextArticle")} —
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </nav>
+        )}
 
         {/* CTA */}
         <div className="border border-crt-green/20 bg-crt-green/5 p-6 text-center mb-8">

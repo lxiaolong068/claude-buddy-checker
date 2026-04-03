@@ -145,6 +145,9 @@ export const en = {
     latestTitle: "// LATEST FROM THE BLOG",
     viewAll: "VIEW ALL POSTS",
     minRead: "min read",
+    seriesNav: "// SERIES NAVIGATION",
+    prevArticle: "← PREV",
+    nextArticle: "NEXT →",
   },
   comparePanel: {
     title: "compare_mode.sh",
