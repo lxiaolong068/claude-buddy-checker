@@ -4,11 +4,12 @@
  * Design: Grid of ASCII art cards with category filters
  */
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { SPECIES_DATA, ALL_SPECIES_SLUGS } from "@/lib/species-data";
 import { BODIES, type Species } from "@/lib/buddy-engine";
+import ComparePanel from "@/components/ComparePanel";
 
 type CategoryFilter = "all" | "animal" | "creature" | "mythical" | "object";
 
@@ -73,6 +74,18 @@ export default function SpeciesIndex() {
   const [filter, setFilter] = useState<CategoryFilter>("all");
   const [peakStatFilter, setPeakStatFilter] = useState<string>("all");
   const [mounted, setMounted] = useState(false);
+  const [selectedSlugs, setSelectedSlugs] = useState<Species[]>([]);
+  const [showCompare, setShowCompare] = useState(false);
+
+  const toggleSelect = useCallback((slug: Species) => {
+    setSelectedSlugs((prev) =>
+      prev.includes(slug)
+        ? prev.filter((s) => s !== slug)
+        : prev.length >= 3
+          ? prev
+          : [...prev, slug]
+    );
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -217,7 +230,16 @@ export default function SpeciesIndex() {
         >
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filtered.map((slug, idx) => (
-              <SpeciesCard key={slug} slug={slug} index={idx} />
+              <SpeciesCard
+                key={slug}
+                slug={slug}
+                index={idx}
+                isSelected={selectedSlugs.includes(slug)}
+                isDisabled={
+                  selectedSlugs.length >= 3 && !selectedSlugs.includes(slug)
+                }
+                onToggle={toggleSelect}
+              />
             ))}
           </div>
         </section>
@@ -228,11 +250,87 @@ export default function SpeciesIndex() {
         <p className="text-[#33ff33]/30 text-xs">{t("footer.line1")}</p>
         <p className="text-[#33ff33]/20 text-xs mt-1">{t("footer.line2")}</p>
       </footer>
+
+      {/* Compare Dock — slides in when at least 1 species selected */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-30 border-t border-[#33ff33]/30 bg-[#0a0a0a]/97 backdrop-blur transition-transform duration-300 ${
+          selectedSlugs.length > 0 ? "translate-y-0" : "translate-y-full"
+        }`}
+      >
+        <div className="container max-w-6xl mx-auto px-4 py-3 flex items-center gap-3 flex-wrap">
+          {/* Count badge */}
+          <span className="text-[10px] text-[#33ff33]/50 uppercase tracking-wider shrink-0">
+            {selectedSlugs.length} {t("speciesIndex.compareSelected")}
+          </span>
+
+          {/* Selected species pills */}
+          <div className="flex gap-1.5 flex-wrap flex-1">
+            {selectedSlugs.map((slug) => (
+              <span
+                key={slug}
+                className="flex items-center gap-1 text-[9px] text-[#33ff33]/70 border border-[#33ff33]/30 px-1.5 py-0.5"
+              >
+                {t(`speciesDetail.speciesNames.${slug}`)}
+                <button
+                  onClick={() => toggleSelect(slug)}
+                  className="text-[#33ff33]/40 hover:text-[#ff5555] transition-colors ml-0.5"
+                  aria-label="remove"
+                >
+                  ×
+                </button>
+              </span>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div className="flex gap-2 shrink-0">
+            <button
+              onClick={() => setSelectedSlugs([])}
+              className="text-[10px] text-[#33ff33]/30 hover:text-[#33ff33]/60 transition-colors uppercase tracking-wider"
+            >
+              [{t("speciesIndex.compareClearAll")}]
+            </button>
+            <button
+              onClick={() => selectedSlugs.length >= 2 && setShowCompare(true)}
+              disabled={selectedSlugs.length < 2}
+              className={`px-3 py-1 text-[10px] uppercase tracking-wider border transition-all ${
+                selectedSlugs.length >= 2
+                  ? "border-[#33ff33]/60 bg-[#33ff33]/15 text-[#33ff33] hover:bg-[#33ff33]/25"
+                  : "border-[#33ff33]/20 text-[#33ff33]/30 cursor-not-allowed"
+              }`}
+            >
+              {selectedSlugs.length < 2
+                ? t("speciesIndex.compareSelectMore")
+                : t("speciesIndex.compareOpen")}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Compare Panel Modal */}
+      {showCompare && (
+        <ComparePanel
+          slugs={selectedSlugs}
+          onClose={() => setShowCompare(false)}
+        />
+      )}
     </div>
   );
 }
 
-function SpeciesCard({ slug, index }: { slug: Species; index: number }) {
+function SpeciesCard({
+  slug,
+  index,
+  isSelected,
+  isDisabled,
+  onToggle,
+}: {
+  slug: Species;
+  index: number;
+  isSelected: boolean;
+  isDisabled: boolean;
+  onToggle: (slug: Species) => void;
+}) {
   const { t } = useI18n();
   const info = SPECIES_DATA[slug];
   const frames = BODIES[slug];
@@ -250,11 +348,35 @@ function SpeciesCard({ slug, index }: { slug: Species; index: number }) {
   };
 
   return (
-    <Link
-      href={`/species/${slug}`}
-      className="block border border-[#33ff33]/15 bg-[#0d1a0d]/40 hover:border-[#33ff33]/40 hover:bg-[#0d1a0d]/80 transition-all group"
+    <div
+      className={`relative border bg-[#0d1a0d]/40 transition-all group ${
+        isSelected
+          ? "border-[#33ff33]/60 bg-[#0d1a0d]/80"
+          : isDisabled
+            ? "border-[#33ff33]/8 opacity-50"
+            : "border-[#33ff33]/15 hover:border-[#33ff33]/40 hover:bg-[#0d1a0d]/80 cursor-pointer"
+      }`}
       style={{ animationDelay: `${index * 50}ms` }}
+      onClick={() => !isDisabled && onToggle(slug)}
     >
+      {/* Select toggle — top-right corner */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          if (!isDisabled) onToggle(slug);
+        }}
+        className={`absolute top-2 right-2 z-10 w-5 h-5 border text-[9px] flex items-center justify-center transition-all ${
+          isSelected
+            ? "border-[#33ff33]/80 bg-[#33ff33]/20 text-[#33ff33]"
+            : isDisabled
+              ? "border-[#33ff33]/10 text-transparent cursor-not-allowed"
+              : "border-[#33ff33]/25 text-transparent hover:border-[#33ff33]/50 hover:text-[#33ff33]/50"
+        }`}
+        aria-label={isSelected ? "deselect" : "select for comparison"}
+      >
+        ✓
+      </button>
+
       <div className="p-4">
         {/* ASCII Art */}
         <pre className="text-[10px] leading-[12px] text-[#33ff33]/50 group-hover:text-[#33ff33]/80 transition-colors text-center mb-3 min-h-[60px] flex items-center justify-center">
@@ -287,13 +409,17 @@ function SpeciesCard({ slug, index }: { slug: Species; index: number }) {
           </div>
         </div>
 
-        {/* View link */}
+        {/* View link — real navigation, stops card toggle propagation */}
         <div className="mt-3 text-center">
-          <span className="text-[10px] text-[#33ff33]/30 group-hover:text-[#33ff33]/60 transition-colors">
+          <Link
+            href={`/species/${slug}`}
+            onClick={(e) => e.stopPropagation()}
+            className="text-[10px] text-[#33ff33]/30 hover:text-[#33ff33]/60 transition-colors"
+          >
             {t("speciesIndex.viewDetails")} →
-          </span>
+          </Link>
         </div>
       </div>
-    </Link>
+    </div>
   );
 }
