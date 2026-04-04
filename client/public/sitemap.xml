@@ -326,4 +326,16 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng" />
   </url>
 
+  <!-- Blog: Claude Buddy Species Bestiary - Origins & Lore -->
+  <url>
+    <loc>https://claudebuddy.art/blog/claude-buddy-species-bestiary-origins-lore</loc>
+    <lastmod>2026-04-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/blog/claude-buddy-species-bestiary-origins-lore" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/blog/claude-buddy-species-bestiary-origins-lore" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/blog/claude-buddy-species-bestiary-origins-lore" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/claude-buddy-species-bestiary-origins-lore" />
+  </url>
+
 </urlset>

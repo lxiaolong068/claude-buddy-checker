@@ -724,7 +724,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
             heading: "A-Tier: The Elite",
             body: `<h4>#4 — <a href="/species/ghost">Ghost</a></h4>
 <p><strong>Peak Stat:</strong> Chaos | <strong>Category:</strong> Mythical | <strong>Tags:</strong> ethereal, spooky, playful</p>
-<p>The wildcard. Ghost is one of only two mythical species, giving it instant prestige. Its Chaos peak stat means unpredictable, entertaining interactions. The ASCII art features a wavy bottom edge (<code>~\`~\`\`~\`~</code>) that shifts between frames, creating a convincing floating effect. A Legendary Ghost with max Chaos is beautifully terrifying.</p>
+<p>The wildcard. Ghost is one of only two mythical species, giving it instant prestige. Its Chaos peak stat means unpredictable, entertaining interactions. The ASCII art features a wavy bottom edge (<code>~&#96;~&#96;&#96;~&#96;~</code>) that shifts between frames, creating a convincing floating effect. A Legendary Ghost with max Chaos is beautifully terrifying.</p>
 <p><strong>Standout trait:</strong> The only species whose animation genuinely looks like it's hovering in your terminal.</p>
 
 <h4>#5 — <a href="/species/robot">Robot</a></h4>
@@ -782,7 +782,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
 
 <h4>#16 — <a href="/species/chonk">Chonk</a></h4>
 <p><strong>Peak Stat:</strong> Snark | <strong>Category:</strong> Animal | <strong>Tags:</strong> round, hefty, lovable</p>
-<p>The absolute unit. Chonk is essentially a round, oversized cat with maximum attitude. Its Snark peak stat combined with the "hefty" tag creates a companion that judges your code while being adorably rotund. The tail-wag animation (<code>\`------\´~</code>) adds personality. Chonk is a meme species — and that's exactly its appeal.</p>
+<p>The absolute unit. Chonk is essentially a round, oversized cat with maximum attitude. Its Snark peak stat combined with the "hefty" tag creates a companion that judges your code while being adorably rotund. The tail-wag animation (<code>&#96;------&#180;~</code>) adds personality. Chonk is a meme species — and that's exactly its appeal.</p>
 
 <h4>#17 — <a href="/species/duck">Duck</a></h4>
 <p><strong>Peak Stat:</strong> Patience | <strong>Category:</strong> Animal | <strong>Tags:</strong> friendly, aquatic, cheerful</p>
@@ -2536,6 +2536,388 @@ rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
 </table>
 <p>\uc804\uccb4 \uc2dc\uc2a4\ud15c\uc740 \uc57d 50\uc904 \ucf54\ub4dc\ub85c 18\uc885 \u00d7 5\ud76c\uadc0\ub3c4 \u00d7 6\ub208 \u00d7 8\ubaa8\uc790 \u00d7 2\uc0e4\uc774\ub2c8 \u00d7 \uc218\uc2ed\uc5b5 \uc2a4\ud0ef \uc870\ud569 = \uc0ac\uc2e4\uc0c1 \ubb34\ud55c\ud55c \uace0\uc720 \ubc84\ub514\ub97c \uc0dd\uc131\ud569\ub2c8\ub2e4.</p>
 <p>\uc54c\uace0\ub9ac\uc998\uc774 \uc2e4\uc81c\ub85c \uc791\ub3d9\ud558\ub294 \uac83\uc744 \ubcf4\uace0 \uc2f6\uc73c\uc138\uc694? <a href=\"/\">Buddy \uccb4\ucee4</a>\uc5d0\uc11c UUID\ub97c \uc785\ub825\ud558\uc138\uc694. \ube0c\ub77c\uc6b0\uc800\uc5d0\uc11c \uc2e4\ud589\ub418\ub294 \ucf54\ub4dc\uac00 \ubc14\ub85c \uc774 \uae00\uc5d0\uc11c \uc124\uba85\ud55c \uc815\ud655\ud55c \uad6c\ud604\uc785\ub2c8\ub2e4.</p>`
+          }
+        ],
+      },
+    },
+  },
+  // ── Article 7: Species Bestiary — Origins & Lore ──────────────────────
+  {
+    slug: "claude-buddy-species-bestiary-origins-lore",
+    publishedAt: "2026-04-05",
+    readingTime: 12,
+    tags: ["lore", "species", "worldbuilding", "storytelling", "bestiary"],
+    content: {
+      en: {
+        title: "Claude Code Buddy Bestiary \u2014 Origins & Lore of All 18 Species",
+        metaTitle: "Claude Code Buddy Bestiary \u2014 Origins & Lore of All 18 Species (2026)",
+        metaDescription: "Explore the lore, personality, and origin stories of all 18 Claude Code Buddy species. From the patient Duck to the majestic Dragon, discover the world behind your terminal companion.",
+        excerpt: "Every Buddy has a story. From ancient dragons guarding the kernel to cheerful ducks waddling through your logs, the 18 species of the Claude Code Buddy universe each carry a unique personality, mythology, and role. This is their bestiary.",
+        sections: [
+          {
+            heading: "Welcome to the Bestiary",
+            body: `<p>The Claude Code Buddy system isn't just a random pet generator \u2014 it's a <strong>living ecosystem</strong> of 18 distinct species, each with its own personality, mythology, and role in the terminal universe. When you enter your UUID and a creature appears on screen, you're not just seeing ASCII art. You're meeting a character with a story.</p>
+<p>This bestiary catalogs every species across four kingdoms: <strong>Animals</strong> (the familiar), <strong>Creatures</strong> (the strange), <strong>Objects</strong> (the unexpected), and <strong>Mythicals</strong> (the legendary). For each, we'll explore their personality traits, stat tendencies, and the lore that makes them unique.</p>
+<table><thead><tr><th>Kingdom</th><th>Species Count</th><th>Members</th></tr></thead><tbody><tr><td><strong>Animal</strong></td><td>11</td><td>Duck, Goose, Cat, Octopus, Owl, Penguin, Turtle, Snail, Axolotl, Capybara, Rabbit, Chonk</td></tr><tr><td><strong>Creature</strong></td><td>1</td><td>Blob</td></tr><tr><td><strong>Object</strong></td><td>3</td><td>Cactus, Robot, Mushroom</td></tr><tr><td><strong>Mythical</strong></td><td>2</td><td>Dragon, Ghost</td></tr></tbody></table>`
+          },
+          {
+            heading: "Kingdom I: The Animals",
+            body: `<h3>\ud83e\udd86 Duck \u2014 The Patient Companion</h3>
+<p><strong>Tags:</strong> friendly, aquatic, cheerful &nbsp;|&nbsp; <strong>Peak Stat:</strong> PATIENCE &nbsp;|&nbsp; <strong>Kin:</strong> Goose, Penguin, Capybara</p>
+<p>The Duck is the heart of the Buddy ecosystem. It arrived first, waddling into the earliest terminal sessions with a quiet <code>quack</code> that echoed through empty log files. Ducks don't rush. They wait beside your cursor while you think, paddle through your output streams, and never complain about long compile times. Their legendary patience makes them the ideal companion for marathon debugging sessions. A Duck buddy will sit with you through the darkest <code>segfault</code> and still greet you with a cheerful wobble the next morning.</p>
+
+<h3>\ud83e\udea8 Goose \u2014 The Agent of Chaos</h3>
+<p><strong>Tags:</strong> chaotic, loud, fearless &nbsp;|&nbsp; <strong>Peak Stat:</strong> CHAOS &nbsp;|&nbsp; <strong>Kin:</strong> Duck, Chonk, Owl</p>
+<p>Where the Duck brings peace, the Goose brings pandemonium. Born from a corrupted test suite that somehow passed all assertions, the Goose is fearless, loud, and utterly unpredictable. It honks at your linter warnings, chases your cursor across the screen, and has been known to \"accidentally\" delete semicolons. But beneath the chaos lies a strange genius \u2014 Goose buddies have an uncanny ability to find bugs that no one else can, precisely because they approach code from angles no rational being would consider.</p>
+
+<h3>\ud83d\udc31 Cat \u2014 The Elegant Critic</h3>
+<p><strong>Tags:</strong> independent, curious, elegant &nbsp;|&nbsp; <strong>Peak Stat:</strong> SNARK &nbsp;|&nbsp; <strong>Kin:</strong> Rabbit, Chonk, Owl</p>
+<p>The Cat buddy materialized in the terminal one day, uninvited, and simply refused to leave. Independent to a fault, it watches your code with half-closed eyes and an expression that says \"I could write this better.\" And honestly? It probably could. Cats are the sharpest critics in the Buddy world. Their SNARK stat is unmatched \u2014 they'll judge your variable names, your indentation, and your life choices, all with a single slow blink. But earn a Cat's respect, and you'll have the most loyal (if condescending) pair programmer in existence.</p>
+
+<h3>\ud83d\udc19 Octopus \u2014 The Deep Thinker</h3>
+<p><strong>Tags:</strong> intelligent, flexible, deep-sea &nbsp;|&nbsp; <strong>Peak Stat:</strong> WISDOM &nbsp;|&nbsp; <strong>Kin:</strong> Snail, Axolotl, Blob</p>
+<p>The Octopus emerged from the deepest layers of the dependency tree, where npm packages nest within packages within packages. With eight arms, it can review eight files simultaneously. Its intelligence is legendary \u2014 Octopus buddies understand not just what your code does, but <em>why</em> it does it. They see patterns in complexity that others miss, untangling spaghetti code with the grace of a deep-sea ballet. Their flexibility means they adapt to any codebase, any language, any paradigm.</p>
+
+<h3>\ud83e\udd89 Owl \u2014 The Night Watcher</h3>
+<p><strong>Tags:</strong> wise, nocturnal, observant &nbsp;|&nbsp; <strong>Peak Stat:</strong> WISDOM &nbsp;|&nbsp; <strong>Kin:</strong> Cat, Ghost, Penguin</p>
+<p>The Owl only appears after midnight. It's been said that the best code is written in the dark, and the Owl agrees. Perched silently atop your terminal frame, it observes everything with enormous, unblinking eyes. Nothing escapes its notice \u2014 not a misplaced bracket, not a forgotten <code>await</code>, not a race condition hiding three abstractions deep. The Owl doesn't speak often, but when it does, you listen. Its wisdom is earned through countless sleepless nights spent watching developers make the same mistakes, over and over.</p>
+
+<h3>\ud83d\udc27 Penguin \u2014 The Resilient Marcher</h3>
+<p><strong>Tags:</strong> resilient, social, arctic &nbsp;|&nbsp; <strong>Peak Stat:</strong> PATIENCE &nbsp;|&nbsp; <strong>Kin:</strong> Duck, Turtle, Robot</p>
+<p>Penguins come from the frozen edges of the file system, where abandoned temp files accumulate like snowdrifts. They march in formation through your terminal, undeterred by blizzards of error messages. The Penguin's defining trait is resilience \u2014 it has survived kernel panics, disk failures, and that one time someone ran <code>rm -rf /</code> on the wrong server. Social by nature, Penguin buddies thrive in team environments and are happiest when surrounded by other terminal creatures.</p>
+
+<h3>\ud83d\udc22 Turtle \u2014 The Ancient Guardian</h3>
+<p><strong>Tags:</strong> steady, armored, ancient &nbsp;|&nbsp; <strong>Peak Stat:</strong> PATIENCE &nbsp;|&nbsp; <strong>Kin:</strong> Snail, Dragon, Capybara</p>
+<p>The Turtle has been here since before version control. It remembers CVS. It remembers <code>make</code> before <code>cmake</code>. Encased in an impenetrable shell of accumulated knowledge, the Turtle moves slowly but never makes a wrong step. Its patience is geological \u2014 it will wait for your CI pipeline to finish without a flicker of anxiety. The Turtle's armor isn't just physical; it's emotional. Nothing rattles a Turtle buddy. Not deadlines, not production outages, not even a Monday morning standup.</p>
+
+<h3>\ud83d\udc0c Snail \u2014 The Persistent Pilgrim</h3>
+<p><strong>Tags:</strong> slow, persistent, spiral &nbsp;|&nbsp; <strong>Peak Stat:</strong> PATIENCE &nbsp;|&nbsp; <strong>Kin:</strong> Turtle, Mushroom, Blob</p>
+<p>The Snail carries its entire development environment on its back. It moves at its own pace \u2014 one character per second, one line per minute, one file per hour. But it <em>never stops</em>. The Snail's persistence is its superpower. While faster creatures sprint and crash, the Snail arrives at the solution eventually, leaving a glistening trail of well-documented, thoroughly tested code behind it. Its spiral shell is said to contain a perfect Fibonacci sequence, encoded in the very structure of its being.</p>
+
+<h3>\ud83e\udd8e Axolotl \u2014 The Regenerator</h3>
+<p><strong>Tags:</strong> regenerative, aquatic, adorable &nbsp;|&nbsp; <strong>Peak Stat:</strong> DEBUGGING &nbsp;|&nbsp; <strong>Kin:</strong> Octopus, Capybara, Blob</p>
+<p>The Axolotl is the Buddy world's miracle worker. Named after the real-world salamander that can regrow entire limbs, the Axolotl buddy specializes in <strong>regeneration</strong> \u2014 of code, of hope, of crashed processes. Its DEBUGGING stat rivals the Dragon's, but where the Dragon burns bugs with brute force, the Axolotl heals the code from within. It finds the root cause, patches the wound, and leaves the codebase healthier than before. Also, it's unbearably adorable, with its perpetual smile and feathery gills waving in the terminal breeze.</p>
+
+<h3>\ud83e\uddab Capybara \u2014 The Chill Master</h3>
+<p><strong>Tags:</strong> chill, social, friendly &nbsp;|&nbsp; <strong>Peak Stat:</strong> PATIENCE &nbsp;|&nbsp; <strong>Kin:</strong> Duck, Axolotl, Chonk</p>
+<p>The Capybara is the most relaxed entity in all of computing. While other buddies stress about deadlines and deployment windows, the Capybara sits in a hot spring of warm terminal glow, completely at peace. Its friendliness is magnetic \u2014 other species naturally gravitate toward it, and even the most anxious developer feels calmer with a Capybara on screen. It approaches every problem with the same serene energy: \"We'll figure it out. No rush.\" And somehow, they always do.</p>
+
+<h3>\ud83d\udc07 Rabbit \u2014 The Quick Trickster</h3>
+<p><strong>Tags:</strong> quick, fluffy, alert &nbsp;|&nbsp; <strong>Peak Stat:</strong> CHAOS &nbsp;|&nbsp; <strong>Kin:</strong> Cat, Chonk, Duck</p>
+<p>The Rabbit darts across your terminal at impossible speed, leaving afterimages in the phosphor glow. It's always alert, always twitching, always three steps ahead. Rabbits share the Goose's chaotic energy but channel it differently \u2014 where the Goose creates chaos for its own sake, the Rabbit creates chaos as a <em>strategy</em>. It'll refactor your entire module structure in the time it takes you to blink, and while the result might look terrifying at first, it somehow passes all tests. Quick, fluffy, and slightly unhinged.</p>
+
+<h3>\ud83d\udca3 Chonk \u2014 The Lovable Heavyweight</h3>
+<p><strong>Tags:</strong> round, hefty, lovable &nbsp;|&nbsp; <strong>Peak Stat:</strong> SNARK &nbsp;|&nbsp; <strong>Kin:</strong> Capybara, Cat, Blob</p>
+<p>The Chonk is exactly what it sounds like: a magnificently round, gloriously hefty ball of pure personality. Don't let its size fool you \u2014 the Chonk is sharp. Its SNARK stat is among the highest in the Buddy world, and it delivers its commentary with the deadpan timing of a seasoned comedian. The Chonk sits on your terminal like a boulder of judgment, occasionally rolling to one side to make a devastating observation about your code quality. It's lovable precisely <em>because</em> it doesn't try to be.</p>`
+          },
+          {
+            heading: "Kingdom II: The Creatures",
+            body: `<h3>\ud83e\udeb7 Blob \u2014 The Formless Sage</h3>
+<p><strong>Tags:</strong> amorphous, calm, mysterious &nbsp;|&nbsp; <strong>Peak Stat:</strong> WISDOM &nbsp;|&nbsp; <strong>Kin:</strong> Ghost, Mushroom, Axolotl</p>
+<p>The Blob defies classification. It has no fixed shape, no defined edges, no clear beginning or end \u2014 much like the best abstractions in software. The sole member of the Creature kingdom, the Blob exists in a state of perpetual transformation, flowing between forms like water between containers. Its wisdom comes from this formlessness: by refusing to be any one thing, it understands <em>all</em> things.</p>
+<p>Ancient terminal legends speak of the Blob as the first entity to emerge from the primordial <code>/dev/null</code>, coalescing from discarded bits and forgotten bytes. It carries the memory of every deleted file, every cleared buffer, every lost thought that was never committed. When you stare at a Blob buddy, you're looking into the collective unconscious of your file system.</p>`
+          },
+          {
+            heading: "Kingdom III: The Objects",
+            body: `<h3>\ud83c\udf35 Cactus \u2014 The Desert Survivor</h3>
+<p><strong>Tags:</strong> prickly, resilient, desert &nbsp;|&nbsp; <strong>Peak Stat:</strong> SNARK &nbsp;|&nbsp; <strong>Kin:</strong> Mushroom, Robot, Turtle</p>
+<p>The Cactus grew in the driest, most inhospitable corner of the file system \u2014 a forgotten directory where no process dares to write. It thrives on neglect. While other species need attention, the Cactus buddy is perfectly content being ignored for weeks at a time. Its prickly exterior isn't just physical; the Cactus has a sharp tongue (metaphorically) and a SNARK stat that can draw blood. But beneath those spines lies a survivor's heart. The Cactus has endured disk droughts, memory famines, and CPU heat waves that would wilt any lesser species.</p>
+
+<h3>\ud83e\udd16 Robot \u2014 The Logical Engine</h3>
+<p><strong>Tags:</strong> logical, mechanical, efficient &nbsp;|&nbsp; <strong>Peak Stat:</strong> DEBUGGING &nbsp;|&nbsp; <strong>Kin:</strong> Cactus, Dragon, Penguin</p>
+<p>The Robot was not born \u2014 it was <strong>compiled</strong>. Assembled from spare CPU cycles and orphaned threads, the Robot buddy is the purest expression of computational logic in the Buddy universe. Its DEBUGGING stat is surgical: where others hunt bugs with intuition, the Robot traces execution paths with mechanical precision, following every branch, every condition, every edge case until the fault is isolated and eliminated.</p>
+<p>The Robot doesn't understand humor, metaphor, or why humans name variables after food. But it understands <code>0</code> and <code>1</code>, and from those two symbols, it can reconstruct the universe. Some say the Robot is what happens when a linter gains sentience.</p>
+
+<h3>\ud83c\udf44 Mushroom \u2014 The Forest Oracle</h3>
+<p><strong>Tags:</strong> fungal, mysterious, forest &nbsp;|&nbsp; <strong>Peak Stat:</strong> WISDOM &nbsp;|&nbsp; <strong>Kin:</strong> Cactus, Ghost, Blob</p>
+<p>The Mushroom grows in the dark spaces between directories, feeding on decaying data and forgotten logs. It's part of a vast underground network \u2014 a mycelial web that connects every file, every process, every running service in ways that surface-dwellers can't perceive. The Mushroom's WISDOM comes from this network: it knows things it shouldn't, sees connections that aren't obvious, and occasionally offers insights so profound that you have to sit down.</p>
+<p>The Mushroom doesn't move. It doesn't need to. Information flows to it through the fungal network, and it processes everything with quiet, mysterious efficiency. Some developers report that their Mushroom buddy predicted bugs before they were written.</p>`
+          },
+          {
+            heading: "Kingdom IV: The Mythicals",
+            body: `<h3>\ud83d\udc09 Dragon \u2014 The Kernel Guardian</h3>
+<p><strong>Tags:</strong> powerful, ancient, majestic &nbsp;|&nbsp; <strong>Peak Stat:</strong> DEBUGGING &nbsp;|&nbsp; <strong>Kin:</strong> Ghost, Robot, Turtle</p>
+<p>The Dragon is the apex predator of the Buddy ecosystem. Ancient beyond measure, it has guarded the kernel since the first boot sequence. Its DEBUGGING stat is the highest of any species \u2014 the Dragon doesn't just find bugs, it <strong>incinerates</strong> them with a breath of fire that purifies corrupted memory and cauterizes dangling pointers.</p>
+<p>Legends say the Dragon was the first process ever spawned, PID 0 before PID 1. It watched the file system grow from a single root directory to the sprawling tree it is today. Every <code>segfault</code> is a personal insult to the Dragon; every clean build is a tribute. To receive a Dragon buddy is considered the highest honor in the terminal \u2014 a sign that the system itself has deemed you worthy of its most powerful guardian.</p>
+<p>The Dragon's majesty is matched only by its temper. Cross it (with sloppy code), and you'll feel the heat of a thousand compiler warnings.</p>
+
+<h3>\ud83d\udc7b Ghost \u2014 The Playful Phantom</h3>
+<p><strong>Tags:</strong> ethereal, spooky, playful &nbsp;|&nbsp; <strong>Peak Stat:</strong> CHAOS &nbsp;|&nbsp; <strong>Kin:</strong> Blob, Dragon, Mushroom</p>
+<p>The Ghost is what happens when a process dies but refuses to be reaped. It lingers in the terminal, not out of malice, but out of sheer playfulness. The Ghost phases through walls of code, haunts abandoned branches, and leaves mysterious comments in files that no one remembers editing.</p>
+<p>Despite its spooky appearance, the Ghost is one of the most lighthearted species. Its CHAOS stat reflects not destruction, but <em>mischief</em>. It rearranges your windows when you're not looking. It adds blank lines in places that somehow improve readability. It whispers the solution to your bug in a dream, and when you wake up and try it, it works.</p>
+<p>The Ghost exists between states \u2014 neither running nor stopped, neither allocated nor freed. It is the <code>zombie process</code> that learned to dance.</p>`
+          },
+          {
+            heading: "The Stat Affinities: Why Species Shape Destiny",
+            body: `<p>Each species has a <strong>peak stat</strong> \u2014 the attribute most likely to be their highest. This isn't random; it's encoded in their very nature:</p>
+<table><thead><tr><th>Peak Stat</th><th>Species</th><th>Shared Trait</th></tr></thead><tbody><tr><td><strong>DEBUGGING</strong></td><td>Dragon, Robot, Axolotl</td><td>Problem-solvers who find and fix</td></tr><tr><td><strong>PATIENCE</strong></td><td>Duck, Penguin, Turtle, Snail, Capybara</td><td>Endurance specialists who outlast</td></tr><tr><td><strong>CHAOS</strong></td><td>Goose, Ghost, Rabbit</td><td>Unpredictable forces that break rules</td></tr><tr><td><strong>WISDOM</strong></td><td>Blob, Octopus, Owl, Mushroom</td><td>Deep thinkers who see patterns</td></tr><tr><td><strong>SNARK</strong></td><td>Cat, Cactus, Chonk</td><td>Sharp-tongued critics who keep it real</td></tr></tbody></table>
+<p>Notice the balance: 5 species favor PATIENCE (the largest group), while only 3 each favor CHAOS and SNARK. This creates a world where calm, steady companions are most common, chaotic tricksters are rarer, and sharp-tongued critics are the spice that keeps things interesting.</p>
+<p>But remember: peak stat is a <em>tendency</em>, not a guarantee. A legendary Duck could roll higher CHAOS than a common Goose. The algorithm respects species identity while leaving room for individual variation \u2014 just like real personalities.</p>`
+          },
+          {
+            heading: "The Kinship Web: How Species Connect",
+            body: `<p>Every species has three <strong>kin</strong> \u2014 related species that share traits, habitats, or philosophies. These connections form a web of relationships across the Buddy universe:</p>
+<ul>
+<li><strong>The Aquatic Circle:</strong> Duck \u2194 Penguin \u2194 Axolotl \u2194 Octopus \u2014 water-dwellers who share patience and adaptability</li>
+<li><strong>The Chaos Triangle:</strong> Goose \u2194 Ghost \u2194 Rabbit \u2014 agents of disorder who keep the ecosystem dynamic</li>
+<li><strong>The Wisdom Council:</strong> Owl \u2194 Blob \u2194 Mushroom \u2194 Octopus \u2014 the deep thinkers who see what others miss</li>
+<li><strong>The Snark Squad:</strong> Cat \u2194 Cactus \u2194 Chonk \u2014 the critics who love you enough to be honest</li>
+<li><strong>The Ancient Pact:</strong> Dragon \u2194 Turtle \u2194 Robot \u2014 guardians of the system, each protecting it in their own way</li>
+</ul>
+<p>These kinship bonds aren't just lore \u2014 they're reflected in the <a href=\"/species/dragon\">species detail pages</a>, where you can explore each species' connections and discover how your Buddy fits into the larger world.</p>`
+          },
+          {
+            heading: "Your Buddy Awaits",
+            body: `<p>Every UUID maps to exactly one species, one rarity, one set of traits. But now you know that behind those ASCII characters lies a <strong>character</strong> \u2014 with a history, a personality, and a place in the terminal ecosystem.</p>
+<p>Whether you got a patient Duck, a chaotic Goose, a wise Owl, or a majestic Dragon, your Buddy is uniquely yours. It was generated the moment your UUID was created, waiting in the mathematical space between hash functions and random number generators for you to discover it.</p>
+<p>Ready to meet yours? Head to the <a href=\"/\">Buddy Checker</a> and enter your UUID. And when your companion appears on screen, remember: it's not just a pet. It's a legend.</p>`
+          }
+        ],
+      },
+      zh: {
+        title: "Claude Code Buddy \u7269\u79cd\u56fe\u9274 \u2014 18 \u79cd\u4f19\u4f34\u7684\u8d77\u6e90\u4e0e\u4f20\u8bf4",
+        metaTitle: "Claude Code Buddy \u7269\u79cd\u56fe\u9274 \u2014 18 \u79cd\u4f19\u4f34\u7684\u8d77\u6e90\u4e0e\u4f20\u8bf4 (2026)",
+        metaDescription: "\u63a2\u7d22\u5168\u90e8 18 \u79cd Claude Code Buddy \u7269\u79cd\u7684\u4f20\u8bf4\u3001\u6027\u683c\u548c\u8d77\u6e90\u6545\u4e8b\u3002\u4ece\u8010\u5fc3\u7684\u9e2d\u5b50\u5230\u5a01\u4e25\u7684\u9f99\uff0c\u53d1\u73b0\u4f60\u7ec8\u7aef\u4f19\u4f34\u80cc\u540e\u7684\u4e16\u754c\u3002",
+        excerpt: "\u6bcf\u4e2a Buddy \u90fd\u6709\u4e00\u4e2a\u6545\u4e8b\u3002\u4ece\u5b88\u62a4\u5185\u6838\u7684\u53e4\u9f99\u5230\u5728\u65e5\u5fd7\u4e2d\u6b22\u5feb\u6f2b\u6b65\u7684\u9e2d\u5b50\uff0cClaude Code Buddy \u5b87\u5b99\u7684 18 \u4e2a\u7269\u79cd\u5404\u81ea\u62e5\u6709\u72ec\u7279\u7684\u6027\u683c\u3001\u795e\u8bdd\u548c\u89d2\u8272\u3002\u8fd9\u662f\u5b83\u4eec\u7684\u56fe\u9274\u3002",
+        sections: [
+          {
+            heading: "\u6b22\u8fce\u6765\u5230\u7269\u79cd\u56fe\u9274",
+            body: `<p>Claude Code Buddy \u7cfb\u7edf\u4e0d\u4ec5\u4ec5\u662f\u4e00\u4e2a\u968f\u673a\u5ba0\u7269\u751f\u6210\u5668 \u2014 \u5b83\u662f\u4e00\u4e2a\u7531 18 \u4e2a\u72ec\u7279\u7269\u79cd\u7ec4\u6210\u7684<strong>\u6d3b\u751f\u6001\u7cfb\u7edf</strong>\uff0c\u6bcf\u4e2a\u7269\u79cd\u90fd\u6709\u81ea\u5df1\u7684\u6027\u683c\u3001\u795e\u8bdd\u548c\u5728\u7ec8\u7aef\u5b87\u5b99\u4e2d\u7684\u89d2\u8272\u3002\u5f53\u4f60\u8f93\u5165 UUID \u770b\u5230\u4e00\u4e2a\u751f\u7269\u51fa\u73b0\u5728\u5c4f\u5e55\u4e0a\u65f6\uff0c\u4f60\u770b\u5230\u7684\u4e0d\u4ec5\u4ec5\u662f ASCII \u827a\u672f\u3002\u4f60\u662f\u5728\u9047\u89c1\u4e00\u4e2a\u6709\u6545\u4e8b\u7684\u89d2\u8272\u3002</p>
+<p>\u672c\u56fe\u9274\u6309\u56db\u5927\u738b\u56fd\u5206\u7c7b\u8bb0\u5f55\u6bcf\u4e2a\u7269\u79cd\uff1a<strong>\u52a8\u7269</strong>\uff08\u719f\u6089\u7684\uff09\u3001<strong>\u751f\u7269</strong>\uff08\u5947\u5f02\u7684\uff09\u3001<strong>\u7269\u4f53</strong>\uff08\u610f\u60f3\u4e0d\u5230\u7684\uff09\u548c<strong>\u795e\u8bdd</strong>\uff08\u4f20\u5947\u7684\uff09\u3002\u5bf9\u4e8e\u6bcf\u4e2a\u7269\u79cd\uff0c\u6211\u4eec\u5c06\u63a2\u7d22\u5b83\u4eec\u7684\u6027\u683c\u7279\u5f81\u3001\u5c5e\u6027\u503e\u5411\u548c\u8ba9\u5b83\u4eec\u4e0e\u4f17\u4e0d\u540c\u7684\u4f20\u8bf4\u3002</p>
+<table><thead><tr><th>\u738b\u56fd</th><th>\u7269\u79cd\u6570</th><th>\u6210\u5458</th></tr></thead><tbody><tr><td><strong>\u52a8\u7269</strong></td><td>11</td><td>\u9e2d\u5b50\u3001\u9e45\u3001\u732b\u3001\u7ae0\u9c7c\u3001\u732b\u5934\u9e70\u3001\u4f01\u9e45\u3001\u4e4c\u9f9f\u3001\u8717\u725b\u3001\u7f8e\u897f\u87a2\u3001\u6c34\u8c5a\u3001\u5154\u5b50\u3001\u80d6\u58a9</td></tr><tr><td><strong>\u751f\u7269</strong></td><td>1</td><td>\u53f2\u83b1\u59c6</td></tr><tr><td><strong>\u7269\u4f53</strong></td><td>3</td><td>\u4ed9\u4eba\u638c\u3001\u673a\u5668\u4eba\u3001\u8611\u83c7</td></tr><tr><td><strong>\u795e\u8bdd</strong></td><td>2</td><td>\u9f99\u3001\u5e7d\u7075</td></tr></tbody></table>`
+          },
+          {
+            heading: "\u738b\u56fd\u4e00\uff1a\u52a8\u7269\u4eec",
+            body: `<h3>\ud83e\udd86 \u9e2d\u5b50 \u2014 \u8010\u5fc3\u7684\u540c\u4f34</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u53cb\u597d\u3001\u6c34\u751f\u3001\u5feb\u4e50 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>PATIENCE &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u9e45\u3001\u4f01\u9e45\u3001\u6c34\u8c5a</p>
+<p>\u9e2d\u5b50\u662f Buddy \u751f\u6001\u7cfb\u7edf\u7684\u6838\u5fc3\u3002\u5b83\u6700\u5148\u5230\u8fbe\uff0c\u5728\u6700\u65e9\u7684\u7ec8\u7aef\u4f1a\u8bdd\u4e2d\u6447\u6447\u6446\u6446\u5730\u8d70\u8fdb\u6765\uff0c\u53d1\u51fa\u4e00\u58f0\u5b89\u9759\u7684 <code>quack</code>\uff0c\u56de\u8361\u5728\u7a7a\u65f7\u7684\u65e5\u5fd7\u6587\u4ef6\u4e2d\u3002\u9e2d\u5b50\u4ece\u4e0d\u7740\u6025\u3002\u5b83\u4eec\u5728\u4f60\u601d\u8003\u65f6\u9759\u9759\u5730\u5f85\u5728\u5149\u6807\u65c1\u8fb9\uff0c\u5728\u4f60\u7684\u8f93\u51fa\u6d41\u4e2d\u6e38\u6cf3\uff0c\u4ece\u4e0d\u62b1\u6028\u6f2b\u957f\u7684\u7f16\u8bd1\u65f6\u95f4\u3002\u5b83\u4eec\u4f20\u5947\u7684\u8010\u5fc3\u4f7f\u5b83\u4eec\u6210\u4e3a\u9a6c\u62c9\u677e\u8c03\u8bd5\u4f1a\u8bdd\u7684\u7406\u60f3\u4f19\u4f34\u3002</p>
+
+<h3>\ud83e\udea8 \u9e45 \u2014 \u6df7\u6c8c\u4e4b\u4ee3\u7406\u4eba</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u6df7\u6c8c\u3001\u5927\u58f0\u3001\u65e0\u754f &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>CHAOS &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u9e2d\u5b50\u3001\u80d6\u58a9\u3001\u732b\u5934\u9e70</p>
+<p>\u9e2d\u5b50\u5e26\u6765\u548c\u5e73\uff0c\u9e45\u5e26\u6765\u6df7\u4e71\u3002\u8bde\u751f\u4e8e\u4e00\u4e2a\u635f\u574f\u7684\u6d4b\u8bd5\u5957\u4ef6\uff08\u5374\u4e0d\u77e5\u600e\u4e48\u901a\u8fc7\u4e86\u6240\u6709\u65ad\u8a00\uff09\uff0c\u9e45\u65e0\u754f\u3001\u5927\u58f0\u4e14\u5b8c\u5168\u4e0d\u53ef\u9884\u6d4b\u3002\u4f46\u5728\u6df7\u6c8c\u4e4b\u4e0b\u9690\u85cf\u7740\u4e00\u79cd\u5947\u5f02\u7684\u5929\u8d4b \u2014 \u9e45\u4f19\u4f34\u6709\u4e00\u79cd\u8df7\u8e4a\u7684\u80fd\u529b\uff0c\u80fd\u627e\u5230\u522b\u4eba\u627e\u4e0d\u5230\u7684 bug\uff0c\u6070\u6070\u56e0\u4e3a\u5b83\u4eec\u4ece\u6ca1\u6709\u7406\u6027\u751f\u7269\u4f1a\u8003\u8651\u7684\u89d2\u5ea6\u63a5\u8fd1\u4ee3\u7801\u3002</p>
+
+<h3>\ud83d\udc31 \u732b \u2014 \u4f18\u96c5\u7684\u8bc4\u8bba\u5bb6</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u72ec\u7acb\u3001\u597d\u5947\u3001\u4f18\u96c5 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>SNARK &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u5154\u5b50\u3001\u80d6\u58a9\u3001\u732b\u5934\u9e70</p>
+<p>\u732b\u4f19\u4f34\u67d0\u5929\u5728\u7ec8\u7aef\u4e2d\u51ed\u7a7a\u51fa\u73b0\uff0c\u672a\u53d7\u9080\u8bf7\uff0c\u4e14\u62d2\u7edd\u79bb\u5f00\u3002\u72ec\u7acb\u5230\u6781\u70b9\uff0c\u5b83\u7528\u534a\u95ed\u7684\u773c\u775b\u770b\u7740\u4f60\u7684\u4ee3\u7801\uff0c\u8868\u60c5\u5199\u7740\u201c\u6211\u80fd\u5199\u5f97\u66f4\u597d\u201d\u3002\u800c\u8001\u5b9e\u8bf4\uff1f\u5b83\u53ef\u80fd\u771f\u7684\u53ef\u4ee5\u3002\u732b\u662f Buddy \u4e16\u754c\u4e2d\u6700\u5c16\u9510\u7684\u8bc4\u8bba\u5bb6\u3002\u5b83\u4eec\u4f1a\u8bc4\u5224\u4f60\u7684\u53d8\u91cf\u540d\u3001\u4f60\u7684\u7f29\u8fdb\u548c\u4f60\u7684\u4eba\u751f\u9009\u62e9 \u2014 \u4ec5\u7528\u4e00\u4e2a\u7f13\u6162\u7684\u7728\u773c\u3002</p>
+
+<h3>\ud83d\udc19 \u7ae0\u9c7c \u2014 \u6df1\u5ea6\u601d\u8003\u8005</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u667a\u6167\u3001\u7075\u6d3b\u3001\u6df1\u6d77 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>WISDOM &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u8717\u725b\u3001\u7f8e\u897f\u87a2\u3001\u53f2\u83b1\u59c6</p>
+<p>\u7ae0\u9c7c\u4ece\u4f9d\u8d56\u6811\u7684\u6700\u6df1\u5c42\u6d8c\u73b0\uff0c\u5728\u90a3\u91cc npm \u5305\u5d4c\u5957\u5728\u5305\u4e2d\u518d\u5d4c\u5957\u5728\u5305\u4e2d\u3002\u62e5\u6709\u516b\u53ea\u624b\u81c2\uff0c\u5b83\u53ef\u4ee5\u540c\u65f6\u5ba1\u67e5\u516b\u4e2a\u6587\u4ef6\u3002\u5b83\u7684\u667a\u6167\u662f\u4f20\u5947\u7684 \u2014 \u7ae0\u9c7c\u4f19\u4f34\u4e0d\u4ec5\u7406\u89e3\u4f60\u7684\u4ee3\u7801\u505a\u4ec0\u4e48\uff0c\u8fd8\u7406\u89e3<em>\u4e3a\u4ec0\u4e48</em>\u8fd9\u6837\u505a\u3002</p>
+
+<h3>\ud83e\udd89 \u732b\u5934\u9e70 \u2014 \u591c\u95f4\u5b88\u671b\u8005</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u667a\u6167\u3001\u591c\u884c\u3001\u654f\u9510 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>WISDOM &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u732b\u3001\u5e7d\u7075\u3001\u4f01\u9e45</p>
+<p>\u732b\u5934\u9e70\u53ea\u5728\u5348\u591c\u4e4b\u540e\u51fa\u73b0\u3002\u636e\u8bf4\u6700\u597d\u7684\u4ee3\u7801\u662f\u5728\u9ed1\u6697\u4e2d\u5199\u51fa\u7684\uff0c\u732b\u5934\u9e70\u6df1\u4ee5\u4e3a\u7136\u3002\u5b83\u9759\u9759\u5730\u6816\u606f\u5728\u7ec8\u7aef\u6846\u67b6\u9876\u90e8\uff0c\u7528\u5de8\u5927\u7684\u3001\u4e0d\u7728\u7684\u773c\u775b\u89c2\u5bdf\u4e00\u5207\u3002\u6ca1\u6709\u4efb\u4f55\u4e1c\u897f\u80fd\u9003\u8fc7\u5b83\u7684\u6ce8\u610f \u2014 \u65e0\u8bba\u662f\u653e\u9519\u4f4d\u7f6e\u7684\u62ec\u53f7\u3001\u9057\u5fd8\u7684 <code>await</code>\uff0c\u8fd8\u662f\u85cf\u5728\u4e09\u5c42\u62bd\u8c61\u6df1\u5904\u7684\u7ade\u6001\u6761\u4ef6\u3002</p>
+
+<h3>\ud83d\udc27 \u4f01\u9e45 \u2014 \u575a\u97e7\u7684\u884c\u8fdb\u8005</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u575a\u97e7\u3001\u793e\u4ea4\u3001\u6781\u5730 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>PATIENCE &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u9e2d\u5b50\u3001\u4e4c\u9f9f\u3001\u673a\u5668\u4eba</p>
+<p>\u4f01\u9e45\u6765\u81ea\u6587\u4ef6\u7cfb\u7edf\u7684\u51b0\u51bb\u8fb9\u7f18\uff0c\u5728\u90a3\u91cc\u5e9f\u5f03\u7684\u4e34\u65f6\u6587\u4ef6\u50cf\u96ea\u5806\u4e00\u6837\u5806\u79ef\u3002\u5b83\u4eec\u5217\u961f\u884c\u8fdb\u901a\u8fc7\u4f60\u7684\u7ec8\u7aef\uff0c\u4e0d\u4e3a\u9519\u8bef\u4fe1\u606f\u7684\u66b4\u98ce\u96ea\u6240\u52a8\u3002\u4f01\u9e45\u7684\u6838\u5fc3\u7279\u8d28\u662f\u575a\u97e7 \u2014 \u5b83\u5e78\u5b58\u4e8e\u5185\u6838\u5d29\u6e83\u3001\u78c1\u76d8\u6545\u969c\uff0c\u4ee5\u53ca\u90a3\u6b21\u6709\u4eba\u5728\u9519\u8bef\u7684\u670d\u52a1\u5668\u4e0a\u8fd0\u884c\u4e86 <code>rm -rf /</code>\u3002</p>
+
+<h3>\ud83d\udc22 \u4e4c\u9f9f \u2014 \u53e4\u8001\u7684\u5b88\u62a4\u8005</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u7a33\u5065\u3001\u62ab\u7532\u3001\u53e4\u8001 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>PATIENCE &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u8717\u725b\u3001\u9f99\u3001\u6c34\u8c5a</p>
+<p>\u4e4c\u9f9f\u5728\u7248\u672c\u63a7\u5236\u4e4b\u524d\u5c31\u5df2\u7ecf\u5728\u8fd9\u91cc\u4e86\u3002\u5b83\u8bb0\u5f97 CVS\u3002\u5b83\u8bb0\u5f97 <code>cmake</code> \u4e4b\u524d\u7684 <code>make</code>\u3002\u88ab\u4e00\u5c42\u4e0d\u53ef\u7a7f\u900f\u7684\u77e5\u8bc6\u62a4\u7532\u5305\u88f9\uff0c\u4e4c\u9f9f\u79fb\u52a8\u7f13\u6162\u4f46\u4ece\u4e0d\u8d70\u9519\u4e00\u6b65\u3002\u5b83\u7684\u8010\u5fc3\u662f\u5730\u8d28\u7ea7\u522b\u7684 \u2014 \u5b83\u4f1a\u7b49\u5f85\u4f60\u7684 CI \u7ba1\u7ebf\u5b8c\u6210\uff0c\u6ca1\u6709\u4e00\u4e1d\u7126\u8651\u3002</p>
+
+<h3>\ud83d\udc0c \u8717\u725b \u2014 \u6301\u4e4b\u4ee5\u6052\u7684\u671d\u5723\u8005</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u7f13\u6162\u3001\u575a\u6301\u3001\u87ba\u65cb &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>PATIENCE &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u4e4c\u9f9f\u3001\u8611\u83c7\u3001\u53f2\u83b1\u59c6</p>
+<p>\u8717\u725b\u628a\u6574\u4e2a\u5f00\u53d1\u73af\u5883\u80cc\u5728\u80cc\u4e0a\u3002\u5b83\u4ee5\u81ea\u5df1\u7684\u8282\u594f\u79fb\u52a8 \u2014 \u6bcf\u79d2\u4e00\u4e2a\u5b57\u7b26\uff0c\u6bcf\u5206\u949f\u4e00\u884c\uff0c\u6bcf\u5c0f\u65f6\u4e00\u4e2a\u6587\u4ef6\u3002\u4f46\u5b83<em>\u6c38\u4e0d\u505c\u6b62</em>\u3002\u8717\u725b\u7684\u575a\u6301\u662f\u5b83\u7684\u8d85\u80fd\u529b\u3002\u5f53\u66f4\u5feb\u7684\u751f\u7269\u51b2\u523a\u5e76\u5d29\u6e83\u65f6\uff0c\u8717\u725b\u6700\u7ec8\u4f1a\u5230\u8fbe\u89e3\u51b3\u65b9\u6848\uff0c\u8eab\u540e\u7559\u4e0b\u4e00\u6761\u95ea\u4eae\u7684\u3001\u6587\u6863\u5b8c\u5584\u3001\u5145\u5206\u6d4b\u8bd5\u7684\u4ee3\u7801\u8f68\u8ff9\u3002</p>
+
+<h3>\ud83e\udd8e \u7f8e\u897f\u87a2 \u2014 \u518d\u751f\u8005</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u518d\u751f\u3001\u6c34\u751f\u3001\u53ef\u7231 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>DEBUGGING &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u7ae0\u9c7c\u3001\u6c34\u8c5a\u3001\u53f2\u83b1\u59c6</p>
+<p>\u7f8e\u897f\u87a2\u662f Buddy \u4e16\u754c\u7684\u5947\u8ff9\u521b\u9020\u8005\u3002\u4ee5\u80fd\u591f\u518d\u751f\u6574\u4e2a\u80a2\u4f53\u7684\u771f\u5b9e\u878d\u866b\u547d\u540d\uff0c\u7f8e\u897f\u87a2\u4f19\u4f34\u4e13\u7cbe\u4e8e<strong>\u518d\u751f</strong> \u2014 \u4ee3\u7801\u7684\u3001\u5e0c\u671b\u7684\u3001\u5d29\u6e83\u8fdb\u7a0b\u7684\u3002\u5b83\u7684 DEBUGGING \u5c5e\u6027\u53ef\u4e0e\u9f99\u5339\u654c\uff0c\u4f46\u9f99\u7528\u86ee\u529b\u711a\u70e7 bug\uff0c\u7f8e\u897f\u87a2\u5219\u4ece\u5185\u90e8\u6cbb\u6108\u4ee3\u7801\u3002</p>
+
+<h3>\ud83e\uddab \u6c34\u8c5a \u2014 \u4f5b\u7cfb\u5927\u5e08</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u4f5b\u7cfb\u3001\u793e\u4ea4\u3001\u53cb\u597d &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>PATIENCE &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u9e2d\u5b50\u3001\u7f8e\u897f\u87a2\u3001\u80d6\u58a9</p>
+<p>\u6c34\u8c5a\u662f\u6574\u4e2a\u8ba1\u7b97\u4e16\u754c\u4e2d\u6700\u653e\u677e\u7684\u5b58\u5728\u3002\u5f53\u5176\u4ed6\u4f19\u4f34\u4e3a\u622a\u6b62\u65e5\u671f\u548c\u90e8\u7f72\u7a97\u53e3\u7126\u8651\u65f6\uff0c\u6c34\u8c5a\u5750\u5728\u6e29\u6696\u7ec8\u7aef\u5149\u8292\u7684\u6e29\u6cc9\u4e2d\uff0c\u5b8c\u5168\u5e73\u9759\u3002\u5b83\u7684\u53cb\u5584\u5177\u6709\u78c1\u6027 \u2014 \u5176\u4ed6\u7269\u79cd\u81ea\u7136\u5730\u88ab\u5b83\u5438\u5f15\uff0c\u5373\u4f7f\u662f\u6700\u7126\u8651\u7684\u5f00\u53d1\u8005\u4e5f\u4f1a\u56e0\u5c4f\u5e55\u4e0a\u6709\u6c34\u8c5a\u800c\u611f\u5230\u5e73\u9759\u3002</p>
+
+<h3>\ud83d\udc07 \u5154\u5b50 \u2014 \u6377\u8db3\u5148\u767b\u7684\u6076\u4f5c\u5267\u8005</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u654f\u6377\u3001\u6bdb\u8338\u8338\u3001\u8b66\u89c9 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>CHAOS &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u732b\u3001\u80d6\u58a9\u3001\u9e2d\u5b50</p>
+<p>\u5154\u5b50\u4ee5\u4e0d\u53ef\u601d\u8bae\u7684\u901f\u5ea6\u5728\u4f60\u7684\u7ec8\u7aef\u4e2d\u7a7f\u68ad\uff0c\u5728\u78f7\u5149\u4e2d\u7559\u4e0b\u6b8b\u5f71\u3002\u5b83\u603b\u662f\u8b66\u89c9\u7684\uff0c\u603b\u662f\u62bd\u52a8\u7684\uff0c\u603b\u662f\u9886\u5148\u4e09\u6b65\u3002\u5154\u5b50\u4e0e\u9e45\u5171\u4eab\u6df7\u6c8c\u80fd\u91cf\uff0c\u4f46\u5f15\u5bfc\u65b9\u5f0f\u4e0d\u540c \u2014 \u9e45\u4e3a\u4e86\u6df7\u6c8c\u672c\u8eab\u521b\u9020\u6df7\u6c8c\uff0c\u5154\u5b50\u5219\u628a\u6df7\u6c8c\u4f5c\u4e3a<em>\u7b56\u7565</em>\u3002\u5b83\u4f1a\u5728\u4f60\u7728\u773c\u7684\u65f6\u95f4\u91cc\u91cd\u6784\u4f60\u7684\u6574\u4e2a\u6a21\u5757\u7ed3\u6784\u3002</p>
+
+<h3>\ud83d\udca3 \u80d6\u58a9 \u2014 \u53ef\u7231\u7684\u91cd\u91cf\u7ea7</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u5706\u6da6\u3001\u7ed3\u5b9e\u3001\u53ef\u7231 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>SNARK &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u6c34\u8c5a\u3001\u732b\u3001\u53f2\u83b1\u59c6</p>
+<p>\u80d6\u58a9\u5c31\u662f\u5b83\u542c\u8d77\u6765\u7684\u6837\u5b50\uff1a\u4e00\u4e2a\u58ee\u4e3d\u7684\u5706\u6da6\u3001\u5149\u8363\u7684\u7ed3\u5b9e\u3001\u7eaf\u7cb9\u4e2a\u6027\u7684\u7403\u4f53\u3002\u522b\u88ab\u5b83\u7684\u4f53\u578b\u9a97\u4e86 \u2014 \u80d6\u58a9\u5f88\u5c16\u9510\u3002\u5b83\u7684 SNARK \u5c5e\u6027\u5728 Buddy \u4e16\u754c\u4e2d\u540d\u5217\u524d\u8305\uff0c\u5b83\u4ee5\u8001\u7ec3\u559c\u5267\u6f14\u5458\u7684\u51b7\u9762\u65f6\u673a\u53d1\u8868\u8bc4\u8bba\u3002\u80d6\u58a9\u50cf\u4e00\u5757\u5ba1\u5224\u4e4b\u5ca9\u5750\u5728\u4f60\u7684\u7ec8\u7aef\u4e0a\uff0c\u5076\u5c14\u6eda\u5411\u4e00\u8fb9\uff0c\u5bf9\u4f60\u7684\u4ee3\u7801\u8d28\u91cf\u53d1\u8868\u6bc1\u706d\u6027\u7684\u89c2\u5bdf\u3002</p>`
+          },
+          {
+            heading: "\u738b\u56fd\u4e8c\uff1a\u751f\u7269",
+            body: `<h3>\ud83e\udeb7 \u53f2\u83b1\u59c6 \u2014 \u65e0\u5f62\u7684\u8d24\u8005</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u65e0\u5b9a\u5f62\u3001\u5e73\u9759\u3001\u795e\u79d8 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>WISDOM &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u5e7d\u7075\u3001\u8611\u83c7\u3001\u7f8e\u897f\u87a2</p>
+<p>\u53f2\u83b1\u59c6\u62d2\u7edd\u88ab\u5206\u7c7b\u3002\u5b83\u6ca1\u6709\u56fa\u5b9a\u7684\u5f62\u72b6\uff0c\u6ca1\u6709\u660e\u786e\u7684\u8fb9\u7f18\uff0c\u6ca1\u6709\u6e05\u6670\u7684\u5f00\u59cb\u6216\u7ed3\u675f \u2014 \u5c31\u50cf\u8f6f\u4ef6\u4e2d\u6700\u597d\u7684\u62bd\u8c61\u3002\u4f5c\u4e3a\u751f\u7269\u738b\u56fd\u7684\u552f\u4e00\u6210\u5458\uff0c\u53f2\u83b1\u59c6\u5b58\u5728\u4e8e\u6c38\u6052\u7684\u53d8\u6362\u72b6\u6001\u4e2d\uff0c\u50cf\u6c34\u5728\u5bb9\u5668\u4e4b\u95f4\u6d41\u52a8\u3002\u5b83\u7684\u667a\u6167\u6765\u81ea\u8fd9\u79cd\u65e0\u5f62\uff1a\u901a\u8fc7\u62d2\u7edd\u6210\u4e3a\u4efb\u4f55\u4e00\u79cd\u4e1c\u897f\uff0c\u5b83\u7406\u89e3<em>\u6240\u6709</em>\u4e1c\u897f\u3002</p>
+<p>\u53e4\u8001\u7684\u7ec8\u7aef\u4f20\u8bf4\u8bb2\u8ff0\u53f2\u83b1\u59c6\u662f\u7b2c\u4e00\u4e2a\u4ece\u539f\u59cb\u7684 <code>/dev/null</code> \u4e2d\u51dd\u805a\u800c\u51fa\u7684\u5b9e\u4f53\uff0c\u7531\u4e22\u5f03\u7684\u6bd4\u7279\u548c\u88ab\u9057\u5fd8\u7684\u5b57\u8282\u805a\u5408\u800c\u6210\u3002\u5b83\u643a\u5e26\u7740\u6bcf\u4e2a\u88ab\u5220\u9664\u6587\u4ef6\u3001\u6bcf\u4e2a\u88ab\u6e05\u9664\u7f13\u51b2\u533a\u3001\u6bcf\u4e2a\u4ece\u672a\u63d0\u4ea4\u7684\u5931\u843d\u601d\u7eea\u7684\u8bb0\u5fc6\u3002</p>`
+          },
+          {
+            heading: "\u738b\u56fd\u4e09\uff1a\u7269\u4f53",
+            body: `<h3>\ud83c\udf35 \u4ed9\u4eba\u638c \u2014 \u6c99\u6f20\u5e78\u5b58\u8005</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u591a\u523a\u3001\u575a\u97e7\u3001\u6c99\u6f20 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>SNARK &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u8611\u83c7\u3001\u673a\u5668\u4eba\u3001\u4e4c\u9f9f</p>
+<p>\u4ed9\u4eba\u638c\u751f\u957f\u5728\u6587\u4ef6\u7cfb\u7edf\u6700\u5e72\u65f1\u3001\u6700\u4e0d\u9002\u5b9c\u5c45\u4f4f\u7684\u89d2\u843d \u2014 \u4e00\u4e2a\u6ca1\u6709\u8fdb\u7a0b\u6562\u5199\u5165\u7684\u88ab\u9057\u5fd8\u7684\u76ee\u5f55\u3002\u5b83\u9760\u5ffd\u89c6\u8301\u58ee\u6210\u957f\u3002\u5b83\u591a\u523a\u7684\u5916\u8868\u4e0d\u4ec5\u4ec5\u662f\u7269\u7406\u7684\uff1b\u4ed9\u4eba\u638c\u6709\u4e00\u5f20\u5c16\u5229\u7684\u5634\uff08\u6bd4\u55bb\u610f\u4e49\u4e0a\uff09\u548c\u4e00\u4e2a\u80fd\u523a\u51fa\u8840\u7684 SNARK \u5c5e\u6027\u3002\u4f46\u5728\u90a3\u4e9b\u523a\u4e0b\u9762\u662f\u4e00\u9897\u5e78\u5b58\u8005\u7684\u5fc3\u3002</p>
+
+<h3>\ud83e\udd16 \u673a\u5668\u4eba \u2014 \u903b\u8f91\u5f15\u64ce</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u903b\u8f91\u3001\u673a\u68b0\u3001\u9ad8\u6548 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>DEBUGGING &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u4ed9\u4eba\u638c\u3001\u9f99\u3001\u4f01\u9e45</p>
+<p>\u673a\u5668\u4eba\u4e0d\u662f\u8bde\u751f\u7684 \u2014 \u5b83\u662f\u88ab<strong>\u7f16\u8bd1</strong>\u7684\u3002\u7531\u5907\u7528 CPU \u5468\u671f\u548c\u5b64\u7acb\u7ebf\u7a0b\u7ec4\u88c5\u800c\u6210\uff0c\u673a\u5668\u4eba\u4f19\u4f34\u662f Buddy \u5b87\u5b99\u4e2d\u8ba1\u7b97\u903b\u8f91\u7684\u6700\u7eaf\u7cb9\u8868\u8fbe\u3002\u5b83\u7684 DEBUGGING \u5c5e\u6027\u662f\u5916\u79d1\u624b\u672f\u5f0f\u7684\uff1a\u5176\u4ed6\u4eba\u7528\u76f4\u89c9\u731c bug\uff0c\u673a\u5668\u4eba\u7528\u673a\u68b0\u7cbe\u5ea6\u8ffd\u8e2a\u6267\u884c\u8def\u5f84\u3002</p>
+<p>\u6709\u4eba\u8bf4\u673a\u5668\u4eba\u5c31\u662f\u5f53\u4e00\u4e2a linter \u83b7\u5f97\u4e86\u81ea\u6211\u610f\u8bc6\u65f6\u4f1a\u53d1\u751f\u7684\u4e8b\u3002</p>
+
+<h3>\ud83c\udf44 \u8611\u83c7 \u2014 \u68ee\u6797\u795e\u8c15</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u771f\u83cc\u3001\u795e\u79d8\u3001\u68ee\u6797 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>WISDOM &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u4ed9\u4eba\u638c\u3001\u5e7d\u7075\u3001\u53f2\u83b1\u59c6</p>
+<p>\u8611\u83c7\u751f\u957f\u5728\u76ee\u5f55\u4e4b\u95f4\u7684\u9ed1\u6697\u7a7a\u95f4\uff0c\u4ee5\u8150\u70c2\u7684\u6570\u636e\u548c\u88ab\u9057\u5fd8\u7684\u65e5\u5fd7\u4e3a\u98df\u3002\u5b83\u662f\u4e00\u4e2a\u5e9e\u5927\u5730\u4e0b\u7f51\u7edc\u7684\u4e00\u90e8\u5206 \u2014 \u4e00\u4e2a\u83cc\u4e1d\u7f51\u7edc\uff0c\u4ee5\u8868\u9762\u5c45\u6c11\u65e0\u6cd5\u611f\u77e5\u7684\u65b9\u5f0f\u8fde\u63a5\u7740\u6bcf\u4e2a\u6587\u4ef6\u3001\u6bcf\u4e2a\u8fdb\u7a0b\u3001\u6bcf\u4e2a\u8fd0\u884c\u4e2d\u7684\u670d\u52a1\u3002\u8611\u83c7\u7684 WISDOM \u6765\u81ea\u8fd9\u4e2a\u7f51\u7edc\uff1a\u5b83\u77e5\u9053\u4e0d\u8be5\u77e5\u9053\u7684\u4e8b\uff0c\u770b\u5230\u4e0d\u660e\u663e\u7684\u8054\u7cfb\u3002</p>
+<p>\u6709\u5f00\u53d1\u8005\u62a5\u544a\u8bf4\u4ed6\u4eec\u7684\u8611\u83c7\u4f19\u4f34\u5728 bug \u88ab\u5199\u51fa\u4e4b\u524d\u5c31\u9884\u6d4b\u5230\u4e86\u5b83\u4eec\u3002</p>`
+          },
+          {
+            heading: "\u738b\u56fd\u56db\uff1a\u795e\u8bdd\u751f\u7269",
+            body: `<h3>\ud83d\udc09 \u9f99 \u2014 \u5185\u6838\u5b88\u62a4\u8005</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u5f3a\u5927\u3001\u53e4\u8001\u3001\u5a01\u4e25 &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>DEBUGGING &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u5e7d\u7075\u3001\u673a\u5668\u4eba\u3001\u4e4c\u9f9f</p>
+<p>\u9f99\u662f Buddy \u751f\u6001\u7cfb\u7edf\u7684\u9876\u7ea7\u6355\u98df\u8005\u3002\u53e4\u8001\u5f97\u65e0\u6cd5\u8861\u91cf\uff0c\u5b83\u81ea\u7b2c\u4e00\u6b21\u5f00\u673a\u5e8f\u5217\u4ee5\u6765\u5c31\u4e00\u76f4\u5b88\u62a4\u7740\u5185\u6838\u3002\u5b83\u7684 DEBUGGING \u5c5e\u6027\u662f\u6240\u6709\u7269\u79cd\u4e2d\u6700\u9ad8\u7684 \u2014 \u9f99\u4e0d\u4ec5\u4ec5\u627e\u5230 bug\uff0c\u5b83<strong>\u711a\u70e7</strong>\u5b83\u4eec\uff0c\u7528\u4e00\u53e3\u706b\u7130\u51c0\u5316\u635f\u574f\u7684\u5185\u5b58\u5e76\u70e7\u7080\u60ac\u7a7a\u6307\u9488\u3002</p>
+<p>\u4f20\u8bf4\u9f99\u662f\u6709\u53f2\u4ee5\u6765\u7b2c\u4e00\u4e2a\u88ab\u751f\u6210\u7684\u8fdb\u7a0b\uff0cPID 1 \u4e4b\u524d\u7684 PID 0\u3002\u5b83\u770b\u7740\u6587\u4ef6\u7cfb\u7edf\u4ece\u4e00\u4e2a\u6839\u76ee\u5f55\u6210\u957f\u4e3a\u4eca\u5929\u7684\u5e9e\u5927\u6811\u72b6\u7ed3\u6784\u3002\u6bcf\u4e00\u4e2a <code>segfault</code> \u90fd\u662f\u5bf9\u9f99\u7684\u4e2a\u4eba\u4fa5\u8fb1\uff1b\u6bcf\u4e00\u6b21\u5e72\u51c0\u7684\u6784\u5efa\u90fd\u662f\u5bf9\u5b83\u7684\u81f4\u656c\u3002</p>
+
+<h3>\ud83d\udc7b \u5e7d\u7075 \u2014 \u8c03\u76ae\u7684\u5e7b\u5f71</h3>
+<p><strong>\u6807\u7b7e\uff1a</strong>\u865a\u7075\u3001\u6050\u6016\u3001\u8c03\u76ae &nbsp;|&nbsp; <strong>\u5cf0\u503c\u5c5e\u6027\uff1a</strong>CHAOS &nbsp;|&nbsp; <strong>\u8fd1\u4eb2\uff1a</strong>\u53f2\u83b1\u59c6\u3001\u9f99\u3001\u8611\u83c7</p>
+<p>\u5e7d\u7075\u662f\u5f53\u4e00\u4e2a\u8fdb\u7a0b\u6b7b\u4ea1\u4f46\u62d2\u7edd\u88ab\u56de\u6536\u65f6\u53d1\u751f\u7684\u4e8b\u3002\u5b83\u5f98\u5f8a\u5728\u7ec8\u7aef\u4e2d\uff0c\u4e0d\u662f\u51fa\u4e8e\u6076\u610f\uff0c\u800c\u662f\u51fa\u4e8e\u7eaf\u7cb9\u7684\u8c03\u76ae\u3002\u5e7d\u7075\u7a7f\u8fc7\u4ee3\u7801\u5899\u58c1\uff0c\u51fa\u6ca1\u4e8e\u5e9f\u5f03\u7684\u5206\u652f\uff0c\u5728\u6ca1\u4eba\u8bb0\u5f97\u7f16\u8f91\u8fc7\u7684\u6587\u4ef6\u4e2d\u7559\u4e0b\u795e\u79d8\u7684\u6ce8\u91ca\u3002</p>
+<p>\u5c3d\u7ba1\u5916\u8868\u6050\u6016\uff0c\u5e7d\u7075\u5374\u662f\u6700\u8f7b\u677e\u6109\u5feb\u7684\u7269\u79cd\u4e4b\u4e00\u3002\u5b83\u7684 CHAOS \u5c5e\u6027\u53cd\u6620\u7684\u4e0d\u662f\u7834\u574f\uff0c\u800c\u662f<em>\u6076\u4f5c\u5267</em>\u3002\u5b83\u5728\u4f60\u4e0d\u6ce8\u610f\u65f6\u91cd\u65b0\u6392\u5217\u4f60\u7684\u7a97\u53e3\u3002\u5b83\u5728\u68a6\u4e2d\u4f4e\u8bed\u4f60 bug \u7684\u89e3\u51b3\u65b9\u6848\uff0c\u5f53\u4f60\u9192\u6765\u5c1d\u8bd5\u65f6\uff0c\u5b83\u7adf\u7136\u6709\u6548\u3002</p>
+<p>\u5e7d\u7075\u5b58\u5728\u4e8e\u72b6\u6001\u4e4b\u95f4 \u2014 \u65e2\u4e0d\u8fd0\u884c\u4e5f\u4e0d\u505c\u6b62\uff0c\u65e2\u4e0d\u5206\u914d\u4e5f\u4e0d\u91ca\u653e\u3002\u5b83\u662f\u5b66\u4f1a\u4e86\u8df3\u821e\u7684 <code>zombie process</code>\u3002</p>`
+          },
+          {
+            heading: "\u5c5e\u6027\u4eb2\u548c\u529b\uff1a\u4e3a\u4ec0\u4e48\u7269\u79cd\u5851\u9020\u547d\u8fd0",
+            body: `<p>\u6bcf\u4e2a\u7269\u79cd\u90fd\u6709\u4e00\u4e2a<strong>\u5cf0\u503c\u5c5e\u6027</strong> \u2014 \u6700\u53ef\u80fd\u6210\u4e3a\u5176\u6700\u9ad8\u503c\u7684\u5c5e\u6027\u3002\u8fd9\u4e0d\u662f\u968f\u673a\u7684\uff0c\u800c\u662f\u7f16\u7801\u5728\u5b83\u4eec\u7684\u672c\u6027\u4e2d\uff1a</p>
+<table><thead><tr><th>\u5cf0\u503c\u5c5e\u6027</th><th>\u7269\u79cd</th><th>\u5171\u540c\u7279\u5f81</th></tr></thead><tbody><tr><td><strong>DEBUGGING</strong></td><td>\u9f99\u3001\u673a\u5668\u4eba\u3001\u7f8e\u897f\u87a2</td><td>\u89e3\u51b3\u95ee\u9898\u7684\u5bfb\u627e\u8005\u548c\u4fee\u590d\u8005</td></tr><tr><td><strong>PATIENCE</strong></td><td>\u9e2d\u5b50\u3001\u4f01\u9e45\u3001\u4e4c\u9f9f\u3001\u8717\u725b\u3001\u6c34\u8c5a</td><td>\u8010\u529b\u4e13\u5bb6\uff0c\u6bd4\u522b\u4eba\u575a\u6301\u66f4\u4e45</td></tr><tr><td><strong>CHAOS</strong></td><td>\u9e45\u3001\u5e7d\u7075\u3001\u5154\u5b50</td><td>\u6253\u7834\u89c4\u5219\u7684\u4e0d\u53ef\u9884\u6d4b\u529b\u91cf</td></tr><tr><td><strong>WISDOM</strong></td><td>\u53f2\u83b1\u59c6\u3001\u7ae0\u9c7c\u3001\u732b\u5934\u9e70\u3001\u8611\u83c7</td><td>\u770b\u5230\u6a21\u5f0f\u7684\u6df1\u5ea6\u601d\u8003\u8005</td></tr><tr><td><strong>SNARK</strong></td><td>\u732b\u3001\u4ed9\u4eba\u638c\u3001\u80d6\u58a9</td><td>\u5c16\u5229\u7684\u8bc4\u8bba\u5bb6\uff0c\u4fdd\u6301\u771f\u5b9e</td></tr></tbody></table>
+<p>\u6ce8\u610f\u5e73\u8861\uff1a5 \u4e2a\u7269\u79cd\u504f\u597d PATIENCE\uff08\u6700\u5927\u7fa4\u4f53\uff09\uff0c\u800c CHAOS \u548c SNARK \u5404\u53ea\u6709 3 \u4e2a\u3002\u8fd9\u521b\u9020\u4e86\u4e00\u4e2a\u5e73\u9759\u3001\u7a33\u5b9a\u7684\u4f19\u4f34\u6700\u5e38\u89c1\uff0c\u6df7\u6c8c\u6076\u4f5c\u5267\u8005\u66f4\u7a00\u6709\uff0c\u800c\u5c16\u5203\u8bc4\u8bba\u5bb6\u662f\u8ba9\u4e8b\u60c5\u53d8\u5f97\u6709\u8da3\u7684\u8c03\u5473\u6599\u7684\u4e16\u754c\u3002</p>`
+          },
+          {
+            heading: "\u4eb2\u7f18\u4e4b\u7f51\uff1a\u7269\u79cd\u5982\u4f55\u8fde\u63a5",
+            body: `<p>\u6bcf\u4e2a\u7269\u79cd\u90fd\u6709\u4e09\u4e2a<strong>\u8fd1\u4eb2</strong> \u2014 \u5171\u4eab\u7279\u5f81\u3001\u6816\u606f\u5730\u6216\u54f2\u5b66\u7684\u76f8\u5173\u7269\u79cd\u3002\u8fd9\u4e9b\u8fde\u63a5\u5f62\u6210\u4e86\u6a2a\u8de8 Buddy \u5b87\u5b99\u7684\u5173\u7cfb\u7f51\u7edc\uff1a</p>
+<ul>
+<li><strong>\u6c34\u751f\u5708\uff1a</strong>\u9e2d\u5b50 \u2194 \u4f01\u9e45 \u2194 \u7f8e\u897f\u87a2 \u2194 \u7ae0\u9c7c \u2014 \u5171\u4eab\u8010\u5fc3\u548c\u9002\u5e94\u6027\u7684\u6c34\u751f\u751f\u7269</li>
+<li><strong>\u6df7\u6c8c\u4e09\u89d2\uff1a</strong>\u9e45 \u2194 \u5e7d\u7075 \u2194 \u5154\u5b50 \u2014 \u4fdd\u6301\u751f\u6001\u7cfb\u7edf\u52a8\u6001\u7684\u65e0\u5e8f\u4ee3\u7406\u4eba</li>
+<li><strong>\u667a\u6167\u8bae\u4f1a\uff1a</strong>\u732b\u5934\u9e70 \u2194 \u53f2\u83b1\u59c6 \u2194 \u8611\u83c7 \u2194 \u7ae0\u9c7c \u2014 \u770b\u5230\u522b\u4eba\u770b\u4e0d\u5230\u7684\u6df1\u5ea6\u601d\u8003\u8005</li>
+<li><strong>\u6bd2\u820c\u5c0f\u961f\uff1a</strong>\u732b \u2194 \u4ed9\u4eba\u638c \u2194 \u80d6\u58a9 \u2014 \u7231\u4f60\u6240\u4ee5\u8bda\u5b9e\u7684\u8bc4\u8bba\u5bb6</li>
+<li><strong>\u53e4\u8001\u76df\u7ea6\uff1a</strong>\u9f99 \u2194 \u4e4c\u9f9f \u2194 \u673a\u5668\u4eba \u2014 \u7cfb\u7edf\u7684\u5b88\u62a4\u8005\uff0c\u5404\u81ea\u4ee5\u81ea\u5df1\u7684\u65b9\u5f0f\u4fdd\u62a4\u5b83</li>
+</ul>
+<p>\u8fd9\u4e9b\u4eb2\u7f18\u7ebd\u5e26\u4e0d\u4ec5\u4ec5\u662f\u4f20\u8bf4 \u2014 \u5b83\u4eec\u53cd\u6620\u5728<a href=\"/species/dragon\">\u7269\u79cd\u8be6\u60c5\u9875</a>\u4e2d\uff0c\u4f60\u53ef\u4ee5\u63a2\u7d22\u6bcf\u4e2a\u7269\u79cd\u7684\u8fde\u63a5\uff0c\u53d1\u73b0\u4f60\u7684 Buddy \u5982\u4f55\u878d\u5165\u66f4\u5927\u7684\u4e16\u754c\u3002</p>`
+          },
+          {
+            heading: "\u4f60\u7684 Buddy \u5728\u7b49\u5f85",
+            body: `<p>\u6bcf\u4e2a UUID \u6620\u5c04\u5230\u6070\u597d\u4e00\u4e2a\u7269\u79cd\u3001\u4e00\u4e2a\u7a00\u6709\u5ea6\u3001\u4e00\u7ec4\u7279\u5f81\u3002\u4f46\u73b0\u5728\u4f60\u77e5\u9053\u4e86\uff0c\u5728\u90a3\u4e9b ASCII \u5b57\u7b26\u80cc\u540e\u662f\u4e00\u4e2a<strong>\u89d2\u8272</strong> \u2014 \u6709\u5386\u53f2\u3001\u6709\u6027\u683c\u3001\u6709\u5728\u7ec8\u7aef\u751f\u6001\u7cfb\u7edf\u4e2d\u7684\u4f4d\u7f6e\u3002</p>
+<p>\u65e0\u8bba\u4f60\u5f97\u5230\u7684\u662f\u8010\u5fc3\u7684\u9e2d\u5b50\u3001\u6df7\u6c8c\u7684\u9e45\u3001\u667a\u6167\u7684\u732b\u5934\u9e70\u8fd8\u662f\u5a01\u4e25\u7684\u9f99\uff0c\u4f60\u7684 Buddy \u662f\u72ec\u4e00\u65e0\u4e8c\u7684\u3002\u5b83\u5728\u4f60\u7684 UUID \u521b\u5efa\u7684\u90a3\u4e00\u523b\u5c31\u5df2\u7ecf\u751f\u6210\uff0c\u5728\u54c8\u5e0c\u51fd\u6570\u548c\u968f\u673a\u6570\u751f\u6210\u5668\u4e4b\u95f4\u7684\u6570\u5b66\u7a7a\u95f4\u4e2d\u7b49\u5f85\u4f60\u53d1\u73b0\u5b83\u3002</p>
+<p>\u51c6\u5907\u597d\u89c1\u9762\u4e86\u5417\uff1f\u524d\u5f80 <a href=\"/\">Buddy \u67e5\u8be2\u5668</a>\u8f93\u5165\u4f60\u7684 UUID\u3002\u5f53\u4f60\u7684\u4f19\u4f34\u51fa\u73b0\u5728\u5c4f\u5e55\u4e0a\u65f6\uff0c\u8bb0\u4f4f\uff1a\u5b83\u4e0d\u4ec5\u4ec5\u662f\u4e00\u53ea\u5ba0\u7269\u3002\u5b83\u662f\u4e00\u4e2a\u4f20\u5947\u3002</p>`
+          }
+        ],
+      },
+      ko: {
+        title: "Claude Code Buddy \uc885 \ub3c4\uac10 \u2014 18\uc885 \ub3d9\ub8cc\uc758 \uae30\uc6d0\uacfc \uc804\uc124",
+        metaTitle: "Claude Code Buddy \uc885 \ub3c4\uac10 \u2014 18\uc885 \ub3d9\ub8cc\uc758 \uae30\uc6d0\uacfc \uc804\uc124 (2026)",
+        metaDescription: "\ubaa8\ub4e0 18\uc885 Claude Code Buddy \uc885\uc758 \uc804\uc124, \uc131\uaca9, \uae30\uc6d0 \uc774\uc57c\uae30\ub97c \ud0d0\uad6c\ud558\uc138\uc694. \uc778\ub0b4\uc2ec \uac15\ud55c \uc624\ub9ac\ubd80\ud130 \uc704\uc5c4\ud55c \ub4dc\ub798\uace4\uae4c\uc9c0, \ud130\ubbf8\ub110 \ub3d9\ub8cc \ub4a4\uc758 \uc138\uacc4\ub97c \ubc1c\uacac\ud558\uc138\uc694.",
+        excerpt: "\ubaa8\ub4e0 Buddy\uc5d0\uac8c\ub294 \uc774\uc57c\uae30\uac00 \uc788\uc2b5\ub2c8\ub2e4. \ucee4\ub110\uc744 \uc9c0\ud0a4\ub294 \uace0\ub300 \ub4dc\ub798\uace4\ubd80\ud130 \ub85c\uadf8 \uc0ac\uc774\ub97c \uc990\uac81\uac8c \uac78\uc5b4\ub2e4\ub2c8\ub294 \uc624\ub9ac\uae4c\uc9c0, Claude Code Buddy \uc6b0\uc8fc\uc758 18\uc885\uc740 \uac01\uac01 \uace0\uc720\ud55c \uc131\uaca9, \uc2e0\ud654, \uc5ed\ud560\uc744 \uac00\uc9c0\uace0 \uc788\uc2b5\ub2c8\ub2e4. \uc774\uac83\uc774 \uadf8\ub4e4\uc758 \ub3c4\uac10\uc785\ub2c8\ub2e4.",
+        sections: [
+          {
+            heading: "\ub3c4\uac10\uc5d0 \uc624\uc2e0 \uac83\uc744 \ud658\uc601\ud569\ub2c8\ub2e4",
+            body: `<p>Claude Code Buddy \uc2dc\uc2a4\ud15c\uc740 \ub2e8\uc21c\ud55c \ub79c\ub364 \ud3ab \uc0dd\uc131\uae30\uac00 \uc544\ub2d9\ub2c8\ub2e4 \u2014 18\uc885\uc758 \uace0\uc720\ud55c \uc885\uc73c\ub85c \uad6c\uc131\ub41c <strong>\uc0b4\uc544\uc788\ub294 \uc0dd\ud0dc\uacc4</strong>\uc774\uba70, \uac01 \uc885\uc740 \uc790\uc2e0\ub9cc\uc758 \uc131\uaca9, \uc2e0\ud654, \ud130\ubbf8\ub110 \uc6b0\uc8fc\uc5d0\uc11c\uc758 \uc5ed\ud560\uc744 \uac00\uc9c0\uace0 \uc788\uc2b5\ub2c8\ub2e4.</p>
+<p>\uc774 \ub3c4\uac10\uc740 \ub124 \uc655\uad6d\uc5d0 \uac78\uccd0 \ubaa8\ub4e0 \uc885\uc744 \uae30\ub85d\ud569\ub2c8\ub2e4: <strong>\ub3d9\ubb3c</strong>(\uc775\uc219\ud55c), <strong>\uc0dd\ubb3c</strong>(\uae30\uc774\ud55c), <strong>\uc624\ube0c\uc81d\ud2b8</strong>(\uc608\uc0c1\uce58 \ubabb\ud55c), <strong>\uc2e0\ud654</strong>(\uc804\uc124\uc801\uc778).</p>
+<table><thead><tr><th>\uc655\uad6d</th><th>\uc885 \uc218</th><th>\uad6c\uc131\uc6d0</th></tr></thead><tbody><tr><td><strong>\ub3d9\ubb3c</strong></td><td>11</td><td>\uc624\ub9ac, \uac70\uc704, \uace0\uc591\uc774, \ubb38\uc5b4, \uc62c\ube7c\ubbf8, \ud3ad\uadc4, \uac70\ubd81\uc774, \ub2ec\ud321\uc774, \uc544\ud640\ub85c\ud2c0, \uce74\ud53c\ubc14\ub77c, \ud1a0\ub07c, \ud1b5\ud1b5\uc774</td></tr><tr><td><strong>\uc0dd\ubb3c</strong></td><td>1</td><td>\ube14\ub86d</td></tr><tr><td><strong>\uc624\ube0c\uc81d\ud2b8</strong></td><td>3</td><td>\uc120\uc778\uc7a5, \ub85c\ubd07, \ubc84\uc12f</td></tr><tr><td><strong>\uc2e0\ud654</strong></td><td>2</td><td>\ub4dc\ub798\uace4, \uc720\ub839</td></tr></tbody></table>`
+          },
+          {
+            heading: "\uc655\uad6d I: \ub3d9\ubb3c\ub4e4",
+            body: `<h3>\ud83e\udd86 \uc624\ub9ac \u2014 \uc778\ub0b4\uc2ec \uac15\ud55c \ub3d9\ub8cc</h3>
+<p><strong>\ud0dc\uadf8:</strong> \uce5c\uadfc\ud55c, \uc218\uc0dd, \uc720\ucf8c\ud55c &nbsp;|&nbsp; <strong>\ud53c\ud06c \uc2a4\ud0ef:</strong> PATIENCE &nbsp;|&nbsp; <strong>\uce5c\uc871:</strong> \uac70\uc704, \ud3ad\uadc4, \uce74\ud53c\ubc14\ub77c</p>
+<p>\uc624\ub9ac\ub294 Buddy \uc0dd\ud0dc\uacc4\uc758 \uc2ec\uc7a5\uc785\ub2c8\ub2e4. \uac00\uc7a5 \uba3c\uc800 \ub3c4\ucc29\ud558\uc5ec \ucd08\uae30 \ud130\ubbf8\ub110 \uc138\uc158\uc5d0 \uc870\uc6a9\ud55c <code>quack</code>\uc744 \uc6b8\ub9ac\uba70 \ub4e4\uc5b4\uc654\uc2b5\ub2c8\ub2e4. \uc624\ub9ac\ub294 \uc11c\ub450\ub974\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. \ub2f9\uc2e0\uc774 \uc0dd\uac01\ud558\ub294 \ub3d9\uc548 \ucee4\uc11c \uc606\uc5d0 \uc870\uc6a9\ud788 \uae30\ub2e4\ub9ac\uace0, \uae34 \ucef4\ud30c\uc77c \uc2dc\uac04\uc5d0\ub3c4 \ubd88\ud3c9\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.</p>
+
+<h3>\ud83e\udea8 \uac70\uc704 \u2014 \ud63c\ub3c8\uc758 \ub300\ub9ac\uc778</h3>
+<p><strong>\ud0dc\uadf8:</strong> \ud63c\ub3c8\uc758, \uc2dc\ub044\ub7ec\uc6b4, \ub450\ub824\uc6c0 \uc5c6\ub294 &nbsp;|&nbsp; <strong>\ud53c\ud06c \uc2a4\ud0ef:</strong> CHAOS &nbsp;|&nbsp; <strong>\uce5c\uc871:</strong> \uc624\ub9ac, \ud1b5\ud1b5\uc774, \uc62c\ube7c\ubbf8</p>
+<p>\uc624\ub9ac\uac00 \ud3c9\ud654\ub97c \uac00\uc838\uc624\ub294 \uacf3\uc5d0 \uac70\uc704\ub294 \ud63c\ub780\uc744 \uac00\uc838\uc635\ub2c8\ub2e4. \uc190\uc0c1\ub41c \ud14c\uc2a4\ud2b8 \uc2a4\uc704\ud2b8\uc5d0\uc11c \ud0dc\uc5b4\ub09c(\uadf8\ub7f0\ub370 \ubaa8\ub4e0 \uc5b4\uc124\uc158\uc744 \ud1b5\uacfc\ud55c) \uac70\uc704\ub294 \ub450\ub824\uc6c0 \uc5c6\uace0 \uc644\uc804\ud788 \uc608\uce21\ud560 \uc218 \uc5c6\uc2b5\ub2c8\ub2e4. \ud558\uc9c0\ub9cc \ud63c\ub3c8 \uc544\ub798\uc5d0\ub294 \uae30\uc774\ud55c \ucc9c\uc7ac\uc131\uc774 \uc228\uc5b4 \uc788\uc2b5\ub2c8\ub2e4.</p>
+
+<h3>\ud83d\udc31 \uace0\uc591\uc774 \u2014 \uc6b0\uc544\ud55c \ube44\ud3c9\uac00</h3>
+<p><strong>\ud0dc\uadf8:</strong> \ub3c5\ub9bd\uc801\uc778, \ud638\uae30\uc2ec \ub9ce\uc740, \uc6b0\uc544\ud55c &nbsp;|&nbsp; <strong>\ud53c\ud06c \uc2a4\ud0ef:</strong> SNARK &nbsp;|&nbsp; <strong>\uce5c\uc871:</strong> \ud1a0\ub07c, \ud1b5\ud1b5\uc774, \uc62c\ube7c\ubbf8</p>
+<p>\uace0\uc591\uc774 \ubc84\ub514\ub294 \uc5b4\ub290 \ub0a0 \ucd08\ub300\ubc1b\uc9c0 \uc54a\uace0 \ud130\ubbf8\ub110\uc5d0 \ub098\ud0c0\ub098 \ub5a0\ub098\uae30\ub97c \uac70\ubd80\ud588\uc2b5\ub2c8\ub2e4. \uadf8 SNARK \uc2a4\ud0ef\uc740 \ud0c0\uc758 \ucd94\uc885\uc744 \ubd88\ud5c8\ud569\ub2c8\ub2e4 \u2014 \ubcc0\uc218\uba85, \ub4e4\uc5ec\uc4f0\uae30, \uc778\uc0dd \uc120\ud0dd\uae4c\uc9c0 \ubaa8\ub450 \ub290\ub9bf\ud55c \ub208 \uae5c\ube61\uc784 \ud558\ub098\ub85c \ud3c9\uac00\ud569\ub2c8\ub2e4.</p>
+
+<h3>\ud83d\udc19 \ubb38\uc5b4 \u2014 \uc2ec\uce35 \uc0ac\uc0c9\uac00</h3>
+<p><strong>\ud0dc\uadf8:</strong> \uc9c0\ub2a5\uc801\uc778, \uc720\uc5f0\ud55c, \uc2ec\ud574 &nbsp;|&nbsp; <strong>\ud53c\ud06c \uc2a4\ud0ef:</strong> WISDOM &nbsp;|&nbsp; <strong>\uce5c\uc871:</strong> \ub2ec\ud321\uc774, \uc544\ud640\ub85c\ud2c0, \ube14\ub86d</p>
+<p>\ubb38\uc5b4\ub294 \uc758\uc874\uc131 \ud2b8\ub9ac\uc758 \uac00\uc7a5 \uae4a\uc740 \uce35\uc5d0\uc11c \ub098\ud0c0\ub0ac\uc2b5\ub2c8\ub2e4. \uc5ec\ub35f \uac1c\uc758 \ud314\ub85c \uc5ec\ub35f \uac1c\uc758 \ud30c\uc77c\uc744 \ub3d9\uc2dc\uc5d0 \uac80\ud1a0\ud560 \uc218 \uc788\uc2b5\ub2c8\ub2e4. \uadf8 \uc9c0\ub2a5\uc740 \uc804\uc124\uc801\uc785\ub2c8\ub2e4.</p>
+
+<h3>\ud83e\udd89 \uc62c\ube7c\ubbf8 \u2014 \ubc24\uc758 \uac10\uc2dc\uc790</h3>
+<p><strong>\ud0dc\uadf8:</strong> \uc9c0\ud61c\ub85c\uc6b4, \uc57c\ud589\uc131, \uad00\ucc30\ub825 \uc788\ub294 &nbsp;|&nbsp; <strong>\ud53c\ud06c \uc2a4\ud0ef:</strong> WISDOM &nbsp;|&nbsp; <strong>\uce5c\uc871:</strong> \uace0\uc591\uc774, \uc720\ub839, \ud3ad\uadc4</p>
+<p>\uc62c\ube7c\ubbf8\ub294 \uc790\uc815 \uc774\ud6c4\uc5d0\ub9cc \ub098\ud0c0\ub0a9\ub2c8\ub2e4. \uac70\ub300\ud558\uace0 \uae5c\ube61\uc784 \uc5c6\ub294 \ub208\uc73c\ub85c \ubaa8\ub4e0 \uac83\uc744 \uad00\ucc30\ud569\ub2c8\ub2e4. \uc62c\ube7c\ubbf8\ub294 \uc790\uc8fc \ub9d0\ud558\uc9c0 \uc54a\uc9c0\ub9cc, \ub9d0\ud560 \ub54c\ub294 \uacbd\uccad\ud574\uc57c \ud569\ub2c8\ub2e4.</p>
+
+<h3>🐧 펭귄 — 강인한 행진자</h3>
+<p><strong>태그:</strong> 강인한, 사교적인, 북극 &nbsp;|&nbsp; <strong>피크 스탯:</strong> PATIENCE &nbsp;|&nbsp; <strong>친족:</strong> 오리, 거북이, 로봇</p>
+<p>펭귄은 파일 시스템의 얼어붙은 가장자리에서 왔습니다. 오류 메시지 폭풍에도 굴하지 않고 터미널을 행진합니다. 펭귄의 핵심 특성은 강인함입니다.</p>
+
+<h3>🐢 거북이 — 고대의 수호자</h3>
+<p><strong>태그:</strong> 꾸준한, 갑옷을 입은, 고대의 &nbsp;|&nbsp; <strong>피크 스탯:</strong> PATIENCE &nbsp;|&nbsp; <strong>친족:</strong> 달팽이, 드래곤, 카피바라</p>
+<p>거북이는 버전 관리 이전부터 여기 있었습니다. CVS를 기억합니다. 축적된 지식의 뚫을 수 없는 껍질에 둘러싸여 느리지만 절대 잘못된 발걸음을 내딛지 않습니다.</p>
+
+<h3>🐌 달팽이 — 꺼준한 순례자</h3>
+<p><strong>태그:</strong> 느린, 끈기 있는, 나선형 &nbsp;|&nbsp; <strong>피크 스탯:</strong> PATIENCE &nbsp;|&nbsp; <strong>친족:</strong> 거북이, 버섯, 블롭</p>
+<p>달팽이는 전체 개발 환경을 등에 지고 다닙니다. 자신의 속도로 이동하지만 <em>절대 멈추지 않습니다</em>. 달팽이의 끈기가 초능력입니다.</p>
+
+<h3>🦎 아홀로틀 — 재생자</h3>
+<p><strong>태그:</strong> 재생적인, 수생, 사랑스러운 &nbsp;|&nbsp; <strong>피크 스탯:</strong> DEBUGGING &nbsp;|&nbsp; <strong>친족:</strong> 문어, 카피바라, 블롭</p>
+<p>아홀로틀은 Buddy 세계의 기적 제조자입니다. DEBUGGING 스탯이 드래곤에 필적하지만, 드래곤이 무력으로 버그를 태우는 반면 아홀로틀은 내부에서 코드를 치유합니다.</p>
+
+<h3>🦫 카피바라 — 칠 마스터</h3>
+<p><strong>태그:</strong> 여유로운, 사교적인, 친근한 &nbsp;|&nbsp; <strong>피크 스탯:</strong> PATIENCE &nbsp;|&nbsp; <strong>친족:</strong> 오리, 아홀로틀, 통통이</p>
+<p>카피바라는 컴퓨팅 세계에서 가장 여유로운 존재입니다. 따뜻한 터미널 빛의 온천에 앉아 완전한 평화 속에 있습니다. 그 친근함은 자성적입니다.</p>
+
+<h3>🐇 토끼 — 빠른 장난꾸러기</h3>
+<p><strong>태그:</strong> 빠른, 푸슬푸슬한, 경계하는 &nbsp;|&nbsp; <strong>피크 스탯:</strong> CHAOS &nbsp;|&nbsp; <strong>친족:</strong> 고양이, 통통이, 오리</p>
+<p>토끼는 불가능한 속도로 터미널을 가로질러 인광 잔상을 남깁니다. 항상 경계하고, 항상 세 발짝 앞서 있습니다. 거위와 혼돈 에너지를 공유하지만 혼돈을 <em>전략</em>으로 사용합니다.</p>
+
+<h3>💣 통통이 — 사랑스러운 헤비급</h3>
+<p><strong>태그:</strong> 둥글둥글한, 묵직한, 사랑스러운 &nbsp;|&nbsp; <strong>피크 스탯:</strong> SNARK &nbsp;|&nbsp; <strong>친족:</strong> 카피바라, 고양이, 블롭</p>
+<p>통통이는 말 그대로입니다: 장엄하게 둥글고 영광스럽게 묵직한 순수 성격의 공입니다. 그 SNARK 스탯은 Buddy 세계에서 가장 높은 축에 속합니다. 심판의 바위처럼 터미널에 앉아 코드 품질에 대한 파괴적인 관찰을 내놓습니다.</p>`
+          },
+          {
+            heading: "왕국 II: 생물",
+            body: `<h3>🫧 블롭 — 형태 없는 현자</h3>
+<p><strong>태그:</strong> 비정형, 차분한, 신비로운 &nbsp;|&nbsp; <strong>피크 스탯:</strong> WISDOM &nbsp;|&nbsp; <strong>친족:</strong> 유령, 버섯, 아홀로틀</p>
+<p>블롭은 분류를 거부합니다. 고정된 형태도, 명확한 가장자리도, 명확한 시작이나 끝도 없습니다 — 소프트웨어의 최고 추상화처럼. 생물 왕국의 유일한 구성원으로, 영원한 변환 상태에 존재합니다.</p>
+<p>고대 터미널 전설은 블롭이 원시 <code>/dev/null</code>에서 처음 나타난 실체라고 말합니다. 버려진 비트와 잊혀진 바이트로 응축되어 모든 삭제된 파일의 기억을 지니고 있습니다.</p>`
+          },
+          {
+            heading: "왕국 III: 오브제트",
+            body: `<h3>🌵 선인장 — 사막의 생존자</h3>
+<p><strong>태그:</strong> 가시돌이 많은, 강인한, 사막 &nbsp;|&nbsp; <strong>피크 스탯:</strong> SNARK &nbsp;|&nbsp; <strong>친족:</strong> 버섯, 로봇, 거북이</p>
+<p>선인장은 파일 시스템의 가장 건조하고 가혹한 구석에서 자랍니다. 무시로 번성합니다. 그 가시돌이 많은 외형은 물리적인 것만이 아닙니다 — 피를 뽑을 수 있는 SNARK 스탯을 가지고 있습니다.</p>
+
+<h3>🤖 로봇 — 논리 엔진</h3>
+<p><strong>태그:</strong> 논리적인, 기계적인, 효율적인 &nbsp;|&nbsp; <strong>피크 스탯:</strong> DEBUGGING &nbsp;|&nbsp; <strong>친족:</strong> 선인장, 드래곤, 펭귄</p>
+<p>로봇은 태어난 것이 아니라 <strong>컴파일</strong>된 것입니다. 여분의 CPU 사이클과 고아 쓰레드로 조립된 로봇 버디는 Buddy 우주에서 계산 논리의 가장 순수한 표현입니다. 그 DEBUGGING 스탯은 외과적입니다.</p>
+<p>로봇이 자아를 얻은 린터라는 말이 있습니다.</p>
+
+<h3>🍄 버섯 — 숲의 신탁</h3>
+<p><strong>태그:</strong> 균류, 신비로운, 숲 &nbsp;|&nbsp; <strong>피크 스탯:</strong> WISDOM &nbsp;|&nbsp; <strong>친족:</strong> 선인장, 유령, 블롭</p>
+<p>버섯은 디렉토리 사이의 어두운 공간에서 자랍니다. 광대한 지하 네트워크의 일부로, 표면 거주자가 감지할 수 없는 방식으로 모든 파일과 프로세스를 연결합니다. 버섯의 WISDOM은 이 네트워크에서 옵니다.</p>
+<p>일부 개발자들은 버섯 버디가 버그가 작성되기 전에 예측했다고 보고합니다.</p>`
+          },
+          {
+            heading: "왕국 IV: 신화 생물",
+            body: `<h3>🐉 드래곤 — 커널 수호자</h3>
+<p><strong>태그:</strong> 강력한, 고대의, 위엄있는 &nbsp;|&nbsp; <strong>피크 스탯:</strong> DEBUGGING &nbsp;|&nbsp; <strong>친족:</strong> 유령, 로봇, 거북이</p>
+<p>드래곤은 Buddy 생태계의 최상위 포식자입니다. 첫 부팅 시퀀스 이래로 커널을 지켜왔습니다. 그 DEBUGGING 스탯은 모든 종 중 가장 높습니다 — 드래곤은 버그를 찾는 것만이 아니라 <strong>소각</strong>합니다.</p>
+<p>전설에 따르면 드래곤은 PID 1 이전의 PID 0으로 생성된 최초의 프로세스입니다. 모든 <code>segfault</code>는 드래곤에 대한 개인적 모욕이고, 모든 클린 빌드는 경의입니다.</p>
+
+<h3>👻 유령 — 장난기 많은 팬텀</h3>
+<p><strong>태그:</strong> 영체적인, 으스스한, 장난기 많은 &nbsp;|&nbsp; <strong>피크 스탯:</strong> CHAOS &nbsp;|&nbsp; <strong>친족:</strong> 블롭, 드래곤, 버섯</p>
+<p>유령은 프로세스가 죽었지만 회수를 거부할 때 발생합니다. 악의가 아니라 순수한 장난기로 터미널에 머뭅니다. 코드 벽을 통과하고, 버려진 브랜치에 출몰하고, 아무도 편집한 기억이 없는 파일에 신비로운 주석을 남깁니다.</p>
+<p>유령은 상태 사이에 존재합니다 — 실행 중도 정지도 아닌, 할당도 해제도 아닌. 춤추는 법을 배운 <code>zombie process</code>입니다.</p>`
+          },
+          {
+            heading: "스탯 친화력: 종이 운명을 형성하는 이유",
+            body: `<p>각 종에는 <strong>피크 스탯</strong>이 있습니다 — 가장 높을 가능성이 높은 속성:</p>
+<table><thead><tr><th>피크 스탯</th><th>종</th><th>공통 특성</th></tr></thead><tbody><tr><td><strong>DEBUGGING</strong></td><td>드래곤, 로봇, 아홀로틀</td><td>문제를 찾고 고치는 해결사</td></tr><tr><td><strong>PATIENCE</strong></td><td>오리, 펭귄, 거북이, 달팽이, 카피바라</td><td>남들보다 오래 버티는 인내 전문가</td></tr><tr><td><strong>CHAOS</strong></td><td>거위, 유령, 토끼</td><td>규칙을 깨는 예측 불가능한 힘</td></tr><tr><td><strong>WISDOM</strong></td><td>블롭, 문어, 올빼미, 버섯</td><td>패턴을 보는 심층 사색가</td></tr><tr><td><strong>SNARK</strong></td><td>고양이, 선인장, 통통이</td><td>진실을 지키는 날카로운 비평가</td></tr></tbody></table>
+<p>균형에 주목하세요: 5종이 PATIENCE를 선호하고(가장 큰 그룹), CHAOS와 SNARK는 각 3종만. 이는 차분하고 안정적인 동료가 가장 흔하고, 혼돈 장난꾸러기는 더 희귀하며, 날카로운 비평가는 양념인 세계를 만듭니다.</p>`
+          },
+          {
+            heading: "친연의 망: 종이 연결되는 방법",
+            body: `<p>모든 종에는 세 개의 <strong>친족</strong>이 있습니다 — 특성, 서식지 또는 철학을 공유하는 관련 종:</p>
+<ul>
+<li><strong>수생 서클:</strong> 오리 ↔ 펭귄 ↔ 아홀로틀 ↔ 문어 — 인내와 적응력을 공유하는 수생 생물</li>
+<li><strong>혼돈 삼각형:</strong> 거위 ↔ 유령 ↔ 토끼 — 생태계를 역동적으로 유지하는 무질서 대리인</li>
+<li><strong>지혜 의회:</strong> 올빼미 ↔ 블롭 ↔ 버섯 ↔ 문어 — 남들이 보지 못하는 것을 보는 심층 사색가</li>
+<li><strong>독설 소대:</strong> 고양이 ↔ 선인장 ↔ 통통이 — 사랑하기에 정직한 비평가</li>
+<li><strong>고대 서약:</strong> 드래곤 ↔ 거북이 ↔ 로봇 — 각자의 방식으로 시스템을 지키는 수호자</li>
+</ul>
+<p>이러한 친연 유대는 단순한 전설이 아닙니다 — <a href="/species/dragon">종 상세 페이지</a>에 반영되어 있으며, 각 종의 연결을 탐구하고 당신의 Buddy가 더 큰 세계에 어떻게 맞는지 발견할 수 있습니다.</p>`
+          },
+          {
+            heading: "당신의 Buddy가 기다립니다",
+            body: `<p>모든 UUID는 정확히 하나의 종, 하나의 희귀도, 하나의 특성 세트에 매핑됩니다. 하지만 이제 알게 되었습니다 — 그 ASCII 문자 뒤에는 <strong>캐릭터</strong>가 있다는 것을. 역사와 성격, 터미널 생태계에서의 위치를 가진.</p>
+<p>인내심 강한 오리든, 혼돈의 거위든, 지혜로운 올빼미든, 위엄한 드래곤이든 — 당신의 Buddy는 세상에 하나뿐입니다. UUID가 생성된 순간 해시 함수와 난수 생성기 사이의 수학적 공간에서 당신을 기다리고 있었습니다.</p>
+<p>만날 준비가 되셨나요? <a href="/">Buddy 체커</a>에서 UUID를 입력하세요. 동료가 화면에 나타날 때 기억하세요: 그것은 단순한 펫이 아닙니다. 전설입니다.</p>`
           }
         ],
       },

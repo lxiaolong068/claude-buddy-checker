@@ -216,6 +216,14 @@ export const BLOG_OG: Record<string, BlogOgData> = {
     readingTime: 10,
     publishedAt: "2026-04-04",
   },
+  "claude-buddy-species-bestiary-origins-lore": {
+    title: "Claude Code Buddy Species Bestiary — Origins & Lore of All 18 Companions",
+    metaDescription: "Complete bestiary of all 18 Claude Code Buddy species. Discover the origins, personality lore, attribute affinities, and kinship connections of every companion in the terminal universe.",
+    excerpt: "Every Buddy has a story. From the ancient Dragon guarding the kernel to the Duck happily waddling through your logs — discover the lore behind all 18 species.",
+    tags: ["#lore", "#species", "#worldbuilding", "#storytelling", "#bestiary"],
+    readingTime: 12,
+    publishedAt: "2026-04-05",
+  },
 };
 
 // ── OgMeta helper ─────────────────────────────────────────────────────────────
