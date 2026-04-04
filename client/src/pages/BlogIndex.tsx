@@ -13,6 +13,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { getAllArticles, type BlogArticle } from "@/lib/blog-data";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
+import BlogListSchema from "@/components/BlogListSchema";
 
 /* ── Sort/Filter Button Components ── */
 function SortButton({
@@ -194,6 +195,7 @@ export default function BlogIndex() {
 
   return (
     <div className="min-h-screen relative">
+      <BlogListSchema articles={articles} locale={locale} />
       <div className="crt-scanlines" />
 
       <div className="relative z-10 max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-12">

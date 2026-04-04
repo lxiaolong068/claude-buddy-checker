@@ -51,14 +51,22 @@ export default function ArticleSchema({
       url: `${articleUrl}#section-${i}`,
     }));
 
-    // 1. Main Article Schema
+    const imageUrl = article.coverImage || `${baseUrl}/og-image.png`;
+
+    // 1. Main BlogPosting Schema
     const articleSchema = {
       "@context": "https://schema.org",
-      "@type": "Article",
+      "@type": "BlogPosting",
       "@id": `${articleUrl}#article`,
       headline: content.title,
       description: content.metaDescription,
-      image: article.coverImage || `${baseUrl}/og-image.png`,
+      image: {
+        "@type": "ImageObject",
+        url: imageUrl,
+        width: 1200,
+        height: 630,
+      },
+      thumbnailUrl: imageUrl,
       datePublished: `${article.publishedAt}T00:00:00+00:00`,
       dateModified: article.updatedAt
         ? `${article.updatedAt}T00:00:00+00:00`
@@ -75,6 +83,8 @@ export default function ArticleSchema({
         logo: {
           "@type": "ImageObject",
           url: `${baseUrl}/favicon.ico`,
+          width: 48,
+          height: 48,
         },
       },
       mainEntityOfPage: {
@@ -82,9 +92,14 @@ export default function ArticleSchema({
         "@id": articleUrl,
       },
       wordCount,
+      timeRequired: `PT${article.readingTime}M`,
       inLanguage,
-      articleSection: article.tags,
+      articleSection: article.tags[0] ?? "Guide",
       keywords: article.tags.join(", "),
+      about: article.tags.map((tag) => ({
+        "@type": "Thing",
+        name: tag,
+      })),
       isPartOf: {
         "@type": "Blog",
         "@id": `${baseUrl}/blog#blog`,
@@ -98,6 +113,7 @@ export default function ArticleSchema({
     const breadcrumbSchema = {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
+      "@id": `${articleUrl}#breadcrumb`,
       itemListElement: [
         {
           "@type": "ListItem",
