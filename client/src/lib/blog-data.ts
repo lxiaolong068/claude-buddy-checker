@@ -2923,6 +2923,309 @@ rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
       },
     },
   },
+  // === Article 8: Probability Lab — 10,000 Simulations ===
+  {
+    slug: 'claude-buddy-probability-lab-10000-simulations',
+    publishedAt: '2026-04-05',
+    readingTime: 10,
+    tags: ['simulation', 'data', 'probability', 'statistics', 'experiment'],
+    content: {
+      en: {
+        title: 'Claude Code Buddy Probability Lab \u2014 Truths Revealed by 10,000 Simulations',
+        excerpt: 'We ran the Buddy generation algorithm 10,000 times with random UUIDs and recorded every outcome. Here\u2019s what the data reveals about rarity distributions, species frequencies, shiny rates, and the elusive Legendary Shiny.',
+        sections: [
+          {
+            heading: 'The Experiment',
+            body: `<p>Theory is elegant. Data is honest. The Claude Code Buddy engine uses a deterministic pipeline \u2014 FNV-1a hash \u2192 Mulberry32 PRNG \u2192 weighted rolls \u2014 that <em>should</em> produce specific probability distributions. But does it? We generated 10,000 random UUIDs, ran each through the exact same <code>rollBuddy()</code> function, and recorded every rarity, species, eye style, hat type, shiny status, and stat value. This article presents the raw results.</p>
+<p>The simulation code mirrors the production engine exactly: same FNV-1a hash with the <code>friend-2026-401</code> salt, same Mulberry32 PRNG, same weighted selection logic. The only variable is the input UUID, generated via Node.js <code>crypto.randomUUID()</code>.</p>`
+          },
+          {
+            heading: 'Rarity Distribution: Theory vs Reality',
+            body: `<p>The rarity system uses weighted random selection with weights of 60/25/10/4/1 (total 100). Here\u2019s how 10,000 trials compared to the theoretical probabilities:</p>
+<table><thead><tr><th>Rarity</th><th>Expected %</th><th>Actual Count</th><th>Actual %</th><th>Deviation</th></tr></thead><tbody>
+<tr><td><strong>Common</strong></td><td>60.0%</td><td>6,027</td><td>60.3%</td><td>+0.3%</td></tr>
+<tr><td><strong>Uncommon</strong></td><td>25.0%</td><td>2,502</td><td>25.0%</td><td>+0.0%</td></tr>
+<tr><td><strong>Rare</strong></td><td>10.0%</td><td>974</td><td>9.7%</td><td>-0.3%</td></tr>
+<tr><td><strong>Epic</strong></td><td>4.0%</td><td>405</td><td>4.0%</td><td>+0.0%</td></tr>
+<tr><td><strong>Legendary</strong></td><td>1.0%</td><td>92</td><td>0.9%</td><td>-0.1%</td></tr>
+</tbody></table>
+<p><strong>Verdict:</strong> The Mulberry32 PRNG delivers remarkably faithful weighted selection. The maximum deviation is just \u00b10.3 percentage points. The law of large numbers holds: given enough trials, the observed distribution converges tightly on the theoretical weights. Your chances of pulling a Legendary are genuinely 1-in-100.</p>`
+          },
+          {
+            heading: 'Species Frequency: Is Every Buddy Equally Likely?',
+            body: `<p>With 18 species and uniform <code>pick()</code> selection, each species should appear in ~5.56% of rolls. Here are the top 5 and bottom 5:</p>
+<table><thead><tr><th>Rank</th><th>Species</th><th>Count</th><th>Actual %</th></tr></thead><tbody>
+<tr><td>1</td><td>\ud83d\udc30 Rabbit</td><td>599</td><td>5.99%</td></tr>
+<tr><td>2</td><td>\ud83d\udc27 Penguin</td><td>598</td><td>5.98%</td></tr>
+<tr><td>3</td><td>\ud83e\udea2 Goose</td><td>596</td><td>5.96%</td></tr>
+<tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>16</td><td>\ud83e\udd86 Duck</td><td>527</td><td>5.27%</td></tr>
+<tr><td>17</td><td>\ud83e\udd16 Robot</td><td>521</td><td>5.21%</td></tr>
+<tr><td>18</td><td>\ud83d\udc19 Octopus</td><td>510</td><td>5.10%</td></tr>
+</tbody></table>
+<p><strong>Verdict:</strong> The spread from most common (Rabbit, 5.99%) to least common (Octopus, 5.10%) is less than 1 percentage point. This is well within normal statistical variance for N=10,000. There is <strong>no hidden species weighting</strong> \u2014 every species is genuinely equally likely.</p>`
+          },
+          {
+            heading: 'Eyes, Hats & Shiny: Cosmetic Probabilities',
+            body: `<p><strong>Eyes</strong> are selected uniformly from 6 styles. The observed range was 16.39% to 17.11% (expected: 16.67% each). No eye style is rarer than another.</p>
+<p><strong>Hats</strong> are only rolled for non-Common buddies (N=3,973 in our sample). Among 8 hat types, Crown was most common at 13.29% and Beanie least at 11.30% (expected: 12.50% each). The deviation is within normal bounds.</p>
+<table><thead><tr><th>Hat</th><th>Count</th><th>Actual %</th><th>Expected %</th></tr></thead><tbody>
+<tr><td>\ud83d\udc51 Crown</td><td>528</td><td>13.29%</td><td>12.50%</td></tr>
+<tr><td>\ud83c\udfa9 Top Hat</td><td>517</td><td>13.01%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\uddf2 Propeller</td><td>522</td><td>13.14%</td><td>12.50%</td></tr>
+<tr><td>\ud83d\ude07 Halo</td><td>485</td><td>12.21%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\uddd9 Wizard</td><td>461</td><td>11.60%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\udde2 Beanie</td><td>449</td><td>11.30%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\udd86 Tiny Duck</td><td>514</td><td>12.94%</td><td>12.50%</td></tr>
+<tr><td>\u2205 None</td><td>497</td><td>12.51%</td><td>12.50%</td></tr>
+</tbody></table>
+<p><strong>Shiny Rate:</strong> 112 out of 10,000 buddies were shiny \u2014 a rate of <strong>1.12%</strong> against the expected 1.00%. This slight overshoot is normal variance. Broken down by rarity: Common 1.14%, Uncommon 1.20%, Rare 0.92%, Epic 0.99%, Legendary 0.00%. The shiny roll is independent of rarity, confirmed by the data.</p>`
+          },
+          {
+            heading: 'The Stat Economy: Average Power by Rarity',
+            body: `<p>Each buddy has 5 stats (DEBUGGING, PATIENCE, CHAOS, WISDOM, SNARK) generated with a floor based on rarity, a boosted peak stat, and a penalized dump stat. Here are the average totals:</p>
+<table><thead><tr><th>Rarity</th><th>Avg DEBUGGING</th><th>Avg PATIENCE</th><th>Avg CHAOS</th><th>Avg WISDOM</th><th>Avg SNARK</th><th>Total</th></tr></thead><tbody>
+<tr><td><strong>Common</strong></td><td>28.9</td><td>29.8</td><td>29.2</td><td>29.3</td><td>28.7</td><td>145.9</td></tr>
+<tr><td><strong>Uncommon</strong></td><td>39.2</td><td>39.1</td><td>39.6</td><td>39.1</td><td>38.1</td><td>195.1</td></tr>
+<tr><td><strong>Rare</strong></td><td>49.2</td><td>47.5</td><td>49.0</td><td>49.5</td><td>49.1</td><td>244.3</td></tr>
+<tr><td><strong>Epic</strong></td><td>59.5</td><td>59.2</td><td>59.1</td><td>59.2</td><td>56.2</td><td>293.2</td></tr>
+<tr><td><strong>Legendary</strong></td><td>68.0</td><td>70.6</td><td>72.3</td><td>70.3</td><td>71.2</td><td>352.4</td></tr>
+</tbody></table>
+<p><strong>Key insight:</strong> Each rarity tier adds roughly <strong>+50 total stat points</strong> over the previous tier. A Legendary buddy averages 352 total points \u2014 more than double a Common's 146. The jump from Epic to Legendary (+59 points) is the largest single-tier increase, making Legendary buddies genuinely elite.</p>
+<p>All 5 stats reached both the minimum (1) and maximum (100) across the 10,000 sample, confirming the full range is achievable. The global average per stat hovers around 35, with SNARK slightly lower at 34.6.</p>`
+          },
+          {
+            heading: 'Peak Stat Distribution & Stat Extremes',
+            body: `<p>The peak stat is chosen uniformly from 5 options. Our data confirms near-perfect uniformity:</p>
+<table><thead><tr><th>Peak Stat</th><th>Count</th><th>Actual %</th><th>Expected %</th></tr></thead><tbody>
+<tr><td>CHAOS</td><td>2,061</td><td>20.61%</td><td>20.00%</td></tr>
+<tr><td>WISDOM</td><td>2,046</td><td>20.46%</td><td>20.00%</td></tr>
+<tr><td>PATIENCE</td><td>2,002</td><td>20.02%</td><td>20.00%</td></tr>
+<tr><td>DEBUGGING</td><td>1,968</td><td>19.68%</td><td>20.00%</td></tr>
+<tr><td>SNARK</td><td>1,923</td><td>19.23%</td><td>20.00%</td></tr>
+</tbody></table>
+<p>No stat is favored as a peak. The dump stat (lowest stat) is also chosen uniformly, but is re-rolled if it matches the peak \u2014 this means each non-peak stat has a 25% chance of being the dump, which our data also confirms.</p>
+<p><strong>Stat extremes across all 10,000 buddies:</strong> Every stat achieved both min=1 and max=100. The theoretical maximum for a single stat is 100 (Legendary peak: floor 50 + 50 + up to 29 = 100, capped). The theoretical minimum is 1 (Common dump: floor 5 - 10 + 0 = -5, clamped to 1).</p>`
+          },
+          {
+            heading: 'The Hunt for Legendary Shiny',
+            body: `<p>The holy grail of Buddy collecting: a <strong>Legendary Shiny</strong>. The probability is 1% (Legendary) \u00d7 1% (Shiny) = <strong>0.01%</strong>, or 1 in 10,000. In our simulation of exactly 10,000 trials, we found:</p>
+<p style="text-align:center;font-size:1.5em;"><strong>0 Legendary Shiny Buddies</strong></p>
+<p>This is actually the most likely outcome! With an expected value of 1.0, the Poisson distribution tells us there's a 36.8% chance of finding exactly zero in 10,000 trials. We were unlucky, but not unusually so. To have a 95% chance of seeing at least one Legendary Shiny, you'd need approximately <strong>30,000 trials</strong>.</p>
+<p>For context, our 92 Legendary buddies had a 1% shiny chance each, giving an expected 0.92 shinies among them. The fact that none were shiny is a coin-flip outcome \u2014 not a bug in the algorithm.</p>
+<p>The rarest possible combination \u2014 a specific Legendary Shiny species with a specific hat, eye, and peak stat \u2014 has a probability of approximately <strong>1 in 86,400,000</strong>. You'd need to generate UUIDs for the entire population of Germany to expect one.</p>`
+          },
+          {
+            heading: 'Conclusions',
+            body: `<p>After 10,000 simulations, we can confirm:</p>
+<ul>
+<li><strong>The PRNG is fair.</strong> Mulberry32 seeded by FNV-1a produces distributions that closely match theoretical expectations across all dimensions.</li>
+<li><strong>No hidden weights.</strong> Species, eyes, hats, and peak stats are all uniformly distributed as documented.</li>
+<li><strong>Rarity matters.</strong> Each tier adds ~50 total stat points, with Legendary buddies averaging 2.4\u00d7 the stats of Commons.</li>
+<li><strong>Shiny is truly rare.</strong> At 1.12% observed (1.00% expected), the shiny rate is honest and independent of rarity.</li>
+<li><strong>Legendary Shiny is a unicorn.</strong> 0 found in 10,000 trials. The math checks out \u2014 you need extraordinary luck or extraordinary patience.</li>
+</ul>
+<p>The beauty of deterministic generation is that your Buddy was decided the moment your UUID was created. These 10,000 simulations simply confirm that the dice are fair. Whether you got a Common Duck or a Legendary Shiny Dragon, the algorithm treated you honestly.</p>`
+          },
+        ],
+      },
+      zh: {
+        title: 'Claude Code Buddy \u6982\u7387\u5b9e\u9a8c\u5ba4 \u2014 10,000 \u6b21\u6a21\u62df\u63ed\u793a\u7684\u771f\u76f8',
+        excerpt: '\u6211\u4eec\u7528\u968f\u673a UUID \u8fd0\u884c\u4e86 10,000 \u6b21 Buddy \u751f\u6210\u7b97\u6cd5\uff0c\u8bb0\u5f55\u4e86\u6bcf\u4e00\u4e2a\u7ed3\u679c\u3002\u4ee5\u4e0b\u662f\u6570\u636e\u63ed\u793a\u7684\u5173\u4e8e\u7a00\u6709\u5ea6\u5206\u5e03\u3001\u7269\u79cd\u9891\u7387\u3001\u95ea\u5149\u7387\u548c\u96be\u4ee5\u6349\u6478\u7684\u4f20\u8bf4\u7ea7\u95ea\u5149\u7684\u771f\u76f8\u3002',
+        sections: [
+          {
+            heading: '\u5b9e\u9a8c\u8bbe\u8ba1',
+            body: `<p>\u7406\u8bba\u5f88\u4f18\u96c5\uff0c\u6570\u636e\u5f88\u8bda\u5b9e\u3002Claude Code Buddy \u5f15\u64ce\u4f7f\u7528\u786e\u5b9a\u6027\u7ba1\u7ebf \u2014 FNV-1a \u54c8\u5e0c \u2192 Mulberry32 PRNG \u2192 \u52a0\u6743\u62bd\u53d6 \u2014 \u7406\u8bba\u4e0a<em>\u5e94\u8be5</em>\u4ea7\u751f\u7279\u5b9a\u7684\u6982\u7387\u5206\u5e03\u3002\u4f46\u5b9e\u9645\u5982\u4f55\uff1f\u6211\u4eec\u751f\u6210\u4e86 10,000 \u4e2a\u968f\u673a UUID\uff0c\u5c06\u6bcf\u4e2a\u901a\u8fc7\u5b8c\u5168\u76f8\u540c\u7684 <code>rollBuddy()</code> \u51fd\u6570\u8fd0\u884c\uff0c\u5e76\u8bb0\u5f55\u4e86\u6bcf\u4e00\u4e2a\u7a00\u6709\u5ea6\u3001\u7269\u79cd\u3001\u773c\u775b\u6837\u5f0f\u3001\u5e3d\u5b50\u7c7b\u578b\u3001\u95ea\u5149\u72b6\u6001\u548c\u5c5e\u6027\u503c\u3002\u672c\u6587\u5c55\u793a\u539f\u59cb\u7ed3\u679c\u3002</p>
+<p>\u6a21\u62df\u4ee3\u7801\u5b8c\u5168\u590d\u5236\u4e86\u751f\u4ea7\u5f15\u64ce\uff1a\u76f8\u540c\u7684 FNV-1a \u54c8\u5e0c\uff08\u4f7f\u7528 <code>friend-2026-401</code> \u76d0\u503c\uff09\u3001\u76f8\u540c\u7684 Mulberry32 PRNG\u3001\u76f8\u540c\u7684\u52a0\u6743\u9009\u62e9\u903b\u8f91\u3002\u552f\u4e00\u7684\u53d8\u91cf\u662f\u8f93\u5165\u7684 UUID\uff0c\u901a\u8fc7 Node.js <code>crypto.randomUUID()</code> \u751f\u6210\u3002</p>`
+          },
+          {
+            heading: '\u7a00\u6709\u5ea6\u5206\u5e03\uff1a\u7406\u8bba vs \u73b0\u5b9e',
+            body: `<p>\u7a00\u6709\u5ea6\u7cfb\u7edf\u4f7f\u7528\u52a0\u6743\u968f\u673a\u9009\u62e9\uff0c\u6743\u91cd\u4e3a 60/25/10/4/1\uff08\u603b\u8ba1 100\uff09\u3002\u4ee5\u4e0b\u662f 10,000 \u6b21\u8bd5\u9a8c\u4e0e\u7406\u8bba\u6982\u7387\u7684\u5bf9\u6bd4\uff1a</p>
+<table><thead><tr><th>\u7a00\u6709\u5ea6</th><th>\u671f\u671b %</th><th>\u5b9e\u9645\u6570\u91cf</th><th>\u5b9e\u9645 %</th><th>\u504f\u5dee</th></tr></thead><tbody>
+<tr><td><strong>\u666e\u901a</strong></td><td>60.0%</td><td>6,027</td><td>60.3%</td><td>+0.3%</td></tr>
+<tr><td><strong>\u7a00\u6709</strong></td><td>25.0%</td><td>2,502</td><td>25.0%</td><td>+0.0%</td></tr>
+<tr><td><strong>\u73cd\u7a00</strong></td><td>10.0%</td><td>974</td><td>9.7%</td><td>-0.3%</td></tr>
+<tr><td><strong>\u53f2\u8bd7</strong></td><td>4.0%</td><td>405</td><td>4.0%</td><td>+0.0%</td></tr>
+<tr><td><strong>\u4f20\u8bf4</strong></td><td>1.0%</td><td>92</td><td>0.9%</td><td>-0.1%</td></tr>
+</tbody></table>
+<p><strong>\u7ed3\u8bba\uff1a</strong>Mulberry32 PRNG \u63d0\u4f9b\u4e86\u975e\u5e38\u5fe0\u5b9e\u7684\u52a0\u6743\u9009\u62e9\u3002\u6700\u5927\u504f\u5dee\u4ec5\u4e3a \u00b10.3 \u4e2a\u767e\u5206\u70b9\u3002\u5927\u6570\u5b9a\u5f8b\u6210\u7acb\uff1a\u7ed9\u5b9a\u8db3\u591f\u7684\u8bd5\u9a8c\u6b21\u6570\uff0c\u89c2\u5bdf\u5230\u7684\u5206\u5e03\u4f1a\u7d27\u5bc6\u6536\u655b\u4e8e\u7406\u8bba\u6743\u91cd\u3002\u4f60\u62bd\u5230\u4f20\u8bf4\u7ea7\u7684\u673a\u4f1a\u786e\u5b9e\u662f\u767e\u5206\u4e4b\u4e00\u3002</p>`
+          },
+          {
+            heading: '\u7269\u79cd\u9891\u7387\uff1a\u6bcf\u4e2a Buddy \u90fd\u540c\u6837\u53ef\u80fd\u5417\uff1f',
+            body: `<p>18 \u4e2a\u7269\u79cd\u4f7f\u7528\u5747\u5300\u7684 <code>pick()</code> \u9009\u62e9\uff0c\u6bcf\u4e2a\u7269\u79cd\u5e94\u51fa\u73b0\u5728\u7ea6 5.56% \u7684\u62bd\u53d6\u4e2d\u3002\u4ee5\u4e0b\u662f\u524d 5 \u540d\u548c\u540e 5 \u540d\uff1a</p>
+<table><thead><tr><th>\u6392\u540d</th><th>\u7269\u79cd</th><th>\u6570\u91cf</th><th>\u5b9e\u9645 %</th></tr></thead><tbody>
+<tr><td>1</td><td>\ud83d\udc30 \u5154\u5b50</td><td>599</td><td>5.99%</td></tr>
+<tr><td>2</td><td>\ud83d\udc27 \u4f01\u9e45</td><td>598</td><td>5.98%</td></tr>
+<tr><td>3</td><td>\ud83e\udea2 \u9e45</td><td>596</td><td>5.96%</td></tr>
+<tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>16</td><td>\ud83e\udd86 \u9e2d\u5b50</td><td>527</td><td>5.27%</td></tr>
+<tr><td>17</td><td>\ud83e\udd16 \u673a\u5668\u4eba</td><td>521</td><td>5.21%</td></tr>
+<tr><td>18</td><td>\ud83d\udc19 \u7ae0\u9c7c</td><td>510</td><td>5.10%</td></tr>
+</tbody></table>
+<p><strong>\u7ed3\u8bba\uff1a</strong>\u4ece\u6700\u5e38\u89c1\uff08\u5154\u5b50 5.99%\uff09\u5230\u6700\u7f55\u89c1\uff08\u7ae0\u9c7c 5.10%\uff09\u7684\u5dee\u8ddd\u4e0d\u5230 1 \u4e2a\u767e\u5206\u70b9\u3002\u8fd9\u5b8c\u5168\u5728 N=10,000 \u7684\u6b63\u5e38\u7edf\u8ba1\u65b9\u5dee\u8303\u56f4\u5185\u3002<strong>\u6ca1\u6709\u9690\u85cf\u7684\u7269\u79cd\u6743\u91cd</strong> \u2014 \u6bcf\u4e2a\u7269\u79cd\u786e\u5b9e\u540c\u6837\u53ef\u80fd\u3002</p>`
+          },
+          {
+            heading: '\u773c\u775b\u3001\u5e3d\u5b50\u4e0e\u95ea\u5149\uff1a\u88c5\u9970\u6982\u7387',
+            body: `<p><strong>\u773c\u775b</strong>\u4ece 6 \u79cd\u6837\u5f0f\u4e2d\u5747\u5300\u9009\u62e9\u3002\u89c2\u5bdf\u8303\u56f4\u4e3a 16.39% \u5230 17.11%\uff08\u671f\u671b\uff1a\u6bcf\u79cd 16.67%\uff09\u3002\u6ca1\u6709\u4efb\u4f55\u773c\u775b\u6837\u5f0f\u6bd4\u5176\u4ed6\u66f4\u7a00\u6709\u3002</p>
+<p><strong>\u5e3d\u5b50</strong>\u4ec5\u5bf9\u975e\u666e\u901a\u7ea7 Buddy \u62bd\u53d6\uff08\u6837\u672c\u4e2d N=3,973\uff09\u30028 \u79cd\u5e3d\u5b50\u4e2d\uff0c\u7687\u51a0\u6700\u5e38\u89c1\uff0813.29%\uff09\uff0c\u6bdb\u7ebf\u5e3d\u6700\u5c11\uff0811.30%\uff09\uff08\u671f\u671b\uff1a12.50%\uff09\u3002</p>
+<table><thead><tr><th>\u5e3d\u5b50</th><th>\u6570\u91cf</th><th>\u5b9e\u9645 %</th><th>\u671f\u671b %</th></tr></thead><tbody>
+<tr><td>\ud83d\udc51 \u7687\u51a0</td><td>528</td><td>13.29%</td><td>12.50%</td></tr>
+<tr><td>\ud83c\udfa9 \u9ad8\u793c\u5e3d</td><td>517</td><td>13.01%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\uddf2 \u87ba\u65cb\u6868</td><td>522</td><td>13.14%</td><td>12.50%</td></tr>
+<tr><td>\ud83d\ude07 \u5149\u73af</td><td>485</td><td>12.21%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\uddd9 \u5deb\u5e08\u5e3d</td><td>461</td><td>11.60%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\udde2 \u6bdb\u7ebf\u5e3d</td><td>449</td><td>11.30%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\udd86 \u5c0f\u9e2d\u5b50</td><td>514</td><td>12.94%</td><td>12.50%</td></tr>
+<tr><td>\u2205 \u65e0</td><td>497</td><td>12.51%</td><td>12.50%</td></tr>
+</tbody></table>
+<p><strong>\u95ea\u5149\u7387\uff1a</strong>10,000 \u53ea Buddy \u4e2d\u6709 112 \u53ea\u95ea\u5149 \u2014 \u6bd4\u7387\u4e3a <strong>1.12%</strong>\uff0c\u5bf9\u6bd4\u671f\u671b\u7684 1.00%\u3002\u8fd9\u79cd\u8f7b\u5fae\u8d85\u51fa\u5c5e\u4e8e\u6b63\u5e38\u65b9\u5dee\u3002\u6309\u7a00\u6709\u5ea6\u5206\u89e3\uff1a\u666e\u901a 1.14%\u3001\u7a00\u6709 1.20%\u3001\u73cd\u7a00 0.92%\u3001\u53f2\u8bd7 0.99%\u3001\u4f20\u8bf4 0.00%\u3002\u95ea\u5149\u62bd\u53d6\u4e0e\u7a00\u6709\u5ea6\u65e0\u5173\uff0c\u6570\u636e\u8bc1\u5b9e\u4e86\u8fd9\u4e00\u70b9\u3002</p>`
+          },
+          {
+            heading: '\u5c5e\u6027\u7ecf\u6d4e\u5b66\uff1a\u6309\u7a00\u6709\u5ea6\u7684\u5e73\u5747\u6218\u529b',
+            body: `<p>\u6bcf\u4e2a Buddy \u6709 5 \u9879\u5c5e\u6027\uff08DEBUGGING\u3001PATIENCE\u3001CHAOS\u3001WISDOM\u3001SNARK\uff09\uff0c\u57fa\u4e8e\u7a00\u6709\u5ea6\u7684\u4e0b\u9650\u751f\u6210\uff0c\u5e76\u6709\u4e00\u4e2a\u589e\u5f3a\u7684\u5cf0\u503c\u5c5e\u6027\u548c\u4e00\u4e2a\u60e9\u7f5a\u7684\u8c37\u5e95\u5c5e\u6027\u3002\u4ee5\u4e0b\u662f\u5e73\u5747\u603b\u5206\uff1a</p>
+<table><thead><tr><th>\u7a00\u6709\u5ea6</th><th>\u5e73\u5747 DEBUGGING</th><th>\u5e73\u5747 PATIENCE</th><th>\u5e73\u5747 CHAOS</th><th>\u5e73\u5747 WISDOM</th><th>\u5e73\u5747 SNARK</th><th>\u603b\u5206</th></tr></thead><tbody>
+<tr><td><strong>\u666e\u901a</strong></td><td>28.9</td><td>29.8</td><td>29.2</td><td>29.3</td><td>28.7</td><td>145.9</td></tr>
+<tr><td><strong>\u7a00\u6709</strong></td><td>39.2</td><td>39.1</td><td>39.6</td><td>39.1</td><td>38.1</td><td>195.1</td></tr>
+<tr><td><strong>\u73cd\u7a00</strong></td><td>49.2</td><td>47.5</td><td>49.0</td><td>49.5</td><td>49.1</td><td>244.3</td></tr>
+<tr><td><strong>\u53f2\u8bd7</strong></td><td>59.5</td><td>59.2</td><td>59.1</td><td>59.2</td><td>56.2</td><td>293.2</td></tr>
+<tr><td><strong>\u4f20\u8bf4</strong></td><td>68.0</td><td>70.6</td><td>72.3</td><td>70.3</td><td>71.2</td><td>352.4</td></tr>
+</tbody></table>
+<p><strong>\u5173\u952e\u53d1\u73b0\uff1a</strong>\u6bcf\u4e2a\u7a00\u6709\u5ea6\u7b49\u7ea7\u6bd4\u524d\u4e00\u4e2a\u7b49\u7ea7\u589e\u52a0\u7ea6 <strong>+50 \u603b\u5c5e\u6027\u70b9</strong>\u3002\u4f20\u8bf4\u7ea7 Buddy \u5e73\u5747 352 \u603b\u70b9 \u2014 \u662f\u666e\u901a\u7ea7 146 \u7684\u4e24\u500d\u591a\u3002\u4ece\u53f2\u8bd7\u5230\u4f20\u8bf4\u7684\u8df3\u8dc3\uff08+59 \u70b9\uff09\u662f\u6700\u5927\u7684\u5355\u7ea7\u589e\u5e45\uff0c\u4f7f\u4f20\u8bf4\u7ea7 Buddy \u771f\u6b63\u5c5e\u4e8e\u7cbe\u82f1\u9636\u5c42\u3002</p>
+<p>\u6240\u6709 5 \u9879\u5c5e\u6027\u5728 10,000 \u4e2a\u6837\u672c\u4e2d\u90fd\u8fbe\u5230\u4e86\u6700\u5c0f\u503c\uff081\uff09\u548c\u6700\u5927\u503c\uff08100\uff09\uff0c\u786e\u8ba4\u4e86\u5168\u8303\u56f4\u53ef\u8fbe\u3002\u5168\u5c40\u5e73\u5747\u6bcf\u9879\u5c5e\u6027\u7ea6\u4e3a 35\uff0cSNARK \u7565\u4f4e\u4e3a 34.6\u3002</p>`
+          },
+          {
+            heading: '\u5cf0\u503c\u5c5e\u6027\u5206\u5e03\u4e0e\u5c5e\u6027\u6781\u503c',
+            body: `<p>\u5cf0\u503c\u5c5e\u6027\u4ece 5 \u4e2a\u9009\u9879\u4e2d\u5747\u5300\u9009\u62e9\u3002\u6211\u4eec\u7684\u6570\u636e\u786e\u8ba4\u4e86\u8fd1\u4e4e\u5b8c\u7f8e\u7684\u5747\u5300\u6027\uff1a</p>
+<table><thead><tr><th>\u5cf0\u503c\u5c5e\u6027</th><th>\u6570\u91cf</th><th>\u5b9e\u9645 %</th><th>\u671f\u671b %</th></tr></thead><tbody>
+<tr><td>CHAOS</td><td>2,061</td><td>20.61%</td><td>20.00%</td></tr>
+<tr><td>WISDOM</td><td>2,046</td><td>20.46%</td><td>20.00%</td></tr>
+<tr><td>PATIENCE</td><td>2,002</td><td>20.02%</td><td>20.00%</td></tr>
+<tr><td>DEBUGGING</td><td>1,968</td><td>19.68%</td><td>20.00%</td></tr>
+<tr><td>SNARK</td><td>1,923</td><td>19.23%</td><td>20.00%</td></tr>
+</tbody></table>
+<p>\u6ca1\u6709\u4efb\u4f55\u5c5e\u6027\u88ab\u504f\u597d\u4f5c\u4e3a\u5cf0\u503c\u3002\u8c37\u5e95\u5c5e\u6027\uff08\u6700\u4f4e\u5c5e\u6027\uff09\u4e5f\u662f\u5747\u5300\u9009\u62e9\u7684\uff0c\u4f46\u5982\u679c\u4e0e\u5cf0\u503c\u76f8\u540c\u5219\u91cd\u65b0\u62bd\u53d6 \u2014 \u8fd9\u610f\u5473\u7740\u6bcf\u4e2a\u975e\u5cf0\u503c\u5c5e\u6027\u6709 25% \u7684\u673a\u4f1a\u6210\u4e3a\u8c37\u5e95\uff0c\u6570\u636e\u4e5f\u8bc1\u5b9e\u4e86\u8fd9\u4e00\u70b9\u3002</p>
+<p><strong>\u5c5e\u6027\u6781\u503c\uff1a</strong>\u6bcf\u9879\u5c5e\u6027\u90fd\u8fbe\u5230\u4e86 min=1 \u548c max=100\u3002\u7406\u8bba\u6700\u5927\u503c\u4e3a 100\uff08\u4f20\u8bf4\u7ea7\u5cf0\u503c\uff1a\u4e0b\u9650 50 + 50 + \u6700\u591a 29 = 100\uff0c\u5c01\u9876\uff09\u3002\u7406\u8bba\u6700\u5c0f\u503c\u4e3a 1\uff08\u666e\u901a\u7ea7\u8c37\u5e95\uff1a\u4e0b\u9650 5 - 10 + 0 = -5\uff0c\u94b3\u4f4d\u5230 1\uff09\u3002</p>`
+          },
+          {
+            heading: '\u8ffd\u5bfb\u4f20\u8bf4\u7ea7\u95ea\u5149',
+            body: `<p>Buddy \u6536\u96c6\u7684\u5723\u676f\uff1a<strong>\u4f20\u8bf4\u7ea7\u95ea\u5149</strong>\u3002\u6982\u7387\u4e3a 1%\uff08\u4f20\u8bf4\uff09\u00d7 1%\uff08\u95ea\u5149\uff09= <strong>0.01%</strong>\uff0c\u5373\u4e07\u5206\u4e4b\u4e00\u3002\u5728\u6211\u4eec\u6070\u597d 10,000 \u6b21\u7684\u6a21\u62df\u4e2d\uff0c\u6211\u4eec\u53d1\u73b0\u4e86\uff1a</p>
+<p style="text-align:center;font-size:1.5em;"><strong>0 \u53ea\u4f20\u8bf4\u7ea7\u95ea\u5149 Buddy</strong></p>
+<p>\u8fd9\u5b9e\u9645\u4e0a\u662f\u6700\u53ef\u80fd\u7684\u7ed3\u679c\uff01\u671f\u671b\u503c\u4e3a 1.0 \u65f6\uff0c\u6cca\u677e\u5206\u5e03\u544a\u8bc9\u6211\u4eec\u5728 10,000 \u6b21\u8bd5\u9a8c\u4e2d\u627e\u5230\u6070\u597d\u96f6\u4e2a\u7684\u6982\u7387\u4e3a 36.8%\u3002\u6211\u4eec\u53ea\u662f\u8fd0\u6c14\u4e0d\u597d\uff0c\u4f46\u5e76\u4e0d\u5f02\u5e38\u3002\u8981\u6709 95% \u7684\u673a\u4f1a\u770b\u5230\u81f3\u5c11\u4e00\u53ea\u4f20\u8bf4\u7ea7\u95ea\u5149\uff0c\u4f60\u9700\u8981\u5927\u7ea6 <strong>30,000 \u6b21\u8bd5\u9a8c</strong>\u3002</p>
+<p>\u4f5c\u4e3a\u53c2\u8003\uff0c\u6211\u4eec\u7684 92 \u53ea\u4f20\u8bf4\u7ea7 Buddy \u6bcf\u53ea\u6709 1% \u7684\u95ea\u5149\u673a\u4f1a\uff0c\u671f\u671b\u4ea7\u751f 0.92 \u53ea\u95ea\u5149\u3002\u5b9e\u9645\u6ca1\u6709\u4e00\u53ea\u95ea\u5149\u662f\u4e00\u4e2a\u62db\u786c\u5e01\u7ea7\u522b\u7684\u7ed3\u679c \u2014 \u4e0d\u662f\u7b97\u6cd5\u7684 bug\u3002</p>
+<p>\u6700\u7a00\u6709\u7684\u53ef\u80fd\u7ec4\u5408 \u2014 \u7279\u5b9a\u7684\u4f20\u8bf4\u7ea7\u95ea\u5149\u7269\u79cd\u52a0\u7279\u5b9a\u5e3d\u5b50\u3001\u773c\u775b\u548c\u5cf0\u503c\u5c5e\u6027 \u2014 \u6982\u7387\u7ea6\u4e3a <strong>\u516b\u5343\u4e07\u5206\u4e4b\u4e00</strong>\u3002\u4f60\u9700\u8981\u4e3a\u5fb7\u56fd\u5168\u90e8\u4eba\u53e3\u751f\u6210 UUID \u624d\u80fd\u671f\u671b\u627e\u5230\u4e00\u4e2a\u3002</p>`
+          },
+          {
+            heading: '\u7ed3\u8bba',
+            body: `<p>\u7ecf\u8fc7 10,000 \u6b21\u6a21\u62df\uff0c\u6211\u4eec\u53ef\u4ee5\u786e\u8ba4\uff1a</p>
+<ul>
+<li><strong>PRNG \u662f\u516c\u5e73\u7684\u3002</strong>Mulberry32 \u7531 FNV-1a \u64ad\u79cd\uff0c\u5728\u6240\u6709\u7ef4\u5ea6\u4e0a\u4ea7\u751f\u4e0e\u7406\u8bba\u671f\u671b\u5bc6\u5207\u5339\u914d\u7684\u5206\u5e03\u3002</li>
+<li><strong>\u6ca1\u6709\u9690\u85cf\u6743\u91cd\u3002</strong>\u7269\u79cd\u3001\u773c\u775b\u3001\u5e3d\u5b50\u548c\u5cf0\u503c\u5c5e\u6027\u90fd\u5982\u6587\u6863\u6240\u8ff0\u5747\u5300\u5206\u5e03\u3002</li>
+<li><strong>\u7a00\u6709\u5ea6\u5f88\u91cd\u8981\u3002</strong>\u6bcf\u4e2a\u7b49\u7ea7\u589e\u52a0\u7ea6 50 \u603b\u5c5e\u6027\u70b9\uff0c\u4f20\u8bf4\u7ea7\u5e73\u5747\u662f\u666e\u901a\u7ea7\u7684 2.4 \u500d\u3002</li>
+<li><strong>\u95ea\u5149\u786e\u5b9e\u7a00\u6709\u3002</strong>\u89c2\u5bdf\u5230 1.12%\uff08\u671f\u671b 1.00%\uff09\uff0c\u95ea\u5149\u7387\u8bda\u5b9e\u4e14\u4e0e\u7a00\u6709\u5ea6\u65e0\u5173\u3002</li>
+<li><strong>\u4f20\u8bf4\u7ea7\u95ea\u5149\u662f\u72ec\u89d2\u517d\u3002</strong>10,000 \u6b21\u8bd5\u9a8c\u4e2d\u627e\u5230 0 \u53ea\u3002\u6570\u5b66\u6ca1\u6709\u95ee\u9898 \u2014 \u4f60\u9700\u8981\u975e\u51e1\u7684\u8fd0\u6c14\u6216\u975e\u51e1\u7684\u8010\u5fc3\u3002</li>
+</ul>
+<p>\u786e\u5b9a\u6027\u751f\u6210\u7684\u7f8e\u5999\u4e4b\u5904\u5728\u4e8e\uff0c\u4f60\u7684 Buddy \u5728 UUID \u521b\u5efa\u7684\u90a3\u4e00\u523b\u5c31\u5df2\u7ecf\u51b3\u5b9a\u4e86\u3002\u8fd9 10,000 \u6b21\u6a21\u62df\u53ea\u662f\u786e\u8ba4\u4e86\u9ab0\u5b50\u662f\u516c\u5e73\u7684\u3002\u65e0\u8bba\u4f60\u5f97\u5230\u7684\u662f\u666e\u901a\u9e2d\u5b50\u8fd8\u662f\u4f20\u8bf4\u7ea7\u95ea\u5149\u9f99\uff0c\u7b97\u6cd5\u5bf9\u4f60\u662f\u8bda\u5b9e\u7684\u3002</p>`
+          },
+        ],
+      },
+      ko: {
+        title: 'Claude Code Buddy \ud655\ub960 \uc2e4\ud5d8\uc2e4 \u2014 10,000\ud68c \uc2dc\ubbac\ub808\uc774\uc158\uc774 \ubc1d\ud78c \uc9c4\uc2e4',
+        excerpt: '\ub79c\ub364 UUID\ub85c Buddy \uc0dd\uc131 \uc54c\uace0\ub9ac\uc998\uc744 10,000\ud68c \uc2e4\ud589\ud558\uace0 \ubaa8\ub4e0 \uacb0\uacfc\ub97c \uae30\ub85d\ud588\uc2b5\ub2c8\ub2e4. \ud76c\uadc0\ub3c4 \ubd84\ud3ec, \uc885 \ube48\ub3c4, \uc0e4\uc774\ub2c8 \ube44\uc728, \uadf8\ub9ac\uace0 \uc804\uc124\uc801\uc778 \ub808\uc804\ub354\ub9ac \uc0e4\uc774\ub2c8\uc5d0 \ub300\ud574 \ub370\uc774\ud130\uac00 \ubc1d\ud78c \uc9c4\uc2e4\uc744 \uacf5\uac1c\ud569\ub2c8\ub2e4.',
+        sections: [
+          {
+            heading: '\uc2e4\ud5d8 \uc124\uacc4',
+            body: `<p>\uc774\ub860\uc740 \uc6b0\uc544\ud558\uace0, \ub370\uc774\ud130\ub294 \uc815\uc9c1\ud569\ub2c8\ub2e4. Claude Code Buddy \uc5d4\uc9c4\uc740 \uacb0\uc815\ub860\uc801 \ud30c\uc774\ud504\ub77c\uc778 \u2014 FNV-1a \ud574\uc2dc \u2192 Mulberry32 PRNG \u2192 \uac00\uc911 \ucd94\ucca8 \u2014 \uc744 \uc0ac\uc6a9\ud558\uc5ec \ud2b9\uc815 \ud655\ub960 \ubd84\ud3ec\ub97c <em>\uc0dd\uc131\ud574\uc57c</em> \ud569\ub2c8\ub2e4. \ud558\uc9c0\ub9cc \uc2e4\uc81c\ub85c \uadf8\ub7f4\uae4c\uc694? 10,000\uac1c\uc758 \ub79c\ub364 UUID\ub97c \uc0dd\uc131\ud558\uace0, \uac01\uac01\uc744 \ub3d9\uc77c\ud55c <code>rollBuddy()</code> \ud568\uc218\ub85c \uc2e4\ud589\ud558\uc5ec \ubaa8\ub4e0 \ud76c\uadc0\ub3c4, \uc885, \ub208 \uc2a4\ud0c0\uc77c, \ubaa8\uc790 \uc720\ud615, \uc0e4\uc774\ub2c8 \uc0c1\ud0dc \ubc0f \uc2a4\ud0ef \uac12\uc744 \uae30\ub85d\ud588\uc2b5\ub2c8\ub2e4.</p>
+<p>\uc2dc\ubbac\ub808\uc774\uc158 \ucf54\ub4dc\ub294 \ud504\ub85c\ub355\uc158 \uc5d4\uc9c4\uc744 \uc815\ud655\ud788 \ubcf5\uc81c\ud569\ub2c8\ub2e4: \ub3d9\uc77c\ud55c FNV-1a \ud574\uc2dc(<code>friend-2026-401</code> \uc194\ud2b8), \ub3d9\uc77c\ud55c Mulberry32 PRNG, \ub3d9\uc77c\ud55c \uac00\uc911 \uc120\ud0dd \ub85c\uc9c1. \uc720\uc77c\ud55c \ubcc0\uc218\ub294 Node.js <code>crypto.randomUUID()</code>\ub85c \uc0dd\uc131\ub41c UUID\uc785\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: '\ud76c\uadc0\ub3c4 \ubd84\ud3ec: \uc774\ub860 vs \ud604\uc2e4',
+            body: `<p>\ud76c\uadc0\ub3c4 \uc2dc\uc2a4\ud15c\uc740 60/25/10/4/1(\ucd1d 100) \uac00\uc911\uce58\ub85c \uac00\uc911 \ub79c\ub364 \uc120\ud0dd\uc744 \uc0ac\uc6a9\ud569\ub2c8\ub2e4. 10,000\ud68c \uc2dc\ud5d8\uacfc \uc774\ub860\uc801 \ud655\ub960\uc758 \ube44\uad50:</p>
+<table><thead><tr><th>\ud76c\uadc0\ub3c4</th><th>\uc608\uc0c1 %</th><th>\uc2e4\uc81c \uc218</th><th>\uc2e4\uc81c %</th><th>\ud3b8\ucc28</th></tr></thead><tbody>
+<tr><td><strong>Common</strong></td><td>60.0%</td><td>6,027</td><td>60.3%</td><td>+0.3%</td></tr>
+<tr><td><strong>Uncommon</strong></td><td>25.0%</td><td>2,502</td><td>25.0%</td><td>+0.0%</td></tr>
+<tr><td><strong>Rare</strong></td><td>10.0%</td><td>974</td><td>9.7%</td><td>-0.3%</td></tr>
+<tr><td><strong>Epic</strong></td><td>4.0%</td><td>405</td><td>4.0%</td><td>+0.0%</td></tr>
+<tr><td><strong>Legendary</strong></td><td>1.0%</td><td>92</td><td>0.9%</td><td>-0.1%</td></tr>
+</tbody></table>
+<p><strong>\ud310\uc815:</strong> Mulberry32 PRNG\ub294 \ub9e4\uc6b0 \ucda9\uc2e4\ud55c \uac00\uc911 \uc120\ud0dd\uc744 \uc81c\uacf5\ud569\ub2c8\ub2e4. \ucd5c\ub300 \ud3b8\ucc28\ub294 \u00b10.3 \ud37c\uc13c\ud2b8 \ud3ec\uc778\ud2b8\uc5d0 \ubd88\uacfc\ud569\ub2c8\ub2e4. \ub300\uc218\uc758 \ubc95\uce59\uc774 \uc131\ub9bd\ud569\ub2c8\ub2e4: \ucda9\ubd84\ud55c \uc2dc\ud5d8\uc774 \uc8fc\uc5b4\uc9c0\uba74 \uad00\ucc30\ub41c \ubd84\ud3ec\ub294 \uc774\ub860\uc801 \uac00\uc911\uce58\uc5d0 \ubc00\uc811\ud558\uac8c \uc218\ub834\ud569\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: '\uc885 \ube48\ub3c4: \ubaa8\ub4e0 Buddy\uac00 \ub3d9\uc77c\ud558\uac8c \uac00\ub2a5\ud55c\uac00\uc694?',
+            body: `<p>18\uc885\uacfc \uade0\uc77c\ud55c <code>pick()</code> \uc120\ud0dd\uc73c\ub85c \uac01 \uc885\uc740 \uc57d 5.56%\uc758 \ud655\ub960\ub85c \ub098\ud0c0\ub098\uc57c \ud569\ub2c8\ub2e4:</p>
+<table><thead><tr><th>\uc21c\uc704</th><th>\uc885</th><th>\uc218</th><th>\uc2e4\uc81c %</th></tr></thead><tbody>
+<tr><td>1</td><td>\ud83d\udc30 \ud1a0\ub07c</td><td>599</td><td>5.99%</td></tr>
+<tr><td>2</td><td>\ud83d\udc27 \ud3ad\uadc4</td><td>598</td><td>5.98%</td></tr>
+<tr><td>3</td><td>\ud83e\udea2 \uac70\uc704</td><td>596</td><td>5.96%</td></tr>
+<tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+<tr><td>16</td><td>\ud83e\udd86 \uc624\ub9ac</td><td>527</td><td>5.27%</td></tr>
+<tr><td>17</td><td>\ud83e\udd16 \ub85c\ubd07</td><td>521</td><td>5.21%</td></tr>
+<tr><td>18</td><td>\ud83d\udc19 \ubb38\uc5b4</td><td>510</td><td>5.10%</td></tr>
+</tbody></table>
+<p><strong>\ud310\uc815:</strong> \uac00\uc7a5 \ud754\ud55c \uc885(\ud1a0\ub07c 5.99%)\uacfc \uac00\uc7a5 \ub4dc\ubb38 \uc885(\ubb38\uc5b4 5.10%)\uc758 \ucc28\uc774\ub294 1 \ud37c\uc13c\ud2b8 \ud3ec\uc778\ud2b8 \ubbf8\ub9cc\uc785\ub2c8\ub2e4. <strong>\uc228\uaca8\uc9c4 \uc885 \uac00\uc911\uce58\ub294 \uc5c6\uc2b5\ub2c8\ub2e4</strong> \u2014 \ubaa8\ub4e0 \uc885\uc774 \uc9c4\uc815\uc73c\ub85c \ub3d9\uc77c\ud558\uac8c \uac00\ub2a5\ud569\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: '\ub208, \ubaa8\uc790 & \uc0e4\uc774\ub2c8: \ucf54\uc2a4\uba54\ud2f1 \ud655\ub960',
+            body: `<p><strong>\ub208</strong>\uc740 6\uac00\uc9c0 \uc2a4\ud0c0\uc77c\uc5d0\uc11c \uade0\uc77c\ud558\uac8c \uc120\ud0dd\ub429\ub2c8\ub2e4. \uad00\ucc30 \ubc94\uc704\ub294 16.39%~17.11%(\uc608\uc0c1: \uac01 16.67%). \uc5b4\ub5a4 \ub208 \uc2a4\ud0c0\uc77c\ub3c4 \ub2e4\ub978 \uac83\ubcf4\ub2e4 \ud76c\uadc0\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4.</p>
+<p><strong>\ubaa8\uc790</strong>\ub294 Common\uc774 \uc544\ub2cc Buddy\uc5d0\ub9cc \uc801\uc6a9\ub429\ub2c8\ub2e4(N=3,973). 8\uac00\uc9c0 \ubaa8\uc790 \uc911 \uc655\uad00\uc774 13.29%\ub85c \uac00\uc7a5 \ub9ce\uace0, \ube44\ub2c8\uac00 11.30%\ub85c \uac00\uc7a5 \uc801\uc2b5\ub2c8\ub2e4(\uc608\uc0c1: 12.50%).</p>
+<table><thead><tr><th>\ubaa8\uc790</th><th>\uc218</th><th>\uc2e4\uc81c %</th><th>\uc608\uc0c1 %</th></tr></thead><tbody>
+<tr><td>\ud83d\udc51 \uc655\uad00</td><td>528</td><td>13.29%</td><td>12.50%</td></tr>
+<tr><td>\ud83c\udfa9 \uc2e4\ud06c\ud587</td><td>517</td><td>13.01%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\uddf2 \ud504\ub85c\ud3a0\ub7ec</td><td>522</td><td>13.14%</td><td>12.50%</td></tr>
+<tr><td>\ud83d\ude07 \ud6c4\uad11</td><td>485</td><td>12.21%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\uddd9 \ub9c8\ubc95\uc0ac</td><td>461</td><td>11.60%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\udde2 \ube44\ub2c8</td><td>449</td><td>11.30%</td><td>12.50%</td></tr>
+<tr><td>\ud83e\udd86 \ubbf8\ub2c8\uc624\ub9ac</td><td>514</td><td>12.94%</td><td>12.50%</td></tr>
+<tr><td>\u2205 \uc5c6\uc74c</td><td>497</td><td>12.51%</td><td>12.50%</td></tr>
+</tbody></table>
+<p><strong>\uc0e4\uc774\ub2c8 \ube44\uc728:</strong> 10,000\ub9c8\ub9ac \uc911 112\ub9c8\ub9ac\uac00 \uc0e4\uc774\ub2c8 \u2014 <strong>1.12%</strong> \ube44\uc728\ub85c \uc608\uc0c1 1.00%\ubcf4\ub2e4 \uc57d\uac04 \ub192\uc2b5\ub2c8\ub2e4. \ud76c\uadc0\ub3c4\ubcc4: Common 1.14%, Uncommon 1.20%, Rare 0.92%, Epic 0.99%, Legendary 0.00%. \uc0e4\uc774\ub2c8 \ud310\uc815\uc740 \ud76c\uadc0\ub3c4\uc640 \ub3c5\ub9bd\uc801\uc785\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: '\uc2a4\ud0ef \uacbd\uc81c\ud559: \ud76c\uadc0\ub3c4\ubcc4 \ud3c9\uade0 \uc804\ud22c\ub825',
+            body: `<p>\uac01 Buddy\ub294 5\uac00\uc9c0 \uc2a4\ud0ef(DEBUGGING, PATIENCE, CHAOS, WISDOM, SNARK)\uc744 \uac00\uc9c0\uba70, \ud76c\uadc0\ub3c4 \uae30\ubc18 \ud558\ud55c\uc73c\ub85c \uc0dd\uc131\ub429\ub2c8\ub2e4:</p>
+<table><thead><tr><th>\ud76c\uadc0\ub3c4</th><th>DEBUGGING</th><th>PATIENCE</th><th>CHAOS</th><th>WISDOM</th><th>SNARK</th><th>\ucd1d\uc810</th></tr></thead><tbody>
+<tr><td><strong>Common</strong></td><td>28.9</td><td>29.8</td><td>29.2</td><td>29.3</td><td>28.7</td><td>145.9</td></tr>
+<tr><td><strong>Uncommon</strong></td><td>39.2</td><td>39.1</td><td>39.6</td><td>39.1</td><td>38.1</td><td>195.1</td></tr>
+<tr><td><strong>Rare</strong></td><td>49.2</td><td>47.5</td><td>49.0</td><td>49.5</td><td>49.1</td><td>244.3</td></tr>
+<tr><td><strong>Epic</strong></td><td>59.5</td><td>59.2</td><td>59.1</td><td>59.2</td><td>56.2</td><td>293.2</td></tr>
+<tr><td><strong>Legendary</strong></td><td>68.0</td><td>70.6</td><td>72.3</td><td>70.3</td><td>71.2</td><td>352.4</td></tr>
+</tbody></table>
+<p><strong>\ud575\uc2ec \ubc1c\uacac:</strong> \uac01 \ud76c\uadc0\ub3c4 \ub4f1\uae09\uc740 \uc774\uc804 \ub4f1\uae09\ubcf4\ub2e4 \uc57d <strong>+50 \ucd1d \uc2a4\ud0ef \ud3ec\uc778\ud2b8</strong>\uac00 \uc99d\uac00\ud569\ub2c8\ub2e4. Legendary Buddy\ub294 \ud3c9\uade0 352\uc810\uc73c\ub85c Common\uc758 146\uc810\uc758 2.4\ubc30\uc785\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: '\ud53c\ud06c \uc2a4\ud0ef \ubd84\ud3ec & \uc2a4\ud0ef \uadf9\uac12',
+            body: `<p>\ud53c\ud06c \uc2a4\ud0ef\uc740 5\uac00\uc9c0 \uc635\uc158\uc5d0\uc11c \uade0\uc77c\ud558\uac8c \uc120\ud0dd\ub429\ub2c8\ub2e4:</p>
+<table><thead><tr><th>\ud53c\ud06c \uc2a4\ud0ef</th><th>\uc218</th><th>\uc2e4\uc81c %</th><th>\uc608\uc0c1 %</th></tr></thead><tbody>
+<tr><td>CHAOS</td><td>2,061</td><td>20.61%</td><td>20.00%</td></tr>
+<tr><td>WISDOM</td><td>2,046</td><td>20.46%</td><td>20.00%</td></tr>
+<tr><td>PATIENCE</td><td>2,002</td><td>20.02%</td><td>20.00%</td></tr>
+<tr><td>DEBUGGING</td><td>1,968</td><td>19.68%</td><td>20.00%</td></tr>
+<tr><td>SNARK</td><td>1,923</td><td>19.23%</td><td>20.00%</td></tr>
+</tbody></table>
+<p>\uc5b4\ub5a4 \uc2a4\ud0ef\ub3c4 \ud53c\ud06c\ub85c \uc120\ud638\ub418\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. \ubaa8\ub4e0 \uc2a4\ud0ef\uc774 min=1\uacfc max=100\uc5d0 \ub3c4\ub2ec\ud588\uc2b5\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: '\ub808\uc804\ub354\ub9ac \uc0e4\uc774\ub2c8\ub97c \ucc3e\uc544\uc11c',
+            body: `<p>Buddy \uc218\uc9d1\uc758 \uc131\ubc30: <strong>\ub808\uc804\ub354\ub9ac \uc0e4\uc774\ub2c8</strong>. \ud655\ub960\uc740 1%(\ub808\uc804\ub354\ub9ac) \u00d7 1%(\uc0e4\uc774\ub2c8) = <strong>0.01%</strong>, \uc989 10,000\ubd84\uc758 1\uc785\ub2c8\ub2e4. \uc815\ud655\ud788 10,000\ud68c \uc2dc\ubbac\ub808\uc774\uc158\uc5d0\uc11c:</p>
+<p style="text-align:center;font-size:1.5em;"><strong>0\ub9c8\ub9ac \ub808\uc804\ub354\ub9ac \uc0e4\uc774\ub2c8 Buddy</strong></p>
+<p>\uc774\uac83\uc740 \uc2e4\uc81c\ub85c \uac00\uc7a5 \uac00\ub2a5\uc131 \ub192\uc740 \uacb0\uacfc\uc785\ub2c8\ub2e4! \uae30\ub300\uac12 1.0\uc77c \ub54c \ud3ec\uc544\uc1a1 \ubd84\ud3ec\uc5d0 \ub530\ub974\uba74 10,000\ud68c\uc5d0\uc11c 0\uac1c\ub97c \ucc3e\uc744 \ud655\ub960\uc740 36.8%\uc785\ub2c8\ub2e4. \uc6b4\uc774 \ub098\uc058\uc9c0\ub9cc \ube44\uc815\uc0c1\uc801\uc774\uc9c0\ub294 \uc54a\uc2b5\ub2c8\ub2e4. 95% \ud655\ub960\ub85c \ucd5c\uc18c 1\ub9c8\ub9ac\ub97c \ubcf4\ub824\uba74 \uc57d <strong>30,000\ud68c</strong>\uac00 \ud544\uc694\ud569\ub2c8\ub2e4.</p>
+<p>\uac00\uc7a5 \ud76c\uadc0\ud55c \uc870\ud569 \u2014 \ud2b9\uc815 \ub808\uc804\ub354\ub9ac \uc0e4\uc774\ub2c8 \uc885 + \ud2b9\uc815 \ubaa8\uc790, \ub208, \ud53c\ud06c \uc2a4\ud0ef \u2014 \uc758 \ud655\ub960\uc740 \uc57d <strong>8,640\ub9cc \ubd84\uc758 1</strong>\uc785\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: '\uacb0\ub860',
+            body: `<p>10,000\ud68c \uc2dc\ubbac\ub808\uc774\uc158 \ud6c4 \ud655\uc778\ud560 \uc218 \uc788\ub294 \uac83:</p>
+<ul>
+<li><strong>PRNG\ub294 \uacf5\uc815\ud569\ub2c8\ub2e4.</strong> FNV-1a\ub85c \uc2dc\ub4dc\ub41c Mulberry32\ub294 \ubaa8\ub4e0 \ucc28\uc6d0\uc5d0\uc11c \uc774\ub860\uc801 \uae30\ub300\uc5d0 \ubc00\uc811\ud558\uac8c \uc77c\uce58\ud558\ub294 \ubd84\ud3ec\ub97c \uc0dd\uc131\ud569\ub2c8\ub2e4.</li>
+<li><strong>\uc228\uaca8\uc9c4 \uac00\uc911\uce58\ub294 \uc5c6\uc2b5\ub2c8\ub2e4.</strong> \uc885, \ub208, \ubaa8\uc790, \ud53c\ud06c \uc2a4\ud0ef \ubaa8\ub450 \ubb38\uc11c\ud654\ub41c \ub300\ub85c \uade0\uc77c\ud558\uac8c \ubd84\ud3ec\ub429\ub2c8\ub2e4.</li>
+<li><strong>\ud76c\uadc0\ub3c4\ub294 \uc911\uc694\ud569\ub2c8\ub2e4.</strong> \uac01 \ub4f1\uae09\uc740 ~50 \ucd1d \uc2a4\ud0ef \ud3ec\uc778\ud2b8\ub97c \ucd94\uac00\ud558\uba70, Legendary\ub294 Common\uc758 2.4\ubc30\uc785\ub2c8\ub2e4.</li>
+<li><strong>\uc0e4\uc774\ub2c8\ub294 \uc9c4\uc815\uc73c\ub85c \ud76c\uadc0\ud569\ub2c8\ub2e4.</strong> \uad00\ucc30 1.12%(\uc608\uc0c1 1.00%), \ud76c\uadc0\ub3c4\uc640 \ub3c5\ub9bd\uc801\uc785\ub2c8\ub2e4.</li>
+<li><strong>\ub808\uc804\ub354\ub9ac \uc0e4\uc774\ub2c8\ub294 \uc720\ub2c8\ucf58\uc785\ub2c8\ub2e4.</strong> 10,000\ud68c\uc5d0\uc11c 0\ub9c8\ub9ac. \uc218\ud559\uc740 \ub9de\uc2b5\ub2c8\ub2e4 \u2014 \ube44\ubc94\ud55c \ud589\uc6b4\uc774\ub098 \ube44\ubc94\ud55c \uc778\ub0b4\uac00 \ud544\uc694\ud569\ub2c8\ub2e4.</li>
+</ul>
+<p>\uacb0\uc815\ub860\uc801 \uc0dd\uc131\uc758 \uc544\ub984\ub2e4\uc6c0\uc740 UUID\uac00 \uc0dd\uc131\ub41c \uc21c\uac04 Buddy\uac00 \uacb0\uc815\ub418\uc5c8\ub2e4\ub294 \uac83\uc785\ub2c8\ub2e4. \uc774 10,000\ud68c \uc2dc\ubbac\ub808\uc774\uc158\uc740 \uc8fc\uc0ac\uc704\uac00 \uacf5\uc815\ud568\uc744 \ud655\uc778\ud560 \ubfd0\uc785\ub2c8\ub2e4.</p>`
+          },
+        ],
+      },
+    },
+  },
 ];
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {

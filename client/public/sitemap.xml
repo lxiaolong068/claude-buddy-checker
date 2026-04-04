@@ -338,4 +338,16 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/claude-buddy-species-bestiary-origins-lore" />
   </url>
 
+  <!-- Blog: Claude Buddy Probability Lab - 10,000 Simulations -->
+  <url>
+    <loc>https://claudebuddy.art/blog/claude-buddy-probability-lab-10000-simulations</loc>
+    <lastmod>2026-04-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://claudebuddy.art/blog/claude-buddy-probability-lab-10000-simulations" />
+    <xhtml:link rel="alternate" hreflang="zh" href="https://claudebuddy.art/blog/claude-buddy-probability-lab-10000-simulations" />
+    <xhtml:link rel="alternate" hreflang="ko" href="https://claudebuddy.art/blog/claude-buddy-probability-lab-10000-simulations" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/blog/claude-buddy-probability-lab-10000-simulations" />
+  </url>
+
 </urlset>

@@ -224,6 +224,14 @@ export const BLOG_OG: Record<string, BlogOgData> = {
     readingTime: 12,
     publishedAt: "2026-04-05",
   },
+  "claude-buddy-probability-lab-10000-simulations": {
+    title: "Claude Code Buddy Probability Lab — Truths Revealed by 10,000 Simulations",
+    metaDescription: "We ran the Buddy generation algorithm 10,000 times with random UUIDs. See real data on rarity distributions, species frequencies, shiny rates, stat averages, and the hunt for Legendary Shiny.",
+    excerpt: "Theory says Legendary is 1-in-100 and Shiny is 1-in-100. But does the PRNG actually deliver? We ran 10,000 simulations and recorded every outcome.",
+    tags: ["#simulation", "#data", "#probability", "#statistics", "#experiment"],
+    readingTime: 10,
+    publishedAt: "2026-04-05",
+  },
 };
 
 // ── OgMeta helper ─────────────────────────────────────────────────────────────
