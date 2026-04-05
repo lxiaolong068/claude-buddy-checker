@@ -163,6 +163,10 @@ export const ko: typeof en = {
     close: "닫기",
     demoNote: "스탯은 경향을 나타냅니다",
   },
+  dailySpecies: {
+    header: "오늘의_추천_종",
+    viewProfile: "상세 보기",
+  },
   footer: {
     line1: "커뮤니티에서 제작. Anthropic과 무관합니다.",
     line2: "모든 계산은 로컬에서 수행됩니다. 데이터를 수집하거나 전송하지 않습니다.",
@@ -231,6 +235,8 @@ export const ko: typeof en = {
     faqNote: "이 FAQ는 Claude Code Buddy 시스템 메커니즘을 기반으로 작성되었습니다.",
     tryChecker: "당신의 Buddy가",
     tryCheckerBtn: "BUDDY 확인하기",
+    randomNext: "랜덤 다음",
+    randomNextHint: "다른 랜덤 종을 탐색하세요",
     errorNotFound: "오류 404: 종을 찾을 수 없습니다",
     categoryAnimal: "동물",
     categoryCreature: "생물",

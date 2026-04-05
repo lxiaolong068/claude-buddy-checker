@@ -163,6 +163,10 @@ export const zh: typeof en = {
     close: "关闭",
     demoNote: "属性值仅供参考（以主属性为基准）",
   },
+  dailySpecies: {
+    header: "每日推荐物种",
+    viewProfile: "查看详情",
+  },
   footer: {
     line1: "由社区构建，与 Anthropic 无关。",
     line2: "所有计算均在本地完成，不收集或传输任何数据。",
@@ -231,6 +235,8 @@ export const zh: typeof en = {
     faqNote: "以下常见问题基于 Claude Code Buddy 系统机制整理。",
     tryChecker: "查看你的 Buddy 是否是",
     tryCheckerBtn: "查询你的 BUDDY",
+    randomNext: "随机下一个",
+    randomNextHint: "随机探索另一个物种",
     errorNotFound: "错误 404：物种未找到",
     categoryAnimal: "动物",
     categoryCreature: "生物",

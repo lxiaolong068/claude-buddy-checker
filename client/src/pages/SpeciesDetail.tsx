@@ -5,10 +5,10 @@
  * Includes: Share card generation via Canvas API
  */
 
-import { useParams, Link } from "wouter";
+import { useParams, Link, useLocation } from "wouter";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useI18n } from "@/contexts/I18nContext";
-import { SPECIES_DATA, type SpeciesInfo } from "@/lib/species-data";
+import { SPECIES_DATA, ALL_SPECIES_SLUGS, type SpeciesInfo } from "@/lib/species-data";
 import {
   BODIES,
   RARITIES,
@@ -53,8 +53,22 @@ export default function SpeciesDetail() {
   const params = useParams<{ slug: string }>();
   const slug = params.slug as Species;
   const { t, locale } = useI18n();
+  const [, navigate] = useLocation();
   const [mounted, setMounted] = useState(false);
   const [shareData, setShareData] = useState<ShareCardSpeciesData | null>(null);
+  const [isRolling, setIsRolling] = useState(false);
+
+  const handleRandomNext = useCallback(() => {
+    if (isRolling) return;
+    setIsRolling(true);
+    // Pick a random species that is different from the current one
+    const others = ALL_SPECIES_SLUGS.filter((s) => s !== slug);
+    const target = others[Math.floor(Math.random() * others.length)];
+    setTimeout(() => {
+      setIsRolling(false);
+      navigate(`/species/${target}`);
+    }, 500);
+  }, [isRolling, slug, navigate]);
 
   const info = SPECIES_DATA[slug];
 
@@ -499,7 +513,7 @@ export default function SpeciesDetail() {
           />
         </section>
 
-        {/* CTA: Check Your Buddy */}
+        {/* CTA: Check Your Buddy + Random Next */}
         <section
           className={`transition-all duration-700 delay-[450ms] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
@@ -508,12 +522,32 @@ export default function SpeciesDetail() {
               {t("speciesDetail.tryChecker")}{" "}
               <span className="text-[#33ff33] font-bold">{speciesName}</span>?
             </p>
-            <Link
-              href="/"
-              className="inline-block px-6 py-3 bg-[#33ff33] text-[#0a0a0a] font-bold text-sm hover:bg-[#44ff44] transition-colors tracking-wider"
-            >
-              {t("speciesDetail.tryCheckerBtn")}
-            </Link>
+            <div className="flex items-center justify-center gap-3 flex-wrap">
+              <Link
+                href="/"
+                className="inline-block px-6 py-3 bg-[#33ff33] text-[#0a0a0a] font-bold text-sm hover:bg-[#44ff44] transition-colors tracking-wider"
+              >
+                {t("speciesDetail.tryCheckerBtn")}
+              </Link>
+              <button
+                onClick={handleRandomNext}
+                disabled={isRolling}
+                title={t("speciesDetail.randomNextHint")}
+                className={`group relative px-5 py-3 border text-sm font-bold uppercase tracking-wider transition-all duration-300 overflow-hidden ${
+                  isRolling
+                    ? "border-[#33ff33] bg-[#33ff33]/20 text-[#33ff33] cursor-wait"
+                    : "border-[#33ff33]/40 text-[#33ff33]/70 hover:border-[#33ff33] hover:text-[#33ff33] hover:bg-[#33ff33]/10"
+                }`}
+              >
+                <span className="absolute inset-0 bg-[#33ff33]/5 -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
+                <span className="relative flex items-center gap-2">
+                  <span className={`inline-block transition-transform duration-500 ${isRolling ? "animate-spin" : "group-hover:rotate-180"}`}>
+                    ⚄
+                  </span>
+                  {t("speciesDetail.randomNext")}
+                </span>
+              </button>
+            </div>
           </div>
         </section>
       </main>

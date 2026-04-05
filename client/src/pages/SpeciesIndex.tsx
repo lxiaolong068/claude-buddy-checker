@@ -10,6 +10,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { SPECIES_DATA, ALL_SPECIES_SLUGS } from "@/lib/species-data";
 import { BODIES, type Species } from "@/lib/buddy-engine";
 import ComparePanel from "@/components/ComparePanel";
+import DailySpecies from "@/components/DailySpecies";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
@@ -212,6 +213,13 @@ export default function SpeciesIndex() {
               </span>
             </button>
           </div>
+        </section>
+
+        {/* Daily Species */}
+        <section
+          className={`mb-8 transition-all duration-700 delay-75 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
+        >
+          <DailySpecies variant="species" />
         </section>
 
         {/* Filter Toolbar */}

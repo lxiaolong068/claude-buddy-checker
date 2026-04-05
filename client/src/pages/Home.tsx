@@ -17,6 +17,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import WebAppSchema from "@/components/WebAppSchema";
 import LazyImage from "@/components/LazyImage";
+import DailySpecies from "@/components/DailySpecies";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp";
 const GRID_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/buddy-showcase-grid-dzj2bCjKycQ4bgSaUeRV58.webp";
@@ -245,6 +246,11 @@ export default function Home() {
             <BuddyResultCard buddy={buddy} />
           </div>
         )}
+
+        {/* Daily Species */}
+        <div className="mb-12">
+          <DailySpecies variant="home" />
+        </div>
 
         {/* Species Grid Section */}
         <div className="mb-12">

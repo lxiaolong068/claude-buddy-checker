@@ -161,6 +161,10 @@ export const en = {
     close: "CLOSE",
     demoNote: "Stats shown are representative tendencies",
   },
+  dailySpecies: {
+    header: "species_of_the_day",
+    viewProfile: "VIEW PROFILE",
+  },
   footer: {
     line1: "Built by the community. Not affiliated with Anthropic.",
     line2: "All computation is local. No data is collected or transmitted.",
@@ -229,6 +233,8 @@ export const en = {
     faqNote: "These FAQs are based on the Claude Code Buddy system mechanics.",
     tryChecker: "Check if your buddy is a",
     tryCheckerBtn: "CHECK YOUR BUDDY",
+    randomNext: "RANDOM NEXT",
+    randomNextHint: "Discover another random species",
     errorNotFound: "ERROR 404: Species not found",
     categoryAnimal: "Animal",
     categoryCreature: "Creature",
