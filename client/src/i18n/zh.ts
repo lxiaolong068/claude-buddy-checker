@@ -196,6 +196,8 @@ export const zh: typeof en = {
     compareMax: "最多 3 个",
     viewDetails: "查看详情",
     backHome: "< 返回查询器",
+    randomExplore: "随机探索",
+    randomExploreHint: "试试手气？随机发现一个物种",
   },
   speciesDetail: {
     metaTitleSuffix: "- Claude Code Buddy 物种图鉴",

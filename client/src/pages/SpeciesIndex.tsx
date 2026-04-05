@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { SPECIES_DATA, ALL_SPECIES_SLUGS } from "@/lib/species-data";
 import { BODIES, type Species } from "@/lib/buddy-engine";
@@ -73,7 +73,9 @@ function PeakStatButton({
 
 export default function SpeciesIndex() {
   const { t, locale } = useI18n();
+  const [, navigate] = useLocation();
   const [filter, setFilter] = useState<CategoryFilter>("all");
+  const [isRolling, setIsRolling] = useState(false);
   const [peakStatFilter, setPeakStatFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [mounted, setMounted] = useState(false);
@@ -94,6 +96,20 @@ export default function SpeciesIndex() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Random species navigation with slot-machine animation
+  const handleRandomSpecies = useCallback(() => {
+    if (isRolling) return;
+    setIsRolling(true);
+    // Pick a random species
+    const randomIndex = Math.floor(Math.random() * ALL_SPECIES_SLUGS.length);
+    const target = ALL_SPECIES_SLUGS[randomIndex];
+    // Brief animation delay then navigate
+    setTimeout(() => {
+      setIsRolling(false);
+      navigate(`/species/${target}`);
+    }, 600);
+  }, [isRolling, navigate]);
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
@@ -167,12 +183,35 @@ export default function SpeciesIndex() {
         <section
           className={`mb-8 transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
-          <h1 className="text-2xl md:text-3xl font-bold tracking-wider mb-3">
-            {t("speciesIndex.h1")}
-          </h1>
-          <p className="text-[#33ff33]/60 text-sm max-w-2xl leading-relaxed">
-            {t("speciesIndex.subtitle")}
-          </p>
+          <div className="flex items-start justify-between gap-4 flex-wrap">
+            <div className="flex-1 min-w-0">
+              <h1 className="text-2xl md:text-3xl font-bold tracking-wider mb-3">
+                {t("speciesIndex.h1")}
+              </h1>
+              <p className="text-[#33ff33]/60 text-sm max-w-2xl leading-relaxed">
+                {t("speciesIndex.subtitle")}
+              </p>
+            </div>
+            <button
+              onClick={handleRandomSpecies}
+              disabled={isRolling}
+              title={t("speciesIndex.randomExploreHint")}
+              className={`group relative shrink-0 mt-1 px-4 py-2.5 border text-xs uppercase tracking-widest transition-all duration-300 overflow-hidden ${
+                isRolling
+                  ? "border-[#33ff33] bg-[#33ff33]/20 text-[#33ff33] cursor-wait"
+                  : "border-[#33ff33]/30 text-[#33ff33]/60 hover:border-[#33ff33]/70 hover:text-[#33ff33] hover:bg-[#33ff33]/10 active:bg-[#33ff33]/20"
+              }`}
+            >
+              {/* Animated background sweep on hover */}
+              <span className="absolute inset-0 bg-[#33ff33]/5 -translate-x-full group-hover:translate-x-0 transition-transform duration-500" />
+              <span className="relative flex items-center gap-2">
+                <span className={`inline-block transition-transform duration-500 ${isRolling ? "animate-spin" : "group-hover:rotate-180"}`}>
+                  ⚄
+                </span>
+                {t("speciesIndex.randomExplore")}
+              </span>
+            </button>
+          </div>
         </section>
 
         {/* Filter Toolbar */}

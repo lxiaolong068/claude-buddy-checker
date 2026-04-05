@@ -194,6 +194,8 @@ export const en = {
     compareMax: "MAX 3",
     viewDetails: "VIEW DETAILS",
     backHome: "< BACK TO CHECKER",
+    randomExplore: "RANDOM SPECIES",
+    randomExploreHint: "Feeling lucky? Discover a random species",
   },
   speciesDetail: {
     metaTitleSuffix: "- Claude Code Buddy Species Guide",

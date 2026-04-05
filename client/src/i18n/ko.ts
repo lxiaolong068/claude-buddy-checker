@@ -196,6 +196,8 @@ export const ko: typeof en = {
     compareMax: "최대 3개",
     viewDetails: "상세 보기",
     backHome: "< 확인기로 돌아가기",
+    randomExplore: "랜덤 탐색",
+    randomExploreHint: "행운을 시험해 보세요! 랜덤 종 발견",
   },
   speciesDetail: {
     metaTitleSuffix: "- Claude Code Buddy 종 도감",
