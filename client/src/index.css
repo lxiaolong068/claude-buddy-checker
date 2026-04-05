@@ -576,3 +576,20 @@
     animation: none;
   }
 }
+
+/* ─── Giscus Comment System — CRT Theme Override ─── */
+.giscus,
+.giscus-frame {
+  width: 100%;
+  min-height: 150px;
+}
+
+/* Dark mode: make the giscus iframe blend with CRT bg */
+.dark .giscus-frame {
+  color-scheme: dark;
+}
+
+/* Light mode adjustments */
+:root:not(.dark) .giscus-frame {
+  color-scheme: light;
+}

@@ -2932,6 +2932,8 @@ rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
     content: {
       en: {
         title: 'Claude Code Buddy Probability Lab \u2014 Truths Revealed by 10,000 Simulations',
+        metaTitle: 'Claude Code Buddy Probability Lab \u2014 10,000 Simulation Results | Claude Buddy Checker',
+        metaDescription: 'We ran the Buddy generation algorithm 10,000 times. See real data on rarity distributions, species frequencies, shiny rates, and the elusive Legendary Shiny probability.',
         excerpt: 'We ran the Buddy generation algorithm 10,000 times with random UUIDs and recorded every outcome. Here\u2019s what the data reveals about rarity distributions, species frequencies, shiny rates, and the elusive Legendary Shiny.',
         sections: [
           {
@@ -3031,6 +3033,8 @@ rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
       },
       zh: {
         title: 'Claude Code Buddy \u6982\u7387\u5b9e\u9a8c\u5ba4 \u2014 10,000 \u6b21\u6a21\u62df\u63ed\u793a\u7684\u771f\u76f8',
+        metaTitle: 'Claude Code Buddy \u6982\u7387\u5b9e\u9a8c\u5ba4 \u2014 10,000 \u6b21\u6a21\u62df\u7ed3\u679c | Claude Buddy Checker',
+        metaDescription: '\u6211\u4eec\u8fd0\u884c\u4e86 10,000 \u6b21 Buddy \u751f\u6210\u7b97\u6cd5\u3002\u67e5\u770b\u7a00\u6709\u5ea6\u5206\u5e03\u3001\u7269\u79cd\u9891\u7387\u3001\u95ea\u5149\u7387\u548c\u4f20\u8bf4\u7ea7\u95ea\u5149\u6982\u7387\u7684\u771f\u5b9e\u6570\u636e\u3002',
         excerpt: '\u6211\u4eec\u7528\u968f\u673a UUID \u8fd0\u884c\u4e86 10,000 \u6b21 Buddy \u751f\u6210\u7b97\u6cd5\uff0c\u8bb0\u5f55\u4e86\u6bcf\u4e00\u4e2a\u7ed3\u679c\u3002\u4ee5\u4e0b\u662f\u6570\u636e\u63ed\u793a\u7684\u5173\u4e8e\u7a00\u6709\u5ea6\u5206\u5e03\u3001\u7269\u79cd\u9891\u7387\u3001\u95ea\u5149\u7387\u548c\u96be\u4ee5\u6349\u6478\u7684\u4f20\u8bf4\u7ea7\u95ea\u5149\u7684\u771f\u76f8\u3002',
         sections: [
           {
@@ -3130,6 +3134,8 @@ rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
       },
       ko: {
         title: 'Claude Code Buddy \ud655\ub960 \uc2e4\ud5d8\uc2e4 \u2014 10,000\ud68c \uc2dc\ubbac\ub808\uc774\uc158\uc774 \ubc1d\ud78c \uc9c4\uc2e4',
+        metaTitle: 'Claude Code Buddy \ud655\ub960 \uc2e4\ud5d8\uc2e4 \u2014 10,000\ud68c \uc2dc\ubbac\ub808\uc774\uc158 \uacb0\uacfc | Claude Buddy Checker',
+        metaDescription: 'Buddy \uc0dd\uc131 \uc54c\uace0\ub9ac\uc998\uc744 10,000\ud68c \uc2e4\ud589\ud588\uc2b5\ub2c8\ub2e4. \ud76c\uadc0\ub3c4 \ubd84\ud3ec, \uc885 \ube48\ub3c4, \uc0e4\uc774\ub2c8 \ube44\uc728 \ubc0f \ub808\uc804\ub354\ub9ac \uc0e4\uc774\ub2c8 \ud655\ub960\uc758 \uc2e4\uc81c \ub370\uc774\ud130\ub97c \ud655\uc778\ud558\uc138\uc694.',
         excerpt: '\ub79c\ub364 UUID\ub85c Buddy \uc0dd\uc131 \uc54c\uace0\ub9ac\uc998\uc744 10,000\ud68c \uc2e4\ud589\ud558\uace0 \ubaa8\ub4e0 \uacb0\uacfc\ub97c \uae30\ub85d\ud588\uc2b5\ub2c8\ub2e4. \ud76c\uadc0\ub3c4 \ubd84\ud3ec, \uc885 \ube48\ub3c4, \uc0e4\uc774\ub2c8 \ube44\uc728, \uadf8\ub9ac\uace0 \uc804\uc124\uc801\uc778 \ub808\uc804\ub354\ub9ac \uc0e4\uc774\ub2c8\uc5d0 \ub300\ud574 \ub370\uc774\ud130\uac00 \ubc1d\ud78c \uc9c4\uc2e4\uc744 \uacf5\uac1c\ud569\ub2c8\ub2e4.',
         sections: [
           {

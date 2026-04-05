@@ -148,6 +148,8 @@ export const en = {
     seriesNav: "// SERIES NAVIGATION",
     prevArticle: "← PREV",
     nextArticle: "NEXT →",
+    commentsTitle: "// COMMENTS",
+    commentsHint: "Sign in with GitHub to leave a comment.",
   },
   comparePanel: {
     title: "compare_mode.sh",

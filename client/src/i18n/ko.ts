@@ -150,6 +150,8 @@ export const ko: typeof en = {
     seriesNav: "// 시리즈 탐색",
     prevArticle: "← 이전",
     nextArticle: "다음 →",
+    commentsTitle: "// 댓글",
+    commentsHint: "GitHub 계정으로 로그인하여 댓글을 남길 수 있습니다.",
   },
   comparePanel: {
     title: "compare_mode.sh",

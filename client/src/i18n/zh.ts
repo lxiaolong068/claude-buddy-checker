@@ -150,6 +150,8 @@ export const zh: typeof en = {
     seriesNav: "// 系列导航",
     prevArticle: "← 上一篇",
     nextArticle: "下一篇 →",
+    commentsTitle: "// 评论",
+    commentsHint: "使用 GitHub 账号登录后可以发表评论。",
   },
   comparePanel: {
     title: "compare_mode.sh",

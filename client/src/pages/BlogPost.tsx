@@ -12,6 +12,7 @@ import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
 import ArticleSchema from "@/components/ArticleSchema";
 import ScrollToTop from "@/components/ScrollToTop";
+import GiscusComments from "@/components/GiscusComments";
 
 export default function BlogPost() {
   const params = useParams<{ slug: string }>();
@@ -333,6 +334,9 @@ export default function BlogPost() {
             </div>
           </nav>
         )}
+
+        {/* Comments */}
+        <GiscusComments slug={params.slug || ""} />
 
         {/* CTA */}
         <div className="border border-crt-green/20 bg-crt-green/5 p-6 text-center mb-8">
