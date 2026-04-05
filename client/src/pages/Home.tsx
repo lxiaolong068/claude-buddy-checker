@@ -18,6 +18,8 @@ import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import WebAppSchema from "@/components/WebAppSchema";
 import LazyImage from "@/components/LazyImage";
 import DailySpecies from "@/components/DailySpecies";
+import CommunityStats from "@/components/CommunityStats";
+import { recordQuery } from "@/lib/community-stats";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp";
 const GRID_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/buddy-showcase-grid-dzj2bCjKycQ4bgSaUeRV58.webp";
@@ -71,6 +73,9 @@ export default function Home() {
       setBuddy(result);
       setIsLoading(false);
       setShowResult(true);
+      // Record query for community stats (non-blocking)
+      recordQuery(trimmed, result.species, result.rarity);
+      window.dispatchEvent(new CustomEvent("buddy-query"));
       setTimeout(() => {
         resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
@@ -314,6 +319,9 @@ export default function Home() {
             </table>
           </div>
         </div>
+
+        {/* Community Stats */}
+        <CommunityStats />
 
         {/* How It Works */}
         <div className="mb-12">
