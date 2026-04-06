@@ -5,6 +5,7 @@
  */
 
 import { useEffect, useMemo } from "react";
+import TableOfContents, { type TocItem } from "@/components/TableOfContents";
 import { Link, useParams } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { getArticleBySlug, getAllArticles, getAdjacentArticles } from "@/lib/blog-data";
@@ -25,6 +26,16 @@ export default function BlogPost() {
     if (!article) return null;
     return article.content[locale as keyof typeof article.content];
   }, [article, locale]);
+
+  // Generate TOC items from article sections for sidebar navigation
+  const tocItems = useMemo<TocItem[]>(() => {
+    if (!content) return [];
+    return content.sections.map((section, i) => ({
+      id: `section-${i}`,
+      label: section.heading,
+      icon: `${String(i + 1).padStart(2, "0")}`,
+    }));
+  }, [content]);
 
 
   // Inject copy buttons into <pre> blocks after content renders
@@ -146,6 +157,11 @@ export default function BlogPost() {
 
       <div className="crt-scanlines" />
 
+      {/* Sidebar TOC for xl screens */}
+      {tocItems.length > 0 && (
+        <TableOfContents items={tocItems} title={t("blog.tableOfContents")} />
+      )}
+
       {/* JSON-LD Article Schema */}
       {content && (
         <ArticleSchema article={article} content={content} locale={locale} />
@@ -211,8 +227,8 @@ export default function BlogPost() {
             </div>
           </header>
 
-          {/* Table of Contents */}
-          <nav className="mb-8 border border-border bg-card p-4">
+          {/* Table of Contents (inline for small screens, hidden on xl where sidebar TOC is shown) */}
+          <nav className="mb-8 border border-border bg-card p-4 xl:hidden">
             <h2 className="text-xs font-bold text-crt-green uppercase tracking-widest mb-3">
               {t("blog.tableOfContents")}
             </h2>
