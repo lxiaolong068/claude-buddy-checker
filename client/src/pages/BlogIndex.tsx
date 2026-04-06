@@ -95,9 +95,29 @@ function CategoryButton({
   );
 }
 
+/** Category badge config: full static Tailwind classes per discussion category */
+const CATEGORY_BADGE: Record<DiscussionCategory, { classes: string; icon: string; labelKey: string }> = {
+  guides: {
+    classes: "border-crt-green/40 text-crt-green bg-crt-green/8",
+    icon: "▶",
+    labelKey: "blog.categoryGuides",
+  },
+  "deep-dives": {
+    classes: "border-crt-cyan/40 text-crt-cyan bg-crt-cyan/8",
+    icon: "◆",
+    labelKey: "blog.categoryDeepDives",
+  },
+  lore: {
+    classes: "border-crt-amber/40 text-crt-amber bg-crt-amber/8",
+    icon: "★",
+    labelKey: "blog.categoryLore",
+  },
+};
+
 function ArticleCard({ article, searchQuery }: { article: BlogArticle; searchQuery: string }) {
   const { t, locale } = useI18n();
   const content = article.content[locale as keyof typeof article.content];
+  const badge = CATEGORY_BADGE[article.discussionCategory];
 
   // Highlight matching text in title and excerpt
   const highlightText = (text: string, query: string) => {
@@ -125,8 +145,15 @@ function ArticleCard({ article, searchQuery }: { article: BlogArticle; searchQue
           <span className="w-2 h-2 rounded-full bg-crt-red" />
           <span className="w-2 h-2 rounded-full bg-crt-amber" />
           <span className="w-2 h-2 rounded-full bg-crt-green" />
-          <span className="ml-2 text-[10px] text-muted-foreground uppercase tracking-widest">
+          <span className="ml-2 text-[10px] text-muted-foreground uppercase tracking-widest flex-1 truncate">
             {article.slug}.md
+          </span>
+          {/* Category Badge */}
+          <span
+            className={`text-[9px] uppercase tracking-widest font-semibold px-2 py-0.5 border flex items-center gap-1 shrink-0 ${badge.classes}`}
+          >
+            <span className="text-[8px]">{badge.icon}</span>
+            {t(badge.labelKey)}
           </span>
         </div>
 
