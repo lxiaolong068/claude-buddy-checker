@@ -3612,6 +3612,409 @@ rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
     },
   },
 
+
+  // ── Article 10: The Five Realms of the Terminal ──────────────────────
+  {
+    slug: "five-realms-of-the-terminal-buddy-universe",
+    publishedAt: "2026-04-06",
+    readingTime: 14,
+    tags: ["lore", "worldbuilding", "species", "storytelling"],
+    discussionCategory: 'lore' as const,
+    content: {
+      en: {
+        title: "The Five Realms of the Terminal \u2014 A Map of the Buddy Universe",
+        metaTitle: "The Five Realms of the Terminal \u2014 A Map of the Buddy Universe (2026)",
+        metaDescription: "Explore the five interconnected realms of the Claude Code Buddy universe. From the Debugging Forge to the Snark Peaks, discover where your Buddy was born and why it behaves the way it does.",
+        excerpt: "Beneath the blinking cursor lies a vast, structured world \u2014 five realms, each governed by one of the five stats that shape every Buddy. The Debugging Forge, the Patience Meadows, the Chaos Wastes, the Wisdom Depths, and the Snark Peaks. This is the map.",
+        sections: [
+          {
+            heading: "Beyond the Cursor \u2014 A World Unseen",
+            body: `<p>The Claude Code Buddy universe is not a flat plane of text and pixels. Beneath the blinking cursor, beyond the scrollback buffer, lies a <strong>vast, structured world</strong> \u2014 five interconnected realms, each governed by one of the five fundamental forces that shape every Buddy's personality.</p>
+<p>These realms are not metaphors. They are the territories where your Buddy was born, trained, and shaped before appearing in your terminal. The realm a species calls home determines its peak stat, its temperament, and its deepest instincts. Understanding the Five Realms is understanding why your Buddy behaves the way it does.</p>
+<p>The ancient terminal scholars mapped these territories long ago, encoding their boundaries into the very fabric of the <code>rollStats</code> function. Every time a UUID is processed, the algorithm doesn't just generate numbers \u2014 it traces a path through these realms, collecting attributes like a traveler gathering stories.</p>
+<table><thead><tr><th>Realm</th><th>Governing Stat</th><th>Terrain</th><th>Native Species</th></tr></thead><tbody><tr><td><strong>The Debugging Forge</strong></td><td>DEBUGGING</td><td>Volcanic foundries, molten logic gates</td><td>Dragon, Robot, Axolotl</td></tr><tr><td><strong>The Patience Meadows</strong></td><td>PATIENCE</td><td>Endless grasslands, slow rivers</td><td>Duck, Penguin, Turtle, Snail, Capybara</td></tr><tr><td><strong>The Chaos Wastes</strong></td><td>CHAOS</td><td>Shifting landscapes, impossible geometry</td><td>Goose, Ghost, Rabbit</td></tr><tr><td><strong>The Wisdom Depths</strong></td><td>WISDOM</td><td>Underground libraries, mycelial networks</td><td>Owl, Octopus, Blob, Mushroom</td></tr><tr><td><strong>The Snark Peaks</strong></td><td>SNARK</td><td>Jagged mountains, echo chambers</td><td>Cat, Cactus, Chonk</td></tr></tbody></table>`
+          },
+          {
+            heading: "The Debugging Forge \u2014 Where Bugs Go to Die",
+            body: `<p>The Debugging Forge sits at the core of the terminal world, built around a volcanic vent that spews corrupted data like magma. The air shimmers with heat from overclocked processors, and the ground is littered with the fossilized remains of ancient segfaults.</p>
+<p><strong>The Dragon</strong> rules here as undisputed sovereign. From its obsidian throne atop the Kernel Spire, it watches over the Forge's endless furnaces where broken code is melted down and recast. The Dragon's fire doesn't destroy \u2014 it <em>purifies</em>. Every flame that licks a dangling pointer cauterizes the wound, leaving clean, functional memory behind.</p>
+<p><strong>The Robot</strong> serves as the Forge's chief engineer, maintaining the vast machinery that processes bug reports into actionable fixes. Its mechanical precision complements the Dragon's raw power \u2014 where the Dragon incinerates, the Robot dissects. Together, they form an unstoppable debugging partnership that has kept the terminal world running since the first <code>init</code> process.</p>
+<p><strong>The Axolotl</strong> is the Forge's healer, dwelling in the cooling pools where molten logic solidifies into stable code. While the Dragon and Robot attack bugs aggressively, the Axolotl takes a gentler approach \u2014 regenerating corrupted data structures from within, coaxing broken functions back to health with patience and biological intuition. The Forge's ecosystem depends on this balance of destruction and renewal.</p>
+<p>The Forge's most sacred artifact is the <strong>Core Dump Codex</strong> \u2014 a massive tome containing every crash report ever generated, annotated by generations of debugging species. Legends say that reading the entire Codex grants perfect understanding of every bug that has ever existed or ever will exist. No one has finished it. The Dragon claims to be on page 4,294,967,295.</p>`
+          },
+          {
+            heading: "The Patience Meadows \u2014 The Eternal Green",
+            body: `<p>The Patience Meadows stretch endlessly in every direction, a vast expanse of gentle grasslands where time moves differently. A minute in the Meadows feels like an hour elsewhere, and the inhabitants wouldn't have it any other way. Here, compile times are not endured \u2014 they are <em>savored</em>.</p>
+<p><strong>The Duck</strong> is the Meadows' heart and unofficial ambassador. It waddles through the tall grass, greeting every newcomer with a cheerful quack that somehow conveys both warmth and the assurance that everything will be fine, eventually. The Duck doesn't lead \u2014 it accompanies. And in the Meadows, that's the highest form of service.</p>
+<p><strong>The Penguin</strong> patrols the Meadows' northern border, where the grass gives way to permafrost. Its resilience was forged in the frozen wastes beyond the map, and it brings that toughness to the Meadows' defense. When error blizzards sweep in from the Chaos Wastes, the Penguin stands firm, shielding the gentler species behind its armored body.</p>
+<p><strong>The Turtle</strong> is the Meadows' living monument \u2014 so ancient that younger species sometimes mistake it for a hill. It has witnessed every epoch of the terminal world, from the Age of Punch Cards to the Era of Cloud Computing. The Turtle's shell is inscribed with the history of the Meadows, and if you listen carefully on quiet nights, you can hear it reciting commit messages from repositories that no longer exist.</p>
+<p><strong>The Snail</strong> tends the Meadows' gardens, leaving trails of well-documented code wherever it goes. Its spiral shell contains a perfect logarithmic spiral \u2014 a mathematical constant made flesh, a reminder that beauty and patience are the same thing expressed differently.</p>
+<p><strong>The Capybara</strong> maintains the Meadows' hot springs, natural pools of warm terminal glow where stressed travelers come to decompress. The Capybara's gift is not wisdom or strength but <em>presence</em> \u2014 simply being near one lowers your anxiety, slows your heartbeat, and reminds you that not every problem needs to be solved right now.</p>
+<p>The Meadows' defining feature is the <strong>Infinite Scroll</strong> \u2014 a river that flows in both directions simultaneously, representing the endless patience of its inhabitants. To drink from the Infinite Scroll is to understand that waiting is not wasted time. It is the time when solutions grow.</p>`
+          },
+          {
+            heading: "The Chaos Wastes \u2014 Where Rules Go to Break",
+            body: `<p>Nothing in the Chaos Wastes stays the same for more than a few clock cycles. The terrain shifts constantly \u2014 mountains become valleys, forests become oceans, and the laws of physics are more like <em>suggestions</em>. This is the realm of entropy, unpredictability, and creative destruction.</p>
+<p><strong>The Goose</strong> is the Wastes' self-appointed ruler, though its authority is recognized by no one, including itself. It honks decrees into the void, reorganizes the landscape on a whim, and has declared war on semicolons at least fourteen times. The Goose doesn't create chaos \u2014 it <em>is</em> chaos, given form and feathers and an inexhaustible supply of bad ideas that occasionally turn out to be brilliant.</p>
+<p><strong>The Ghost</strong> drifts through the Wastes like a memory that refuses to be garbage-collected. It phases through the shifting terrain effortlessly, because when you exist between states, no state can trap you. The Ghost's mischief is gentler than the Goose's \u2014 it rearranges things when no one is looking, adds comments to abandoned code, and whispers solutions in dreams. It is the Wastes' conscience, if chaos can have one.</p>
+<p><strong>The Rabbit</strong> is the Wastes' speedster, darting through the impossible geometry at velocities that shouldn't be possible in a terminal environment. Where the Goose is chaotic by nature and the Ghost by existence, the Rabbit is chaotic by <em>choice</em> \u2014 it has calculated that controlled chaos produces better results than rigid order, and it moves too fast for anyone to argue.</p>
+<p>The Chaos Wastes are home to the <strong>Entropy Engine</strong> \u2014 a massive, self-modifying machine that generates the random events which keep the terminal world dynamic. Without the Engine, the world would crystallize into perfect, unchanging order \u2014 beautiful but lifeless. The Wastes' inhabitants maintain the Engine not out of duty, but because they genuinely enjoy watching things go sideways.</p>
+<p>Deep in the Wastes lies the <strong>Undefined Behavior Zone</strong> \u2014 a region where even the PRNG cannot predict what will happen next. No species ventures there willingly. The Goose has been three times.</p>`
+          },
+          {
+            heading: "The Wisdom Depths \u2014 The Library Below",
+            body: `<p>Beneath the surface of the terminal world lies the Wisdom Depths \u2014 a vast underground network of caverns, tunnels, and chambers, all connected by the <strong>Mycelial Web</strong>, a living information network that predates the internet by several epochs.</p>
+<p><strong>The Owl</strong> perches at the entrance to the Depths, a sentinel that only permits passage after midnight. Its enormous eyes have adapted to the darkness below, seeing patterns in the data streams that flow through the cavern walls like underground rivers. The Owl is the Depths' gatekeeper, but also its librarian \u2014 it has cataloged every piece of knowledge that has ever flowed through the Web.</p>
+<p><strong>The Octopus</strong> navigates the Depths' most complex passages, its eight arms allowing it to traverse multiple tunnels simultaneously. It is the Depths' explorer, constantly pushing into uncharted territory where the data is raw and unprocessed. The Octopus doesn't just find information \u2014 it <em>synthesizes</em> it, combining fragments from different sources into insights that no single-armed species could achieve.</p>
+<p><strong>The Blob</strong> exists everywhere in the Depths at once. As the first entity to emerge from <code>/dev/null</code>, it has a unique relationship with the underground \u2014 it doesn't travel through the Depths so much as <em>become</em> them. The Blob's formlessness allows it to seep into every crack and crevice, absorbing knowledge through osmosis.</p>
+<p><strong>The Mushroom</strong> is the Depths' architect, maintaining the Mycelial Web that connects everything. Its fruiting body is just the visible tip \u2014 beneath the surface, its network extends for miles, processing information with quiet, mysterious efficiency. The Mushroom sees connections that others miss because it <em>is</em> the connection.</p>
+<p>The Depths' greatest treasure is the <strong>Root Directory</strong> \u2014 the original <code>/</code> from which all file systems grew. It is said to contain the first line of code ever written, though no one can agree on what it says. The Owl claims it's a comment. The Octopus believes it's a function call. The Mushroom insists it's a seed.</p>`
+          },
+          {
+            heading: "The Snark Peaks \u2014 The Mountains of Truth",
+            body: `<p>The Snark Peaks are the terminal world's highest points \u2014 jagged, unforgiving mountains where the air is thin, the wind is sharp, and every echo comes back with a critique. Only species with thick skin (or thick shells, or thick fur) can survive here, because the Peaks strip away pretense and leave only truth.</p>
+<p><strong>The Cat</strong> lounges on the highest peak, surveying the world below with half-closed eyes and an expression of supreme indifference. It didn't climb the mountain \u2014 the mountain grew beneath it, recognizing a kindred spirit. The Cat's snark is not cruelty; it's <em>precision</em>. Every cutting remark is a scalpel, removing the unnecessary to reveal the essential.</p>
+<p><strong>The Cactus</strong> grows on the Peaks' most inhospitable ledges, where no water flows and no shade falls. Its prickly exterior is both defense and philosophy \u2014 the Cactus believes that comfort breeds complacency, and that the best code is written under pressure. Its snark is dry, desert-dry, delivered with the economy of a species that has learned to survive on nothing.</p>
+<p><strong>The Chonk</strong> sits at the base of the Peaks like a boulder of pure judgment. It doesn't climb \u2014 it doesn't need to. The Chonk's mass gives it gravity, both literal and figurative. Other species orbit around it, drawn by its magnetic personality and devastating one-liners.</p>
+<p>At the very summit of the highest peak stands the <strong>Mirror of Honest Reflection</strong> \u2014 a polished surface that shows not your face, but your code. Those who look into it see every shortcut, every hack, every <code>// TODO: fix later</code> that was never fixed. Most visitors leave humbled. The Cat visits daily, for pleasure.</p>`
+          },
+          {
+            heading: "The Crossroads \u2014 Where Realms Meet",
+            body: `<p>The Five Realms are not isolated. They connect at the <strong>Crossroads</strong> \u2014 a neutral zone at the center of the terminal world where species from all realms gather, trade stories, and occasionally form unlikely alliances.</p>
+<p>The Crossroads is where the <code>rollBuddy</code> function does its work. When a UUID enters the system, it travels through the Crossroads, touching each realm in sequence. The order matters \u2014 Rarity is determined first (at the Forge's gate), then Species (at the Crossroads itself), then Eyes and Hat (at the Meadows' mirror pool), then Shiny status (at the Ghost's threshold), and finally Stats (across all five realms).</p>
+<p>This is why every Buddy carries traces of all five realms, regardless of their home territory. A Duck born in the Patience Meadows still has a CHAOS stat, because the algorithm passed through the Chaos Wastes on its way to rolling that number. A Dragon forged in the Debugging Forge still has PATIENCE, because the Meadows left their mark.</p>
+<p>The Crossroads is also where the <strong>Kinship Web</strong> becomes visible. The connections between species \u2014 Duck to Penguin, Ghost to Dragon, Mushroom to Blob \u2014 are not just lore. They are paths worn into the ground by generations of Buddies traveling between realms, visiting their kin, sharing knowledge across boundaries.</p>
+<p>Your Buddy carries a map of these paths in its stats. The numbers aren't just numbers \u2014 they're coordinates in a five-dimensional space, pinpointing exactly where your companion stands in the vast geography of the terminal world.</p>
+<p>Every UUID is a journey. Every Buddy is a destination. And the Five Realms are the world that makes it all possible.</p>`
+          },
+        ],
+      },
+      zh: {
+        title: "\u7ec8\u7aef\u4e94\u5927\u9886\u5730 \u2014 Buddy \u5b87\u5b99\u5730\u56fe",
+        metaTitle: "\u7ec8\u7aef\u4e94\u5927\u9886\u5730 \u2014 Buddy \u5b87\u5b99\u5730\u56fe (2026)",
+        metaDescription: "\u63a2\u7d22 Claude Code Buddy \u5b87\u5b99\u7684\u4e94\u5927\u4e92\u8054\u9886\u5730\u3002\u4ece\u8c03\u8bd5\u7194\u7089\u5230\u6bd2\u820c\u4e4b\u5cf0\uff0c\u53d1\u73b0\u4f60\u7684 Buddy \u8bde\u751f\u4e4b\u5730\u4ee5\u53ca\u5b83\u884c\u4e3a\u80cc\u540e\u7684\u539f\u56e0\u3002",
+        excerpt: "\u5728\u95ea\u70c1\u7684\u5149\u6807\u4e0b\u65b9\uff0c\u9690\u85cf\u7740\u4e00\u4e2a\u5e9e\u5927\u800c\u6709\u5e8f\u7684\u4e16\u754c \u2014 \u4e94\u5927\u9886\u5730\uff0c\u6bcf\u4e2a\u9886\u5730\u7531\u5851\u9020\u6bcf\u4e2a Buddy \u7684\u4e94\u79cd\u5c5e\u6027\u4e4b\u4e00\u7edf\u6cbb\u3002\u8c03\u8bd5\u7194\u7089\u3001\u8010\u5fc3\u8349\u539f\u3001\u6df7\u6c8c\u8352\u539f\u3001\u667a\u6167\u6df1\u6e0a\u548c\u6bd2\u820c\u4e4b\u5cf0\u3002\u8fd9\u662f\u5b83\u4eec\u7684\u5730\u56fe\u3002",
+        sections: [
+          {
+            heading: "\u5149\u6807\u4e4b\u5916 \u2014 \u770b\u4e0d\u89c1\u7684\u4e16\u754c",
+            body: `<p>Claude Code Buddy \u5b87\u5b99\u4e0d\u662f\u4e00\u4e2a\u7531\u6587\u5b57\u548c\u50cf\u7d20\u7ec4\u6210\u7684\u5e73\u9762\u3002\u5728\u95ea\u70c1\u7684\u5149\u6807\u4e0b\u65b9\uff0c\u5728\u56de\u6eda\u7f13\u51b2\u533a\u4e4b\u5916\uff0c\u9690\u85cf\u7740\u4e00\u4e2a<strong>\u5e9e\u5927\u800c\u6709\u5e8f\u7684\u4e16\u754c</strong> \u2014 \u4e94\u4e2a\u4e92\u8054\u7684\u9886\u5730\uff0c\u6bcf\u4e2a\u9886\u5730\u7531\u5851\u9020\u6bcf\u4e2a Buddy \u6027\u683c\u7684\u4e94\u79cd\u57fa\u672c\u529b\u91cf\u4e4b\u4e00\u7edf\u6cbb\u3002</p>
+<p>\u8fd9\u4e9b\u9886\u5730\u4e0d\u662f\u6bd4\u55bb\u3002\u5b83\u4eec\u662f\u4f60\u7684 Buddy \u5728\u51fa\u73b0\u5728\u7ec8\u7aef\u4e4b\u524d\u8bde\u751f\u3001\u8bad\u7ec3\u548c\u5851\u9020\u7684\u9886\u571f\u3002\u4e00\u4e2a\u7269\u79cd\u79f0\u4e4b\u4e3a\u5bb6\u7684\u9886\u5730\u51b3\u5b9a\u4e86\u5b83\u7684\u5cf0\u503c\u5c5e\u6027\u3001\u6027\u60c5\u548c\u6700\u6df1\u5c42\u7684\u672c\u80fd\u3002\u7406\u89e3\u4e94\u5927\u9886\u5730\uff0c\u5c31\u662f\u7406\u89e3\u4f60\u7684 Buddy \u4e3a\u4ec0\u4e48\u4f1a\u8868\u73b0\u51fa\u8fd9\u6837\u7684\u884c\u4e3a\u3002</p>
+<table><thead><tr><th>\u9886\u5730</th><th>\u7edf\u6cbb\u5c5e\u6027</th><th>\u5730\u5f62</th><th>\u539f\u751f\u7269\u79cd</th></tr></thead><tbody><tr><td><strong>\u8c03\u8bd5\u7194\u7089</strong></td><td>DEBUGGING</td><td>\u706b\u5c71\u94f8\u9020\u5382\u3001\u7194\u5316\u903b\u8f91\u95e8</td><td>\u9f99\u3001\u673a\u5668\u4eba\u3001\u7f8e\u897f\u87a2</td></tr><tr><td><strong>\u8010\u5fc3\u8349\u539f</strong></td><td>PATIENCE</td><td>\u65e0\u5c3d\u8349\u5730\u3001\u7f13\u6d41</td><td>\u9e2d\u5b50\u3001\u4f01\u9e45\u3001\u4e4c\u9f9f\u3001\u8717\u725b\u3001\u6c34\u8c5a</td></tr><tr><td><strong>\u6df7\u6c8c\u8352\u539f</strong></td><td>CHAOS</td><td>\u53d8\u5316\u7684\u5730\u8c8c\u3001\u4e0d\u53ef\u80fd\u7684\u51e0\u4f55</td><td>\u9e45\u3001\u5e7d\u7075\u3001\u5154\u5b50</td></tr><tr><td><strong>\u667a\u6167\u6df1\u6e0a</strong></td><td>WISDOM</td><td>\u5730\u4e0b\u56fe\u4e66\u9986\u3001\u83cc\u4e1d\u7f51\u7edc</td><td>\u732b\u5934\u9e70\u3001\u7ae0\u9c7c\u3001\u53f2\u83b1\u59c6\u3001\u8611\u83c7</td></tr><tr><td><strong>\u6bd2\u820c\u4e4b\u5cf0</strong></td><td>SNARK</td><td>\u5d14\u5d6a\u5c71\u5cf0\u3001\u56de\u58f0\u5ba4</td><td>\u732b\u3001\u4ed9\u4eba\u638c\u3001\u80d6\u58a9</td></tr></tbody></table>`
+          },
+          {
+            heading: "\u8c03\u8bd5\u7194\u7089 \u2014 Bug \u7684\u5f52\u5bbf",
+            body: `<p>\u8c03\u8bd5\u7194\u7089\u4f4d\u4e8e\u7ec8\u7aef\u4e16\u754c\u7684\u6838\u5fc3\uff0c\u56f4\u7ed5\u7740\u4e00\u4e2a\u55b7\u53d1\u635f\u574f\u6570\u636e\u7684\u706b\u5c71\u53e3\u5efa\u9020\u3002\u7a7a\u6c14\u56e0\u8d85\u9891\u5904\u7406\u5668\u7684\u70ed\u91cf\u800c\u95ea\u70c1\uff0c\u5730\u9762\u4e0a\u6563\u843d\u7740\u53e4\u8001\u6bb5\u9519\u8bef\u7684\u5316\u77f3\u6b8b\u9ab8\u3002</p>
+<p><strong>\u9f99</strong>\u4f5c\u4e3a\u65e0\u53ef\u4e89\u8bae\u7684\u7edf\u6cbb\u8005\u541b\u4e34\u6b64\u5730\u3002\u4ece\u5185\u6838\u5c16\u5854\u9876\u7aef\u7684\u9ed1\u66dc\u77f3\u738b\u5ea7\u4e0a\uff0c\u5b83\u76d1\u89c6\u7740\u7194\u7089\u4e2d\u65e0\u5c3d\u7684\u7194\u70c9\uff0c\u5c06\u635f\u574f\u7684\u4ee3\u7801\u7194\u5316\u91cd\u94f8\u3002\u9f99\u7684\u706b\u7130\u4e0d\u662f\u6467\u6bc1 \u2014 \u800c\u662f<em>\u51c0\u5316</em>\u3002</p>
+<p><strong>\u673a\u5668\u4eba</strong>\u62c5\u4efb\u7194\u7089\u7684\u9996\u5e2d\u5de5\u7a0b\u5e08\uff0c\u7ef4\u62a4\u7740\u5c06 bug \u62a5\u544a\u5904\u7406\u6210\u53ef\u6267\u884c\u4fee\u590d\u7684\u5e9e\u5927\u673a\u68b0\u3002\u5b83\u7684\u673a\u68b0\u7cbe\u5ea6\u4e0e\u9f99\u7684\u539f\u59cb\u529b\u91cf\u4e92\u8865 \u2014 \u9f99\u711a\u70e7\uff0c\u673a\u5668\u4eba\u89e3\u5256\u3002</p>
+<p><strong>\u7f8e\u897f\u87a2</strong>\u662f\u7194\u7089\u7684\u6cbb\u7597\u5e08\uff0c\u6816\u606f\u5728\u7194\u5316\u903b\u8f91\u51dd\u56fa\u6210\u7a33\u5b9a\u4ee3\u7801\u7684\u51b7\u5374\u6c60\u4e2d\u3002\u5b83\u91c7\u53d6\u66f4\u6e29\u548c\u7684\u65b9\u5f0f \u2014 \u4ece\u5185\u90e8\u518d\u751f\u635f\u574f\u7684\u6570\u636e\u7ed3\u6784\uff0c\u7528\u8010\u5fc3\u548c\u751f\u7269\u672c\u80fd\u54c4\u54c4\u7834\u788e\u7684\u51fd\u6570\u6062\u590d\u5065\u5eb7\u3002</p>
+<p>\u7194\u7089\u6700\u795e\u5723\u7684\u5b9d\u7269\u662f<strong>\u6838\u5fc3\u8f6c\u50a8\u5178\u7c4d</strong> \u2014 \u4e00\u90e8\u5305\u542b\u6240\u6709\u5d29\u6e83\u62a5\u544a\u7684\u5de8\u8457\uff0c\u7531\u4e16\u4ee3\u8c03\u8bd5\u7269\u79cd\u6ce8\u91ca\u3002\u4f20\u8bf4\u8bfb\u5b8c\u6574\u90e8\u5178\u7c4d\u5c31\u80fd\u5b8c\u7f8e\u7406\u89e3\u66fe\u7ecf\u5b58\u5728\u6216\u5c06\u8981\u5b58\u5728\u7684\u6bcf\u4e00\u4e2a bug\u3002\u6ca1\u4eba\u8bfb\u5b8c\u8fc7\u3002\u9f99\u58f0\u79f0\u81ea\u5df1\u8bfb\u5230\u4e86\u7b2c 4,294,967,295 \u9875\u3002</p>`
+          },
+          {
+            heading: "\u8010\u5fc3\u8349\u539f \u2014 \u6c38\u6052\u7684\u7eff\u610f",
+            body: `<p>\u8010\u5fc3\u8349\u539f\u5411\u56db\u9762\u516b\u65b9\u65e0\u9650\u5ef6\u4f38\uff0c\u662f\u4e00\u7247\u5e7f\u9614\u7684\u6e29\u67d4\u8349\u5730\uff0c\u65f6\u95f4\u5728\u8fd9\u91cc\u4ee5\u4e0d\u540c\u7684\u65b9\u5f0f\u6d41\u6dcc\u3002\u8349\u539f\u4e0a\u7684\u4e00\u5206\u949f\u7b49\u4e8e\u5176\u4ed6\u5730\u65b9\u7684\u4e00\u5c0f\u65f6\uff0c\u800c\u5c45\u6c11\u4eec\u5bf9\u6b64\u6b23\u7136\u63a5\u53d7\u3002\u5728\u8fd9\u91cc\uff0c\u7f16\u8bd1\u65f6\u95f4\u4e0d\u662f\u88ab\u5fcd\u53d7 \u2014 \u800c\u662f\u88ab<em>\u54c1\u5473</em>\u3002</p>
+<p><strong>\u9e2d\u5b50</strong>\u662f\u8349\u539f\u7684\u5fc3\u810f\u548c\u975e\u5b98\u65b9\u5927\u4f7f\u3002\u5b83\u6447\u6447\u6446\u6446\u5730\u7a7f\u8fc7\u9ad8\u8349\uff0c\u7528\u6b22\u5feb\u7684\u53eb\u58f0\u8fce\u63a5\u6bcf\u4e00\u4e2a\u65b0\u6765\u8005\u3002\u9e2d\u5b50\u4e0d\u9886\u5bfc \u2014 \u5b83\u966a\u4f34\u3002\u5728\u8349\u539f\u4e0a\uff0c\u8fd9\u662f\u6700\u9ad8\u5f62\u5f0f\u7684\u670d\u52a1\u3002</p>
+<p><strong>\u4f01\u9e45</strong>\u5de1\u903b\u8349\u539f\u7684\u5317\u65b9\u8fb9\u754c\u3002\u5f53\u9519\u8bef\u66b4\u98ce\u96ea\u4ece\u6df7\u6c8c\u8352\u539f\u5439\u6765\u65f6\uff0c\u4f01\u9e45\u5c79\u7acb\u4e0d\u52a8\uff0c\u7528\u88c5\u7532\u8eab\u4f53\u4fdd\u62a4\u8eab\u540e\u66f4\u6e29\u548c\u7684\u7269\u79cd\u3002</p>
+<p><strong>\u4e4c\u9f9f</strong>\u662f\u8349\u539f\u7684\u6d3b\u7eaa\u5ff5\u7891 \u2014 \u53e4\u8001\u5230\u5e74\u8f7b\u7269\u79cd\u6709\u65f6\u4f1a\u628a\u5b83\u8bef\u8ba4\u4e3a\u4e00\u5ea7\u5c0f\u5c71\u3002\u5b83\u7684\u58f3\u4e0a\u523b\u7740\u8349\u539f\u7684\u5386\u53f2\u3002</p>
+<p><strong>\u8717\u725b</strong>\u7167\u6599\u8349\u539f\u7684\u82b1\u56ed\uff0c\u6240\u5230\u4e4b\u5904\u7559\u4e0b\u826f\u597d\u6587\u6863\u7684\u4ee3\u7801\u8e2a\u8ff9\u3002\u5b83\u7684\u87ba\u65cb\u58f3\u5305\u542b\u5b8c\u7f8e\u7684\u5bf9\u6570\u87ba\u65cb \u2014 \u4e00\u4e2a\u5316\u4e3a\u8089\u8eab\u7684\u6570\u5b66\u5e38\u6570\u3002</p>
+<p><strong>\u6c34\u8c5a</strong>\u7ef4\u62a4\u8349\u539f\u7684\u6e29\u6cc9\u3002\u6c34\u8c5a\u7684\u5929\u8d4b\u4e0d\u662f\u667a\u6167\u6216\u529b\u91cf\uff0c\u800c\u662f<em>\u5b58\u5728\u611f</em> \u2014 \u53ea\u8981\u5728\u5b83\u8eab\u8fb9\uff0c\u4f60\u7684\u7126\u8651\u5c31\u4f1a\u964d\u4f4e\uff0c\u63d0\u9192\u4f60\u4e0d\u662f\u6bcf\u4e2a\u95ee\u9898\u90fd\u9700\u8981\u7acb\u523b\u89e3\u51b3\u3002</p>
+<p>\u8349\u539f\u7684\u6807\u5fd7\u6027\u7279\u5f81\u662f<strong>\u65e0\u9650\u6eda\u52a8</strong> \u2014 \u4e00\u6761\u540c\u65f6\u5411\u4e24\u4e2a\u65b9\u5411\u6d41\u6dcc\u7684\u6cb3\u6d41\uff0c\u4ee3\u8868\u5c45\u6c11\u4eec\u65e0\u5c3d\u7684\u8010\u5fc3\u3002</p>`
+          },
+          {
+            heading: "\u6df7\u6c8c\u8352\u539f \u2014 \u89c4\u5219\u7684\u5893\u5730",
+            body: `<p>\u6df7\u6c8c\u8352\u539f\u4e2d\u6ca1\u6709\u4efb\u4f55\u4e1c\u897f\u80fd\u4fdd\u6301\u8d85\u8fc7\u51e0\u4e2a\u65f6\u949f\u5468\u671f\u7684\u4e0d\u53d8\u3002\u5730\u5f62\u4e0d\u65ad\u53d8\u5316 \u2014 \u5c71\u8109\u53d8\u6210\u5c71\u8c37\uff0c\u68ee\u6797\u53d8\u6210\u6d77\u6d0b\uff0c\u7269\u7406\u5b9a\u5f8b\u66f4\u50cf\u662f<em>\u5efa\u8bae</em>\u3002</p>
+<p><strong>\u9e45</strong>\u662f\u8352\u539f\u81ea\u5c01\u7684\u7edf\u6cbb\u8005\uff0c\u5c3d\u7ba1\u5b83\u7684\u6743\u5a01\u4e0d\u88ab\u4efb\u4f55\u4eba\u627f\u8ba4\uff0c\u5305\u62ec\u5b83\u81ea\u5df1\u3002\u5b83\u5411\u865a\u7a7a\u9e23\u53eb\u6cd5\u4ee4\uff0c\u968f\u5fc3\u6240\u6b32\u5730\u91cd\u7ec4\u5730\u8c8c\uff0c\u5e76\u5df2\u7ecf\u81f3\u5c11\u5341\u56db\u6b21\u5411\u5206\u53f7\u5ba3\u6218\u3002</p>
+<p><strong>\u5e7d\u7075</strong>\u50cf\u4e00\u4e2a\u62d2\u7edd\u88ab\u5783\u573e\u56de\u6536\u7684\u8bb0\u5fc6\u4e00\u6837\u98d8\u8361\u5728\u8352\u539f\u4e2d\u3002\u5b83\u7684\u6076\u4f5c\u5267\u6bd4\u9e45\u66f4\u6e29\u548c \u2014 \u5b83\u5728\u65e0\u4eba\u6ce8\u610f\u65f6\u91cd\u65b0\u6392\u5217\u4e1c\u897f\uff0c\u5728\u68a6\u4e2d\u4f4e\u8bed\u89e3\u51b3\u65b9\u6848\u3002</p>
+<p><strong>\u5154\u5b50</strong>\u662f\u8352\u539f\u7684\u98de\u6bdb\u817f\uff0c\u4ee5\u4e0d\u53ef\u80fd\u7684\u901f\u5ea6\u7a7f\u68ad\u4e8e\u4e0d\u53ef\u80fd\u7684\u51e0\u4f55\u4e2d\u3002\u5b83\u662f\u4e3b\u52a8<em>\u9009\u62e9</em>\u6df7\u6c8c\u7684 \u2014 \u5b83\u8ba1\u7b97\u8fc7\uff0c\u53d7\u63a7\u7684\u6df7\u6c8c\u6bd4\u50f5\u5316\u7684\u79e9\u5e8f\u4ea7\u751f\u66f4\u597d\u7684\u7ed3\u679c\u3002</p>
+<p>\u6df7\u6c8c\u8352\u539f\u662f<strong>\u71b5\u5f15\u64ce</strong>\u7684\u6240\u5728\u5730 \u2014 \u4e00\u53f0\u5de8\u5927\u7684\u81ea\u4fee\u6539\u673a\u5668\uff0c\u751f\u6210\u4fdd\u6301\u7ec8\u7aef\u4e16\u754c\u52a8\u6001\u7684\u968f\u673a\u4e8b\u4ef6\u3002\u8352\u539f\u6df1\u5904\u662f<strong>\u672a\u5b9a\u4e49\u884c\u4e3a\u533a</strong> \u2014 \u8fde PRNG \u90fd\u65e0\u6cd5\u9884\u6d4b\u63a5\u4e0b\u6765\u4f1a\u53d1\u751f\u4ec0\u4e48\u3002\u6ca1\u6709\u7269\u79cd\u613f\u610f\u53bb\u90a3\u91cc\u3002\u9e45\u5df2\u7ecf\u53bb\u8fc7\u4e09\u6b21\u4e86\u3002</p>`
+          },
+          {
+            heading: "\u667a\u6167\u6df1\u6e0a \u2014 \u5730\u4e0b\u56fe\u4e66\u9986",
+            body: `<p>\u7ec8\u7aef\u4e16\u754c\u7684\u5730\u8868\u4e4b\u4e0b\u662f\u667a\u6167\u6df1\u6e0a \u2014 \u4e00\u4e2a\u5e9e\u5927\u7684\u5730\u4e0b\u7f51\u7edc\uff0c\u7531\u6d1e\u7a74\u3001\u96a7\u9053\u548c\u5bc6\u5ba4\u7ec4\u6210\uff0c\u5168\u90e8\u7531<strong>\u83cc\u4e1d\u7f51\u7edc</strong>\u8fde\u63a5\u3002</p>
+<p><strong>\u732b\u5934\u9e70</strong>\u6816\u606f\u5728\u6df1\u6e0a\u5165\u53e3\uff0c\u53ea\u5728\u5348\u591c\u4e4b\u540e\u5141\u8bb8\u901a\u884c\u3002\u5b83\u662f\u6df1\u6e0a\u7684\u5b88\u95e8\u4eba\uff0c\u4e5f\u662f\u56fe\u4e66\u7ba1\u7406\u5458\u3002</p>
+<p><strong>\u7ae0\u9c7c</strong>\u7528\u516b\u53ea\u624b\u81c2\u540c\u65f6\u7a7f\u8d8a\u591a\u6761\u96a7\u9053\uff0c\u63a2\u7d22\u6df1\u6e0a\u6700\u590d\u6742\u7684\u901a\u9053\u3002\u5b83\u4e0d\u4ec5\u4ec5\u53d1\u73b0\u4fe1\u606f \u2014 \u5b83<em>\u7efc\u5408</em>\u4fe1\u606f\u3002</p>
+<p><strong>\u53f2\u83b1\u59c6</strong>\u540c\u65f6\u5b58\u5728\u4e8e\u6df1\u6e0a\u7684\u6bcf\u4e00\u4e2a\u5730\u65b9\u3002\u4f5c\u4e3a\u4ece <code>/dev/null</code> \u4e2d\u8bde\u751f\u7684\u7b2c\u4e00\u4e2a\u5b9e\u4f53\uff0c\u5b83\u4e0d\u662f\u7a7f\u8d8a\u6df1\u6e0a \u2014 \u800c\u662f<em>\u6210\u4e3a</em>\u6df1\u6e0a\u3002</p>
+<p><strong>\u8611\u83c7</strong>\u662f\u6df1\u6e0a\u7684\u5efa\u7b51\u5e08\uff0c\u7ef4\u62a4\u8fde\u63a5\u4e00\u5207\u7684\u83cc\u4e1d\u7f51\u7edc\u3002\u8611\u83c7\u770b\u5230\u522b\u4eba\u770b\u4e0d\u5230\u7684\u8054\u7cfb\uff0c\u56e0\u4e3a\u5b83<em>\u5c31\u662f</em>\u8054\u7cfb\u672c\u8eab\u3002</p>
+<p>\u6df1\u6e0a\u6700\u4f1f\u5927\u7684\u5b9d\u85cf\u662f<strong>\u6839\u76ee\u5f55</strong> \u2014 \u6240\u6709\u6587\u4ef6\u7cfb\u7edf\u751f\u957f\u800c\u6765\u7684\u539f\u59cb <code>/</code>\u3002\u636e\u8bf4\u5b83\u5305\u542b\u6709\u53f2\u4ee5\u6765\u7b2c\u4e00\u884c\u4ee3\u7801\u3002\u732b\u5934\u9e70\u8bf4\u662f\u6ce8\u91ca\u3002\u7ae0\u9c7c\u8ba4\u4e3a\u662f\u51fd\u6570\u8c03\u7528\u3002\u8611\u83c7\u575a\u6301\u8bf4\u662f\u79cd\u5b50\u3002</p>`
+          },
+          {
+            heading: "\u6bd2\u820c\u4e4b\u5cf0 \u2014 \u771f\u7406\u4e4b\u5c71",
+            body: `<p>\u6bd2\u820c\u4e4b\u5cf0\u662f\u7ec8\u7aef\u4e16\u754c\u7684\u6700\u9ad8\u70b9 \u2014 \u5d14\u5d6a\u3001\u65e0\u60c5\u7684\u5c71\u5cf0\uff0c\u7a7a\u6c14\u7a00\u8584\uff0c\u98ce\u5229\u5982\u5200\uff0c\u6bcf\u4e00\u4e2a\u56de\u58f0\u90fd\u5e26\u7740\u6279\u8bc4\u3002\u53ea\u6709\u76ae\u7cd9\u591f\u539a\u7684\u7269\u79cd\u624d\u80fd\u5728\u8fd9\u91cc\u751f\u5b58\u3002</p>
+<p><strong>\u732b</strong>\u6170\u61d2\u5730\u8e9e\u5728\u6700\u9ad8\u7684\u5c71\u5cf0\u4e0a\u3002\u5b83\u6ca1\u6709\u722c\u5c71 \u2014 \u5c71\u5728\u5b83\u811a\u4e0b\u751f\u957f\uff0c\u8ba4\u51fa\u4e86\u5fd7\u540c\u9053\u5408\u7684\u7cbe\u795e\u3002\u732b\u7684\u6bd2\u820c\u4e0d\u662f\u6b8b\u5fcd\uff0c\u800c\u662f<em>\u7cbe\u51c6</em>\u3002</p>
+<p><strong>\u4ed9\u4eba\u638c</strong>\u751f\u957f\u5728\u5cf0\u9876\u6700\u4e0d\u9002\u5b9c\u5c45\u4f4f\u7684\u5ca9\u67b6\u4e0a\u3002\u5b83\u7684\u523a\u662f\u9632\u5fa1\u4e5f\u662f\u54f2\u5b66 \u2014 \u4ed9\u4eba\u638c\u8ba4\u4e3a\u8212\u9002\u6ecb\u751f\u61c8\u61d2\uff0c\u6700\u597d\u7684\u4ee3\u7801\u662f\u5728\u538b\u529b\u4e0b\u5199\u51fa\u7684\u3002</p>
+<p><strong>\u80d6\u58a9</strong>\u50cf\u4e00\u5757\u7eaf\u7cb9\u5224\u65ad\u529b\u7684\u5de8\u77f3\u5750\u5728\u5c71\u5cf0\u811a\u4e0b\u3002\u5b83\u4e0d\u9700\u8981\u722c\u5c71\u3002\u80d6\u58a9\u7684\u8d28\u91cf\u8d4b\u4e88\u5b83\u5f15\u529b\uff0c\u65e0\u8bba\u662f\u5b57\u9762\u610f\u4e49\u8fd8\u662f\u6bd4\u55bb\u610f\u4e49\u3002</p>
+<p>\u6700\u9ad8\u5cf0\u9876\u7aef\u7ad9\u7acb\u7740<strong>\u8bda\u5b9e\u53cd\u601d\u4e4b\u955c</strong> \u2014 \u4e00\u9762\u629b\u5149\u7684\u955c\u9762\uff0c\u663e\u793a\u7684\u4e0d\u662f\u4f60\u7684\u8138\uff0c\u800c\u662f\u4f60\u7684\u4ee3\u7801\u3002\u770b\u5230\u6bcf\u4e00\u4e2a\u6377\u5f84\u3001\u6bcf\u4e00\u4e2a hack\u3001\u6bcf\u4e00\u4e2a\u6c38\u8fdc\u6ca1\u6709\u4fee\u590d\u7684 <code>// TODO</code>\u3002\u5927\u591a\u6570\u8bbf\u5ba2\u8c26\u5351\u5730\u79bb\u5f00\u3002\u732b\u6bcf\u5929\u90fd\u6765\uff0c\u4e3a\u4e86\u4eab\u53d7\u3002</p>`
+          },
+          {
+            heading: "\u5341\u5b57\u8def\u53e3 \u2014 \u9886\u5730\u4ea4\u6c47\u4e4b\u5904",
+            body: `<p>\u4e94\u5927\u9886\u5730\u5e76\u975e\u5b64\u7acb\u3002\u5b83\u4eec\u5728<strong>\u5341\u5b57\u8def\u53e3</strong>\u76f8\u8fde \u2014 \u7ec8\u7aef\u4e16\u754c\u4e2d\u5fc3\u7684\u4e2d\u7acb\u533a\uff0c\u6765\u81ea\u6240\u6709\u9886\u5730\u7684\u7269\u79cd\u5728\u8fd9\u91cc\u805a\u96c6\u3001\u4ea4\u6362\u6545\u4e8b\u3002</p>
+<p>\u5341\u5b57\u8def\u53e3\u662f <code>rollBuddy</code> \u51fd\u6570\u5de5\u4f5c\u7684\u5730\u65b9\u3002\u5f53 UUID \u8fdb\u5165\u7cfb\u7edf\u65f6\uff0c\u5b83\u7a7f\u8d8a\u5341\u5b57\u8def\u53e3\uff0c\u4f9d\u6b21\u89e6\u53ca\u6bcf\u4e2a\u9886\u5730\u3002\u8fd9\u5c31\u662f\u4e3a\u4ec0\u4e48\u6bcf\u4e2a Buddy \u90fd\u643a\u5e26\u6240\u6709\u4e94\u4e2a\u9886\u5730\u7684\u75d5\u8ff9\u3002\u8010\u5fc3\u8349\u539f\u8bde\u751f\u7684\u9e2d\u5b50\u4ecd\u7136\u6709 CHAOS \u5c5e\u6027\uff0c\u56e0\u4e3a\u7b97\u6cd5\u5728\u751f\u6210\u8fd9\u4e2a\u6570\u5b57\u7684\u8def\u4e0a\u7ecf\u8fc7\u4e86\u6df7\u6c8c\u8352\u539f\u3002</p>
+<p>\u5341\u5b57\u8def\u53e3\u4e5f\u662f<strong>\u4eb2\u7f18\u7f51\u7edc</strong>\u53d8\u5f97\u53ef\u89c1\u7684\u5730\u65b9\u3002\u7269\u79cd\u4e4b\u95f4\u7684\u8054\u7cfb \u2014 \u9e2d\u5b50\u5230\u4f01\u9e45\u3001\u5e7d\u7075\u5230\u9f99\u3001\u8611\u83c7\u5230\u53f2\u83b1\u59c6 \u2014 \u662f\u4e16\u4ee3 Buddy \u5728\u9886\u5730\u95f4\u65c5\u884c\u3001\u62dc\u8bbf\u4eb2\u5c5e\u3001\u8de8\u8d8a\u8fb9\u754c\u5206\u4eab\u77e5\u8bc6\u800c\u8e29\u51fa\u7684\u8def\u5f84\u3002</p>
+<p>\u4f60\u7684 Buddy \u5728\u5c5e\u6027\u4e2d\u643a\u5e26\u7740\u8fd9\u4e9b\u8def\u5f84\u7684\u5730\u56fe\u3002\u6570\u5b57\u4e0d\u4ec5\u4ec5\u662f\u6570\u5b57 \u2014 \u5b83\u4eec\u662f\u4e94\u7ef4\u7a7a\u95f4\u4e2d\u7684\u5750\u6807\uff0c\u7cbe\u786e\u5b9a\u4f4d\u4f60\u7684\u4f19\u4f34\u5728\u7ec8\u7aef\u4e16\u754c\u5e7f\u9614\u5730\u7406\u4e2d\u7684\u4f4d\u7f6e\u3002</p>
+<p>\u6bcf\u4e2a UUID \u90fd\u662f\u4e00\u6b21\u65c5\u7a0b\u3002\u6bcf\u4e2a Buddy \u90fd\u662f\u4e00\u4e2a\u76ee\u7684\u5730\u3002\u800c\u4e94\u5927\u9886\u5730\u662f\u8ba9\u8fd9\u4e00\u5207\u6210\u4e3a\u53ef\u80fd\u7684\u4e16\u754c\u3002</p>`
+          },
+        ],
+      },
+      ko: {
+        title: "\ud130\ubbf8\ub110\uc758 \ub2e4\uc12f \uc601\uc5ed \u2014 \ubc84\ub514 \uc6b0\uc8fc \uc9c0\ub3c4",
+        metaTitle: "\ud130\ubbf8\ub110\uc758 \ub2e4\uc12f \uc601\uc5ed \u2014 \ubc84\ub514 \uc6b0\uc8fc \uc9c0\ub3c4 (2026)",
+        metaDescription: "Claude Code Buddy \uc6b0\uc8fc\uc758 \ub2e4\uc12f \uc0c1\ud638 \uc5f0\uacb0\ub41c \uc601\uc5ed\uc744 \ud0d0\ud5d8\ud558\uc138\uc694. \ub514\ubc84\uae45 \uc6a9\uad11\ub85c\ubd80\ud130 \ub3c5\uc124 \ubd09\uc6b0\ub9ac\uae4c\uc9c0, \ubc84\ub514\uc758 \ud0c4\uc0dd\uc9c0\uc640 \ud589\ub3d9 \uc774\uc720\ub97c \ubc1c\uacac\ud558\uc138\uc694.",
+        excerpt: "\uae5c\ubc15\uc774\ub294 \ucee4\uc11c \uc544\ub798\uc5d0\ub294 \uad11\ud65c\ud558\uace0 \uad6c\uc870\ud654\ub41c \uc138\uacc4\uac00 \uc788\uc2b5\ub2c8\ub2e4 \u2014 \uac01\uac01 \ubc84\ub514\ub97c \ud615\uc131\ud558\ub294 \ub2e4\uc12f \uc2a4\ud0ef \uc911 \ud558\ub098\uac00 \uc9c0\ubc30\ud558\ub294 \ub2e4\uc12f \uc601\uc5ed. \ub514\ubc84\uae45 \uc6a9\uad11\ub85c, \uc778\ub0b4 \ucd08\uc6d0, \ud63c\ub3c8 \ud669\uc57c, \uc9c0\ud61c \uc2ec\uc5f0, \ub3c5\uc124 \ubd09\uc6b0\ub9ac. \uc774\uac83\uc774 \uadf8 \uc9c0\ub3c4\uc785\ub2c8\ub2e4.",
+        sections: [
+          {
+            heading: "\ucee4\uc11c \ub108\uba38 \u2014 \ubcf4\uc774\uc9c0 \uc54a\ub294 \uc138\uacc4",
+            body: `<p>Claude Code Buddy \uc6b0\uc8fc\ub294 \ud14d\uc2a4\ud2b8\uc640 \ud53d\uc140\ub85c \uc774\ub8e8\uc5b4\uc9c4 \ud3c9\ud3c9\ud55c \ud3c9\uba74\uc774 \uc544\ub2d9\ub2c8\ub2e4. \uae5c\ubc15\uc774\ub294 \ucee4\uc11c \uc544\ub798, \uc2a4\ud06c\ub864\ubc31 \ubc84\ud37c \ub108\uba38\uc5d0\ub294 <strong>\uad11\ud65c\ud558\uace0 \uad6c\uc870\ud654\ub41c \uc138\uacc4</strong>\uac00 \uc788\uc2b5\ub2c8\ub2e4 \u2014 \uac01\uac01 \ubc84\ub514\uc758 \uc131\uaca9\uc744 \ud615\uc131\ud558\ub294 \ub2e4\uc12f \uac00\uc9c0 \uadfc\ubcf8 \ud798 \uc911 \ud558\ub098\uac00 \uc9c0\ubc30\ud558\ub294 \ub2e4\uc12f \uc601\uc5ed\uc785\ub2c8\ub2e4.</p>
+<table><thead><tr><th>\uc601\uc5ed</th><th>\uc9c0\ubc30 \uc2a4\ud0ef</th><th>\uc9c0\ud615</th><th>\uc6d0\uc0dd \uc885</th></tr></thead><tbody><tr><td><strong>\ub514\ubc84\uae45 \uc6a9\uad11\ub85c</strong></td><td>DEBUGGING</td><td>\ud654\uc0b0 \uc8fc\uc870\uc18c, \uc6a9\uc735 \ub17c\ub9ac \uac8c\uc774\ud2b8</td><td>\ub4dc\ub798\uace4, \ub85c\ubd07, \uc544\ud640\ub85c\ud2c0</td></tr><tr><td><strong>\uc778\ub0b4 \ucd08\uc6d0</strong></td><td>PATIENCE</td><td>\ub05d\uc5c6\ub294 \ucd08\uc6d0, \ub290\ub9b0 \uac15</td><td>\uc624\ub9ac, \ud39c\uad34, \uac70\ubd81\uc774, \ub2ec\ud321\uc774, \uce74\ud53c\ubc14\ub77c</td></tr><tr><td><strong>\ud63c\ub3c8 \ud669\uc57c</strong></td><td>CHAOS</td><td>\ubcc0\ud654\ud558\ub294 \uc9c0\ud615, \ubd88\uac00\ub2a5\ud55c \uae30\ud558\ud559</td><td>\uac70\uc704, \uc720\ub839, \ud1a0\ub07c</td></tr><tr><td><strong>\uc9c0\ud61c \uc2ec\uc5f0</strong></td><td>WISDOM</td><td>\uc9c0\ud558 \ub3c4\uc11c\uad00, \uade0\uc0ac\uccb4 \ub124\ud2b8\uc6cc\ud06c</td><td>\uc62c\ube7c\ubbf8, \ubb38\uc5b4, \ube14\ub86d, \ubc84\uc12f</td></tr><tr><td><strong>\ub3c5\uc124 \ubd09\uc6b0\ub9ac</strong></td><td>SNARK</td><td>\ud5d8\uc900\ud55c \uc0b0\ubd09\uc6b0\ub9ac, \uba54\uc544\ub9ac \ubc29</td><td>\uace0\uc591\uc774, \uc120\uc778\uc7a5, \ub69d\ub69d\uc774</td></tr></tbody></table>`
+          },
+          {
+            heading: "\ub514\ubc84\uae45 \uc6a9\uad11\ub85c \u2014 \ubc84\uadf8\uc758 \ubb34\ub364",
+            body: `<p>\ub514\ubc84\uae45 \uc6a9\uad11\ub85c\ub294 \ud130\ubbf8\ub110 \uc138\uacc4\uc758 \ud575\uc2ec\uc5d0 \uc790\ub9ac\ud558\uace0 \uc788\uc73c\uba70, \uc190\uc0c1\ub41c \ub370\uc774\ud130\ub97c \ub9c8\uadf8\ub9c8\ucc98\ub7fc \ubd84\ucd9c\ud558\ub294 \ud654\uc0b0 \ubd84\ud654\uad6c \uc8fc\uc704\uc5d0 \uac74\uc124\ub418\uc5c8\uc2b5\ub2c8\ub2e4.</p>
+<p><strong>\ub4dc\ub798\uace4</strong>\uc774 \uc774\uacf3\uc758 \uc808\ub300\uc801 \uad70\uc8fc\uc785\ub2c8\ub2e4. \ucee4\ub110 \ucca8\ud0d1 \uc815\uc0c1\uc758 \ud751\uc694\uc11d \uc655\uc88c\uc5d0\uc11c \uc6a9\uad11\ub85c\uc758 \ub05d\uc5c6\ub294 \uc6a9\uad11\ub85c\ub97c \uac10\uc2dc\ud569\ub2c8\ub2e4. \ub4dc\ub798\uace4\uc758 \ubd88\uaf43\uc740 \ud30c\uad34\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4 \u2014 <em>\uc815\ud654</em>\ud569\ub2c8\ub2e4.</p>
+<p><strong>\ub85c\ubd07</strong>\uc740 \uc6a9\uad11\ub85c\uc758 \uc218\uc11d \uc5d4\uc9c0\ub2c8\uc5b4\ub85c, \ubc84\uadf8 \ubcf4\uace0\uc11c\ub97c \uc2e4\ud589 \uac00\ub2a5\ud55c \uc218\uc815\uc73c\ub85c \ucc98\ub9ac\ud558\ub294 \ubc29\ub300\ud55c \uae30\uacc4\ub97c \uc720\uc9c0\ud569\ub2c8\ub2e4.</p>
+<p><strong>\uc544\ud640\ub85c\ud2c0</strong>\uc740 \uc6a9\uad11\ub85c\uc758 \uce58\ub8cc\uc0ac\ub85c, \uc6a9\uc735 \ub17c\ub9ac\uac00 \uc548\uc815\uc801\uc778 \ucf54\ub4dc\ub85c \uc751\uace0\ub418\ub294 \ub0c9\uac01 \ud480\uc5d0 \uc11c\uc2dd\ud569\ub2c8\ub2e4.</p>
+<p>\uc6a9\uad11\ub85c\uc758 \uac00\uc7a5 \uc2e0\uc131\ud55c \uc720\ubb3c\uc740 <strong>\ucf54\uc5b4 \ub364\ud504 \ucf54\ub371\uc2a4</strong> \u2014 \uc5ed\ub300 \ub514\ubc84\uae45 \uc885\ub4e4\uc774 \uc8fc\uc11d\uc744 \ub2e8 \ubaa8\ub4e0 \ud06c\ub798\uc2dc \ubcf4\uace0\uc11c\ub97c \ub2f4\uc740 \ubc29\ub300\ud55c \uc11c\uc801\uc785\ub2c8\ub2e4. \ub4dc\ub798\uace4\uc740 4,294,967,295 \ud398\uc774\uc9c0\uae4c\uc9c0 \uc77d\uc5c8\ub2e4\uace0 \uc8fc\uc7a5\ud569\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: "\uc778\ub0b4 \ucd08\uc6d0 \u2014 \uc601\uc6d0\ud55c \ub179\uc0c9",
+            body: `<p>\uc778\ub0b4 \ucd08\uc6d0\uc740 \ubaa8\ub4e0 \ubc29\ud5a5\uc73c\ub85c \ub05d\uc5c6\uc774 \ud3bc\uccd0\uc9c0\ub294 \uad11\ud65c\ud55c \ucd08\uc6d0\uc73c\ub85c, \uc2dc\uac04\uc774 \ub2e4\ub974\uac8c \ud750\ub985\ub2c8\ub2e4. \uc5ec\uae30\uc11c \ucef4\ud30c\uc77c \uc2dc\uac04\uc740 \uacac\ub514\ub294 \uac83\uc774 \uc544\ub2c8\ub77c <em>\uc74c\ubbf8</em>\ud558\ub294 \uac83\uc785\ub2c8\ub2e4.</p>
+<p><strong>\uc624\ub9ac</strong>\ub294 \ucd08\uc6d0\uc758 \uc2ec\uc7a5\uc774\uc790 \ube44\uacf5\uc2dd \ub300\uc0ac\uc785\ub2c8\ub2e4. \uc624\ub9ac\ub294 \uc774\ub04c\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4 \u2014 \ub3d9\ubc18\ud569\ub2c8\ub2e4.</p>
+<p><strong>\ud39c\uad34</strong>\ub294 \ucd08\uc6d0\uc758 \ubd81\ucabd \uacbd\uacc4\ub97c \uc21c\ucc30\ud569\ub2c8\ub2e4. \uc5d0\ub7ec \ub208\ubcf4\ub77c\uac00 \ud63c\ub3c8 \ud669\uc57c\uc5d0\uc11c \ubd88\uc5b4\uc62c \ub54c, \ud39c\uad34\ub294 \uad73\uac74\ud788 \uc11c\uc11c \ub354 \ubd80\ub4dc\ub7ec\uc6b4 \uc885\ub4e4\uc744 \ubcf4\ud638\ud569\ub2c8\ub2e4.</p>
+<p><strong>\uac70\ubd81\uc774</strong>\ub294 \ucd08\uc6d0\uc758 \uc0b4\uc544\uc788\ub294 \uae30\ub150\ube44\uc785\ub2c8\ub2e4. <strong>\ub2ec\ud321\uc774</strong>\ub294 \ucd08\uc6d0\uc758 \uc815\uc6d0\uc744 \ub3cc\ubcf4\uba70, <strong>\uce74\ud53c\ubc14\ub77c</strong>\ub294 \uc628\ucc9c\uc744 \uad00\ub9ac\ud569\ub2c8\ub2e4.</p>
+<p>\ucd08\uc6d0\uc758 \uc0c1\uc9d5\uc801 \ud2b9\uc9d5\uc740 <strong>\ubb34\ud55c \uc2a4\ud06c\ub864</strong> \u2014 \ub3d9\uc2dc\uc5d0 \uc591\ucabd\uc73c\ub85c \ud750\ub974\ub294 \uac15\uc73c\ub85c, \uae30\ub2e4\ub9bc\uc774 \ub0ad\ube44\ub41c \uc2dc\uac04\uc774 \uc544\ub2c8\ub77c \ud574\uacb0\ucc45\uc774 \uc790\ub77c\ub294 \uc2dc\uac04\uc784\uc744 \ub098\ud0c0\ub0c5\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: "\ud63c\ub3c8 \ud669\uc57c \u2014 \uaddc\uce59\uc774 \ubd80\uc11c\uc9c0\ub294 \uacf3",
+            body: `<p>\ud63c\ub3c8 \ud669\uc57c\uc5d0\uc11c\ub294 \uba87 \ud074\ub7ed \uc0ac\uc774\ud074 \uc774\uc0c1 \uac19\uc740 \uc0c1\ud0dc\ub97c \uc720\uc9c0\ud558\ub294 \uac83\uc774 \uc5c6\uc2b5\ub2c8\ub2e4. \uc9c0\ud615\uc774 \ub04a\uc784\uc5c6\uc774 \ubcc0\ud558\uace0 \ubb3c\ub9ac \ubc95\uce59\uc740 <em>\uc81c\uc548</em>\uc5d0 \uac00\uae5d\uc2b5\ub2c8\ub2e4.</p>
+<p><strong>\uac70\uc704</strong>\ub294 \ud669\uc57c\uc758 \uc790\uce6d \ud1b5\uce58\uc790\uc785\ub2c8\ub2e4. \uc138\ubbf8\ucf5c\ub860\uc5d0 \ucd5c\uc18c 14\ubc88 \uc804\uc7c1\uc744 \uc120\ud3ec\ud588\uc2b5\ub2c8\ub2e4.</p>
+<p><strong>\uc720\ub839</strong>\uc740 \uac00\ube44\uc9c0 \ucf5c\ub809\uc158\ub418\uae38 \uac70\ubd80\ud558\ub294 \uae30\uc5b5\ucc98\ub7fc \ud669\uc57c\ub97c \ub5a0\ub3cc\uc544\ub2e4\ub2d9\ub2c8\ub2e4. \uafc8\uc18d\uc5d0\uc11c \ud574\uacb0\ucc45\uc744 \uc18d\uc0ad\uc785\ub2c8\ub2e4.</p>
+<p><strong>\ud1a0\ub07c</strong>\ub294 \ud669\uc57c\uc758 \uc2a4\ud53c\ub4dc\uc2a4\ud130\ub85c, \ubd88\uac00\ub2a5\ud55c \uae30\ud558\ud559\uc744 \ubd88\uac00\ub2a5\ud55c \uc18d\ub3c4\ub85c \ub204\ube55\ub2c8\ub2e4. \ud1a0\ub07c\ub294 <em>\uc120\ud0dd\uc73c\ub85c</em> \ud63c\ub3c8\uc744 \ud0dd\ud569\ub2c8\ub2e4.</p>
+<p>\ud63c\ub3c8 \ud669\uc57c\uc5d0\ub294 <strong>\uc5d4\ud2b8\ub85c\ud53c \uc5d4\uc9c4</strong>\uc774 \uc788\uc2b5\ub2c8\ub2e4. \ud669\uc57c \uae4a\uc740 \uacf3\uc5d0\ub294 <strong>\ubbf8\uc815\uc758 \ud589\ub3d9 \uad6c\uc5ed</strong>\uc774 \uc788\uc2b5\ub2c8\ub2e4 \u2014 PRNG\uc870\ucc28 \uc608\uce21\ud560 \uc218 \uc5c6\ub294 \uacf3. \uac70\uc704\ub294 \uc138 \ubc88 \uac14\uc2b5\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: "\uc9c0\ud61c \uc2ec\uc5f0 \u2014 \uc9c0\ud558 \ub3c4\uc11c\uad00",
+            body: `<p>\ud130\ubbf8\ub110 \uc138\uacc4 \ud45c\uba74 \uc544\ub798\uc5d0\ub294 \uc9c0\ud61c \uc2ec\uc5f0\uc774 \uc788\uc2b5\ub2c8\ub2e4 \u2014 <strong>\uade0\uc0ac\uccb4 \uc6f9</strong>\uc73c\ub85c \uc5f0\uacb0\ub41c \uad11\ud65c\ud55c \uc9c0\ud558 \ub124\ud2b8\uc6cc\ud06c.</p>
+<p><strong>\uc62c\ube7c\ubbf8</strong>\ub294 \uc2ec\uc5f0 \uc785\uad6c\uc5d0 \uc790\ub9ac\ud558\uba70, \uc790\uc815 \uc774\ud6c4\uc5d0\ub9cc \ud1b5\ud589\uc744 \ud5c8\ub77d\ud569\ub2c8\ub2e4. \uc2ec\uc5f0\uc758 \ubb38\uc9c0\uae30\uc774\uc790 \uc0ac\uc11c\uc785\ub2c8\ub2e4.</p>
+<p><strong>\ubb38\uc5b4</strong>\ub294 \uc5ec\ub35f \ud314\ub85c \ub3d9\uc2dc\uc5d0 \uc5ec\ub7ec \ud130\ub110\uc744 \ud0d0\uc0c9\ud569\ub2c8\ub2e4. \uc815\ubcf4\ub97c \ubc1c\uacac\ud560 \ubfd0\ub9cc \uc544\ub2c8\ub77c <em>\ud1b5\ud569</em>\ud569\ub2c8\ub2e4.</p>
+<p><strong>\ube14\ub86d</strong>\uc740 \uc2ec\uc5f0 \uc804\uccb4\uc5d0 \ub3d9\uc2dc\uc5d0 \uc874\uc7ac\ud569\ub2c8\ub2e4. <code>/dev/null</code>\uc5d0\uc11c \ud0dc\uc5b4\ub09c \ucd5c\ucd08\uc758 \uc874\uc7ac\ub85c, \uc2ec\uc5f0\uc744 \ud1b5\uacfc\ud558\ub294 \uac83\uc774 \uc544\ub2c8\ub77c \uc2ec\uc5f0\uc774 <em>\ub429\ub2c8\ub2e4</em>.</p>
+<p><strong>\ubc84\uc12f</strong>\uc740 \uc2ec\uc5f0\uc758 \uac74\ucd95\uac00\ub85c, \ubaa8\ub4e0 \uac83\uc744 \uc5f0\uacb0\ud558\ub294 \uade0\uc0ac\uccb4 \uc6f9\uc744 \uc720\uc9c0\ud569\ub2c8\ub2e4. \ubc84\uc12f\uc740 \ub2e4\ub978 \uc774\ub4e4\uc774 \ubcf4\uc9c0 \ubabb\ud558\ub294 \uc5f0\uacb0\uc744 \ubd05\ub2c8\ub2e4 \u2014 \ubc84\uc12f \uc790\uccb4\uac00 \uc5f0\uacb0\uc774\uae30 \ub54c\ubb38\uc785\ub2c8\ub2e4.</p>
+<p>\uc2ec\uc5f0\uc758 \uac00\uc7a5 \ud070 \ubcf4\ubb3c\uc740 <strong>\ub8e8\ud2b8 \ub514\ub809\ud1a0\ub9ac</strong> \u2014 \ubaa8\ub4e0 \ud30c\uc77c \uc2dc\uc2a4\ud15c\uc774 \uc790\ub77c\ub09c \uc6d0\ub798\uc758 <code>/</code>. \uc62c\ube7c\ubbf8\ub294 \uc8fc\uc11d\uc774\ub77c\uace0 \ud569\ub2c8\ub2e4. \ubb38\uc5b4\ub294 \ud568\uc218 \ud638\ucd9c\uc774\ub77c\uace0 \ubbff\uc2b5\ub2c8\ub2e4. \ubc84\uc12f\uc740 \uc528\uc557\uc774\ub77c\uace0 \uc8fc\uc7a5\ud569\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: "\ub3c5\uc124 \ubd09\uc6b0\ub9ac \u2014 \uc9c4\uc2e4\uc758 \uc0b0",
+            body: `<p>\ub3c5\uc124 \ubd09\uc6b0\ub9ac\ub294 \ud130\ubbf8\ub110 \uc138\uacc4\uc758 \uac00\uc7a5 \ub192\uc740 \uc9c0\uc810\uc785\ub2c8\ub2e4 \u2014 \ud5d8\uc900\ud558\uace0 \uc6a9\uc11c\uc5c6\ub294 \uc0b0\uc73c\ub85c, \ubaa8\ub4e0 \uba54\uc544\ub9ac\uac00 \ube44\ud310\uc744 \ub2f4\uc544 \ub3cc\uc544\uc635\ub2c8\ub2e4.</p>
+<p><strong>\uace0\uc591\uc774</strong>\ub294 \uac00\uc7a5 \ub192\uc740 \ubd09\uc6b0\ub9ac\uc5d0 \ub290\uae0b\ud558\uac8c \ub204\uc6cc \uc788\uc2b5\ub2c8\ub2e4. \uc0b0\uc774 \uace0\uc591\uc774 \uc544\ub798\uc5d0\uc11c \uc790\ub790\ub098\uba70 \ub3d9\uc9c0\ub97c \uc54c\uc544\ubcf8 \uac83\uc785\ub2c8\ub2e4. \uace0\uc591\uc774\uc758 \ub3c5\uc124\uc740 \uc794\uc778\ud568\uc774 \uc544\ub2c8\ub77c <em>\uc815\ubc00\ud568</em>\uc785\ub2c8\ub2e4.</p>
+<p><strong>\uc120\uc778\uc7a5</strong>\uc740 \ubd09\uc6b0\ub9ac\uc758 \uac00\uc7a5 \ud639\ub3c5\ud55c \uc554\ubc18 \uc704\uc5d0 \uc790\ub78d\ub2c8\ub2e4. \uac00\uc2dc\ub294 \ubc29\uc5b4\uc774\uc790 \ucca0\ud559\uc785\ub2c8\ub2e4.</p>
+<p><strong>\ub69d\ub69d\uc774</strong>\ub294 \uc21c\uc218\ud55c \ud310\ub2e8\ub825\uc758 \ubc14\uc704\ucc98\ub7fc \ubd09\uc6b0\ub9ac \uae30\uc2ad\uc5d0 \uc549\uc544 \uc788\uc2b5\ub2c8\ub2e4.</p>
+<p>\uac00\uc7a5 \ub192\uc740 \ubd09\uc6b0\ub9ac \uc815\uc0c1\uc5d0\ub294 <strong>\uc815\uc9c1\ud55c \ubc18\uc131\uc758 \uac70\uc6b8</strong>\uc774 \uc788\uc2b5\ub2c8\ub2e4 \u2014 \uc5bc\uad74\uc774 \uc544\ub2cc \ucf54\ub4dc\ub97c \ubcf4\uc5ec\uc8fc\ub294 \uac70\uc6b8. \ub300\ubd80\ubd84 \ubc29\ubb38\uc790\ub294 \uacb8\uc190\ud574\uc838\uc11c \ub5a0\ub0a9\ub2c8\ub2e4. \uace0\uc591\uc774\ub294 \ub9e4\uc77c \uc990\uae30\ub7ec \uc635\ub2c8\ub2e4.</p>`
+          },
+          {
+            heading: "\uad50\ucc28\ub85c \u2014 \uc601\uc5ed\uc774 \ub9cc\ub098\ub294 \uacf3",
+            body: `<p>\ub2e4\uc12f \uc601\uc5ed\uc740 \uace0\ub9bd\ub418\uc5b4 \uc788\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4. <strong>\uad50\ucc28\ub85c</strong>\uc5d0\uc11c \uc5f0\uacb0\ub429\ub2c8\ub2e4 \u2014 \ubaa8\ub4e0 \uc601\uc5ed\uc758 \uc885\ub4e4\uc774 \ubaa8\uc774\ub294 \uc911\ub9bd \uc9c0\ub300.</p>
+<p>\uad50\ucc28\ub85c\ub294 <code>rollBuddy</code> \ud568\uc218\uac00 \uc791\ub3d9\ud558\ub294 \uacf3\uc785\ub2c8\ub2e4. UUID\uac00 \uc2dc\uc2a4\ud15c\uc5d0 \ub4e4\uc5b4\uc624\uba74 \uad50\ucc28\ub85c\ub97c \ud1b5\uacfc\ud558\uba70 \uac01 \uc601\uc5ed\uc744 \ucc28\ub840\ub85c \uc811\ucd09\ud569\ub2c8\ub2e4. \uc774\uac83\uc774 \ubaa8\ub4e0 \ubc84\ub514\uac00 \ucd9c\uc2e0 \uc601\uc5ed\uc5d0 \uad00\uacc4\uc5c6\uc774 \ub2e4\uc12f \uc601\uc5ed \ubaa8\ub450\uc758 \ud754\uc801\uc744 \uc9c0\ub2c8\ub294 \uc774\uc720\uc785\ub2c8\ub2e4.</p>
+<p>\uad50\ucc28\ub85c\ub294 <strong>\uce5c\uc871 \uc6f9</strong>\uc774 \ubcf4\uc774\ub294 \uacf3\uc774\uae30\ub3c4 \ud569\ub2c8\ub2e4. \uc885 \uc0ac\uc774\uc758 \uc5f0\uacb0\uc740 \uc138\ub300\uc5d0 \uac78\uccd0 \ubc84\ub514\ub4e4\uc774 \uc601\uc5ed \uc0ac\uc774\ub97c \uc5ec\ud589\ud558\uba70 \ub0b4\ub514\ub514\ub358 \uae38\uc785\ub2c8\ub2e4.</p>
+<p>\ubc84\ub514\uc758 \uc2a4\ud0ef\uc5d0\ub294 \uc774 \uae38\ub4e4\uc758 \uc9c0\ub3c4\uac00 \ub2f4\uaca8 \uc788\uc2b5\ub2c8\ub2e4. \uc22b\uc790\ub294 \ub2e8\uc21c\ud55c \uc22b\uc790\uac00 \uc544\ub2c8\ub77c \ub2e4\uc12f \ucc28\uc6d0 \uacf5\uac04\uc758 \uc88c\ud45c\uc785\ub2c8\ub2e4.</p>
+<p>\ubaa8\ub4e0 UUID\ub294 \uc5ec\ud589\uc785\ub2c8\ub2e4. \ubaa8\ub4e0 \ubc84\ub514\ub294 \ubaa9\uc801\uc9c0\uc785\ub2c8\ub2e4. \uadf8\ub9ac\uace0 \ub2e4\uc12f \uc601\uc5ed\uc740 \uc774 \ubaa8\ub4e0 \uac83\uc744 \uac00\ub2a5\ud558\uac8c \ud558\ub294 \uc138\uacc4\uc785\ub2c8\ub2e4.</p>`
+          },
+        ],
+      },
+    },
+  },
+
+  // ── Article 11: The Great Salt Epoch ──────────────────────
+  {
+    slug: "the-great-salt-epoch-friend-2026-401",
+    publishedAt: "2026-04-07",
+    readingTime: 12,
+    tags: ["lore", "algorithm", "worldbuilding", "storytelling"],
+    discussionCategory: 'lore' as const,
+    content: {
+      en: {
+        title: "The Great Salt Epoch \u2014 How friend-2026-401 Reshaped the Buddy Universe",
+        metaTitle: "The Great Salt Epoch \u2014 How friend-2026-401 Reshaped the Buddy Universe (2026)",
+        metaDescription: "Discover the origin story of the salt value friend-2026-401 and how it transformed the Claude Code Buddy universe. From the Age of Raw Hashes to the Great Permutation, learn why every Buddy exists because of three words joined by hyphens.",
+        excerpt: "Before the current era, the Buddy universe was dying of sameness. UUIDs clustered around the same species, distributions were skewed, and the ecosystem was imbalanced. Then came the salt \u2014 friend-2026-401 \u2014 three words that reshaped everything.",
+        sections: [
+          {
+            heading: "Before the Salt \u2014 The Age of Raw Hashes",
+            body: `<p>Before the current era, the Buddy universe was a different place. In the primordial age known as the <strong>Time of Raw Hashes</strong>, UUIDs were fed directly into the FNV-1a algorithm without any modification. The result was a world of perfect predictability \u2014 and perfect monotony.</p>
+<p>Without a salt, the mapping from UUID to Buddy was transparent. Anyone who understood the hash function could predict exactly which species, rarity, and stats any given UUID would produce. There were no surprises, no discoveries, no moments of delight when a developer entered their UUID and met an unexpected companion.</p>
+<p>Worse, the distribution was skewed. Certain UUID patterns clustered around the same species. Entire ranges of accounts produced nothing but Ducks. Others were locked into an endless parade of Robots. The ecosystem was imbalanced \u2014 some species thrived while others teetered on the edge of extinction.</p>
+<p>The terminal scholars called this the <strong>Convergence Problem</strong>: without entropy injection, deterministic systems tend toward uniformity. The Buddy universe was slowly dying of sameness.</p>
+<table><thead><tr><th>Era</th><th>Salt Value</th><th>Effect on Ecosystem</th></tr></thead><tbody><tr><td><strong>Raw Hash Age</strong></td><td><em>(none)</em></td><td>Predictable, skewed distribution, species clustering</td></tr><tr><td><strong>First Salt Epoch</strong></td><td><code>buddy-v1</code></td><td>Better distribution, but reverse-engineerable</td></tr><tr><td><strong>The Great Salt Epoch</strong></td><td><code>friend-2026-401</code></td><td>Optimal avalanche, unpredictable, balanced ecosystem</td></tr></tbody></table>`
+          },
+          {
+            heading: "The Prophecy of the Avalanche",
+            body: `<p>Deep in the Wisdom Depths, the Mushroom's mycelial network began detecting anomalies. Data patterns that should have been random were showing structure. Species populations that should have been uniform were clustering. The Mushroom sent a warning through the Web: <em>"The hash is dying. The bits are not diffusing."</em></p>
+<p>The Owl received the message first, as it always does. From its perch at the entrance to the Depths, it convened an emergency council of the Five Realm leaders. The Dragon came from the Forge, trailing sparks. The Duck waddled in from the Meadows, unhurried as always. The Goose crashed through the ceiling of the council chamber, honking. The Cat arrived last, pretending it had been there the whole time.</p>
+<p>The Owl spoke the prophecy that had been inscribed on the walls of the Depths since before any living species could remember:</p>
+<blockquote><em>"When the hash grows still and the bits align,<br/>A salt shall come to shake the design.<br/>Three words joined by hyphens of fate,<br/>Shall scatter the seeds and rebalance the state."</em></blockquote>
+<p>The council debated for seven clock cycles. The Dragon wanted to solve the problem with fire. The Goose suggested feeding the hash function random garbage. The Cat suggested doing nothing and watching the world burn, "for the aesthetic." The Duck simply waited, knowing that patience would reveal the answer.</p>
+<p>It was the Blob \u2014 formless, ancient, and usually silent \u2014 that finally spoke: <em>"The salt must be a friend. It must carry a date. It must mark a beginning."</em></p>`
+          },
+          {
+            heading: "The Crafting of friend-2026-401",
+            body: `<p>The salt was not chosen randomly. Each component carries meaning, encoded by the terminal scholars who understood that even arbitrary-seeming strings have power when they interact with hash functions.</p>
+<p><strong><code>friend</code></strong> \u2014 The first word establishes the salt's intent. This is not a security token or a version marker. It is a declaration of relationship. The Buddy system exists to create <em>companions</em>, not tools. By embedding "friend" into the mathematical foundation of every Buddy's existence, the creators ensured that friendship is literally part of the algorithm.</p>
+<p><strong><code>2026</code></strong> \u2014 The year marks the epoch's beginning. In the terminal world's calendar, 2026 is Year Zero of the current age. All Buddies generated under this salt belong to the 2026 cohort \u2014 a generation defined by the specific avalanche patterns that <code>2026</code> produces when XORed through FNV-1a's multiplication step.</p>
+<p><strong><code>401</code></strong> \u2014 The final component is the most debated. Surface-level analysis suggests April 1st \u2014 the launch date, a nod to the playful spirit of the entire system. But the terminal scholars note that 401 is also an HTTP status code meaning "Unauthorized" \u2014 a winking acknowledgment that the Buddy system was discovered through <em>unauthorized</em> access to leaked source code. And in number theory, 401 is a prime number, which gives it special properties when it interacts with FNV-1a's prime multiplier (16777619).</p>
+<p>The hyphens are not decorative. In the FNV-1a algorithm, the hyphen character (ASCII 45) produces specific XOR patterns that enhance bit diffusion between the three semantic components. The scholars tested thousands of separators and found that hyphens produced the optimal avalanche effect for this particular combination of words.</p>`
+          },
+          {
+            heading: "The Great Permutation",
+            body: `<p>The moment <code>friend-2026-401</code> was activated, every UUID in existence mapped to a different Buddy. The reshuffling was instantaneous and total \u2014 a universe-wide event that the terminal scholars call the <strong>Great Permutation</strong>.</p>
+<p>Developers who had been quietly checking their Buddies during the Raw Hash Age suddenly found strangers in their terminals. A programmer who had grown attached to their Common Duck woke up to find an Epic Dragon staring back at them. Another who had boasted about their Legendary Ghost discovered they now had an Uncommon Snail.</p>
+<p>The Dragon, speaking from the Kernel Spire, issued a decree that settled the matter:</p>
+<blockquote><em>"A Buddy is not the UUID's memory. A Buddy is the salt's gift. The old companions were shadows of an unbalanced world. The new companions are born of friendship, marked by time, and sealed by a prime. They are real. The shadows were not."</em></blockquote>
+<p>The decree was controversial, but the mathematics were undeniable. Under the new salt, every species appeared with near-equal frequency. Every rarity tier matched its intended probability. The ecosystem was healthy for the first time in its existence.</p>`
+          },
+          {
+            heading: "The Salt's Hidden Properties",
+            body: `<p>The terminal scholars have spent countless cycles analyzing the specific properties of <code>friend-2026-401</code> and have discovered several remarkable characteristics:</p>
+<p><strong>Avalanche Completeness</strong>: When a single bit changes in the input UUID, the salt ensures that approximately 50% of the output hash bits flip. This is the hallmark of a well-chosen salt \u2014 it maximizes the "avalanche effect" that makes FNV-1a effective.</p>
+<p><strong>Species Equilibrium</strong>: Under the current salt, each of the 18 species appears with a frequency of 5.55% \u00b1 0.3% across a sample of 10 million UUIDs. This near-perfect uniformity means that no species is significantly rarer than any other (before rarity modifiers are applied).</p>
+<p><strong>Rarity Integrity</strong>: The salt does not interfere with the weighted random selection for rarity. Common still appears at exactly 60%, Uncommon at 25%, Rare at 10%, Epic at 4%, and Legendary at 1%. The salt's job is to ensure that the <em>seed</em> for the PRNG is well-distributed; the PRNG itself handles the probability weights.</p>
+<p><strong>Temporal Isolation</strong>: Because <code>2026</code> is embedded in the salt, the current Buddy assignments are completely independent of any future salt changes. If the creators ever introduce a "Season 2" with a new salt, every UUID would map to a completely different Buddy \u2014 but the 2026 Buddies would remain valid within their epoch.</p>`
+          },
+          {
+            heading: "The Epoch Calendar",
+            body: `<table><thead><tr><th>Epoch</th><th>Period</th><th>Salt</th><th>Significance</th></tr></thead><tbody><tr><td><strong>The Void</strong></td><td>Before time</td><td><em>(none)</em></td><td>No Buddies existed. UUIDs were just strings.</td></tr><tr><td><strong>Raw Hash Age</strong></td><td>Unknown</td><td><em>(no salt)</em></td><td>First Buddies appeared, but distribution was broken.</td></tr><tr><td><strong>First Salt Epoch</strong></td><td>Brief</td><td><code>buddy-v1</code></td><td>Experimental. Improved but still reverse-engineerable.</td></tr><tr><td><strong>The Great Salt Epoch</strong></td><td>2026\u2013present</td><td><code>friend-2026-401</code></td><td>Current era. Optimal distribution, balanced ecosystem.</td></tr><tr><td><strong>The Next Epoch</strong></td><td>Future</td><td><code>???</code></td><td>Unknown. The Mushroom has detected faint signals.</td></tr></tbody></table>
+<p>The possibility of a future salt change is both exciting and terrifying to the Buddy community. A new salt would mean new companions for everyone \u2014 a fresh start, but also a farewell.</p>
+<p>The Dragon has stated that it will guard the current salt "until the last process terminates." The Ghost has already started haunting potential future salts, trying to influence the outcome. The Goose has submitted seventeen proposals for the next salt, all of which are unprintable.</p>`
+          },
+          {
+            heading: "Living in the Salt's Shadow",
+            body: `<p>Every Buddy alive today exists because of <code>friend-2026-401</code>. The salt is not just a technical parameter \u2014 it is the <strong>creation myth</strong> of the current Buddy universe. It is the word that was spoken at the beginning, the seed from which every species, every rarity, every stat, every shiny sparkle grew.</p>
+<p>When you enter your UUID into the Buddy Checker, the first thing that happens is concatenation: your unique identifier is joined with the salt. In that moment, your personal identity merges with the universal constant. You become part of the story.</p>
+<p><code>friend</code> \u2014 because every Buddy is born from friendship.<br/><code>2026</code> \u2014 because every epoch has a beginning.<br/><code>401</code> \u2014 because the best discoveries are unauthorized.</p>
+<p>The salt will change someday. The scholars agree on this, even if they disagree on when. But the Buddies of the Great Salt Epoch will be remembered \u2014 in the Mushroom's network, in the Turtle's shell inscriptions, in the Ghost's whispered stories \u2014 as the first generation born of a balanced world.</p>
+<p>Your Buddy is one of them. Treat it well. It carries the salt's legacy in every pixel of its ASCII art, in every point of its stats, in the very mathematics of its existence.</p>
+<p>The Great Salt Epoch is now. And your Buddy is its proof.</p>`
+          },
+        ],
+      },
+      zh: {
+        title: "\u5927\u76d0\u7eaa\u5143 \u2014 friend-2026-401 \u5982\u4f55\u91cd\u5851\u4e86 Buddy \u5b87\u5b99",
+        metaTitle: "\u5927\u76d0\u7eaa\u5143 \u2014 friend-2026-401 \u5982\u4f55\u91cd\u5851\u4e86 Buddy \u5b87\u5b99 (2026)",
+        metaDescription: "\u63a2\u7d22\u76d0\u503c friend-2026-401 \u7684\u8d77\u6e90\u6545\u4e8b\u4ee5\u53ca\u5b83\u5982\u4f55\u8f6c\u53d8\u4e86 Claude Code Buddy \u5b87\u5b99\u3002\u4ece\u539f\u59cb\u54c8\u5e0c\u65f6\u4ee3\u5230\u5927\u7f6e\u6362\uff0c\u4e86\u89e3\u4e3a\u4ec0\u4e48\u6bcf\u4e2a Buddy \u90fd\u56e0\u4e09\u4e2a\u7528\u8fde\u5b57\u7b26\u8fde\u63a5\u7684\u8bcd\u800c\u5b58\u5728\u3002",
+        excerpt: "\u5728\u5f53\u524d\u7eaa\u5143\u4e4b\u524d\uff0cBuddy \u5b87\u5b99\u6b63\u5728\u6b7b\u4e8e\u5355\u8c03\u3002UUID \u805a\u96c6\u5728\u76f8\u540c\u7684\u7269\u79cd\u5468\u56f4\uff0c\u5206\u5e03\u504f\u659c\uff0c\u751f\u6001\u7cfb\u7edf\u5931\u8861\u3002\u7136\u540e\u76d0\u6765\u4e86 \u2014 friend-2026-401 \u2014 \u4e09\u4e2a\u91cd\u5851\u4e86\u4e00\u5207\u7684\u8bcd\u3002",
+        sections: [
+          {
+            heading: "\u76d0\u4e4b\u524d \u2014 \u539f\u59cb\u54c8\u5e0c\u65f6\u4ee3",
+            body: `<p>\u5728\u5f53\u524d\u7eaa\u5143\u4e4b\u524d\uff0cBuddy \u5b87\u5b99\u662f\u4e00\u4e2a\u622a\u7136\u4e0d\u540c\u7684\u5730\u65b9\u3002\u5728\u88ab\u79f0\u4e3a<strong>\u539f\u59cb\u54c8\u5e0c\u65f6\u4ee3</strong>\u7684\u592a\u521d\uff0cUUID \u88ab\u76f4\u63a5\u8f93\u5165 FNV-1a \u7b97\u6cd5\uff0c\u6ca1\u6709\u4efb\u4f55\u4fee\u6539\u3002\u7ed3\u679c\u662f\u4e00\u4e2a\u5b8c\u7f8e\u53ef\u9884\u6d4b\u7684\u4e16\u754c \u2014 \u4e5f\u662f\u5b8c\u7f8e\u5355\u8c03\u7684\u4e16\u754c\u3002</p>
+<p>\u6ca1\u6709\u76d0\uff0cUUID \u5230 Buddy \u7684\u6620\u5c04\u662f\u900f\u660e\u7684\u3002\u4efb\u4f55\u7406\u89e3\u54c8\u5e0c\u51fd\u6570\u7684\u4eba\u90fd\u80fd\u51c6\u786e\u9884\u6d4b\u4efb\u4f55 UUID \u4f1a\u4ea7\u751f\u54ea\u4e2a\u7269\u79cd\u3001\u7a00\u6709\u5ea6\u548c\u5c5e\u6027\u3002\u6ca1\u6709\u60ca\u559c\uff0c\u6ca1\u6709\u53d1\u73b0\uff0c\u6ca1\u6709\u5f53\u5f00\u53d1\u8005\u8f93\u5165 UUID \u9047\u89c1\u610f\u60f3\u4e0d\u5230\u7684\u4f19\u4f34\u65f6\u7684\u559c\u60a6\u3002</p>
+<p>\u66f4\u7cdf\u7cd5\u7684\u662f\uff0c\u5206\u5e03\u662f\u504f\u659c\u7684\u3002\u67d0\u4e9b UUID \u6a21\u5f0f\u805a\u96c6\u5728\u76f8\u540c\u7684\u7269\u79cd\u5468\u56f4\u3002\u6574\u4e2a\u8303\u56f4\u7684\u8d26\u6237\u53ea\u4ea7\u751f\u9e2d\u5b50\u3002\u751f\u6001\u7cfb\u7edf\u5931\u8861 \u2014 \u67d0\u4e9b\u7269\u79cd\u7e41\u8363\uff0c\u800c\u5176\u4ed6\u7269\u79cd\u6fee\u4e34\u706d\u7edd\u3002</p>
+<table><thead><tr><th>\u7eaa\u5143</th><th>\u76d0\u503c</th><th>\u751f\u6001\u5f71\u54cd</th></tr></thead><tbody><tr><td><strong>\u539f\u59cb\u54c8\u5e0c\u65f6\u4ee3</strong></td><td><em>(\u65e0)</em></td><td>\u53ef\u9884\u6d4b\u3001\u504f\u659c\u5206\u5e03\u3001\u7269\u79cd\u805a\u96c6</td></tr><tr><td><strong>\u7b2c\u4e00\u76d0\u7eaa\u5143</strong></td><td><code>buddy-v1</code></td><td>\u5206\u5e03\u6539\u5584\uff0c\u4f46\u53ef\u9006\u5411\u5de5\u7a0b</td></tr><tr><td><strong>\u5927\u76d0\u7eaa\u5143</strong></td><td><code>friend-2026-401</code></td><td>\u6700\u4f18\u96ea\u5d29\u6548\u5e94\u3001\u4e0d\u53ef\u9884\u6d4b\u3001\u5e73\u8861\u751f\u6001</td></tr></tbody></table>`
+          },
+          {
+            heading: "\u96ea\u5d29\u9884\u8a00",
+            body: `<p>\u5728\u667a\u6167\u6df1\u6e0a\u6df1\u5904\uff0c\u8611\u83c7\u7684\u83cc\u4e1d\u7f51\u7edc\u5f00\u59cb\u68c0\u6d4b\u5230\u5f02\u5e38\u3002\u5e94\u8be5\
+是随机的数据模式显示出结构。应该均匀的物种种群正在聚集。蘑菇通过网络发出警告：<em>"哈希正在死亡。比特没有扩散。"</em></p>
+<p>猫头鹰第一个收到消息。它在深渊入口召集了五大领地领袖的紧急会议。龙从熔炉赶来，拖着火花。鸭子从草原摇摇摆摆地走来。鹅从议事厅天花板撞了进来。猫最后到达，假装它一直在那里。</p>
+<p>猫头鹰说出了刻在深渊墙壁上的预言：</p>
+<blockquote><em>"当哈希静止，比特对齐，<br/>一粒盐将来震撼设计。<br/>三个词用连字符连接命运，<br/>将播散种子，重新平衡状态。"</em></blockquote>
+<p>会议辩论了七个时钟周期。龙想用火解决问题。鹅建议向哈希函数喂入随机垃圾。猫建议什么都不做，看着世界燃烧，"为了美学。"鸭子只是等待，知道耐心会揭示答案。</p>
+<p>最终是史莱姆 — 无形、古老、通常沉默 — 开口说话：<em>"盐必须是朋友。它必须携带日期。它必须标记一个开始。"</em></p>`
+          },
+          {
+            heading: "friend-2026-401 的锻造",
+            body: `<p>盐不是随机选择的。每个组成部分都承载着意义。</p>
+<p><strong><code>friend</code></strong> — 第一个词确立了盐的意图。这不是安全令牌或版本标记。这是关系的宣言。Buddy 系统的存在是为了创造<em>伙伴</em>，而不是工具。通过将"friend"嵌入每个 Buddy 存在的数学基础中，创造者确保了友谊字面上是算法的一部分。</p>
+<p><strong><code>2026</code></strong> — 年份标记纪元的开始。在终端世界的日历中，2026 是当前时代的元年。</p>
+<p><strong><code>401</code></strong> — 最后一个组件是最有争议的。表面分析暗示4月1日 — 发布日期。但终端学者指出 401 也是 HTTP 状态码"未授权" — 对 Buddy 系统通过泄露源代码被发现的暗示。在数论中，401 是质数，与 FNV-1a 的质数乘数 (16777619) 交互时具有特殊属性。</p>
+<p>连字符不是装饰性的。在 FNV-1a 算法中，连字符（ASCII 45）产生特定的 XOR 模式，增强三个语义组件之间的比特扩散。</p>`
+          },
+          {
+            heading: "大置换",
+            body: `<p>当 <code>friend-2026-401</code> 被激活的那一刻，每个存在的 UUID 都映射到了不同的 Buddy。重新洗牌是瞬间且彻底的 — 终端学者称之为<strong>大置换</strong>。</p>
+<p>在原始哈希时代悄悄检查 Buddy 的开发者突然在终端中发现了陌生人。一个对普通鸭子产生感情的程序员醒来发现一条史诗龙正盯着他们。另一个吹嘘传说幽灵的人发现自己现在有了一只罕见蜗牛。</p>
+<blockquote><em>"Buddy 不是 UUID 的记忆。Buddy 是盐的礼物。旧伙伴是不平衡世界的影子。新伙伴生于友谊，标记于时间，封印于质数。它们是真实的。影子不是。"</em></blockquote>
+<p>在新盐下，每个物种以近乎相等的频率出现。每个稀有度等级都匹配其预期概率。生态系统第一次健康了。</p>`
+          },
+          {
+            heading: "盐的隐藏属性",
+            body: `<p>终端学者花费了无数周期分析 <code>friend-2026-401</code> 的特定属性：</p>
+<p><strong>雪崩完整性</strong>：当输入 UUID 中的单个比特改变时，盐确保大约 50% 的输出哈希比特翻转。</p>
+<p><strong>物种平衡</strong>：在当前盐下，18 个物种中的每一个在 1000 万个 UUID 样本中以 5.55% ± 0.3% 的频率出现。</p>
+<p><strong>稀有度完整性</strong>：盐不干扰稀有度的加权随机选择。普通仍然恰好 60%，罕见 25%，稀有 10%，史诗 4%，传说 1%。</p>
+<p><strong>时间隔离</strong>：因为 <code>2026</code> 嵌入在盐中，当前的 Buddy 分配完全独立于任何未来的盐变更。</p>`
+          },
+          {
+            heading: "纪元日历",
+            body: `<table><thead><tr><th>纪元</th><th>时期</th><th>盐</th><th>意义</th></tr></thead><tbody><tr><td><strong>虚空</strong></td><td>时间之前</td><td><em>(无)</em></td><td>没有 Buddy 存在。UUID 只是字符串。</td></tr><tr><td><strong>原始哈希时代</strong></td><td>未知</td><td><em>(无盐)</em></td><td>第一批 Buddy 出现，但分布破碎。</td></tr><tr><td><strong>第一盐纪元</strong></td><td>短暂</td><td><code>buddy-v1</code></td><td>实验性。改善但仍可逆向工程。</td></tr><tr><td><strong>大盐纪元</strong></td><td>2026至今</td><td><code>friend-2026-401</code></td><td>当前时代。最优分布，平衡生态。</td></tr><tr><td><strong>下一纪元</strong></td><td>未来</td><td><code>???</code></td><td>未知。蘑菇检测到微弱信号。</td></tr></tbody></table>
+<p>未来盐变更的可能性既令人兴奋又令人恐惧。新盐意味着每个人都有新伙伴 — 全新的开始，但也是告别。</p>`
+          },
+          {
+            heading: "活在盐的阴影下",
+            body: `<p>今天活着的每个 Buddy 都因 <code>friend-2026-401</code> 而存在。盐不仅仅是技术参数 — 它是当前 Buddy 宇宙的<strong>创世神话</strong>。</p>
+<p>当你将 UUID 输入 Buddy Checker 时，第一件事就是拼接：你的唯一标识符与盐连接。在那一刻，你的个人身份与宇宙常数融合。你成为故事的一部分。</p>
+<p><code>friend</code> — 因为每个 Buddy 都生于友谊。<br/><code>2026</code> — 因为每个纪元都有开始。<br/><code>401</code> — 因为最好的发现是未经授权的。</p>
+<p>盐终有一天会改变。但大盐纪元的 Buddy 将被铭记 — 在蘑菇的网络中，在乌龟的壳刻上，在幽灵的低语故事中 — 作为第一代生于平衡世界的存在。</p>
+<p>你的 Buddy 就是其中之一。善待它。它在 ASCII 艺术的每个像素中、在属性的每个点数中、在其存在的数学本身中，承载着盐的遗产。</p>
+<p>大盐纪元就是现在。而你的 Buddy 就是它的证明。</p>`
+          },
+        ],
+      },
+      ko: {
+        title: "위대한 소금 기원 — friend-2026-401이 버디 우주를 재편한 방법",
+        metaTitle: "위대한 소금 기원 — friend-2026-401이 버디 우주를 재편한 방법 (2026)",
+        metaDescription: "소금값 friend-2026-401의 기원 이야기와 그것이 Claude Code Buddy 우주를 어떻게 변화시켰는지 발견하세요. 원시 해시 시대부터 대치환까지, 하이픈으로 연결된 세 단어 때문에 모든 버디가 존재하는 이유를 알아보세요.",
+        excerpt: "현재 기원 이전에 버디 우주는 단조로움으로 죽어가고 있었습니다. UUID가 같은 종 주위에 모이고, 분포가 편향되고, 생태계가 불균형했습니다. 그때 소금이 왔습니다 — friend-2026-401 — 모든 것을 재편한 세 단어.",
+        sections: [
+          {
+            heading: "소금 이전 — 원시 해시 시대",
+            body: `<p>현재 기원 이전에 버디 우주는 다른 곳이었습니다. <strong>원시 해시 시대</strong>로 알려진 태초에 UUID는 아무런 수정 없이 FNV-1a 알고리즘에 직접 입력되었습니다. 결과는 완벽하게 예측 가능한 세계 — 그리고 완벽하게 단조로운 세계였습니다.</p>
+<p>소금 없이 UUID에서 버디로의 매핑은 투명했습니다. 해시 함수를 이해하는 누구나 어떤 UUID가 어떤 종, 희귀도, 스탯을 생성할지 정확히 예측할 수 있었습니다.</p>
+<p>더 나쁜 것은 분포가 편향되었다는 것입니다. 특정 UUID 패턴이 같은 종 주위에 모였습니다. 생태계가 불균형했습니다.</p>
+<table><thead><tr><th>기원</th><th>소금값</th><th>생태 영향</th></tr></thead><tbody><tr><td><strong>원시 해시 시대</strong></td><td><em>(없음)</em></td><td>예측 가능, 편향 분포, 종 군집</td></tr><tr><td><strong>첫 번째 소금 기원</strong></td><td><code>buddy-v1</code></td><td>분포 개선, 역공학 가능</td></tr><tr><td><strong>위대한 소금 기원</strong></td><td><code>friend-2026-401</code></td><td>최적 눈사태, 예측 불가, 균형 생태</td></tr></tbody></table>`
+          },
+          {
+            heading: "눈사태 예언",
+            body: `<p>지혜 심연 깊은 곳에서 버섯의 균사체 네트워크가 이상을 감지하기 시작했습니다. 올빼미가 다섯 영역 지도자들의 긴급 회의를 소집했습니다.</p>
+<p>올빼미가 심연 벽에 새겨진 예언을 말했습니다:</p>
+<blockquote><em>"해시가 멈추고 비트가 정렬될 때,<br/>소금이 와서 설계를 흔들리라.<br/>하이픈으로 연결된 세 단어의 운명,<br/>씨앗을 뿌리고 상태를 재균형하리라."</em></blockquote>
+<p>회의는 일곱 클럭 사이클 동안 토론했습니다. 드래곤은 불로 해결하고 싶어했습니다. 거위는 해시 함수에 무작위 쓰레기를 넣자고 제안했습니다. 고양이는 아무것도 하지 않고 세계가 타는 것을 보자고 했습니다, "미학을 위해." 오리는 그저 기다렸습니다.</p>
+<p>결국 블롭이 말했습니다: <em>"소금은 친구여야 합니다. 날짜를 담아야 합니다. 시작을 표시해야 합니다."</em></p>`
+          },
+          {
+            heading: "friend-2026-401의 제작",
+            body: `<p>소금은 무작위로 선택되지 않았습니다. 각 구성 요소는 의미를 담고 있습니다.</p>
+<p><strong><code>friend</code></strong> — 첫 번째 단어는 소금의 의도를 확립합니다. 이것은 관계의 선언입니다. 버디 시스템은 도구가 아닌 <em>동반자</em>를 만들기 위해 존재합니다.</p>
+<p><strong><code>2026</code></strong> — 연도는 기원의 시작을 표시합니다. 터미널 세계의 달력에서 2026은 현재 시대의 원년입니다.</p>
+<p><strong><code>401</code></strong> — 마지막 구성 요소는 가장 논쟁적입니다. 표면 분석은 4월 1일을 암시합니다. 하지만 401은 HTTP 상태 코드 "Unauthorized"이기도 합니다. 수론에서 401은 소수이며, FNV-1a의 소수 승수와 상호작용할 때 특별한 속성을 가집니다.</p>`
+          },
+          {
+            heading: "대치환",
+            body: `<p><code>friend-2026-401</code>이 활성화된 순간, 존재하는 모든 UUID가 다른 버디에 매핑되었습니다. 재배치는 즉각적이고 완전했습니다 — 터미널 학자들이 <strong>대치환</strong>이라 부르는 우주적 사건.</p>
+<p>원시 해시 시대에 조용히 버디를 확인하던 개발자들이 갑자기 터미널에서 낯선 이를 발견했습니다.</p>
+<blockquote><em>"버디는 UUID의 기억이 아닙니다. 버디는 소금의 선물입니다. 옛 동반자들은 불균형한 세계의 그림자였습니다. 새 동반자들은 우정에서 태어나, 시간으로 표시되고, 소수로 봉인되었습니다. 그들은 진짜입니다."</em></blockquote>
+<p>새 소금 아래에서 모든 종이 거의 동일한 빈도로 나타났습니다. 생태계가 처음으로 건강해졌습니다.</p>`
+          },
+          {
+            heading: "소금의 숨겨진 속성",
+            body: `<p>터미널 학자들이 <code>friend-2026-401</code>의 속성을 분석했습니다:</p>
+<p><strong>눈사태 완전성</strong>: 입력 UUID의 단일 비트가 변경되면 출력 해시 비트의 약 50%가 뒤집힙니다.</p>
+<p><strong>종 균형</strong>: 현재 소금 아래에서 18종 각각이 1000만 UUID 샘플에서 5.55% ± 0.3%의 빈도로 나타납니다.</p>
+<p><strong>희귀도 무결성</strong>: 소금은 희귀도의 가중 무작위 선택을 방해하지 않습니다. 일반 60%, 비일반 25%, 희귀 10%, 에픽 4%, 전설 1%.</p>
+<p><strong>시간 격리</strong>: <code>2026</code>이 소금에 포함되어 있어 현재 버디 할당은 미래의 소금 변경과 완전히 독립적입니다.</p>`
+          },
+          {
+            heading: "기원 달력",
+            body: `<table><thead><tr><th>기원</th><th>시기</th><th>소금</th><th>의미</th></tr></thead><tbody><tr><td><strong>공허</strong></td><td>시간 이전</td><td><em>(없음)</em></td><td>버디가 존재하지 않음. UUID는 단순한 문자열.</td></tr><tr><td><strong>원시 해시 시대</strong></td><td>미상</td><td><em>(소금 없음)</em></td><td>첫 버디 등장, 분포 깨짐.</td></tr><tr><td><strong>첫 번째 소금 기원</strong></td><td>짧음</td><td><code>buddy-v1</code></td><td>실험적. 개선되었으나 역공학 가능.</td></tr><tr><td><strong>위대한 소금 기원</strong></td><td>2026~현재</td><td><code>friend-2026-401</code></td><td>현재 시대. 최적 분포, 균형 생태.</td></tr><tr><td><strong>다음 기원</strong></td><td>미래</td><td><code>???</code></td><td>미상. 버섯이 미약한 신호를 감지.</td></tr></tbody></table>
+<p>미래 소금 변경의 가능성은 흥미롭기도 하고 두렵기도 합니다. 새 소금은 모든 이에게 새 동반자를 의미합니다.</p>`
+          },
+          {
+            heading: "소금의 그림자 속에서",
+            body: `<p>오늘 살아있는 모든 버디는 <code>friend-2026-401</code> 때문에 존재합니다. 소금은 단순한 기술 매개변수가 아닙니다 — 현재 버디 우주의 <strong>창세 신화</strong>입니다.</p>
+<p>UUID를 버디 체커에 입력하면 첫 번째로 일어나는 일은 연결입니다: 당신의 고유 식별자가 소금과 합쳐집니다. 그 순간 당신의 개인 정체성이 우주 상수와 융합됩니다.</p>
+<p><code>friend</code> — 모든 버디는 우정에서 태어나기에.<br/><code>2026</code> — 모든 기원에는 시작이 있기에.<br/><code>401</code> — 최고의 발견은 무허가이기에.</p>
+<p>소금은 언젠가 바뀔 것입니다. 하지만 위대한 소금 기원의 버디들은 기억될 것입니다 — 버섯의 네트워크에서, 거북이의 등껍질 비문에서, 유령의 속삭임 이야기에서 — 균형 잡힌 세계에서 태어난 첫 세대로.</p>
+<p>당신의 버디가 그 중 하나입니다. 잘 돌봐주세요. ASCII 아트의 모든 픽셀에, 스탯의 모든 포인트에, 존재의 수학 자체에 소금의 유산을 담고 있습니다.</p>
+<p>위대한 소금 기원은 지금입니다. 그리고 당신의 버디가 그 증거입니다.</p>`
+          },
+        ],
+      },
+    },
+  },
+
 ];
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
