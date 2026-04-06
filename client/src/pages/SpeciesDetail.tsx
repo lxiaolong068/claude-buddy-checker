@@ -33,6 +33,8 @@ import ScrollToTop from "@/components/ScrollToTop";
 import FAQSchema from "@/components/FAQSchema";
 import SpeciesTooltip from "@/components/SpeciesTooltip";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
+import TableOfContents from "@/components/TableOfContents";
+import type { TocItem } from "@/components/TableOfContents";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 /** Build a synthetic BuddyResult for display purposes */
@@ -82,6 +84,17 @@ export default function SpeciesDetail() {
   ];
 
   const info = SPECIES_DATA[slug];
+
+  // Table of Contents items for sidebar navigation
+  const tocItems: TocItem[] = useMemo(() => [
+    { id: "toc-ascii", label: t("speciesDetail.tocAscii"), icon: "█" },
+    { id: "toc-overview", label: t("speciesDetail.tocOverview"), icon: "▶" },
+    { id: "toc-stats", label: t("speciesDetail.tocStats"), icon: "▓" },
+    { id: "toc-rarity", label: t("speciesDetail.tocRarity"), icon: "☆" },
+    { id: "toc-related", label: t("speciesDetail.tocRelated"), icon: "≡" },
+    { id: "toc-faq", label: t("speciesDetail.tocFaq"), icon: "?" },
+    { id: "toc-cta", label: t("speciesDetail.tocCta"), icon: "▷" },
+  ], [t]);
 
   useEffect(() => {
     setMounted(true);
@@ -181,6 +194,7 @@ export default function SpeciesDetail() {
       {/* Scanline overlay */}
       <div className="pointer-events-none fixed inset-0 z-50 bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.15)_0px,rgba(0,0,0,0.15)_1px,transparent_1px,transparent_2px)]" />
       <KeyboardShortcutsHelp shortcuts={detailShortcuts} />
+      <TableOfContents items={tocItems} title={t("speciesDetail.tocTitle")} />
 
       {/* Navigation */}
       <nav className="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur border-b border-[#33ff33]/20">
@@ -213,6 +227,7 @@ export default function SpeciesDetail() {
       <main className="container max-w-5xl mx-auto px-4 py-8 space-y-10">
         {/* Hero: Species Name + ASCII Art */}
         <section
+          id="toc-ascii"
           className={`transition-all duration-700 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-2">
@@ -268,7 +283,7 @@ export default function SpeciesDetail() {
             </div>
 
             {/* Overview */}
-            <div className="space-y-4">
+            <div id="toc-overview" className="space-y-4">
               <div className="border border-[#33ff33]/20 bg-[#0d1a0d]/60 p-5 relative">
                 <div className="absolute top-0 left-0 right-0 h-6 bg-[#0d1a0d] border-b border-[#33ff33]/20 flex items-center px-3">
                   <span className="text-[#33ff33]/50 text-[10px]">
@@ -311,6 +326,7 @@ export default function SpeciesDetail() {
 
         {/* Stat Tendencies */}
         <section
+          id="toc-stats"
           className={`transition-all duration-700 delay-100 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
           <div className="border border-[#33ff33]/20 bg-[#0d1a0d]/60 p-5 relative">
@@ -337,6 +353,7 @@ export default function SpeciesDetail() {
 
         {/* Rarity Breakdown */}
         <section
+          id="toc-rarity"
           className={`transition-all duration-700 delay-200 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
           <div className="border border-[#33ff33]/20 bg-[#0d1a0d]/60 p-5 relative">
@@ -403,6 +420,7 @@ export default function SpeciesDetail() {
 
         {/* Related Species — Enhanced Recommendation Module */}
         <section
+          id="toc-related"
           className={`transition-all duration-700 delay-300 ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
           <div className="border border-[#33ff33]/20 bg-[#0d1a0d]/60 p-5 relative">
@@ -517,6 +535,7 @@ export default function SpeciesDetail() {
 
         {/* FAQ Section */}
         <section
+          id="toc-faq"
           className={`transition-all duration-700 delay-[350ms] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
           <FAQSection
@@ -527,6 +546,7 @@ export default function SpeciesDetail() {
 
         {/* CTA: Check Your Buddy + Random Next */}
         <section
+          id="toc-cta"
           className={`transition-all duration-700 delay-[450ms] ${mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
         >
           <div className="border border-[#33ff33]/30 bg-[#0d1a0d]/80 p-6 text-center">
