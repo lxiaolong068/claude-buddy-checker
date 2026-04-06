@@ -178,20 +178,30 @@ export default function Home() {
             </div>
 
             {/* How to find UUID */}
-            <div className="mb-4 text-xs text-muted-foreground space-y-2">
+            <div className="mb-4 text-xs text-muted-foreground space-y-1.5">
               <p className="text-crt-green">{t("input.howToFind")}</p>
-              <p>
-                <span className="text-crt-amber">{t("input.option1Label")}</span> {t("input.option1Text")}{" "}
-                <code className="text-foreground bg-secondary/50 px-1.5 py-0.5">
+              <div>
+                <p>
+                  <span className="text-crt-amber">{t("input.option1Label")}</span> {t("input.option1Text")}
+                </p>
+                <code className="text-foreground bg-secondary/50 px-1.5 py-0.5 text-[11px] block mt-0.5 break-all">
                   {t("input.option1Code")}
                 </code>
-              </p>
-              <p>
-                <span className="text-crt-amber">{t("input.option2Label")}</span> {t("input.option2Text")}{" "}
-                <code className="text-foreground bg-secondary/50 px-1.5 py-0.5">
-                  {t("input.option2Code")}
-                </code>
-              </p>
+                <p className="text-muted-foreground/60 text-[10px] mt-0.5">
+                  {t("input.option1Win")}
+                </p>
+              </div>
+              <div>
+                <p>
+                  <span className="text-crt-amber">{t("input.option2Label")}</span> {t("input.option2Text")}{" "}
+                  <code className="text-foreground bg-secondary/50 px-1.5 py-0.5">
+                    {t("input.option2Code")}
+                  </code>
+                </p>
+                <p className="text-muted-foreground/60 text-[10px] mt-0.5">
+                  {t("input.option2Hint")}
+                </p>
+              </div>
             </div>
 
             {/* Input */}
