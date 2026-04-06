@@ -8,7 +8,7 @@ import { useEffect, useMemo } from "react";
 import TableOfContents, { type TocItem } from "@/components/TableOfContents";
 import { Link, useParams } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
-import { getArticleBySlug, getAllArticles, getAdjacentArticles, getRelatedArticles } from "@/lib/blog-data";
+import { getArticleBySlug, getAllArticles, getAdjacentArticles, getRelatedArticles, type RelatedArticleMatch } from "@/lib/blog-data";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
 import ArticleSchema from "@/components/ArticleSchema";
@@ -70,8 +70,8 @@ export default function BlogPost() {
     };
   }, [content]);
 
-  // Related articles based on smart relevance scoring (category + tags + recency)
-  const relatedArticles = useMemo(() => {
+  // Related articles with match metadata for relevance badges
+  const relatedArticles: RelatedArticleMatch[] = useMemo(() => {
     return getRelatedArticles(params.slug || "", 3);
   }, [params.slug]);
 
@@ -353,18 +353,45 @@ export default function BlogPost() {
               {t("blog.relatedArticles")}
             </h2>
             <div className="space-y-3">
-              {relatedArticles.map((ra) => {
+              {relatedArticles.map((match) => {
                 const raContent =
-                  ra.content[locale as keyof typeof ra.content];
+                  match.article.content[locale as keyof typeof match.article.content];
+                // Build match reason badges
+                const badges: { label: string; color: string }[] = [];
+                if (match.sameCategory) {
+                  badges.push({ label: t("blog.matchSameCategory"), color: "text-crt-green border-crt-green/30" });
+                }
+                if (match.sharedTagCount > 0) {
+                  const tagKey = match.sharedTagCount === 1 ? "blog.matchSharedTag" : "blog.matchSharedTags";
+                  badges.push({
+                    label: t(tagKey).replace("{{count}}", String(match.sharedTagCount)),
+                    color: "text-crt-cyan border-crt-cyan/30",
+                  });
+                }
+                if (!match.sameCategory && match.sharedTagCount === 0) {
+                  badges.push({ label: t("blog.matchRecent"), color: "text-crt-amber border-crt-amber/30" });
+                }
                 return (
                   <Link
-                    key={ra.slug}
-                    href={`/blog/${ra.slug}`}
+                    key={match.article.slug}
+                    href={`/blog/${match.article.slug}`}
                     className="block border border-border/30 bg-card/50 p-4 hover:border-crt-green/30 transition-colors group"
                   >
-                    <h3 className="text-sm font-semibold text-foreground group-hover:text-crt-green transition-colors">
-                      {raContent.title}
-                    </h3>
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="text-sm font-semibold text-foreground group-hover:text-crt-green transition-colors flex-1">
+                        {raContent.title}
+                      </h3>
+                      <div className="flex gap-1.5 shrink-0 mt-0.5">
+                        {badges.map((badge, i) => (
+                          <span
+                            key={i}
+                            className={`text-[9px] font-mono font-bold uppercase tracking-wider px-1.5 py-0.5 border ${badge.color} bg-background/50`}
+                          >
+                            {badge.label}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
                     <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                       {raContent.excerpt}
                     </p>

@@ -3624,17 +3624,34 @@ export function getAllArticles(): BlogArticle[] {
   );
 }
 
+/** Match reason metadata for related article recommendations */
+export interface RelatedArticleMatch {
+  article: BlogArticle;
+  score: number;
+  sameCategory: boolean;
+  sharedTagCount: number;
+  sharedTags: string[];
+}
+
 /**
  * Get related articles based on relevance scoring.
  * Scoring: same category = 3 pts, each shared tag = 2 pts, recency bonus = 0-1 pt.
- * Returns top N articles sorted by score (descending), excluding current article.
+ * Returns top N articles with match metadata, sorted by score (descending).
  */
 export function getRelatedArticles(
   slug: string,
   count: number = 3
-): BlogArticle[] {
+): RelatedArticleMatch[] {
   const current = BLOG_ARTICLES.find((a) => a.slug === slug);
-  if (!current) return BLOG_ARTICLES.slice(0, count);
+  if (!current) {
+    return BLOG_ARTICLES.slice(0, count).map((a) => ({
+      article: a,
+      score: 0,
+      sameCategory: false,
+      sharedTagCount: 0,
+      sharedTags: [],
+    }));
+  }
 
   const now = Date.now();
   const ONE_YEAR = 365 * 24 * 60 * 60 * 1000;
@@ -3643,9 +3660,10 @@ export function getRelatedArticles(
     .filter((a) => a.slug !== slug)
     .map((candidate) => {
       let score = 0;
+      const sameCategory = candidate.discussionCategory === current.discussionCategory;
 
       // Same discussion category = strong signal (+3)
-      if (candidate.discussionCategory === current.discussionCategory) {
+      if (sameCategory) {
         score += 3;
       }
 
@@ -3657,11 +3675,17 @@ export function getRelatedArticles(
       const age = now - new Date(candidate.publishedAt).getTime();
       score += Math.max(0, 1 - age / ONE_YEAR);
 
-      return { article: candidate, score, sharedTags: sharedTags.length };
+      return {
+        article: candidate,
+        score,
+        sameCategory,
+        sharedTagCount: sharedTags.length,
+        sharedTags,
+      };
     })
     .sort((a, b) => b.score - a.score);
 
-  return scored.slice(0, count).map((s) => s.article);
+  return scored.slice(0, count);
 }
 
 export function getAdjacentArticles(slug: string): {
