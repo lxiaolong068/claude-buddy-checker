@@ -10,7 +10,7 @@ type SortMode = "newest" | "oldest" | "titleAZ" | "titleZA";
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
-import { getAllArticles, type BlogArticle } from "@/lib/blog-data";
+import { getAllArticles, type BlogArticle, type DiscussionCategory } from "@/lib/blog-data";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
 import BlogListSchema from "@/components/BlogListSchema";
@@ -60,6 +60,36 @@ function TagButton({
       }`}
     >
       {children}
+    </button>
+  );
+}
+
+function CategoryButton({
+  active,
+  onClick,
+  children,
+  count,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+  count: number;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-2.5 py-1 text-[10px] uppercase tracking-wider border transition-all whitespace-nowrap flex items-center gap-1.5 ${
+        active
+          ? "border-crt-cyan/60 bg-crt-cyan/10 text-crt-cyan"
+          : "border-border/40 text-muted-foreground/50 hover:border-crt-cyan/30 hover:text-muted-foreground/70"
+      }`}
+    >
+      {children}
+      <span className={`text-[9px] ${
+        active ? "text-crt-cyan/60" : "text-muted-foreground/30"
+      }`}>
+        ({count})
+      </span>
     </button>
   );
 }
@@ -154,6 +184,7 @@ export default function BlogIndex() {
 
   const [sortMode, setSortMode] = useState<SortMode>("newest");
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState<DiscussionCategory | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -199,13 +230,18 @@ export default function BlogIndex() {
       });
     }
 
+    // Apply category filter
+    if (activeCategory) {
+      result = result.filter((a) => a.discussionCategory === activeCategory);
+    }
+
     // Apply tag filter
     if (activeTag) {
       result = result.filter((a) => a.tags.includes(activeTag));
     }
 
     return result;
-  }, [articles, debouncedQuery, activeTag, locale]);
+  }, [articles, debouncedQuery, activeTag, activeCategory, locale]);
 
   // Sort filtered articles
   const sortedArticles = useMemo(() => {
@@ -262,7 +298,16 @@ export default function BlogIndex() {
     if (searchInputRef.current) searchInputRef.current.focus();
   };
 
-  const hasActiveFilters = debouncedQuery.trim() || activeTag;
+  const hasActiveFilters = debouncedQuery.trim() || activeTag || activeCategory;
+
+  // Count articles per category
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: articles.length, guides: 0, 'deep-dives': 0, lore: 0 };
+    articles.forEach((a) => {
+      counts[a.discussionCategory] = (counts[a.discussionCategory] || 0) + 1;
+    });
+    return counts;
+  }, [articles]);
 
   // Keyboard shortcuts
   useKeyboardShortcuts({
@@ -271,10 +316,11 @@ export default function BlogIndex() {
       searchInputRef.current?.focus();
     },
     "Escape": () => {
-      if (searchQuery || activeTag) {
+      if (searchQuery || activeTag || activeCategory) {
         setSearchQuery("");
         setDebouncedQuery("");
         setActiveTag(null);
+        setActiveCategory(null);
         searchInputRef.current?.blur();
       }
     },
@@ -399,7 +445,44 @@ export default function BlogIndex() {
               </div>
             </div>
 
-            {/* Filter Row */}
+            {/* Category Filter Row */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] text-crt-cyan/50 uppercase tracking-wider font-semibold min-w-[52px]">
+                {t("blog.filterByCategory")}:
+              </span>
+              <div className="flex gap-1.5 flex-wrap">
+                <CategoryButton
+                  active={activeCategory === null}
+                  onClick={() => setActiveCategory(null)}
+                  count={categoryCounts.all}
+                >
+                  {t("blog.categoryAll")}
+                </CategoryButton>
+                <CategoryButton
+                  active={activeCategory === "guides"}
+                  onClick={() => setActiveCategory(activeCategory === "guides" ? null : "guides")}
+                  count={categoryCounts.guides}
+                >
+                  {t("blog.categoryGuides")}
+                </CategoryButton>
+                <CategoryButton
+                  active={activeCategory === "deep-dives"}
+                  onClick={() => setActiveCategory(activeCategory === "deep-dives" ? null : "deep-dives")}
+                  count={categoryCounts["deep-dives"]}
+                >
+                  {t("blog.categoryDeepDives")}
+                </CategoryButton>
+                <CategoryButton
+                  active={activeCategory === "lore"}
+                  onClick={() => setActiveCategory(activeCategory === "lore" ? null : "lore")}
+                  count={categoryCounts.lore}
+                >
+                  {t("blog.categoryLore")}
+                </CategoryButton>
+              </div>
+            </div>
+
+            {/* Tag Filter Row */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[10px] text-crt-amber/50 uppercase tracking-wider font-semibold min-w-[52px]">
                 {t("blog.filterByTag")}:
@@ -440,6 +523,7 @@ export default function BlogIndex() {
                 <button
                   onClick={() => {
                     setActiveTag(null);
+                    setActiveCategory(null);
                     clearSearch();
                   }}
                   className="text-[10px] text-crt-red/60 hover:text-crt-red uppercase tracking-wider transition-colors"

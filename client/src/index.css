@@ -56,6 +56,7 @@
   --color-crt-amber: oklch(0.80 0.18 80);
   --color-crt-red: oklch(0.65 0.22 25);
   --color-crt-blue: oklch(0.65 0.18 250);
+  --color-crt-cyan: oklch(0.78 0.15 195);
   --color-crt-purple: oklch(0.65 0.20 300);
   --color-crt-gold: oklch(0.82 0.18 90);
 }
