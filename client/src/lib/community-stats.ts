@@ -8,7 +8,7 @@
  * - Debounced writes to avoid excessive localStorage access
  */
 
-import { SPECIES, type Species } from "./buddy-engine";
+import { SPECIES, RARITIES, RARITY_WEIGHTS, type Species, type Rarity } from "./buddy-engine";
 
 // ─── Types ───────────────────────────────────────────────────────
 export interface QueryRecord {
@@ -66,12 +66,24 @@ function seededRandom(seed: number): number {
 }
 
 // ─── localStorage Helpers (with error handling) ──────────────────
+function isValidQueryRecord(obj: unknown): obj is QueryRecord {
+  if (typeof obj !== "object" || obj === null) return false;
+  const r = obj as Record<string, unknown>;
+  return (
+    typeof r.uuid === "string" &&
+    typeof r.species === "string" &&
+    typeof r.rarity === "string" &&
+    typeof r.timestamp === "number"
+  );
+}
+
 function readHistory(): QueryRecord[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return [];
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.filter(isValidQueryRecord);
   } catch {
     return [];
   }
@@ -190,7 +202,7 @@ export function getGlobalStats(): GlobalStats {
   // Active explorers: ~5-15% of total, varies by hour
   const hourSeed = Math.floor(now / 3_600_000);
   const activeRatio = 0.05 + seededRandom(hourSeed) * 0.10;
-  const activeExplorers = Math.floor(totalBuddiesChecked * activeRatio * 0.01);
+  const activeExplorers = Math.floor(totalBuddiesChecked * activeRatio);
 
   // Species popularity: based on mathematical probability (equal 1/18 each)
   // but with slight simulated variance for visual interest
@@ -204,14 +216,12 @@ export function getGlobalStats(): GlobalStats {
     };
   }).sort((a, b) => b.percentage - a.percentage);
 
-  // Rarity breakdown: matches the actual algorithm probabilities
-  const rarityBreakdown = [
-    { rarity: "common", percentage: 60, color: RARITY_COLORS.common },
-    { rarity: "uncommon", percentage: 25, color: RARITY_COLORS.uncommon },
-    { rarity: "rare", percentage: 10, color: RARITY_COLORS.rare },
-    { rarity: "epic", percentage: 4, color: RARITY_COLORS.epic },
-    { rarity: "legendary", percentage: 1, color: RARITY_COLORS.legendary },
-  ];
+  // Rarity breakdown: derived from RARITY_WEIGHTS (single source of truth)
+  const rarityBreakdown = RARITIES.map((rarity: Rarity) => ({
+    rarity,
+    percentage: RARITY_WEIGHTS[rarity],
+    color: RARITY_COLORS[rarity],
+  }));
 
   return {
     totalBuddiesChecked,

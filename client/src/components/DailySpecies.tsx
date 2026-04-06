@@ -7,6 +7,7 @@
 import { useMemo } from "react";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
+import { useLocalizedDate } from "@/hooks/useLocalizedDate";
 import { SPECIES_DATA, ALL_SPECIES_SLUGS } from "@/lib/species-data";
 import { BODIES, type Species } from "@/lib/buddy-engine";
 
@@ -29,6 +30,7 @@ interface DailySpeciesProps {
 
 export default function DailySpecies({ variant = "home" }: DailySpeciesProps) {
   const { t } = useI18n();
+  const formatDate = useLocalizedDate();
 
   const dailySlug = useMemo(() => {
     const idx = getDailySpeciesIndex(ALL_SPECIES_SLUGS.length);
@@ -78,7 +80,7 @@ export default function DailySpecies({ variant = "home" }: DailySpeciesProps) {
             isHome ? "text-crt-green/40" : "text-[#33ff33]/30"
           }`}
         >
-          {new Date().toLocaleDateString("en-CA")}
+          {formatDate(new Date())}
         </span>
       </div>
 

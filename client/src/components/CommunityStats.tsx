@@ -7,6 +7,7 @@
 
 import { useState, useEffect, useMemo, memo } from "react";
 import { useI18n } from "@/contexts/I18nContext";
+import { useLocalizedDate } from "@/hooks/useLocalizedDate";
 import { getGlobalStats, getUserStats, type GlobalStats, type UserStats } from "@/lib/community-stats";
 
 // ─── Animated Counter ────────────────────────────────────────────
@@ -16,20 +17,24 @@ function AnimatedNumber({ value, duration = 1500 }: { value: number; duration?: 
   useEffect(() => {
     if (value === 0) { setDisplay(0); return; }
     const start = performance.now();
-    const startVal = 0;
-    let raf: number;
+    let rafId: number | null = null;
+    let mounted = true;
 
     const animate = (now: number) => {
+      if (!mounted) return;
       const elapsed = now - start;
       const progress = Math.min(elapsed / duration, 1);
       // Ease-out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplay(Math.floor(startVal + (value - startVal) * eased));
-      if (progress < 1) raf = requestAnimationFrame(animate);
+      setDisplay(Math.floor(value * eased));
+      if (progress < 1) rafId = requestAnimationFrame(animate);
     };
 
-    raf = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf);
+    rafId = requestAnimationFrame(animate);
+    return () => {
+      mounted = false;
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
   }, [value, duration]);
 
   return <>{display.toLocaleString()}</>;
@@ -109,6 +114,7 @@ function StatRow({ label, value, highlight = false }: { label: string; value: st
 // ─── Main Component ──────────────────────────────────────────────
 export default function CommunityStats() {
   const { t } = useI18n();
+  const formatDate = useLocalizedDate();
   const [globalStats, setGlobalStats] = useState<GlobalStats | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [isVisible, setIsVisible] = useState(false);
@@ -133,25 +139,40 @@ export default function CommunityStats() {
   // Compute stats only when visible
   useEffect(() => {
     if (!isVisible) return;
-    // Use requestIdleCallback for non-critical computation
     const compute = () => {
       setGlobalStats(getGlobalStats());
       setUserStats(getUserStats());
     };
-    if ("requestIdleCallback" in window) {
-      (window as any).requestIdleCallback(compute);
+    // Use requestIdleCallback for non-critical computation
+    type IdleCallbackHandle = ReturnType<typeof globalThis.requestIdleCallback>;
+    let idleId: IdleCallbackHandle | ReturnType<typeof setTimeout> | null = null;
+    if (typeof globalThis.requestIdleCallback === "function") {
+      idleId = globalThis.requestIdleCallback(compute);
     } else {
-      setTimeout(compute, 50);
+      idleId = setTimeout(compute, 50);
     }
+    return () => {
+      if (idleId === null) return;
+      if (typeof globalThis.cancelIdleCallback === "function") {
+        globalThis.cancelIdleCallback(idleId as IdleCallbackHandle);
+      } else {
+        clearTimeout(idleId as ReturnType<typeof setTimeout>);
+      }
+    };
   }, [isVisible]);
 
-  // Listen for new queries (custom event from Home page)
+  // Listen for new queries (custom event from Home page), debounced
   useEffect(() => {
+    let debounceId: ReturnType<typeof setTimeout>;
     const handler = () => {
-      setUserStats(getUserStats());
+      clearTimeout(debounceId);
+      debounceId = setTimeout(() => setUserStats(getUserStats()), 300);
     };
     window.addEventListener("buddy-query", handler);
-    return () => window.removeEventListener("buddy-query", handler);
+    return () => {
+      clearTimeout(debounceId);
+      window.removeEventListener("buddy-query", handler);
+    };
   }, []);
 
   // Top 6 species for display
@@ -161,12 +182,6 @@ export default function CommunityStats() {
   }, [globalStats]);
 
   const maxPercentage = topSpecies[0]?.percentage || 1;
-
-  // Format date
-  const formatDate = (ts: number | null) => {
-    if (!ts) return "—";
-    return new Date(ts).toLocaleDateString();
-  };
 
   return (
     <div id="community-stats-section" className="mb-12">
