@@ -3624,6 +3624,46 @@ export function getAllArticles(): BlogArticle[] {
   );
 }
 
+/**
+ * Get related articles based on relevance scoring.
+ * Scoring: same category = 3 pts, each shared tag = 2 pts, recency bonus = 0-1 pt.
+ * Returns top N articles sorted by score (descending), excluding current article.
+ */
+export function getRelatedArticles(
+  slug: string,
+  count: number = 3
+): BlogArticle[] {
+  const current = BLOG_ARTICLES.find((a) => a.slug === slug);
+  if (!current) return BLOG_ARTICLES.slice(0, count);
+
+  const now = Date.now();
+  const ONE_YEAR = 365 * 24 * 60 * 60 * 1000;
+
+  const scored = BLOG_ARTICLES
+    .filter((a) => a.slug !== slug)
+    .map((candidate) => {
+      let score = 0;
+
+      // Same discussion category = strong signal (+3)
+      if (candidate.discussionCategory === current.discussionCategory) {
+        score += 3;
+      }
+
+      // Shared tags = moderate signal (+2 each)
+      const sharedTags = candidate.tags.filter((t) => current.tags.includes(t));
+      score += sharedTags.length * 2;
+
+      // Recency bonus: newer articles get up to +1 point
+      const age = now - new Date(candidate.publishedAt).getTime();
+      score += Math.max(0, 1 - age / ONE_YEAR);
+
+      return { article: candidate, score, sharedTags: sharedTags.length };
+    })
+    .sort((a, b) => b.score - a.score);
+
+  return scored.slice(0, count).map((s) => s.article);
+}
+
 export function getAdjacentArticles(slug: string): {
   prev: BlogArticle | null;
   next: BlogArticle | null;

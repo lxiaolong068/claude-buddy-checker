@@ -8,7 +8,7 @@ import { useEffect, useMemo } from "react";
 import TableOfContents, { type TocItem } from "@/components/TableOfContents";
 import { Link, useParams } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
-import { getArticleBySlug, getAllArticles, getAdjacentArticles } from "@/lib/blog-data";
+import { getArticleBySlug, getAllArticles, getAdjacentArticles, getRelatedArticles } from "@/lib/blog-data";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
 import ArticleSchema from "@/components/ArticleSchema";
@@ -70,10 +70,10 @@ export default function BlogPost() {
     };
   }, [content]);
 
-  // Related articles (exclude current)
+  // Related articles based on smart relevance scoring (category + tags + recency)
   const relatedArticles = useMemo(() => {
-    return allArticles.filter((a) => a.slug !== params.slug).slice(0, 3);
-  }, [allArticles, params.slug]);
+    return getRelatedArticles(params.slug || "", 3);
+  }, [params.slug]);
 
   // Adjacent articles for series navigation
   const { prev: prevArticle, next: nextArticle } = useMemo(
