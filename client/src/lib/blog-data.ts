@@ -4,12 +4,16 @@
  * Each article has multilingual content keyed by locale
  */
 
+/** Discussion category for Giscus comment routing */
+export type DiscussionCategory = 'guides' | 'deep-dives' | 'lore';
+
 export interface BlogArticle {
   slug: string;
   publishedAt: string; // ISO date
   updatedAt?: string;
   readingTime: number; // minutes
   tags: string[];
+  discussionCategory: DiscussionCategory;
   coverImage?: string;
   content: {
     en: ArticleContent;
@@ -38,6 +42,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     updatedAt: "2026-04-02",
     readingTime: 5,
     tags: ["guide", "tutorial", "buddy", "uuid"],
+    discussionCategory: 'guides',
     content: {
       en: {
         title: "How to Find Your Claude Code Buddy",
@@ -298,6 +303,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     publishedAt: "2026-04-02",
     readingTime: 7,
     tags: ["rarity", "guide", "stats", "legendary"],
+    discussionCategory: 'guides',
     content: {
       en: {
         title: "Claude Code Buddy Rarity Guide",
@@ -687,6 +693,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     publishedAt: "2026-04-02",
     readingTime: 10,
     tags: ["ranking", "species", "tier-list", "guide"],
+    discussionCategory: 'guides',
     content: {
       en: {
         title: "All 18 Claude Buddy Species Ranked",
@@ -1157,6 +1164,7 @@ export const BLOG_ARTICLES: BlogArticle[] = [
     publishedAt: "2026-04-04",
     readingTime: 8,
     tags: ["stats", "attributes", "deep-dive", "debugging", "wisdom"],
+    discussionCategory: 'deep-dives',
     content: {
       en: {
         title: "Claude Code Buddy Stats Deep Dive — Understanding the 5 Personality Attributes",
@@ -1565,6 +1573,7 @@ Total: 100 + 89 + 89 + 89 + 54 = 421</code></pre>
     publishedAt: "2026-04-04",
     readingTime: 7,
     tags: ["cosmetics", "hats", "eyes", "shiny", "probability"],
+    discussionCategory: 'guides',
     content: {
       en: {
         title: "Claude Code Buddy Cosmetics Guide — Hats, Eyes & Shiny Effects",
@@ -1964,6 +1973,7 @@ P(전부) = 0.01 × 0.0556 × 0.1667 × 0.125 × 0.01
     publishedAt: "2026-04-04",
     readingTime: 10,
     tags: ["algorithm", "technical", "fnv1a", "prng", "deep-dive"],
+    discussionCategory: 'deep-dives',
     content: {
       en: {
         title: "The Algorithm Behind Claude Code Buddy \u2014 FNV-1a & Mulberry32 PRNG Explained",
@@ -2550,6 +2560,7 @@ rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
     publishedAt: "2026-04-05",
     readingTime: 12,
     tags: ["lore", "species", "worldbuilding", "storytelling", "bestiary"],
+    discussionCategory: 'lore',
     content: {
       en: {
         title: "Claude Code Buddy Bestiary \u2014 Origins & Lore of All 18 Species",
@@ -2932,6 +2943,7 @@ rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
     publishedAt: '2026-04-05',
     readingTime: 10,
     tags: ['simulation', 'data', 'probability', 'statistics', 'experiment'],
+    discussionCategory: 'deep-dives',
     content: {
       en: {
         title: 'Claude Code Buddy Probability Lab \u2014 Truths Revealed by 10,000 Simulations',
@@ -3241,6 +3253,7 @@ rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
     publishedAt: "2026-04-06",
     readingTime: 7,
     tags: ["guide", "tutorial", "uuid", "setup"],
+    discussionCategory: 'guides',
     content: {
       en: {
         title: "Find Your UUID: Complete Guide for macOS, Windows & Linux",

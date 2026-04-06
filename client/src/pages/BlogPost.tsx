@@ -331,7 +331,7 @@ export default function BlogPost() {
         )}
 
         {/* Comments */}
-        <GiscusComments slug={params.slug || ""} />
+        <GiscusComments slug={params.slug || ""} discussionCategory={article?.discussionCategory} />
 
         {/* CTA */}
         <div className="border border-crt-green/20 bg-crt-green/5 p-6 text-center mb-8">
