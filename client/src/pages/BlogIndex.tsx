@@ -5,8 +5,6 @@
  * SEO: Optimized for blog listing with structured data
  */
 
-type SortMode = "newest" | "oldest" | "titleAZ" | "titleZA";
-
 import { useEffect, useMemo, useRef } from "react";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
@@ -317,7 +315,7 @@ export default function BlogIndex() {
     setActiveTag(activeTag === tag ? null : tag);
   };
 
-  const hasActiveFilters = debouncedQuery.trim() || activeTag || activeCategory;
+  const hasActiveFilters = searchQuery.trim() || activeTag || activeCategory;
 
   // Count articles per category
   const categoryCounts = useMemo(() => {

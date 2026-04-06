@@ -11,7 +11,6 @@ export default function ReadingProgress() {
   const [progress, setProgress] = useState(0);
   const [visible, setVisible] = useState(false);
   const rafRef = useRef<number | null>(null);
-  const lastScrollRef = useRef(0);
 
   const updateProgress = useCallback(() => {
     const scrollTop = window.scrollY;

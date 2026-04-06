@@ -12,7 +12,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import type { DiscussionCategory } from "@/lib/blog-data";
 
-type SortMode = "newest" | "oldest" | "titleAZ" | "titleZA";
+export type SortMode = "newest" | "oldest" | "titleAZ" | "titleZA";
 
 const VALID_SORTS: SortMode[] = ["newest", "oldest", "titleAZ", "titleZA"];
 const VALID_CATEGORIES: DiscussionCategory[] = ["guides", "deep-dives", "lore"];
@@ -175,6 +175,5 @@ export function useQueryFilters(allTags: string[]) {
     setActiveTag,
     clearSearch,
     clearAll,
-    debounceTimerRef,
   };
 }
