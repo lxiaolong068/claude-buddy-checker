@@ -7,7 +7,7 @@
 
 type SortMode = "newest" | "oldest" | "titleAZ" | "titleZA";
 
-import { useEffect, useState, useMemo, useRef, useCallback } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { getAllArticles, type BlogArticle, type DiscussionCategory } from "@/lib/blog-data";
@@ -16,6 +16,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import BlogListSchema from "@/components/BlogListSchema";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import { useQueryFilters } from "@/hooks/useQueryFilters";
 
 /* ── Sort/Filter Button Components ── */
 function SortButton({
@@ -181,30 +182,7 @@ function ArticleCard({ article, searchQuery }: { article: BlogArticle; searchQue
 export default function BlogIndex() {
   const { t, locale } = useI18n();
   const articles = getAllArticles();
-
-  const [sortMode, setSortMode] = useState<SortMode>("newest");
-  const [activeTag, setActiveTag] = useState<string | null>(null);
-  const [activeCategory, setActiveCategory] = useState<DiscussionCategory | null>(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedQuery, setDebouncedQuery] = useState("");
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  // Debounce search input (200ms)
-  const handleSearchChange = useCallback((value: string) => {
-    setSearchQuery(value);
-    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    debounceTimerRef.current = setTimeout(() => {
-      setDebouncedQuery(value);
-    }, 200);
-  }, []);
-
-  // Cleanup debounce timer
-  useEffect(() => {
-    return () => {
-      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    };
-  }, []);
 
   // Collect all unique tags from articles
   const allTags = useMemo(() => {
@@ -212,6 +190,26 @@ export default function BlogIndex() {
     articles.forEach((a) => a.tags.forEach((tag) => tagSet.add(tag)));
     return Array.from(tagSet).sort();
   }, [articles]);
+
+  // URL-synced filter state
+  const {
+    searchQuery,
+    debouncedQuery,
+    sortMode,
+    activeCategory,
+    activeTag,
+    handleSearchChange,
+    setSortMode,
+    setActiveCategory,
+    setActiveTag,
+    clearSearch: clearSearchHook,
+    clearAll,
+  } = useQueryFilters(allTags);
+
+  const clearSearch = () => {
+    clearSearchHook();
+    searchInputRef.current?.focus();
+  };
 
   // Search + filter articles
   const searchedArticles = useMemo(() => {
@@ -289,13 +287,7 @@ export default function BlogIndex() {
   }, [locale, t]);
 
   const handleTagClick = (tag: string) => {
-    setActiveTag((prev) => (prev === tag ? null : tag));
-  };
-
-  const clearSearch = () => {
-    setSearchQuery("");
-    setDebouncedQuery("");
-    if (searchInputRef.current) searchInputRef.current.focus();
+    setActiveTag(activeTag === tag ? null : tag);
   };
 
   const hasActiveFilters = debouncedQuery.trim() || activeTag || activeCategory;
@@ -317,10 +309,7 @@ export default function BlogIndex() {
     },
     "Escape": () => {
       if (searchQuery || activeTag || activeCategory) {
-        setSearchQuery("");
-        setDebouncedQuery("");
-        setActiveTag(null);
-        setActiveCategory(null);
+        clearAll();
         searchInputRef.current?.blur();
       }
     },
@@ -521,11 +510,7 @@ export default function BlogIndex() {
               </span>
               {hasActiveFilters && (
                 <button
-                  onClick={() => {
-                    setActiveTag(null);
-                    setActiveCategory(null);
-                    clearSearch();
-                  }}
+                  onClick={clearAll}
                   className="text-[10px] text-crt-red/60 hover:text-crt-red uppercase tracking-wider transition-colors"
                 >
                   [{t("blog.clearFilter")}]
