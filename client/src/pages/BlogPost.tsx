@@ -4,7 +4,7 @@
  * SEO: Full article schema, breadcrumbs, internal links
  */
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { Link, useParams } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { getArticleBySlug, getAllArticles, getAdjacentArticles } from "@/lib/blog-data";
@@ -13,6 +13,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import ArticleSchema from "@/components/ArticleSchema";
 import ScrollToTop from "@/components/ScrollToTop";
 import GiscusComments from "@/components/GiscusComments";
+import ReadingProgress from "@/components/ReadingProgress";
 
 export default function BlogPost() {
   const params = useParams<{ slug: string }>();
@@ -25,17 +26,6 @@ export default function BlogPost() {
     return article.content[locale as keyof typeof article.content];
   }, [article, locale]);
 
-  const [readingProgress, setReadingProgress] = useState(0);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const docHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      setReadingProgress(docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0);
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   // Inject copy buttons into <pre> blocks after content renders
   useEffect(() => {
@@ -152,18 +142,7 @@ export default function BlogPost() {
   return (
     <div className="min-h-screen relative">
       {/* Reading progress bar */}
-      <div className="fixed top-0 left-0 right-0 z-[60] h-[2px] bg-[#33ff33]/10">
-        <div
-          className="h-full bg-[#33ff33] transition-[width] duration-75"
-          style={{
-            width: `${readingProgress}%`,
-            boxShadow:
-              readingProgress > 0
-                ? "0 0 8px rgba(51,255,51,0.8), 0 0 16px rgba(51,255,51,0.4)"
-                : "none",
-          }}
-        />
-      </div>
+      <ReadingProgress />
 
       <div className="crt-scanlines" />
 
