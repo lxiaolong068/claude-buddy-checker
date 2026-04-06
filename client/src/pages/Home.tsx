@@ -5,7 +5,7 @@
  * i18n: All user-facing text via useI18n()
  */
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback, useEffect, useMemo } from "react";
 import { Link } from "wouter";
 import { rollBuddy, type BuddyResult, SPECIES } from "@/lib/buddy-engine";
 import { getAllArticles } from "@/lib/blog-data";
@@ -48,6 +48,44 @@ export default function Home() {
   const [error, setError] = useState("");
   const resultRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [copiedCmd, setCopiedCmd] = useState<string | null>(null);
+
+  // UUID format detection
+  const uuidHint = useMemo(() => {
+    const v = uuid.trim();
+    if (!v) return null;
+    // Standard UUID format (accountUuid)
+    if (/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v)) {
+      return { type: "uuid" as const, key: "input.detectedUuid" };
+    }
+    // Long hex string (userID) — 32+ hex chars without dashes
+    if (/^[0-9a-f]{32,}$/i.test(v)) {
+      return { type: "userId" as const, key: "input.detectedUserId" };
+    }
+    // Any other non-empty string
+    if (v.length > 0) {
+      return { type: "anon" as const, key: "input.detectedAnon" };
+    }
+    return null;
+  }, [uuid]);
+
+  const handleCopy = useCallback(async (text: string, id: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedCmd(id);
+      setTimeout(() => setCopiedCmd(null), 1500);
+    } catch {
+      // fallback
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      setCopiedCmd(id);
+      setTimeout(() => setCopiedCmd(null), 1500);
+    }
+  }, []);
 
   // Update document title when locale changes
   useEffect(() => {
@@ -184,12 +222,30 @@ export default function Home() {
                 <p>
                   <span className="text-crt-amber">{t("input.option1Label")}</span> {t("input.option1Text")}
                 </p>
-                <code className="text-foreground bg-secondary/50 px-1.5 py-0.5 text-[11px] block mt-0.5 break-all">
-                  {t("input.option1Code")}
-                </code>
-                <p className="text-muted-foreground/60 text-[10px] mt-0.5">
-                  {t("input.option1Win")}
-                </p>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <code className="text-foreground bg-secondary/50 px-1.5 py-0.5 text-[11px] break-all flex-1">
+                    {t("input.option1Code")}
+                  </code>
+                  <button
+                    onClick={() => handleCopy(t("input.option1Code"), "cmd1")}
+                    className="shrink-0 px-1.5 py-0.5 text-[10px] border border-border/50 hover:border-crt-green/50 hover:text-crt-green transition-all"
+                    title={t("input.copyCmd")}
+                  >
+                    {copiedCmd === "cmd1" ? t("input.copied") : "[CP]"}
+                  </button>
+                </div>
+                <div className="flex items-center gap-1.5 mt-0.5">
+                  <code className="text-muted-foreground/60 bg-secondary/30 px-1.5 py-0.5 text-[10px] break-all flex-1">
+                    {t("input.option1Win")}
+                  </code>
+                  <button
+                    onClick={() => handleCopy("Select-String 'accountUuid|userID' ~\\.claude.json", "cmd1win")}
+                    className="shrink-0 px-1.5 py-0.5 text-[10px] border border-border/50 hover:border-crt-green/50 hover:text-crt-green transition-all"
+                    title={t("input.copyCmd")}
+                  >
+                    {copiedCmd === "cmd1win" ? t("input.copied") : "[CP]"}
+                  </button>
+                </div>
               </div>
               <div>
                 <p>
@@ -226,6 +282,20 @@ export default function Home() {
                   </span>
                 )}
               </div>
+
+              {/* UUID format detection hint */}
+              {uuidHint && (
+                <div className={`text-[10px] mt-1 font-mono transition-all ${
+                  uuidHint.type === "uuid" ? "text-crt-green" :
+                  uuidHint.type === "userId" ? "text-crt-amber" :
+                  "text-muted-foreground/60"
+                }`}>
+                  {uuidHint.type === "uuid" && "✓ "}
+                  {uuidHint.type === "userId" && "✓ "}
+                  {uuidHint.type === "anon" && "⚠ "}
+                  {t(uuidHint.key)}
+                </div>
+              )}
               <button
                 onClick={handleCheck}
                 disabled={isLoading}
