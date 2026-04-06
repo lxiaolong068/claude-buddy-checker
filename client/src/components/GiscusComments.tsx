@@ -3,7 +3,7 @@
  *
  * Features:
  *   - Reactive language switching (en / zh-CN / ko)
- *   - Reactive theme switching (dark_dimmed / light)
+ *   - Reactive theme switching (custom CRT dark / light CSS)
  *   - Lazy-loaded iframe for performance
  *   - Custom CRT wrapper styling
  *   - Maps blog pathname for per-article discussions
@@ -20,9 +20,20 @@ const GISCUS_LANG: Record<Locale, string> = {
   ko: "ko",
 };
 
-/** Map our theme to Giscus theme names */
+/**
+ * Custom Giscus CRT theme CSS URLs hosted on GitHub (public repo).
+ *
+ * Giscus loads the theme inside its own cross-origin iframe, so the CSS must
+ * be served from a publicly accessible URL with proper CORS headers.
+ * jsDelivr CDN proxies GitHub files with correct Content-Type and CORS headers.
+ */
+const GISCUS_THEME_URLS: Record<string, string> = {
+  dark: "https://cdn.jsdelivr.net/gh/lxiaolong068/claude-buddy-checker@main/client/public/giscus-themes/giscus-crt-dark.css",
+  light: "https://cdn.jsdelivr.net/gh/lxiaolong068/claude-buddy-checker@main/client/public/giscus-themes/giscus-crt-light.css",
+};
+
 function getGiscusTheme(theme: string): string {
-  return theme === "light" ? "light" : "dark_dimmed";
+  return GISCUS_THEME_URLS[theme] || GISCUS_THEME_URLS.dark;
 }
 
 interface GiscusCommentsProps {
