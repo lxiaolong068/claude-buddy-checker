@@ -20,6 +20,7 @@ import LazyImage from "@/components/LazyImage";
 import DailySpecies from "@/components/DailySpecies";
 import CommunityStats from "@/components/CommunityStats";
 import { recordQuery } from "@/lib/community-stats";
+import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp";
 const GRID_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/buddy-showcase-grid-dzj2bCjKycQ4bgSaUeRV58.webp";
@@ -124,13 +125,23 @@ export default function Home() {
     if (e.key === "Enter") handleCheck();
   };
 
-  // / — focus UUID input when not already typing
+  // Keyboard shortcuts
   useKeyboardShortcuts({
     "/": (e) => {
       e.preventDefault();
       inputRef.current?.focus();
     },
+    "Escape": () => {
+      if (inputRef.current) {
+        inputRef.current.blur();
+      }
+    },
   });
+
+  const homeShortcuts = [
+    { key: "/", label: t("shortcuts.search") },
+    { key: "Esc", label: t("shortcuts.clear") },
+  ];
 
   const rarityRows = [
     { name: t("rarity.common"), chance: "60%", floor: "5", stars: "★", cls: "rarity-common" },
@@ -147,6 +158,7 @@ export default function Home() {
 
       {/* CRT Scan Lines Overlay */}
       <div className="crt-scanlines" />
+      <KeyboardShortcutsHelp shortcuts={homeShortcuts} />
 
       {/* Main Content */}
       <div className="relative z-10 max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-12">

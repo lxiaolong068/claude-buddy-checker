@@ -192,6 +192,13 @@ export const en = {
     header: "species_of_the_day",
     viewProfile: "VIEW PROFILE",
   },
+  shortcuts: {
+    title: "KEYBOARD SHORTCUTS",
+    search: "Focus search",
+    clear: "Clear / Close",
+    random: "Random species",
+    hint: "Press ? for shortcuts",
+  },
   footer: {
     line1: "Built by the community. Not affiliated with Anthropic.",
     line2: "All computation is local. No data is collected or transmitted.",

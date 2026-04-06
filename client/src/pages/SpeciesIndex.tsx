@@ -13,6 +13,7 @@ import ComparePanel from "@/components/ComparePanel";
 import DailySpecies from "@/components/DailySpecies";
 import ThemeToggle from "@/components/ThemeToggle";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
+import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 
 type CategoryFilter = "all" | "animal" | "creature" | "mythical" | "object";
 
@@ -136,7 +137,18 @@ export default function SpeciesIndex() {
         setShowCompare(true);
       }
     },
+    // r — random species
+    "r": () => {
+      handleRandomSpecies();
+    },
   });
+
+  const speciesShortcuts = [
+    { key: "/", label: t("shortcuts.search") },
+    { key: "Esc", label: t("shortcuts.clear") },
+    { key: "r", label: t("shortcuts.random") },
+    { key: "Enter", label: "Compare" },
+  ];
 
   // Update document title
   useEffect(() => {
@@ -162,6 +174,7 @@ export default function SpeciesIndex() {
     <div className="min-h-screen bg-[#0a0a0a] text-[#33ff33] font-mono relative overflow-hidden">
       {/* Scanline overlay */}
       <div className="pointer-events-none fixed inset-0 z-50 bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.15)_0px,rgba(0,0,0,0.15)_1px,transparent_1px,transparent_2px)]" />
+      <KeyboardShortcutsHelp shortcuts={speciesShortcuts} />
 
       {/* Navigation */}
       <nav className="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur border-b border-[#33ff33]/20">

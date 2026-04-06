@@ -14,6 +14,8 @@ import { getAllArticles, type BlogArticle } from "@/lib/blog-data";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "@/components/ThemeToggle";
 import BlogListSchema from "@/components/BlogListSchema";
+import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 /* ── Sort/Filter Button Components ── */
 function SortButton({
@@ -262,10 +264,32 @@ export default function BlogIndex() {
 
   const hasActiveFilters = debouncedQuery.trim() || activeTag;
 
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    "/": (e) => {
+      e.preventDefault();
+      searchInputRef.current?.focus();
+    },
+    "Escape": () => {
+      if (searchQuery || activeTag) {
+        setSearchQuery("");
+        setDebouncedQuery("");
+        setActiveTag(null);
+        searchInputRef.current?.blur();
+      }
+    },
+  });
+
+  const blogShortcuts = [
+    { key: "/", label: t("shortcuts.search") },
+    { key: "Esc", label: t("shortcuts.clear") },
+  ];
+
   return (
     <div className="min-h-screen relative">
       <BlogListSchema articles={articles} locale={locale} />
       <div className="crt-scanlines" />
+      <KeyboardShortcutsHelp shortcuts={blogShortcuts} />
 
       <div className="relative z-10 max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
         {/* Top Bar */}

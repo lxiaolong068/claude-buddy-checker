@@ -194,6 +194,13 @@ export const zh: typeof en = {
     header: "每日推荐物种",
     viewProfile: "查看详情",
   },
+  shortcuts: {
+    title: "键盘快捷键",
+    search: "聚焦搜索",
+    clear: "清除 / 关闭",
+    random: "随机物种",
+    hint: "按 ? 查看快捷键",
+  },
   footer: {
     line1: "由社区构建，与 Anthropic 无关。",
     line2: "所有计算均在本地完成，不收集或传输任何数据。",

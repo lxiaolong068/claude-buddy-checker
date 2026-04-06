@@ -32,6 +32,8 @@ import FAQSection from "@/components/FAQSection";
 import ScrollToTop from "@/components/ScrollToTop";
 import FAQSchema from "@/components/FAQSchema";
 import SpeciesTooltip from "@/components/SpeciesTooltip";
+import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
+import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 
 /** Build a synthetic BuddyResult for display purposes */
 function makeDemoBuddy(species: Species, info: SpeciesInfo): BuddyResult {
@@ -69,6 +71,15 @@ export default function SpeciesDetail() {
       navigate(`/species/${target}`);
     }, 500);
   }, [isRolling, slug, navigate]);
+
+  // Keyboard shortcuts
+  useKeyboardShortcuts({
+    "r": () => { handleRandomNext(); },
+  });
+
+  const detailShortcuts = [
+    { key: "r", label: t("shortcuts.random") },
+  ];
 
   const info = SPECIES_DATA[slug];
 
@@ -169,6 +180,7 @@ export default function SpeciesDetail() {
     <div className="min-h-screen bg-[#0a0a0a] text-[#33ff33] font-mono relative overflow-hidden">
       {/* Scanline overlay */}
       <div className="pointer-events-none fixed inset-0 z-50 bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.15)_0px,rgba(0,0,0,0.15)_1px,transparent_1px,transparent_2px)]" />
+      <KeyboardShortcutsHelp shortcuts={detailShortcuts} />
 
       {/* Navigation */}
       <nav className="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur border-b border-[#33ff33]/20">

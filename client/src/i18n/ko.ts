@@ -194,6 +194,13 @@ export const ko: typeof en = {
     header: "오늘의_추천_종",
     viewProfile: "상세 보기",
   },
+  shortcuts: {
+    title: "키보드 단축키",
+    search: "검색 포커스",
+    clear: "지우기 / 닫기",
+    random: "랜덤 종",
+    hint: "? 키를 눌러 단축키 보기",
+  },
   footer: {
     line1: "커뮤니티에서 제작. Anthropic과 무관합니다.",
     line2: "모든 계산은 로컬에서 수행됩니다. 데이터를 수집하거나 전송하지 않습니다.",
