@@ -1,13 +1,13 @@
 /**
  * Blog Index Page - CRT Terminal Style
  * Design: Grid of article cards with terminal aesthetics
- * Features: Sort by date/title, filter by tag
+ * Features: Search by keyword, sort by date/title, filter by tag
  * SEO: Optimized for blog listing with structured data
  */
 
 type SortMode = "newest" | "oldest" | "titleAZ" | "titleZA";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { getAllArticles, type BlogArticle } from "@/lib/blog-data";
@@ -62,9 +62,27 @@ function TagButton({
   );
 }
 
-function ArticleCard({ article }: { article: BlogArticle }) {
+function ArticleCard({ article, searchQuery }: { article: BlogArticle; searchQuery: string }) {
   const { t, locale } = useI18n();
   const content = article.content[locale as keyof typeof article.content];
+
+  // Highlight matching text in title and excerpt
+  const highlightText = (text: string, query: string) => {
+    if (!query.trim()) return text;
+    const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const regex = new RegExp(`(${escapedQuery})`, "gi");
+    const parts = text.split(regex);
+    if (parts.length === 1) return text;
+    return parts.map((part, i) =>
+      regex.test(part) ? (
+        <mark key={i} className="bg-crt-green/30 text-crt-green px-0.5">
+          {part}
+        </mark>
+      ) : (
+        part
+      )
+    );
+  };
 
   return (
     <Link href={`/blog/${article.slug}`}>
@@ -85,7 +103,11 @@ function ArticleCard({ article }: { article: BlogArticle }) {
             {article.tags.map((tag) => (
               <span
                 key={tag}
-                className="text-[10px] uppercase tracking-wider px-2 py-0.5 border border-crt-green/20 text-crt-green/70"
+                className={`text-[10px] uppercase tracking-wider px-2 py-0.5 border transition-colors ${
+                  searchQuery && tag.toLowerCase().includes(searchQuery.toLowerCase())
+                    ? "border-crt-green/50 text-crt-green bg-crt-green/10"
+                    : "border-crt-green/20 text-crt-green/70"
+                }`}
               >
                 #{tag}
               </span>
@@ -94,12 +116,12 @@ function ArticleCard({ article }: { article: BlogArticle }) {
 
           {/* Title */}
           <h2 className="text-base sm:text-lg font-bold text-foreground group-hover:text-crt-green transition-colors mb-2 leading-snug">
-            {content.title}
+            {highlightText(content.title, searchQuery)}
           </h2>
 
           {/* Excerpt */}
           <p className="text-xs text-muted-foreground leading-relaxed mb-4 line-clamp-3">
-            {content.excerpt}
+            {highlightText(content.excerpt, searchQuery)}
           </p>
 
           {/* Meta */}
@@ -130,6 +152,26 @@ export default function BlogIndex() {
 
   const [sortMode, setSortMode] = useState<SortMode>("newest");
   const [activeTag, setActiveTag] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Debounce search input (200ms)
+  const handleSearchChange = useCallback((value: string) => {
+    setSearchQuery(value);
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    debounceTimerRef.current = setTimeout(() => {
+      setDebouncedQuery(value);
+    }, 200);
+  }, []);
+
+  // Cleanup debounce timer
+  useEffect(() => {
+    return () => {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+    };
+  }, []);
 
   // Collect all unique tags from articles
   const allTags = useMemo(() => {
@@ -138,15 +180,34 @@ export default function BlogIndex() {
     return Array.from(tagSet).sort();
   }, [articles]);
 
-  // Filter articles by tag
-  const filteredArticles = useMemo(() => {
-    if (!activeTag) return articles;
-    return articles.filter((a) => a.tags.includes(activeTag));
-  }, [articles, activeTag]);
+  // Search + filter articles
+  const searchedArticles = useMemo(() => {
+    let result = articles;
+
+    // Apply search query
+    if (debouncedQuery.trim()) {
+      const q = debouncedQuery.toLowerCase().trim();
+      result = result.filter((a) => {
+        const content = a.content[locale as keyof typeof a.content];
+        const titleMatch = content.title.toLowerCase().includes(q);
+        const excerptMatch = content.excerpt.toLowerCase().includes(q);
+        const tagMatch = a.tags.some((tag) => tag.toLowerCase().includes(q));
+        const slugMatch = a.slug.toLowerCase().includes(q);
+        return titleMatch || excerptMatch || tagMatch || slugMatch;
+      });
+    }
+
+    // Apply tag filter
+    if (activeTag) {
+      result = result.filter((a) => a.tags.includes(activeTag));
+    }
+
+    return result;
+  }, [articles, debouncedQuery, activeTag, locale]);
 
   // Sort filtered articles
   const sortedArticles = useMemo(() => {
-    const arr = [...filteredArticles];
+    const arr = [...searchedArticles];
     switch (sortMode) {
       case "newest":
         return arr.sort(
@@ -181,7 +242,7 @@ export default function BlogIndex() {
       default:
         return arr;
     }
-  }, [filteredArticles, sortMode, locale]);
+  }, [searchedArticles, sortMode, locale]);
 
   useEffect(() => {
     document.title = t("blog.indexTitle");
@@ -192,6 +253,14 @@ export default function BlogIndex() {
   const handleTagClick = (tag: string) => {
     setActiveTag((prev) => (prev === tag ? null : tag));
   };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setDebouncedQuery("");
+    if (searchInputRef.current) searchInputRef.current.focus();
+  };
+
+  const hasActiveFilters = debouncedQuery.trim() || activeTag;
 
   return (
     <div className="min-h-screen relative">
@@ -225,7 +294,7 @@ export default function BlogIndex() {
           </p>
         </div>
 
-        {/* ── Sort & Filter Toolbar ── */}
+        {/* ── Search & Sort & Filter Toolbar ── */}
         <div className="border border-border/50 bg-card/50 mb-6">
           {/* Toolbar Terminal Header */}
           <div className="flex items-center gap-2 px-3 py-1.5 border-b border-border/30">
@@ -236,6 +305,43 @@ export default function BlogIndex() {
           </div>
 
           <div className="p-3 space-y-3">
+            {/* Search Row */}
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] text-crt-green/50 uppercase tracking-wider font-semibold min-w-[52px]">
+                {t("blog.searchLabel")}:
+              </span>
+              <div className="flex-1 relative">
+                <div className="absolute left-2.5 top-1/2 -translate-y-1/2 text-crt-green/40 pointer-events-none">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <path d="m21 21-4.3-4.3" />
+                  </svg>
+                </div>
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => handleSearchChange(e.target.value)}
+                  placeholder={t("blog.searchPlaceholder")}
+                  className="w-full bg-background/50 border border-border/40 text-xs text-foreground placeholder:text-muted-foreground/30 pl-8 pr-8 py-1.5 focus:outline-none focus:border-crt-green/50 transition-colors tracking-wide"
+                  spellCheck={false}
+                  autoComplete="off"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={clearSearch}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground/40 hover:text-crt-red transition-colors"
+                    title={t("blog.searchClear")}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 6 6 18" />
+                      <path d="m6 6 12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
+
             {/* Sort Row */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[10px] text-crt-green/50 uppercase tracking-wider font-semibold min-w-[52px]">
@@ -300,10 +406,18 @@ export default function BlogIndex() {
                   {sortedArticles.length}
                 </span>{" "}
                 {t("blog.resultsCount")}
+                {debouncedQuery.trim() && (
+                  <span className="ml-2 text-crt-green/50">
+                    — grep "{debouncedQuery}"
+                  </span>
+                )}
               </span>
-              {activeTag && (
+              {hasActiveFilters && (
                 <button
-                  onClick={() => setActiveTag(null)}
+                  onClick={() => {
+                    setActiveTag(null);
+                    clearSearch();
+                  }}
                   className="text-[10px] text-crt-red/60 hover:text-crt-red uppercase tracking-wider transition-colors"
                 >
                   [{t("blog.clearFilter")}]
@@ -317,12 +431,24 @@ export default function BlogIndex() {
         {sortedArticles.length > 0 ? (
           <div className="space-y-4 mb-12">
             {sortedArticles.map((article) => (
-              <ArticleCard key={article.slug} article={article} />
+              <ArticleCard key={article.slug} article={article} searchQuery={debouncedQuery} />
             ))}
           </div>
         ) : (
-          <div className="border border-border bg-card p-8 text-center text-sm text-muted-foreground mb-12">
-            {t("blog.noArticles")}
+          <div className="border border-border bg-card p-8 text-center mb-12">
+            <div className="text-crt-amber/60 text-sm mb-2">
+              {debouncedQuery.trim()
+                ? t("blog.searchNoResults")
+                : t("blog.noArticles")}
+            </div>
+            {debouncedQuery.trim() && (
+              <button
+                onClick={clearSearch}
+                className="text-xs text-crt-green/60 hover:text-crt-green uppercase tracking-wider transition-colors mt-2"
+              >
+                [{t("blog.searchClear")}]
+              </button>
+            )}
           </div>
         )}
 
