@@ -53,17 +53,18 @@ export const BLOG_ARTICLES: BlogArticle[] = [
           },
           {
             heading: "Step 1: Find Your Account UUID",
-            body: `<p>Your buddy is generated from your <code>accountUuid</code> — a unique identifier tied to your Anthropic account. There are two ways to find it:</p>
-<h4>Method A: Ask Claude Code Directly</h4>
-<p>The simplest method is to open Claude Code and type:</p>
-<pre><code>What is my accountUuid?</code></pre>
-<p>Claude will respond with your UUID in the format: <code>acde070d-8c4c-4f0d-9d8a-162843c10333</code></p>
-<h4>Method B: Check Your Config File</h4>
-<p>Run this command in your terminal:</p>
-<pre><code>cat ~/.claude.json | grep accountUuid</code></pre>
-<p>This reads your local Claude configuration file and extracts the UUID field.</p>
+            body: `<p>Your buddy is generated from your <code>accountUuid</code> — a unique identifier tied to your Anthropic account. Here's how to find it:</p>
+<h4>Method A: Terminal Command (Recommended)</h4>
+<p>Run this command in your terminal (macOS/Linux):</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<p>On Windows PowerShell:</p>
+<pre><code>Select-String 'accountUuid|userID' ~\\.claude.json</code></pre>
+<p>You should see output containing your UUID: <code>acde070d-8c4c-4f0d-9d8a-162843c10333</code></p>
+<h4>Method B: Open the Config File</h4>
+<p>Manually open <code>~/.claude.json</code> in any text editor. Look for <code>accountUuid</code> inside the <code>oauthAccount</code> object, or <code>userID</code> at the top level.</p>
 <h4>Alternative: Use Your User ID</h4>
-<p>If you can't find your <code>accountUuid</code>, you can also use your <code>userID</code>. The buddy checker supports both formats.</p>`
+<p>If you can't find your <code>accountUuid</code>, you can also use your <code>userID</code>. The buddy checker supports both formats.</p>
+<p>For a detailed platform-specific guide with screenshots, see our <a href="/blog/find-your-uuid-complete-platform-guide">Complete UUID Guide for macOS, Windows & Linux</a>.</p>`
           },
           {
             heading: "Step 2: Check Your Buddy",
@@ -136,17 +137,18 @@ export const BLOG_ARTICLES: BlogArticle[] = [
           },
           {
             heading: "第一步：找到你的账户 UUID",
-            body: `<p>你的 Buddy 是根据 <code>accountUuid</code> 生成的——这是与你的 Anthropic 账户绑定的唯一标识符。有两种方法可以找到它：</p>
-<h4>方法 A：直接询问 Claude Code</h4>
-<p>最简单的方法是打开 Claude Code 并输入：</p>
-<pre><code>What is my accountUuid?</code></pre>
-<p>Claude 会以这种格式回复你的 UUID：<code>acde070d-8c4c-4f0d-9d8a-162843c10333</code></p>
-<h4>方法 B：查看配置文件</h4>
-<p>在终端中运行以下命令：</p>
-<pre><code>cat ~/.claude.json | grep accountUuid</code></pre>
-<p>这会读取你本地的 Claude 配置文件并提取 UUID 字段。</p>
+            body: `<p>你的 Buddy 是根据 <code>accountUuid</code> 生成的——这是与你的 Anthropic 账户绑定的唯一标识符。以下是找到它的方法：</p>
+<h4>方法 A：终端命令（推荐）</h4>
+<p>在终端中运行以下命令（macOS/Linux）：</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<p>Windows PowerShell 用户：</p>
+<pre><code>Select-String 'accountUuid|userID' ~\\.claude.json</code></pre>
+<p>你应该看到包含 UUID 的输出：<code>acde070d-8c4c-4f0d-9d8a-162843c10333</code></p>
+<h4>方法 B：手动打开配置文件</h4>
+<p>用任意文本编辑器打开 <code>~/.claude.json</code>。在 <code>oauthAccount</code> 对象中查找 <code>accountUuid</code>，或在顶层查找 <code>userID</code>。</p>
 <h4>替代方案：使用 User ID</h4>
-<p>如果你找不到 <code>accountUuid</code>，也可以使用你的 <code>userID</code>。Buddy 查询工具支持两种格式。</p>`
+<p>如果你找不到 <code>accountUuid</code>，也可以使用你的 <code>userID</code>。Buddy 查询工具支持两种格式。</p>
+<p>需要更详细的分平台截图指南？请查看 <a href="/blog/find-your-uuid-complete-platform-guide">macOS、Windows 和 Linux 完整 UUID 指南</a>。</p>`
           },
           {
             heading: "第二步：查询你的 Buddy",
@@ -219,17 +221,18 @@ export const BLOG_ARTICLES: BlogArticle[] = [
           },
           {
             heading: "1단계: 계정 UUID 찾기",
-            body: `<p>버디는 <code>accountUuid</code>에서 생성됩니다 — Anthropic 계정에 연결된 고유 식별자입니다. 두 가지 방법으로 찾을 수 있습니다:</p>
-<h4>방법 A: Claude Code에 직접 물어보기</h4>
-<p>가장 간단한 방법은 Claude Code를 열고 다음을 입력하는 것입니다:</p>
-<pre><code>What is my accountUuid?</code></pre>
-<p>Claude가 다음 형식으로 UUID를 알려줍니다: <code>acde070d-8c4c-4f0d-9d8a-162843c10333</code></p>
-<h4>방법 B: 설정 파일 확인</h4>
-<p>터미널에서 다음 명령을 실행하세요:</p>
-<pre><code>cat ~/.claude.json | grep accountUuid</code></pre>
-<p>이 명령은 로컬 Claude 설정 파일을 읽고 UUID 필드를 추출합니다.</p>
+            body: `<p>버디는 <code>accountUuid</code>에서 생성됩니다 — Anthropic 계정에 연결된 고유 식별자입니다. 찾는 방법은 다음과 같습니다:</p>
+<h4>방법 A: 터미널 명령어 (권장)</h4>
+<p>터미널에서 다음 명령을 실행하세요 (macOS/Linux):</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<p>Windows PowerShell 사용자:</p>
+<pre><code>Select-String 'accountUuid|userID' ~\\.claude.json</code></pre>
+<p>UUID가 포함된 출력이 표시됩니다: <code>acde070d-8c4c-4f0d-9d8a-162843c10333</code></p>
+<h4>방법 B: 설정 파일 직접 열기</h4>
+<p>아무 텍스트 편집기에서 <code>~/.claude.json</code>을 열어보세요. <code>oauthAccount</code> 객체 안에서 <code>accountUuid</code>를, 또는 최상위 레벨에서 <code>userID</code>를 찾으세요.</p>
 <h4>대안: User ID 사용</h4>
-<p><code>accountUuid</code>를 찾을 수 없다면 <code>userID</code>를 사용할 수도 있습니다. Buddy 체커는 두 형식 모두 지원합니다.</p>`
+<p><code>accountUuid</code>를 찾을 수 없다면 <code>userID</code>를 사용할 수도 있습니다. Buddy 체커는 두 형식 모두 지원합니다.</p>
+<p>스크린샷이 포함된 상세한 플랫폼별 가이드는 <a href="/blog/find-your-uuid-complete-platform-guide">macOS, Windows, Linux 완전 UUID 가이드</a>를 참조하세요.</p>`
           },
           {
             heading: "2단계: 버디 확인하기",
@@ -3232,6 +3235,370 @@ rng() \u2192 ...        \u2192 stats = { ... }</code></pre>
       },
     },
   },
+  // Article 9: How to Find Your UUID - Complete Platform Guide
+  {
+    slug: "find-your-uuid-complete-platform-guide",
+    publishedAt: "2026-04-06",
+    readingTime: 7,
+    tags: ["guide", "tutorial", "uuid", "setup"],
+    content: {
+      en: {
+        title: "Find Your UUID: Complete Guide for macOS, Windows & Linux",
+        metaTitle: "Find Your Claude Code UUID - Step-by-Step Guide for macOS, Windows & Linux (2026)",
+        metaDescription: "Complete guide to finding your Claude Code accountUuid or userID on macOS, Windows, and Linux. Includes terminal commands, file locations, troubleshooting tips, and format explanations.",
+        excerpt: "Can't find your UUID? This platform-specific guide walks you through every method on macOS, Windows, and Linux — with terminal commands, file paths, and troubleshooting for common issues.",
+        sections: [
+          {
+            heading: "Why You Need Your UUID",
+            body: `<p>Your Claude Code <strong>Buddy</strong> is deterministically generated from your account identifier — either an <code>accountUuid</code> (UUID format like <code>acde070d-8c4c-4f0d-9d8a-162843c10333</code>) or a <code>userID</code> (hex string like <code>a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6</code>). Both work with our <a href="/">Buddy Checker</a>.</p>
+<p>This identifier is stored locally in your Claude configuration file at <code>~/.claude.json</code>. It is <strong>not a credential</strong> — it cannot be used to authenticate or impersonate your account. It's simply the seed that determines which of the 18 species, 5 rarity tiers, and countless stat combinations your Buddy will have.</p>
+<p>Below we cover <strong>every method</strong> on all three major platforms, plus troubleshooting for common issues.</p>`
+          },
+          {
+            heading: "Method 1: Terminal Command (Recommended)",
+            body: `<p>The fastest and most reliable method. Open your terminal and run a single command.</p>
+<h4>macOS (Terminal / iTerm2)</h4>
+<p>Open <strong>Terminal.app</strong> (or iTerm2) and run:</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<p>You should see output like:</p>
+<pre><code>"accountUuid": "acde070d-8c4c-4f0d-9d8a-162843c10333"</code></pre>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-macos-terminal-Xbuydjbb6cT3r8mt9mMgTi.webp" alt="macOS Terminal showing the grep command to find accountUuid" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<h4>Windows (PowerShell)</h4>
+<p>Open <strong>PowerShell</strong> (press <code>Win + X</code> → "Windows PowerShell") and run:</p>
+<pre><code>Select-String 'accountUuid|userID' ~\\.claude.json</code></pre>
+<p>The output will show the matching line with your UUID:</p>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-windows-powershell-KATBboDrf35bepwaH3uvNU.webp" alt="Windows PowerShell showing the Select-String command to find accountUuid" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<h4>Linux (Bash / Zsh)</h4>
+<p>Open your terminal emulator and run the same command as macOS:</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-linux-terminal-WfgKR4Mq46YhgArN2pqvMn.webp" alt="Linux Terminal showing the grep command to find accountUuid" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<p><strong>Tip:</strong> If you get "No such file or directory", it means Claude Code hasn't created the config file yet. Make sure you've opened Claude Code at least once and signed in.</p>`
+          },
+          {
+            heading: "Method 2: Open the Config File Manually",
+            body: `<p>If you prefer a visual approach, you can open the configuration file directly in any text editor.</p>
+<h4>File Location</h4>
+<table>
+<tr><th>Platform</th><th>File Path</th></tr>
+<tr><td>macOS</td><td><code>~/.claude.json</code> → <code>/Users/yourname/.claude.json</code></td></tr>
+<tr><td>Windows</td><td><code>~\\.claude.json</code> → <code>C:\\Users\\yourname\\.claude.json</code></td></tr>
+<tr><td>Linux</td><td><code>~/.claude.json</code> → <code>/home/yourname/.claude.json</code></td></tr>
+</table>
+<p><strong>Note:</strong> The file starts with a dot (<code>.</code>), which means it's hidden by default on macOS and Linux.</p>
+<h4>How to Show Hidden Files</h4>
+<ul>
+<li><strong>macOS Finder:</strong> Press <code>Cmd + Shift + .</code> (period) to toggle hidden files</li>
+<li><strong>Windows Explorer:</strong> Click "View" tab → check "Hidden items"</li>
+<li><strong>Linux (Nautilus):</strong> Press <code>Ctrl + H</code> to show hidden files</li>
+</ul>
+<h4>What to Look For</h4>
+<p>Open the file in VS Code, Notepad, or any text editor. Look for these fields:</p>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-claude-json-file-cB3qe6fz3BKeF4uhs5v9Lx.webp" alt="VS Code showing .claude.json file with accountUuid highlighted" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<p>You're looking for either:</p>
+<ul>
+<li><code>"accountUuid"</code> — inside the <code>oauthAccount</code> object (UUID format with dashes)</li>
+<li><code>"userID"</code> — at the top level of the JSON (hex string without dashes)</li>
+</ul>
+<p>Either one works with our Buddy Checker. Copy the value (without quotes) and paste it into the <a href="/">checker tool</a>.</p>`
+          },
+          {
+            heading: "Understanding UUID Formats",
+            body: `<p>Our Buddy Checker accepts two different identifier formats. Here's how to tell them apart:</p>
+<table>
+<tr><th>Format</th><th>Field Name</th><th>Example</th><th>Where Found</th></tr>
+<tr><td><strong>accountUuid</strong></td><td>accountUuid</td><td><code>acde070d-8c4c-4f0d-9d8a-162843c10333</code></td><td>Inside <code>oauthAccount</code> object</td></tr>
+<tr><td><strong>userID</strong></td><td>userID</td><td><code>a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6</code></td><td>Top-level field in JSON</td></tr>
+</table>
+<p><strong>Which one should I use?</strong> Either works! The Buddy Checker automatically detects the format when you paste it in. You'll see a green indicator for accountUuid format or an amber indicator for userID format.</p>
+<p><strong>Are they the same?</strong> No — they're different identifiers for the same account. The <code>accountUuid</code> is typically used by OAuth/Team/Pro accounts, while <code>userID</code> is an older format. Both produce valid Buddy results through different code paths in the generation algorithm.</p>`
+          },
+          {
+            heading: "Troubleshooting",
+            body: `<h4>"File not found" or "No such file"</h4>
+<p>The <code>.claude.json</code> file is created when you first sign into Claude Code. If it doesn't exist:</p>
+<ol>
+<li>Open Claude Code in your terminal (<code>claude</code> command)</li>
+<li>Sign in with your Anthropic account</li>
+<li>Close Claude Code</li>
+<li>Try the command again — the file should now exist</li>
+</ol>
+<h4>"Permission denied"</h4>
+<p>On macOS/Linux, try:</p>
+<pre><code>chmod 644 ~/.claude.json && cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<h4>File exists but no accountUuid or userID found</h4>
+<p>Your config file might have a different structure. Try viewing the entire file:</p>
+<pre><code>cat ~/.claude.json</code></pre>
+<p>Or on Windows:</p>
+<pre><code>Get-Content ~\\.claude.json</code></pre>
+<p>Look for any field containing a UUID-like string (8-4-4-4-12 format with dashes) or a long hexadecimal string (32+ characters, only 0-9 and a-f).</p>
+<h4>"Can I ask Claude Code for my UUID?"</h4>
+<p>This method is <strong>not reliable</strong>. Claude Code is an AI assistant, and its ability to read local files depends on version, permissions, and sandbox restrictions. We recommend using the terminal command or manual file inspection methods described above.</p>`
+          },
+          {
+            heading: "Security & Privacy",
+            body: `<p>A common concern: <strong>"Is it safe to share my UUID?"</strong></p>
+<p>Yes. Your <code>accountUuid</code> and <code>userID</code> are <strong>not credentials</strong>. They cannot be used to:</p>
+<ul>
+<li>Log into your account</li>
+<li>Access your conversations or data</li>
+<li>Make API calls on your behalf</li>
+<li>Impersonate you in any way</li>
+</ul>
+<p>They are simply identifiers used internally by Claude Code to generate your Buddy. Our <a href="/">Buddy Checker</a> runs the generation algorithm <strong>entirely in your browser</strong> — your UUID is never sent to any server.</p>
+<p>That said, if you prefer to keep your UUID private, that's perfectly fine too. You can check your Buddy without sharing it with anyone.</p>`
+          },
+          {
+            heading: "Next Steps",
+            body: `<p>Found your UUID? Here's what to do next:</p>
+<ol>
+<li><strong><a href="/">Check your Buddy</a></strong> — paste your UUID into the checker and discover your companion</li>
+<li><strong><a href="/species">Browse all 18 species</a></strong> — learn about each species' lore, stats, and rarity</li>
+<li><strong>Share your result</strong> — use the Share Card feature to generate a social media-ready image of your Buddy</li>
+<li><strong><a href="/blog/claude-code-buddy-rarity-guide">Understand your rarity</a></strong> — learn what your rarity tier means for your stats</li>
+</ol>
+<p>Remember: your Buddy is already determined. The same UUID will always produce the same result. Check it now before the official <code>/buddy</code> command launches!</p>`
+          },
+        ],
+      },
+      zh: {
+        title: "查找你的 UUID：macOS、Windows 和 Linux 完整指南",
+        metaTitle: "查找你的 Claude Code UUID - macOS、Windows 和 Linux 分步指南 (2026)",
+        metaDescription: "在 macOS、Windows 和 Linux 上查找 Claude Code accountUuid 或 userID 的完整指南。包含终端命令、文件位置、故障排除和格式说明。",
+        excerpt: "找不到你的 UUID？这份平台专属指南将带你逐步在 macOS、Windows 和 Linux 上完成操作——包含终端命令、文件路径和常见问题排除。",
+        sections: [
+          {
+            heading: "为什么需要你的 UUID",
+            body: `<p>你的 Claude Code <strong>Buddy</strong> 是根据你的账户标识符确定性生成的——可以是 <code>accountUuid</code>（UUID 格式，如 <code>acde070d-8c4c-4f0d-9d8a-162843c10333</code>）或 <code>userID</code>（十六进制字符串，如 <code>a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6</code>）。两者都可以在我们的 <a href="/">Buddy 查询器</a>中使用。</p>
+<p>这个标识符存储在你本地的 Claude 配置文件 <code>~/.claude.json</code> 中。它<strong>不是凭证</strong>——不能用于身份验证或冒充你的账户。它只是决定你的 Buddy 属于 18 个物种中的哪一个、5 个稀有度等级中的哪一级，以及无数属性组合中的哪一种的种子。</p>
+<p>下面我们将介绍三大平台上的<strong>所有方法</strong>，以及常见问题的排除方案。</p>`
+          },
+          {
+            heading: "方法一：终端命令（推荐）",
+            body: `<p>最快速、最可靠的方法。打开终端，运行一行命令即可。</p>
+<h4>macOS（终端 / iTerm2）</h4>
+<p>打开 <strong>Terminal.app</strong>（或 iTerm2），运行：</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<p>你应该看到类似这样的输出：</p>
+<pre><code>"accountUuid": "acde070d-8c4c-4f0d-9d8a-162843c10333"</code></pre>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-macos-terminal-Xbuydjbb6cT3r8mt9mMgTi.webp" alt="macOS 终端显示 grep 命令查找 accountUuid" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<h4>Windows（PowerShell）</h4>
+<p>打开 <strong>PowerShell</strong>（按 <code>Win + X</code> → 选择"Windows PowerShell"），运行：</p>
+<pre><code>Select-String 'accountUuid|userID' ~\\.claude.json</code></pre>
+<p>输出会显示包含你 UUID 的匹配行：</p>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-windows-powershell-KATBboDrf35bepwaH3uvNU.webp" alt="Windows PowerShell 显示 Select-String 命令查找 accountUuid" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<h4>Linux（Bash / Zsh）</h4>
+<p>打开终端模拟器，运行与 macOS 相同的命令：</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-linux-terminal-WfgKR4Mq46YhgArN2pqvMn.webp" alt="Linux 终端显示 grep 命令查找 accountUuid" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<p><strong>提示：</strong>如果提示"No such file or directory"（文件不存在），说明 Claude Code 还没有创建配置文件。请确保你已经至少打开过一次 Claude Code 并完成登录。</p>`
+          },
+          {
+            heading: "方法二：手动打开配置文件",
+            body: `<p>如果你更喜欢可视化操作，可以直接用文本编辑器打开配置文件。</p>
+<h4>文件位置</h4>
+<table>
+<tr><th>平台</th><th>文件路径</th></tr>
+<tr><td>macOS</td><td><code>~/.claude.json</code> → <code>/Users/你的用户名/.claude.json</code></td></tr>
+<tr><td>Windows</td><td><code>~\\.claude.json</code> → <code>C:\\Users\\你的用户名\\.claude.json</code></td></tr>
+<tr><td>Linux</td><td><code>~/.claude.json</code> → <code>/home/你的用户名/.claude.json</code></td></tr>
+</table>
+<p><strong>注意：</strong>文件名以点（<code>.</code>）开头，这意味着在 macOS 和 Linux 上默认是隐藏的。</p>
+<h4>如何显示隐藏文件</h4>
+<ul>
+<li><strong>macOS Finder：</strong>按 <code>Cmd + Shift + .</code>（句号）切换显示隐藏文件</li>
+<li><strong>Windows 资源管理器：</strong>点击"查看"选项卡 → 勾选"隐藏的项目"</li>
+<li><strong>Linux（Nautilus）：</strong>按 <code>Ctrl + H</code> 显示隐藏文件</li>
+</ul>
+<h4>要找什么</h4>
+<p>用 VS Code、记事本或任何文本编辑器打开文件，查找以下字段：</p>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-claude-json-file-cB3qe6fz3BKeF4uhs5v9Lx.webp" alt="VS Code 显示 .claude.json 文件，accountUuid 高亮显示" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<p>你要找的是：</p>
+<ul>
+<li><code>"accountUuid"</code> — 在 <code>oauthAccount</code> 对象内（UUID 格式，带连字符）</li>
+<li><code>"userID"</code> — 在 JSON 的顶层（十六进制字符串，不带连字符）</li>
+</ul>
+<p>两者都可以在 Buddy 查询器中使用。复制值（不含引号），粘贴到<a href="/">查询工具</a>即可。</p>`
+          },
+          {
+            heading: "理解 UUID 格式",
+            body: `<p>我们的 Buddy 查询器接受两种不同的标识符格式。以下是区分方法：</p>
+<table>
+<tr><th>格式</th><th>字段名</th><th>示例</th><th>位置</th></tr>
+<tr><td><strong>accountUuid</strong></td><td>accountUuid</td><td><code>acde070d-8c4c-4f0d-9d8a-162843c10333</code></td><td><code>oauthAccount</code> 对象内</td></tr>
+<tr><td><strong>userID</strong></td><td>userID</td><td><code>a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6</code></td><td>JSON 顶层字段</td></tr>
+</table>
+<p><strong>应该用哪个？</strong>都可以！Buddy 查询器会在你粘贴时自动检测格式。accountUuid 格式会显示绿色指示器，userID 格式会显示琥珀色指示器。</p>
+<p><strong>它们是一样的吗？</strong>不是——它们是同一账户的不同标识符。<code>accountUuid</code> 通常用于 OAuth/团队/Pro 账户，而 <code>userID</code> 是较旧的格式。两者都能通过生成算法中不同的代码路径产生有效的 Buddy 结果。</p>`
+          },
+          {
+            heading: "故障排除",
+            body: `<h4>"文件不存在"或"No such file"</h4>
+<p><code>.claude.json</code> 文件在你首次登录 Claude Code 时创建。如果文件不存在：</p>
+<ol>
+<li>在终端中打开 Claude Code（运行 <code>claude</code> 命令）</li>
+<li>用你的 Anthropic 账户登录</li>
+<li>关闭 Claude Code</li>
+<li>重新运行命令——文件现在应该存在了</li>
+</ol>
+<h4>"权限被拒绝"（Permission denied）</h4>
+<p>在 macOS/Linux 上，尝试：</p>
+<pre><code>chmod 644 ~/.claude.json && cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<h4>文件存在但找不到 accountUuid 或 userID</h4>
+<p>你的配置文件可能有不同的结构。尝试查看整个文件：</p>
+<pre><code>cat ~/.claude.json</code></pre>
+<p>或在 Windows 上：</p>
+<pre><code>Get-Content ~\\.claude.json</code></pre>
+<p>查找任何包含 UUID 格式字符串（8-4-4-4-12 格式，带连字符）或长十六进制字符串（32+ 个字符，仅包含 0-9 和 a-f）的字段。</p>
+<h4>"能不能直接问 Claude Code 要 UUID？"</h4>
+<p>这个方法<strong>不太可靠</strong>。Claude Code 是一个 AI 助手，它能否读取本地文件取决于版本、权限和沙箱限制。我们建议使用上述终端命令或手动查看文件的方法。</p>`
+          },
+          {
+            heading: "安全与隐私",
+            body: `<p>一个常见的顾虑：<strong>"分享我的 UUID 安全吗？"</strong></p>
+<p>安全。你的 <code>accountUuid</code> 和 <code>userID</code> <strong>不是凭证</strong>。它们不能用于：</p>
+<ul>
+<li>登录你的账户</li>
+<li>访问你的对话或数据</li>
+<li>以你的名义进行 API 调用</li>
+<li>以任何方式冒充你</li>
+</ul>
+<p>它们只是 Claude Code 内部用于生成 Buddy 的标识符。我们的 <a href="/">Buddy 查询器</a>在你的<strong>浏览器中完全本地运行</strong>生成算法——你的 UUID 永远不会被发送到任何服务器。</p>
+<p>当然，如果你更愿意保密你的 UUID，那也完全没问题。你可以在不与任何人分享的情况下查看你的 Buddy。</p>`
+          },
+          {
+            heading: "下一步",
+            body: `<p>找到你的 UUID 了？接下来可以：</p>
+<ol>
+<li><strong><a href="/">查询你的 Buddy</a></strong> — 将 UUID 粘贴到查询器中，发现你的伙伴</li>
+<li><strong><a href="/species">浏览全部 18 个物种</a></strong> — 了解每个物种的传说、属性和稀有度</li>
+<li><strong>分享你的结果</strong> — 使用分享卡片功能生成适合社交媒体的 Buddy 图片</li>
+<li><strong><a href="/blog/claude-code-buddy-rarity-guide">了解你的稀有度</a></strong> — 了解你的稀有度等级对属性的影响</li>
+</ol>
+<p>记住：你的 Buddy 已经确定了。相同的 UUID 永远产生相同的结果。在官方 <code>/buddy</code> 命令上线前先来查看吧！</p>`
+          },
+        ],
+      },
+      ko: {
+        title: "UUID 찾기: macOS, Windows, Linux 완전 가이드",
+        metaTitle: "Claude Code UUID 찾기 - macOS, Windows, Linux 단계별 가이드 (2026)",
+        metaDescription: "macOS, Windows, Linux에서 Claude Code accountUuid 또는 userID를 찾는 완전한 가이드. 터미널 명령어, 파일 위치, 문제 해결 및 형식 설명 포함.",
+        excerpt: "UUID를 찾을 수 없나요? 이 플랫폼별 가이드가 macOS, Windows, Linux에서 단계별로 안내합니다 — 터미널 명령어, 파일 경로, 일반적인 문제 해결 방법 포함.",
+        sections: [
+          {
+            heading: "UUID가 필요한 이유",
+            body: `<p>Claude Code <strong>Buddy</strong>는 계정 식별자에서 결정론적으로 생성됩니다 — <code>accountUuid</code>(UUID 형식: <code>acde070d-8c4c-4f0d-9d8a-162843c10333</code>) 또는 <code>userID</code>(16진수 문자열: <code>a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6</code>). 두 가지 모두 <a href="/">Buddy 체커</a>에서 사용할 수 있습니다.</p>
+<p>이 식별자는 로컬 Claude 설정 파일 <code>~/.claude.json</code>에 저장됩니다. 이것은 <strong>자격 증명이 아닙니다</strong> — 계정 인증이나 사칭에 사용할 수 없습니다. 단지 18종의 종, 5단계 희귀도, 수많은 스탯 조합 중 어떤 Buddy를 받게 될지 결정하는 시드일 뿐입니다.</p>
+<p>아래에서 세 가지 주요 플랫폼의 <strong>모든 방법</strong>과 일반적인 문제 해결 방법을 다룹니다.</p>`
+          },
+          {
+            heading: "방법 1: 터미널 명령어 (권장)",
+            body: `<p>가장 빠르고 안정적인 방법입니다. 터미널을 열고 한 줄 명령어를 실행하세요.</p>
+<h4>macOS (터미널 / iTerm2)</h4>
+<p><strong>Terminal.app</strong>(또는 iTerm2)을 열고 실행:</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<p>다음과 같은 출력이 표시됩니다:</p>
+<pre><code>"accountUuid": "acde070d-8c4c-4f0d-9d8a-162843c10333"</code></pre>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-macos-terminal-Xbuydjbb6cT3r8mt9mMgTi.webp" alt="macOS 터미널에서 accountUuid를 찾는 grep 명령어" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<h4>Windows (PowerShell)</h4>
+<p><strong>PowerShell</strong>을 열고 (<code>Win + X</code> → "Windows PowerShell") 실행:</p>
+<pre><code>Select-String 'accountUuid|userID' ~\\.claude.json</code></pre>
+<p>UUID가 포함된 일치하는 줄이 출력됩니다:</p>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-windows-powershell-KATBboDrf35bepwaH3uvNU.webp" alt="Windows PowerShell에서 accountUuid를 찾는 Select-String 명령어" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<h4>Linux (Bash / Zsh)</h4>
+<p>터미널 에뮬레이터를 열고 macOS와 동일한 명령어를 실행:</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-linux-terminal-WfgKR4Mq46YhgArN2pqvMn.webp" alt="Linux 터미널에서 accountUuid를 찾는 grep 명령어" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<p><strong>팁:</strong> "No such file or directory" 오류가 나타나면 Claude Code가 아직 설정 파일을 생성하지 않은 것입니다. Claude Code를 최소 한 번 열고 로그인했는지 확인하세요.</p>`
+          },
+          {
+            heading: "방법 2: 설정 파일 직접 열기",
+            body: `<p>시각적인 방법을 선호한다면 텍스트 편집기에서 설정 파일을 직접 열 수 있습니다.</p>
+<h4>파일 위치</h4>
+<table>
+<tr><th>플랫폼</th><th>파일 경로</th></tr>
+<tr><td>macOS</td><td><code>~/.claude.json</code> → <code>/Users/사용자이름/.claude.json</code></td></tr>
+<tr><td>Windows</td><td><code>~\\.claude.json</code> → <code>C:\\Users\\사용자이름\\.claude.json</code></td></tr>
+<tr><td>Linux</td><td><code>~/.claude.json</code> → <code>/home/사용자이름/.claude.json</code></td></tr>
+</table>
+<p><strong>참고:</strong> 파일 이름이 점(<code>.</code>)으로 시작하므로 macOS와 Linux에서는 기본적으로 숨겨져 있습니다.</p>
+<h4>숨김 파일 표시 방법</h4>
+<ul>
+<li><strong>macOS Finder:</strong> <code>Cmd + Shift + .</code>(마침표)를 눌러 숨김 파일 표시 전환</li>
+<li><strong>Windows 탐색기:</strong> "보기" 탭 클릭 → "숨긴 항목" 체크</li>
+<li><strong>Linux (Nautilus):</strong> <code>Ctrl + H</code>를 눌러 숨김 파일 표시</li>
+</ul>
+<h4>찾아야 할 것</h4>
+<p>VS Code, 메모장 또는 아무 텍스트 편집기에서 파일을 열고 다음 필드를 찾으세요:</p>
+<img src="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/blog-uuid-claude-json-file-cB3qe6fz3BKeF4uhs5v9Lx.webp" alt="VS Code에서 .claude.json 파일의 accountUuid 하이라이트" style="width:100%;border-radius:8px;margin:16px 0;border:1px solid rgba(51,255,51,0.2);" />
+<p>찾아야 할 것:</p>
+<ul>
+<li><code>"accountUuid"</code> — <code>oauthAccount</code> 객체 안 (대시가 있는 UUID 형식)</li>
+<li><code>"userID"</code> — JSON 최상위 레벨 (대시 없는 16진수 문자열)</li>
+</ul>
+<p>둘 다 Buddy 체커에서 사용할 수 있습니다. 값을 복사(따옴표 제외)하여 <a href="/">체커 도구</a>에 붙여넣으세요.</p>`
+          },
+          {
+            heading: "UUID 형식 이해하기",
+            body: `<p>Buddy 체커는 두 가지 다른 식별자 형식을 허용합니다. 구별 방법은 다음과 같습니다:</p>
+<table>
+<tr><th>형식</th><th>필드명</th><th>예시</th><th>위치</th></tr>
+<tr><td><strong>accountUuid</strong></td><td>accountUuid</td><td><code>acde070d-8c4c-4f0d-9d8a-162843c10333</code></td><td><code>oauthAccount</code> 객체 안</td></tr>
+<tr><td><strong>userID</strong></td><td>userID</td><td><code>a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6</code></td><td>JSON 최상위 필드</td></tr>
+</table>
+<p><strong>어떤 것을 사용해야 하나요?</strong> 둘 다 됩니다! Buddy 체커는 붙여넣기 시 형식을 자동으로 감지합니다. accountUuid 형식은 녹색 표시기, userID 형식은 호박색 표시기가 나타납니다.</p>
+<p><strong>같은 건가요?</strong> 아닙니다 — 같은 계정의 다른 식별자입니다. <code>accountUuid</code>는 일반적으로 OAuth/팀/Pro 계정에서 사용되고, <code>userID</code>는 이전 형식입니다. 둘 다 생성 알고리즘의 다른 코드 경로를 통해 유효한 Buddy 결과를 생성합니다.</p>`
+          },
+          {
+            heading: "문제 해결",
+            body: `<h4>"파일을 찾을 수 없음" 또는 "No such file"</h4>
+<p><code>.claude.json</code> 파일은 Claude Code에 처음 로그인할 때 생성됩니다. 파일이 없다면:</p>
+<ol>
+<li>터미널에서 Claude Code를 엽니다 (<code>claude</code> 명령어)</li>
+<li>Anthropic 계정으로 로그인합니다</li>
+<li>Claude Code를 닫습니다</li>
+<li>명령어를 다시 실행합니다 — 이제 파일이 있어야 합니다</li>
+</ol>
+<h4>"권한 거부" (Permission denied)</h4>
+<p>macOS/Linux에서 시도:</p>
+<pre><code>chmod 644 ~/.claude.json && cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<h4>파일은 있지만 accountUuid나 userID를 찾을 수 없음</h4>
+<p>설정 파일의 구조가 다를 수 있습니다. 전체 파일을 확인해 보세요:</p>
+<pre><code>cat ~/.claude.json</code></pre>
+<p>또는 Windows에서:</p>
+<pre><code>Get-Content ~\\.claude.json</code></pre>
+<p>UUID 형식 문자열(대시가 있는 8-4-4-4-12 형식) 또는 긴 16진수 문자열(32자 이상, 0-9와 a-f만 포함)이 있는 필드를 찾으세요.</p>
+<h4>"Claude Code에 직접 UUID를 물어볼 수 있나요?"</h4>
+<p>이 방법은 <strong>신뢰할 수 없습니다</strong>. Claude Code는 AI 어시스턴트이며, 로컬 파일을 읽을 수 있는지는 버전, 권한, 샌드박스 제한에 따라 다릅니다. 위에서 설명한 터미널 명령어나 수동 파일 확인 방법을 권장합니다.</p>`
+          },
+          {
+            heading: "보안 및 개인정보",
+            body: `<p>일반적인 우려: <strong>"UUID를 공유해도 안전한가요?"</strong></p>
+<p>네, 안전합니다. <code>accountUuid</code>와 <code>userID</code>는 <strong>자격 증명이 아닙니다</strong>. 다음과 같은 용도로 사용할 수 없습니다:</p>
+<ul>
+<li>계정 로그인</li>
+<li>대화나 데이터 접근</li>
+<li>대신 API 호출</li>
+<li>어떤 방식으로든 사칭</li>
+</ul>
+<p>이것들은 단순히 Claude Code가 내부적으로 Buddy를 생성하는 데 사용하는 식별자입니다. <a href="/">Buddy 체커</a>는 생성 알고리즘을 <strong>브라우저에서 완전히 로컬로</strong> 실행합니다 — UUID는 어떤 서버로도 전송되지 않습니다.</p>
+<p>물론 UUID를 비공개로 유지하고 싶다면 그것도 완전히 괜찮습니다. 누구와도 공유하지 않고 Buddy를 확인할 수 있습니다.</p>`
+          },
+          {
+            heading: "다음 단계",
+            body: `<p>UUID를 찾았나요? 다음으로 할 일:</p>
+<ol>
+<li><strong><a href="/">Buddy 확인하기</a></strong> — UUID를 체커에 붙여넣고 동반자를 발견하세요</li>
+<li><strong><a href="/species">18종 모두 둘러보기</a></strong> — 각 종의 전설, 스탯, 희귀도에 대해 알아보세요</li>
+<li><strong>결과 공유하기</strong> — 공유 카드 기능으로 소셜 미디어에 적합한 Buddy 이미지를 생성하세요</li>
+<li><strong><a href="/blog/claude-code-buddy-rarity-guide">희귀도 이해하기</a></strong> — 희귀도 등급이 스탯에 미치는 영향을 알아보세요</li>
+</ol>
+<p>기억하세요: Buddy는 이미 결정되어 있습니다. 같은 UUID는 항상 같은 결과를 만듭니다. 공식 <code>/buddy</code> 명령어가 출시되기 전에 지금 확인하세요!</p>`
+          },
+        ],
+      },
+    },
+  },
+
 ];
 
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
