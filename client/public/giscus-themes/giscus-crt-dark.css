@@ -1,0 +1,191 @@
+/*! CRT Phosphor Green Dark Theme for Giscus
+ * Custom theme for Claude Buddy Checker
+ * Matches the CRT terminal aesthetic with phosphor green colors
+ */
+
+main {
+  /* Syntax highlighting - CRT green tones */
+  --color-prettylights-syntax-comment: #3a5a3a;
+  --color-prettylights-syntax-constant: #00ff41;
+  --color-prettylights-syntax-entity: #39ff14;
+  --color-prettylights-syntax-storage-modifier-import: #b0e0b0;
+  --color-prettylights-syntax-entity-tag: #00ff41;
+  --color-prettylights-syntax-keyword: #39ff14;
+  --color-prettylights-syntax-string: #7dff7d;
+  --color-prettylights-syntax-variable: #a0ffa0;
+  --color-prettylights-syntax-brackethighlighter-unmatched: #ff6b6b;
+  --color-prettylights-syntax-invalid-illegal-text: #ff4444;
+  --color-prettylights-syntax-invalid-illegal-bg: #1a0000;
+  --color-prettylights-syntax-carriage-return-text: #ff4444;
+  --color-prettylights-syntax-carriage-return-bg: #1a0000;
+  --color-prettylights-syntax-string-regexp: #00ff41;
+  --color-prettylights-syntax-markup-list: #39ff14;
+  --color-prettylights-syntax-markup-heading: #00ff41;
+  --color-prettylights-syntax-markup-italic: #b0e0b0;
+  --color-prettylights-syntax-markup-bold: #00ff41;
+  --color-prettylights-syntax-markup-deleted-text: #ff6b6b;
+  --color-prettylights-syntax-markup-deleted-bg: #1a0000;
+  --color-prettylights-syntax-markup-inserted-text: #00ff41;
+  --color-prettylights-syntax-markup-inserted-bg: #0a1a0a;
+  --color-prettylights-syntax-markup-changed-text: #f0c040;
+  --color-prettylights-syntax-markup-changed-bg: #1a1a00;
+  --color-prettylights-syntax-markup-ignored-text: #b0e0b0;
+  --color-prettylights-syntax-markup-ignored-bg: #0a1a0a;
+  --color-prettylights-syntax-meta-diff-range: #39ff14;
+  --color-prettylights-syntax-brackethighlighter-angle: #00ff41;
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #2a4a2a;
+  --color-prettylights-syntax-constant-other-reference-link: #7dff7d;
+
+  /* Buttons - CRT green style */
+  --color-btn-text: #00ff41;
+  --color-btn-bg: #0a1a0a;
+  --color-btn-border: rgba(0, 255, 65, 0.2);
+  --color-btn-shadow: 0 0 transparent;
+  --color-btn-inset-shadow: 0 0 transparent;
+  --color-btn-hover-bg: #0f2a0f;
+  --color-btn-hover-border: rgba(0, 255, 65, 0.35);
+  --color-btn-active-bg: #143014;
+  --color-btn-active-border: #00ff41;
+  --color-btn-selected-bg: #0f2a0f;
+
+  /* Primary buttons */
+  --color-btn-primary-text: #000000;
+  --color-btn-primary-bg: #00cc33;
+  --color-btn-primary-border: rgba(0, 255, 65, 0.3);
+  --color-btn-primary-shadow: 0 0 transparent;
+  --color-btn-primary-inset-shadow: 0 0 transparent;
+  --color-btn-primary-hover-bg: #00ff41;
+  --color-btn-primary-hover-border: rgba(0, 255, 65, 0.4);
+  --color-btn-primary-selected-bg: #00cc33;
+  --color-btn-primary-selected-shadow: 0 0 transparent;
+  --color-btn-primary-disabled-text: rgba(0, 0, 0, 0.5);
+  --color-btn-primary-disabled-bg: rgba(0, 204, 51, 0.4);
+  --color-btn-primary-disabled-border: rgba(0, 255, 65, 0.15);
+
+  /* Action list */
+  --color-action-list-item-default-hover-bg: rgba(0, 255, 65, 0.08);
+
+  /* Segmented control */
+  --color-segmented-control-bg: rgba(0, 255, 65, 0.05);
+  --color-segmented-control-button-bg: #0a1a0a;
+  --color-segmented-control-button-selected-border: #00ff41;
+
+  /* Foreground colors - CRT green shades */
+  --color-fg-default: #00ff41;
+  --color-fg-muted: rgb(0 255 65 / 60%);
+  --color-fg-subtle: rgb(0 255 65 / 35%);
+
+  /* Canvas / background colors - transparent to blend with site */
+  --color-canvas-default: transparent;
+  --color-canvas-overlay: rgb(5 15 5 / 90%);
+  --color-canvas-inset: transparent;
+  --color-canvas-subtle: rgb(0 255 65 / 3%);
+
+  /* Borders */
+  --color-border-default: rgba(0, 255, 65, 0.15);
+  --color-border-muted: rgba(0, 255, 65, 0.08);
+
+  /* Neutral */
+  --color-neutral-muted: rgba(0, 255, 65, 0.1);
+  --color-neutral-subtle: rgba(0, 255, 65, 0.05);
+
+  /* Accent - phosphor green */
+  --color-accent-fg: #00ff41;
+  --color-accent-emphasis: #00cc33;
+  --color-accent-muted: rgba(0, 255, 65, 0.25);
+  --color-accent-subtle: rgba(0, 255, 65, 0.1);
+
+  /* Success - brighter green */
+  --color-success-fg: #39ff14;
+
+  /* Attention - amber/yellow for CRT */
+  --color-attention-fg: #f0c040;
+  --color-attention-muted: rgba(240, 192, 64, 0.25);
+  --color-attention-subtle: rgba(240, 192, 64, 0.1);
+
+  /* Danger - red */
+  --color-danger-fg: #ff4444;
+  --color-danger-muted: rgba(255, 68, 68, 0.25);
+  --color-danger-subtle: rgba(255, 68, 68, 0.1);
+
+  /* Primer shadow */
+  --color-primer-shadow-inset: 0 0 transparent;
+
+  /* Scale colors */
+  --color-scale-gray-7: #0a1a0a;
+  --color-scale-blue-8: #003300;
+
+  /* Social reaction backgrounds */
+  --color-social-reaction-bg-hover: var(--color-scale-gray-7);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+}
+
+main .pagination-loader-container {
+  background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line-dark.svg");
+}
+
+main .gsc-loading-image {
+  background-image: url("https://github.githubassets.com/images/mona-loading-dark.gif");
+}
+
+/* Custom CRT glow effects */
+main .gsc-comment-box {
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.05), inset 0 0 5px rgba(0, 255, 65, 0.02);
+}
+
+main .gsc-comment {
+  border-color: rgba(0, 255, 65, 0.12) !important;
+}
+
+main .gsc-header {
+  border-color: rgba(0, 255, 65, 0.12) !important;
+}
+
+main .gsc-comment-box textarea {
+  background-color: rgb(0 10 3 / 80%) !important;
+  color: #00ff41 !important;
+  border-color: rgba(0, 255, 65, 0.15) !important;
+}
+
+main .gsc-comment-box textarea:focus {
+  border-color: #00ff41 !important;
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.15) !important;
+}
+
+/* Scrollbar styling */
+main ::-webkit-scrollbar {
+  width: 6px;
+}
+
+main ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+main ::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 65, 0.2);
+  border-radius: 3px;
+}
+
+main ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 65, 0.35);
+}
+
+/* Font override for monospace CRT feel */
+main {
+  --font-family-sans: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', monospace;
+  --font-family-monospace: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', monospace;
+}
+
+/* CRT glow on links */
+main a {
+  text-shadow: 0 0 5px rgba(0, 255, 65, 0.25);
+}
+
+main a:hover {
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.45);
+}
+
+/* Reaction button hover glow */
+main .gsc-direct-reaction-buttons button:hover {
+  box-shadow: 0 0 6px rgba(0, 255, 65, 0.15);
+}

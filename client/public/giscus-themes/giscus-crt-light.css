@@ -1,0 +1,177 @@
+/*! CRT Phosphor Green Light Theme for Giscus
+ * Custom theme for Claude Buddy Checker
+ * Light mode variant with muted green tones on light background
+ */
+
+main {
+  /* Syntax highlighting - muted green tones */
+  --color-prettylights-syntax-comment: #6a9a6a;
+  --color-prettylights-syntax-constant: #006622;
+  --color-prettylights-syntax-entity: #007a2e;
+  --color-prettylights-syntax-storage-modifier-import: #1a3a1a;
+  --color-prettylights-syntax-entity-tag: #006622;
+  --color-prettylights-syntax-keyword: #007a2e;
+  --color-prettylights-syntax-string: #2a6a2a;
+  --color-prettylights-syntax-variable: #3a7a3a;
+  --color-prettylights-syntax-brackethighlighter-unmatched: #cc3333;
+  --color-prettylights-syntax-invalid-illegal-text: #cc0000;
+  --color-prettylights-syntax-invalid-illegal-bg: #fff0f0;
+  --color-prettylights-syntax-carriage-return-text: #cc0000;
+  --color-prettylights-syntax-carriage-return-bg: #fff0f0;
+  --color-prettylights-syntax-string-regexp: #006622;
+  --color-prettylights-syntax-markup-list: #007a2e;
+  --color-prettylights-syntax-markup-heading: #006622;
+  --color-prettylights-syntax-markup-italic: #1a3a1a;
+  --color-prettylights-syntax-markup-bold: #006622;
+  --color-prettylights-syntax-markup-deleted-text: #cc3333;
+  --color-prettylights-syntax-markup-deleted-bg: #fff0f0;
+  --color-prettylights-syntax-markup-inserted-text: #006622;
+  --color-prettylights-syntax-markup-inserted-bg: #e6ffe6;
+  --color-prettylights-syntax-markup-changed-text: #8a6d00;
+  --color-prettylights-syntax-markup-changed-bg: #fff8e0;
+  --color-prettylights-syntax-markup-ignored-text: #1a3a1a;
+  --color-prettylights-syntax-markup-ignored-bg: #e6ffe6;
+  --color-prettylights-syntax-meta-diff-range: #007a2e;
+  --color-prettylights-syntax-brackethighlighter-angle: #006622;
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #b0d0b0;
+  --color-prettylights-syntax-constant-other-reference-link: #2a6a2a;
+
+  /* Buttons */
+  --color-btn-text: #1a3a1a;
+  --color-btn-bg: #f0f8f0;
+  --color-btn-border: rgba(0, 102, 34, 0.2);
+  --color-btn-shadow: 0 1px 0 rgba(0, 50, 0, 0.04);
+  --color-btn-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  --color-btn-hover-bg: #e0f0e0;
+  --color-btn-hover-border: rgba(0, 102, 34, 0.3);
+  --color-btn-active-bg: #d0e8d0;
+  --color-btn-active-border: rgba(0, 102, 34, 0.4);
+  --color-btn-selected-bg: #d0e8d0;
+
+  /* Primary buttons */
+  --color-btn-primary-text: #ffffff;
+  --color-btn-primary-bg: #008833;
+  --color-btn-primary-border: rgba(0, 102, 34, 0.3);
+  --color-btn-primary-shadow: 0 1px 0 rgba(0, 50, 0, 0.1);
+  --color-btn-primary-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  --color-btn-primary-hover-bg: #006622;
+  --color-btn-primary-hover-border: rgba(0, 80, 26, 0.4);
+  --color-btn-primary-selected-bg: #006622;
+  --color-btn-primary-selected-shadow: inset 0 1px 0 rgba(0, 30, 0, 0.2);
+  --color-btn-primary-disabled-text: rgba(255, 255, 255, 0.5);
+  --color-btn-primary-disabled-bg: rgba(0, 136, 51, 0.5);
+  --color-btn-primary-disabled-border: rgba(0, 102, 34, 0.15);
+
+  /* Action list */
+  --color-action-list-item-default-hover-bg: rgba(0, 102, 34, 0.06);
+
+  /* Segmented control */
+  --color-segmented-control-bg: rgba(0, 102, 34, 0.05);
+  --color-segmented-control-button-bg: #f8fcf8;
+  --color-segmented-control-button-selected-border: #008833;
+
+  /* Foreground colors */
+  --color-fg-default: #1a3a1a;
+  --color-fg-muted: #4a7a4a;
+  --color-fg-subtle: #6a9a6a;
+
+  /* Canvas / background colors */
+  --color-canvas-default: #f8fcf8;
+  --color-canvas-overlay: #ffffff;
+  --color-canvas-inset: #f0f6f0;
+  --color-canvas-subtle: #f0f6f0;
+
+  /* Borders */
+  --color-border-default: rgba(0, 102, 34, 0.15);
+  --color-border-muted: rgba(0, 102, 34, 0.08);
+
+  /* Neutral */
+  --color-neutral-muted: rgba(0, 102, 34, 0.08);
+  --color-neutral-subtle: rgba(0, 102, 34, 0.04);
+
+  /* Accent - green */
+  --color-accent-fg: #008833;
+  --color-accent-emphasis: #006622;
+  --color-accent-muted: rgba(0, 136, 51, 0.25);
+  --color-accent-subtle: rgba(0, 136, 51, 0.08);
+
+  /* Success */
+  --color-success-fg: #007a2e;
+
+  /* Attention */
+  --color-attention-fg: #8a6d00;
+  --color-attention-muted: rgba(138, 109, 0, 0.25);
+  --color-attention-subtle: rgba(138, 109, 0, 0.08);
+
+  /* Danger */
+  --color-danger-fg: #cc3333;
+  --color-danger-muted: rgba(204, 51, 51, 0.25);
+  --color-danger-subtle: rgba(204, 51, 51, 0.08);
+
+  /* Primer shadow */
+  --color-primer-shadow-inset: inset 0 1px 0 rgba(0, 50, 0, 0.04);
+
+  /* Scale colors */
+  --color-scale-gray-7: #e0f0e0;
+  --color-scale-blue-8: #d0e8d0;
+
+  /* Social reaction backgrounds */
+  --color-social-reaction-bg-hover: var(--color-scale-gray-7);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-8);
+}
+
+main .pagination-loader-container {
+  background-image: url("https://github.com/images/modules/pulls/progressive-disclosure-line.svg");
+}
+
+main .gsc-loading-image {
+  background-image: url("https://github.githubassets.com/images/mona-loading-default.gif");
+}
+
+/* Custom styling */
+main .gsc-comment-box {
+  box-shadow: 0 1px 3px rgba(0, 102, 34, 0.06);
+}
+
+main .gsc-comment {
+  border-color: rgba(0, 102, 34, 0.1) !important;
+}
+
+main .gsc-header {
+  border-color: rgba(0, 102, 34, 0.1) !important;
+}
+
+main .gsc-comment-box textarea {
+  background-color: #ffffff !important;
+  color: #1a3a1a !important;
+  border-color: rgba(0, 102, 34, 0.15) !important;
+}
+
+main .gsc-comment-box textarea:focus {
+  border-color: #008833 !important;
+  box-shadow: 0 0 6px rgba(0, 136, 51, 0.12) !important;
+}
+
+/* Scrollbar styling */
+main ::-webkit-scrollbar {
+  width: 6px;
+}
+
+main ::-webkit-scrollbar-track {
+  background: #f0f6f0;
+}
+
+main ::-webkit-scrollbar-thumb {
+  background: rgba(0, 102, 34, 0.15);
+  border-radius: 3px;
+}
+
+main ::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 102, 34, 0.25);
+}
+
+/* Font override for monospace CRT feel */
+main {
+  --font-family-sans: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', monospace;
+  --font-family-monospace: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Source Code Pro', monospace;
+}
