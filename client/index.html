@@ -36,17 +36,17 @@
     <meta name="keywords" content="claude code buddy, buddy checker, claude pet, tamagotchi, terminal pet, claude code easter egg, claude buddy species, claude buddy rarity" />
 
     <!-- Hreflang for multilingual SEO -->
-    <link rel="alternate" hreflang="en" href="https://claudebuddy.art/" />
-    <link rel="alternate" hreflang="zh" href="https://claudebuddy.art/?lang=zh" />
-    <link rel="alternate" hreflang="ko" href="https://claudebuddy.art/?lang=ko" />
-    <link rel="alternate" hreflang="x-default" href="https://claudebuddy.art/" />
+    <link rel="alternate" hreflang="en" href="https://www.claudebuddy.art/" />
+    <link rel="alternate" hreflang="zh" href="https://www.claudebuddy.art/?lang=zh" />
+    <link rel="alternate" hreflang="ko" href="https://www.claudebuddy.art/?lang=ko" />
+    <link rel="alternate" hreflang="x-default" href="https://www.claudebuddy.art/" />
 
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Claude Buddy Checker - Check Your Terminal Pet" />
     <meta property="og:description" content="Claude Code ships with a hidden Tamagotchi-style pet system. Check your unique buddy before launch." />
     <meta property="og:image" content="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp" />
-    <meta property="og:url" content="https://claudebuddy.art/" />
+    <meta property="og:url" content="https://www.claudebuddy.art/" />
     <meta property="og:site_name" content="Claude Buddy Checker" />
 
     <!-- Twitter Card -->
@@ -56,7 +56,7 @@
     <meta name="twitter:image" content="https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp" />
 
     <!-- Canonical -->
-    <link rel="canonical" href="https://claudebuddy.art/" />
+    <link rel="canonical" href="https://www.claudebuddy.art/" />
 
     <!-- Preconnect to CDN for faster image loading -->
     <link rel="preconnect" href="https://d2xsxph8kpxj0f.cloudfront.net" crossorigin />
@@ -81,10 +81,26 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-    <script
-      defer
-      src="%VITE_ANALYTICS_ENDPOINT%/umami"
-      data-website-id="%VITE_ANALYTICS_WEBSITE_ID%"></script>
+    <!--
+      Analytics: Umami (self-hosted).
+      Set VITE_ANALYTICS_ENDPOINT and VITE_ANALYTICS_WEBSITE_ID in .env.production
+      before building. The inline guard below prevents a console error when the
+      variables have not been configured — the script simply will not load.
+    -->
+    <script>
+      (function () {
+        var ep = "%VITE_ANALYTICS_ENDPOINT%";
+        var id = "%VITE_ANALYTICS_WEBSITE_ID%";
+        // Only inject the script if both vars were actually replaced at build time
+        if (ep && id && ep.indexOf('%') === -1 && id.indexOf('%') === -1) {
+          var s = document.createElement('script');
+          s.defer = true;
+          s.src = ep + '/umami';
+          s.setAttribute('data-website-id', id);
+          document.head.appendChild(s);
+        }
+      })();
+    </script>
   </body>
 
 </html>

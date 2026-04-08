@@ -15,7 +15,7 @@ const LANG_MAP: Record<string, string> = {
 export default function WebAppSchema() {
   const { t, dict, locale } = useI18n();
   const inLanguage = LANG_MAP[locale] || "en-US";
-  const siteUrl = "https://claudebuddy.art";
+  const siteUrl = "https://www.claudebuddy.art";
 
   // WebApplication Schema
   const webAppSchema = {

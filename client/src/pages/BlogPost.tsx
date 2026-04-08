@@ -84,7 +84,7 @@ export default function BlogPost() {
   useEffect(() => {
     if (content) {
       const slug = params.slug || "";
-      const url = `https://claudebuddy.art/blog/${slug}`;
+      const url = `https://www.claudebuddy.art/blog/${slug}`;
 
       document.title = content.metaTitle;
 

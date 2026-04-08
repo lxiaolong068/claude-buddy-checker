@@ -34,7 +34,7 @@ const BLOG_DESC_MAP: Record<string, string> = {
 export default function BlogListSchema({
   articles,
   locale,
-  baseUrl = "https://claudebuddy.art",
+  baseUrl = "https://www.claudebuddy.art",
 }: BlogListSchemaProps) {
   const schemas = useMemo(() => {
     const blogUrl = `${baseUrl}/blog`;

@@ -31,7 +31,7 @@ export default function ArticleSchema({
   article,
   content,
   locale,
-  baseUrl = "https://claudebuddy.art",
+  baseUrl = "https://www.claudebuddy.art",
 }: ArticleSchemaProps) {
   const schemas = useMemo(() => {
     const articleUrl = `${baseUrl}/blog/${article.slug}`;
