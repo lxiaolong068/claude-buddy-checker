@@ -6,6 +6,8 @@
  */
 
 import { useEffect, useMemo, useRef } from "react";
+import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { SITE_URL } from "@/lib/constants";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { getAllArticles, type BlogArticle, type DiscussionCategory } from "@/lib/blog-data";
@@ -125,7 +127,7 @@ function ArticleCard({ article, searchQuery }: { article: BlogArticle; searchQue
     const parts = text.split(regex);
     if (parts.length === 1) return text;
     return parts.map((part, i) =>
-      regex.test(part) ? (
+      i % 2 === 1 ? (
         <mark key={i} className="bg-crt-green/30 text-crt-green px-0.5">
           {part}
         </mark>
@@ -309,20 +311,9 @@ export default function BlogIndex() {
     document.title = t("blog.indexTitle");
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute("content", t("blog.indexMetaDesc"));
-    // Update hreflang alternate links for multilingual SEO
-    const url = "https://www.claudebuddy.art/blog";
-    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
-    for (const loc of ["en", "zh", "ko", "x-default"]) {
-      const link = document.createElement("link");
-      link.rel = "alternate";
-      link.setAttribute("hreflang", loc);
-      link.href = url;
-      document.head.appendChild(link);
-    }
-    return () => {
-      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
-    };
   }, [locale, t]);
+
+  useHreflangLinks(`${SITE_URL}/blog`);
 
   const handleTagClick = (tag: string) => {
     setActiveTag(activeTag === tag ? null : tag);

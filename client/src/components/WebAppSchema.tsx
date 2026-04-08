@@ -5,6 +5,7 @@
  */
 
 import { useI18n } from "@/contexts/I18nContext";
+import { SITE_URL } from "@/lib/constants";
 
 const LANG_MAP: Record<string, string> = {
   en: "en-US",
@@ -15,7 +16,7 @@ const LANG_MAP: Record<string, string> = {
 export default function WebAppSchema() {
   const { t, dict, locale } = useI18n();
   const inLanguage = LANG_MAP[locale] || "en-US";
-  const siteUrl = "https://www.claudebuddy.art";
+  const siteUrl = SITE_URL;
 
   // WebApplication Schema
   const webAppSchema = {

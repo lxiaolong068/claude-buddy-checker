@@ -7,6 +7,7 @@
 
 import { useMemo } from "react";
 import type { BlogArticle, ArticleContent } from "@/lib/blog-data";
+import { SITE_URL } from "@/lib/constants";
 
 interface ArticleSchemaProps {
   article: BlogArticle;
@@ -31,7 +32,7 @@ export default function ArticleSchema({
   article,
   content,
   locale,
-  baseUrl = "https://www.claudebuddy.art",
+  baseUrl = SITE_URL,
 }: ArticleSchemaProps) {
   const schemas = useMemo(() => {
     const articleUrl = `${baseUrl}/blog/${article.slug}`;

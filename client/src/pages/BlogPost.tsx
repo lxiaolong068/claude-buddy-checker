@@ -5,6 +5,7 @@
  */
 
 import { useEffect, useMemo } from "react";
+import { SITE_URL } from "@/lib/constants";
 import TableOfContents, { type TocItem } from "@/components/TableOfContents";
 import { Link, useParams } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
@@ -84,7 +85,7 @@ export default function BlogPost() {
   useEffect(() => {
     if (content) {
       const slug = params.slug || "";
-      const url = `https://www.claudebuddy.art/blog/${slug}`;
+      const url = `${SITE_URL}/blog/${slug}`;
 
       document.title = content.metaTitle;
 

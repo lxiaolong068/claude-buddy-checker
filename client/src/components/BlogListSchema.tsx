@@ -6,6 +6,7 @@
 
 import { useMemo } from "react";
 import type { BlogArticle } from "@/lib/blog-data";
+import { SITE_URL } from "@/lib/constants";
 
 interface BlogListSchemaProps {
   articles: BlogArticle[];
@@ -34,7 +35,7 @@ const BLOG_DESC_MAP: Record<string, string> = {
 export default function BlogListSchema({
   articles,
   locale,
-  baseUrl = "https://www.claudebuddy.art",
+  baseUrl = SITE_URL,
 }: BlogListSchemaProps) {
   const schemas = useMemo(() => {
     const blogUrl = `${baseUrl}/blog`;

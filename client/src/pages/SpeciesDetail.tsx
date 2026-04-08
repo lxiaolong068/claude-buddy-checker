@@ -6,6 +6,7 @@
  */
 
 import { useParams, Link, useLocation } from "wouter";
+import { SITE_URL } from "@/lib/constants";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 import { SPECIES_DATA, ALL_SPECIES_SLUGS, type SpeciesInfo } from "@/lib/species-data";
@@ -106,7 +107,7 @@ export default function SpeciesDetail() {
       const name = t(`speciesDetail.speciesNames.${slug}`);
       const title = `${name} ${t("speciesDetail.metaTitleSuffix")}`;
       const desc = `${t("speciesDetail.metaDescPrefix")} ${name} ${t("speciesDetail.metaDescSuffix")}`;
-      const url = `https://www.claudebuddy.art/species/${slug}`;
+      const url = `${SITE_URL}/species/${slug}`;
 
       document.title = title;
 
@@ -593,7 +594,7 @@ export default function SpeciesDetail() {
       {/* FAQ Schema */}
       <FAQSchema
         faqs={SPECIES_FAQS[slug]?.[locale as "en" | "zh" | "ko"] || SPECIES_FAQS[slug]?.en || []}
-        pageUrl={`https://www.claudebuddy.art/species/${slug}`}
+        pageUrl={`${SITE_URL}/species/${slug}`}
         speciesName={speciesName}
       />
 

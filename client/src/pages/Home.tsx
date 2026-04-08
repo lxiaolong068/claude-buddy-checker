@@ -6,6 +6,8 @@
  */
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
+import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { SITE_URL } from "@/lib/constants";
 import { Link } from "wouter";
 import { rollBuddy, type BuddyResult, SPECIES } from "@/lib/buddy-engine";
 import { getAllArticles } from "@/lib/blog-data";
@@ -88,27 +90,16 @@ export default function Home() {
     }
   }, []);
 
-  // Update document title, meta description, and hreflang when locale changes
+  // Update document title and meta description when locale changes
   useEffect(() => {
     document.title = t("meta.title");
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute("content", t("meta.description"));
     }
-    // Update hreflang alternate links for multilingual SEO
-    const url = "https://www.claudebuddy.art/";
-    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
-    for (const loc of ["en", "zh", "ko", "x-default"]) {
-      const link = document.createElement("link");
-      link.rel = "alternate";
-      link.setAttribute("hreflang", loc);
-      link.href = url;
-      document.head.appendChild(link);
-    }
-    return () => {
-      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
-    };
   }, [locale, t]);
+
+  useHreflangLinks(`${SITE_URL}/`);
 
   const handleCheck = useCallback(() => {
     const trimmed = uuid.trim();

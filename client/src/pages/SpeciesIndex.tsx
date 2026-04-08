@@ -5,6 +5,8 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { SITE_URL } from "@/lib/constants";
 import { Link, useLocation } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { SPECIES_DATA, ALL_SPECIES_SLUGS } from "@/lib/species-data";
@@ -150,27 +152,16 @@ export default function SpeciesIndex() {
     { key: "Enter", label: "Compare" },
   ];
 
-  // Update document title, meta description, and hreflang
+  // Update document title and meta description
   useEffect(() => {
     document.title = t("speciesIndex.title");
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute("content", t("speciesIndex.metaDesc"));
     }
-    // Update hreflang alternate links for multilingual SEO
-    const url = "https://www.claudebuddy.art/species";
-    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
-    for (const loc of ["en", "zh", "ko", "x-default"]) {
-      const link = document.createElement("link");
-      link.rel = "alternate";
-      link.setAttribute("hreflang", loc);
-      link.href = url;
-      document.head.appendChild(link);
-    }
-    return () => {
-      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
-    };
   }, [t, locale]);
+
+  useHreflangLinks(`${SITE_URL}/species`);
 
   const filtered = ALL_SPECIES_SLUGS.filter((s) => {
     const matchCat = filter === "all" || SPECIES_DATA[s].category === filter;
