@@ -150,13 +150,26 @@ export default function SpeciesIndex() {
     { key: "Enter", label: "Compare" },
   ];
 
-  // Update document title
+  // Update document title, meta description, and hreflang
   useEffect(() => {
     document.title = t("speciesIndex.title");
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
       metaDesc.setAttribute("content", t("speciesIndex.metaDesc"));
     }
+    // Update hreflang alternate links for multilingual SEO
+    const url = "https://www.claudebuddy.art/species";
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+    for (const loc of ["en", "zh", "ko", "x-default"]) {
+      const link = document.createElement("link");
+      link.rel = "alternate";
+      link.setAttribute("hreflang", loc);
+      link.href = url;
+      document.head.appendChild(link);
+    }
+    return () => {
+      document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+    };
   }, [t, locale]);
 
   const filtered = ALL_SPECIES_SLUGS.filter((s) => {
