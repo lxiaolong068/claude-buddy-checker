@@ -35,6 +35,471 @@ export interface ArticleSection {
   body: string; // supports HTML
 }
 
+
+
+// === Reroll Guide Article Content ===
+const REROLL_EN: ArticleContent = {
+  title: "How to Reroll Your Claude Buddy — Strategies for Hunting Legendary & Shiny Pets",
+  metaTitle: "How to Reroll Your Claude Buddy — Legendary & Shiny Hunting Guide 2026",
+  metaDescription: "Complete guide to rerolling your Claude Code Buddy. Learn the math behind rarity odds, brute-force strategies for Legendary and Shiny pets, and what actually works vs. common myths.",
+  excerpt: "Your buddy is deterministic — but that doesn't mean you're stuck. Learn the real math behind Legendary odds, brute-force reroll strategies, and the truth about every 'hack' the community has tried.",
+  sections: [
+    {
+      heading: "Why Rerolling Matters",
+      body: `<p>You typed <code>/buddy</code>, watched the ASCII egg crack open, and got… a Common Duck. No hat. No sparkle. SNARK 7. Meanwhile, your coworker is showing off a <strong>Legendary Shiny Dragon</strong> with a wizard hat and stats in the 80s.</p>
+come to the buddy lottery. With only a <strong>1% chance</strong> for Legendary and another <strong>1% chance</strong> for Shiny, the odds of getting both on a single roll are <strong>1 in 10,000</strong>. But here's the thing: the buddy system is <em>deterministic</em>, not random. Your buddy is computed from your identity string using a fixed algorithm. That means if you understand the math, you can work the system.</p>
+s guide covers everything: the exact probabilities, what "rerolling" actually means, brute-force strategies that work, and the myths you should ignore.</p>`
+    },
+    {
+      heading: "The Algorithm in 30 Seconds",
+      body: `<p>Before we talk strategy, you need to understand how your buddy is generated. The entire process is a <strong>deterministic pipeline</strong>:</p>
+<ol>
+ur input string (UUID, userID, or any text) is concatenated with the salt <code>friend-2026-401</code></li>
+e combined string is hashed using <strong>FNV-1a</strong> to produce a 32-bit integer</li>
+at integer seeds a <strong>Mulberry32 PRNG</strong> (pseudo-random number generator)</li>
+e PRNG sequentially determines: <strong>Rarity → Species → Eyes → Hat → Shiny → 5 Stats</strong></li>
+</ol>
+ critical insight: <strong>same input = same buddy, every time</strong>. There's no server-side randomness, no time-based seed, no hidden entropy. If you change the input, you change the buddy. That's the entire basis of rerolling.</p>
+ a deeper dive into FNV-1a and Mulberry32, see our <a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">algorithm deep dive</a>.</p>`
+    },
+    {
+      heading: "The Rarity Math You Need to Know",
+      body: `<p>The rarity roll is the <strong>first</strong> thing the PRNG decides. Here are the exact weights:</p>
+>
+h>Rarity</th><th>Weight</th><th>Probability</th><th>Stat Floor</th><th>Expected Rolls</th></tr>
+d>Common</td><td>60</td><td>60%</td><td>5</td><td>~2</td></tr>
+d>Uncommon</td><td>25</td><td>25%</td><td>15</td><td>4</td></tr>
+d>Rare</td><td>10</td><td>10%</td><td>25</td><td>10</td></tr>
+d>Epic</td><td>4</td><td>4%</td><td>35</td><td>25</td></tr>
+d>Legendary</td><td>1</td><td>1%</td><td>50</td><td>100</td></tr>
+e>
+pected Rolls" means: on average, how many different inputs do you need to try before hitting that rarity? For Legendary, it's <strong>100 tries</strong>. That's very achievable with a script.</p>
+ what if you want a <em>specific</em> Legendary? Since there are 18 species and species is rolled independently after rarity, the odds of getting a specific Legendary species are <strong>1/100 × 1/18 = 1 in 1,800</strong>. Still doable.</p>
+ add Shiny (1% chance, rolled after hat): a <strong>Legendary Shiny</strong> of any species is <strong>1 in 10,000</strong>. A <strong>Legendary Shiny of a specific species</strong> is <strong>1 in 180,000</strong>. That's where brute-force scripts become essential.</p>`
+    },
+    {
+      heading: "Method 1: The Buddy Checker (Quick & Easy)",
+      body: `<p>The simplest way to "reroll" is to use our <a href="/">Buddy Checker tool</a>. Here's the key insight most people miss:</p>
+rong>The checker accepts any string, not just real UUIDs.</strong></p>
+ typing your name, your pet's name, a random phrase, or just mashing the keyboard. Each unique string produces a unique buddy. You can manually explore dozens of inputs in a few minutes.</p>
+ick Exploration Strategy</h4>
+ systematic variations of a base string:</p>
+code>myname-001
+-002
+-003
+...
+-100</code></pre>
+100 tries, you have a ~63% chance of seeing at least one Legendary (1 - 0.99^100). In 200 tries, that jumps to ~87%. In 460 tries, you're at 99%.</p>
+rong>Limitation:</strong> This only shows you what buddy a given string <em>would</em> produce. Your actual Claude Code buddy is tied to your <code>accountUuid</code> — you can't change it by typing a different string into the checker.</p>`
+    },
+    {
+      heading: "Method 2: Brute-Force Scripts",
+      body: `<p>For serious hunters, the community has built brute-force tools that automate the search. The approach is simple: generate thousands of input strings, run each through the buddy algorithm, and filter for your desired criteria.</p>
+w It Works</h4>
+ buddy generation algorithm is lightweight — a single call takes microseconds. A simple script can test <strong>1 million inputs in under 10 seconds</strong> on modern hardware. Here's the basic logic:</p>
+code>for i in range(1_000_000):
+put_str = f"hunt-{i}"
+ddy = rollBuddy(input_str)
+ buddy.rarity == "legendary" and buddy.shiny:
+  print(f"Found: {input_str} → {buddy.species}")</code></pre>
+h 1 million trials, you'll find approximately:</p>
+>
+h>Target</th><th>Expected Hits</th></tr>
+d>Any Legendary</td><td>~10,000</td></tr>
+d>Specific Legendary species</td><td>~556</td></tr>
+d>Any Legendary Shiny</td><td>~100</td></tr>
+d>Specific Legendary Shiny species</td><td>~6</td></tr>
+e>
+ community has published open-source reroll scripts on GitHub. These tools let you specify your desired species, rarity, and cosmetics, then search until a match is found.</p>
+rong>Important caveat:</strong> These scripts find <em>input strings</em> that produce your dream buddy. They don't change your actual Claude Code buddy, which is permanently tied to your account identity.</p>`
+    },
+    {
+      heading: "The accountUuid Trap (Team/Pro Users)",
+      body: `<p>This is the most common pitfall in the community, and it trips up almost everyone on a Team or Pro plan.</p>
+ude Code uses two identity fields stored in <code>~/.claude.json</code>:</p>
+>
+h>Field</th><th>Description</th><th>Who Has It</th></tr>
+d><code>userID</code></td><td>Top-level user identifier</td><td>All users</td></tr>
+d><code>accountUuid</code></td><td>OAuth account UUID (inside <code>oauthAccount</code>)</td><td>Team/Pro users</td></tr>
+e>
+e's the trap: <strong>if <code>accountUuid</code> exists, it overrides <code>userID</code></strong> as the seed for buddy generation. This means:</p>
+<ul>
+ee-tier users: buddy is seeded from <code>userID</code></li>
+am/Pro users: buddy is seeded from <code>accountUuid</code></li>
+</ul>
+y community "reroll hacks" suggest modifying your <code>userID</code> in the config file. This works for free-tier users but <strong>does nothing for Team/Pro users</strong> because <code>accountUuid</code> takes priority. If you're on a paid plan, the only way to get a different buddy is to use a different Anthropic account.</p>
+check which field your buddy actually uses, run:</p>
+code>cat ~/.claude.json | python3 -c "
+ json, sys
+on.load(sys.stdin)
+ d.get('oauthAccount', {}).get('accountUuid')
+d.get('userID')
+f'accountUuid: {acct}')
+f'userID: {uid}')
+f'Buddy seed: {acct or uid}')
+e></pre>`
+    },
+    {
+      heading: "Myth vs. Reality: Community Hacks Debunked",
+      body: `<p>The buddy community is full of creative "hacks." Let's separate what works from what doesn't:</p>
+>
+h>Claim</th><th>Verdict</th><th>Explanation</th></tr>
+d>"Delete ~/.claude.json to reroll"</td><td>Partially true</td><td>Deleting the file forces re-authentication, which may assign a new <code>userID</code>. But <code>accountUuid</code> is tied to your Anthropic account and won't change.</td></tr>
+d>"Edit userID in the config"</td><td>Works (free tier only)</td><td>Changing <code>userID</code> changes your buddy seed — but only if you don't have an <code>accountUuid</code> that overrides it.</td></tr>
+d>"Use a VPN to get a different buddy"</td><td>False</td><td>IP address has zero effect on buddy generation. The algorithm is purely based on your identity string + salt.</td></tr>
+d>"Time of day affects rarity"</td><td>False</td><td>There is no time-based component in the algorithm. Same input = same buddy at any time.</td></tr>
+d>"Certain UUID patterns give better odds"</td><td>False</td><td>FNV-1a distributes hashes uniformly. No input pattern has a statistical advantage.</td></tr>
+d>"Create a new Anthropic account"</td><td>True</td><td>A new account means a new <code>accountUuid</code>, which means a genuinely different buddy. This is the only guaranteed reroll method.</td></tr>
+e>`
+    },
+    {
+      heading: "The Optimal Hunting Strategy",
+      body: `<p>Based on the math and community experience, here's the most efficient approach depending on your goal:</p>
+al: See Cool Buddies (Explorer)</h4>
+ the <a href="/">Buddy Checker</a> with random strings. Try 50–100 inputs and you'll see a nice spread of species and rarities. Screenshot your favorites and share them with <code>#ClaudeBuddy</code>.</p>
+al: Find a Specific Dream Buddy (Collector)</h4>
+ a brute-force script. Define your criteria (species + rarity + optional shiny/hat), run 100K–1M iterations, and collect all matching input strings. Time required: under 30 seconds.</p>
+al: Actually Change Your Claude Code Buddy (Reroller)</h4>
+s is the hard part. Your options depend on your account type:</p>
+<ul>
+trong>Free tier:</strong> Back up <code>~/.claude.json</code>, modify the <code>userID</code> field to a string that produces your desired buddy (found via brute-force), and restart Claude Code.</li>
+trong>Team/Pro:</strong> Your buddy is locked to <code>accountUuid</code>. The only option is a different Anthropic account. Consider whether a different buddy is worth the hassle.</li>
+</ul>
+al: Legendary Shiny of a Specific Species (Whale)</h4>
+ a brute-force script with 10M+ iterations. At 1 in 180,000 odds, you'll need patience — but the script will find matches. Then follow the reroller steps above to apply it.</p>`
+    },
+    {
+      heading: "Expected Value Calculator",
+      body: `<p>Use this quick reference to estimate how many rolls you need for any target:</p>
+>
+h>Target</th><th>Probability</th><th>50% Chance After</th><th>90% Chance After</th><th>99% Chance After</th></tr>
+d>Any Legendary</td><td>1%</td><td>69 rolls</td><td>229 rolls</td><td>459 rolls</td></tr>
+d>Specific Legendary species</td><td>0.056%</td><td>1,247 rolls</td><td>4,142 rolls</td><td>8,283 rolls</td></tr>
+d>Any Shiny</td><td>1%</td><td>69 rolls</td><td>229 rolls</td><td>459 rolls</td></tr>
+d>Any Legendary Shiny</td><td>0.01%</td><td>6,931 rolls</td><td>23,026 rolls</td><td>46,050 rolls</td></tr>
+d>Specific Legendary Shiny</td><td>0.00056%</td><td>124,766 rolls</td><td>414,558 rolls</td><td>828,660 rolls</td></tr>
+e>
+ "50% Chance After" column uses the formula: <code>n = ln(0.5) / ln(1 - p)</code>. This tells you the number of trials needed for a coin-flip chance of success. The 90% and 99% columns use <code>ln(0.1)</code> and <code>ln(0.01)</code> respectively.</p>
+ a deeper statistical analysis with 10,000 Monte Carlo simulations, see our <a href="/blog/claude-buddy-probability-lab-10000-simulations">Probability Lab article</a>.</p>`
+    },
+    {
+      heading: "Final Thoughts: Embrace the Roll",
+      body: `<p>Here's an unpopular opinion: <strong>your first buddy is your real buddy</strong>. The one tied to your actual account, generated from your real identity — that's the companion the algorithm chose for you.</p>
+olling is fun as an intellectual exercise. The math is satisfying, the brute-force scripts are a neat hack, and exploring the possibility space is genuinely entertaining. But there's something to be said for the buddy you got honestly.</p>
+ommon Duck with SNARK 74 has more character than a brute-forced Legendary Dragon. Your coworkers will know. You'll know.</p>
+tever you decide, check your buddy on our <a href="/">Buddy Checker</a>, explore the <a href="/species">full species catalog</a>, and share your results with the community. Happy hunting!</p>`
+    },
+  ],
+};
+
+const REROLL_ZH: ArticleContent = {
+  title: "如何重投你的 Claude Buddy — 猎取传说级与闪光宠物的策略",
+  metaTitle: "如何重投你的 Claude Buddy — 传说级与闪光宠物猎取指南 2026",
+  metaDescription: "Claude Code Buddy 重投完全指南。了解稀有度概率背后的数学原理、暴力搜索传说级和闪光宠物的策略，以及哪些方法真正有效。",
+  excerpt: "你的 Buddy 是确定性生成的——但这不意味着你只能认命。了解传说级概率背后的真实数学、暴力搜索重投策略，以及社区各种\u201c黑科技\u201d的真相。",
+  sections: [
+    {
+      heading: "为什么重投很重要",
+      body: `<p>你输入了 <code>/buddy</code>，看着 ASCII 蛋壳裂开，然后得到了……一只普通鸭子。没有帽子，没有闪光，毒舌值 7。与此同时，你的同事正在炫耀他的<strong>传说级闪光龙</strong>，戴着巫师帽，属性全在 80 以上。</p>
+到 Buddy 抽奖。传说级只有 <strong>1%</strong> 的概率，闪光又是另外 <strong>1%</strong>，两者同时出现的概率是 <strong>万分之一</strong>。但关键在于：Buddy 系统是<em>确定性</em>的，不是随机的。你的 Buddy 是通过固定算法从你的身份字符串计算出来的。这意味着如果你理解数学原理，就能利用这个系统。</p>
+涵盖所有内容：精确概率、"重投"的真正含义、有效的暴力搜索策略，以及你应该忽略的谣言。</p>`
+    },
+    {
+      heading: "30 秒了解算法",
+      body: `<p>在讨论策略之前，你需要了解 Buddy 是如何生成的。整个过程是一个<strong>确定性流水线</strong>：</p>
+<ol>
+输入字符串（UUID、userID 或任意文本）与盐值 <code>friend-2026-401</code> 拼接</li>
+后的字符串使用 <strong>FNV-1a</strong> 哈希生成一个 32 位整数</li>
+数作为 <strong>Mulberry32 PRNG</strong>（伪随机数生成器）的种子</li>
+NG 依次决定：<strong>稀有度 → 物种 → 眼睛 → 帽子 → 闪光 → 5 项属性</strong></li>
+</ol>
+察：<strong>相同输入 = 相同 Buddy，每次都是</strong>。没有服务端随机性，没有基于时间的种子，没有隐藏的熵源。改变输入，就改变 Buddy。这就是重投的全部基础。</p>
+了解 FNV-1a 和 Mulberry32？请阅读我们的<a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">算法深度解析</a>。</p>`
+    },
+    {
+      heading: "你需要知道的稀有度数学",
+      body: `<p>稀有度是 PRNG <strong>最先</strong>决定的属性。以下是精确权重：</p>
+>
+h>稀有度</th><th>权重</th><th>概率</th><th>属性下限</th><th>期望次数</th></tr>
+d>普通</td><td>60</td><td>60%</td><td>5</td><td>~2</td></tr>
+d>稀有</td><td>25</td><td>25%</td><td>15</td><td>4</td></tr>
+d>精良</td><td>10</td><td>10%</td><td>25</td><td>10</td></tr>
+d>史诗</td><td>4</td><td>4%</td><td>35</td><td>25</td></tr>
+d>传说</td><td>1</td><td>1%</td><td>50</td><td>100</td></tr>
+e>
+次数"指的是：平均需要尝试多少个不同的输入才能命中该稀有度？对于传说级，是 <strong>100 次</strong>。用脚本完全可以做到。</p>
+你想要<em>特定的</em>传说级呢？由于有 18 种物种且物种在稀有度之后独立抽取，获得特定传说级物种的概率是 <strong>1/100 × 1/18 = 1/1,800</strong>。仍然可行。</p>
+闪光（1% 概率，在帽子之后抽取）：任意物种的<strong>传说级闪光</strong>是 <strong>万分之一</strong>。<strong>特定物种的传说级闪光</strong>是 <strong>1/180,000</strong>。这时候暴力搜索脚本就必不可少了。</p>`
+    },
+    {
+      heading: "方法一：Buddy 查询工具（快速简便）",
+      body: `<p>最简单的"重投"方式是使用我们的 <a href="/">Buddy 查询工具</a>。以下是大多数人忽略的关键点：</p>
+rong>查询工具接受任何字符串，不仅仅是真实的 UUID。</strong></p>
+入你的名字、你宠物的名字、一个随机短语，或者随便敲键盘。每个唯一的字符串都会产生一个唯一的 Buddy。你可以在几分钟内手动探索几十个输入。</p>
+探索策略</h4>
+于基础字符串的系统变体：</p>
+code>myname-001
+-002
+-003
+...
+-100</code></pre>
+ 次尝试中，你有约 63% 的概率看到至少一个传说级（1 - 0.99^100）。200 次提升到约 87%。460 次达到 99%。</p>
+rong>局限性：</strong>这只能展示给定字符串<em>会</em>产生什么 Buddy。你在 Claude Code 中的实际 Buddy 绑定的是你的 <code>accountUuid</code>——你无法通过在查询工具中输入不同的字符串来改变它。</p>`
+    },
+    {
+      heading: "方法二：暴力搜索脚本",
+      body: `<p>对于认真的猎手，社区已经构建了自动化搜索的暴力破解工具。方法很简单：生成数千个输入字符串，将每个通过 Buddy 算法运行，然后筛选符合你标准的结果。</p>
+原理</h4>
+dy 生成算法非常轻量——单次调用只需微秒级时间。一个简单的脚本可以在现代硬件上 <strong>10 秒内测试 100 万个输入</strong>。基本逻辑如下：</p>
+code>for i in range(1_000_000):
+put_str = f"hunt-{i}"
+ddy = rollBuddy(input_str)
+ buddy.rarity == "legendary" and buddy.shiny:
+  print(f"Found: {input_str} → {buddy.species}")</code></pre>
+ 万次试验中，你大约会找到：</p>
+>
+h>目标</th><th>预期命中数</th></tr>
+d>任意传说级</td><td>~10,000</td></tr>
+d>特定传说级物种</td><td>~556</td></tr>
+d>任意传说级闪光</td><td>~100</td></tr>
+d>特定传说级闪光物种</td><td>~6</td></tr>
+e>
+在 GitHub 上发布了开源重投脚本。这些工具让你指定期望的物种、稀有度和外观，然后搜索直到找到匹配。</p>
+rong>重要提醒：</strong>这些脚本找到的是<em>能产生</em>你梦想 Buddy 的输入字符串。它们不会改变你在 Claude Code 中的实际 Buddy，那个是永久绑定到你的账户身份的。</p>`
+    },
+    {
+      heading: "accountUuid 陷阱（Team/Pro 用户）",
+      body: `<p>这是社区中最常见的坑，几乎所有 Team 或 Pro 计划的用户都会踩到。</p>
+ude Code 在 <code>~/.claude.json</code> 中使用两个身份字段：</p>
+>
+h>字段</th><th>描述</th><th>谁拥有</th></tr>
+d><code>userID</code></td><td>顶层用户标识符</td><td>所有用户</td></tr>
+d><code>accountUuid</code></td><td>OAuth 账户 UUID（在 <code>oauthAccount</code> 内）</td><td>Team/Pro 用户</td></tr>
+e>
+于：<strong>如果 <code>accountUuid</code> 存在，它会覆盖 <code>userID</code></strong> 作为 Buddy 生成的种子。这意味着：</p>
+<ul>
+用户：Buddy 种子来自 <code>userID</code></li>
+am/Pro 用户：Buddy 种子来自 <code>accountUuid</code></li>
+</ul>
+许多"重投黑科技"建议修改配置文件中的 <code>userID</code>。这对免费用户有效，但<strong>对 Team/Pro 用户完全无效</strong>，因为 <code>accountUuid</code> 优先级更高。如果你使用付费计划，获得不同 Buddy 的唯一方法是使用不同的 Anthropic 账户。</p>
+你的 Buddy 实际使用的是哪个字段，运行：</p>
+code>cat ~/.claude.json | python3 -c "
+ json, sys
+on.load(sys.stdin)
+ d.get('oauthAccount', {}).get('accountUuid')
+d.get('userID')
+f'accountUuid: {acct}')
+f'userID: {uid}')
+f'Buddy seed: {acct or uid}')
+e></pre>`
+    },
+    {
+      heading: "谣言 vs. 现实：社区黑科技辨真假",
+      body: `<p>Buddy 社区充满了各种创意"黑科技"。让我们分清哪些有效，哪些无效：</p>
+>
+h>说法</th><th>结论</th><th>解释</th></tr>
+d>"删除 ~/.claude.json 可以重投"</td><td>部分正确</td><td>删除文件会强制重新认证，可能分配新的 <code>userID</code>。但 <code>accountUuid</code> 绑定的是你的 Anthropic 账户，不会改变。</td></tr>
+d>"修改配置中的 userID"</td><td>有效（仅限免费用户）</td><td>修改 <code>userID</code> 会改变 Buddy 种子——但前提是你没有会覆盖它的 <code>accountUuid</code>。</td></tr>
+d>"用 VPN 可以获得不同的 Buddy"</td><td>错误</td><td>IP 地址对 Buddy 生成零影响。算法纯粹基于你的身份字符串 + 盐值。</td></tr>
+d>"一天中的时间会影响稀有度"</td><td>错误</td><td>算法中没有基于时间的组件。相同输入 = 任何时候都是相同的 Buddy。</td></tr>
+d>"某些 UUID 模式有更好的概率"</td><td>错误</td><td>FNV-1a 均匀分布哈希值。没有任何输入模式具有统计优势。</td></tr>
+d>"创建新的 Anthropic 账户"</td><td>正确</td><td>新账户意味着新的 <code>accountUuid</code>，也就意味着真正不同的 Buddy。这是唯一保证有效的重投方法。</td></tr>
+e>`
+    },
+    {
+      heading: "最优猎取策略",
+      body: `<p>基于数学原理和社区经验，以下是根据不同目标的最高效方案：</p>
+：欣赏酷炫 Buddy（探索者）</h4>
+a href="/">Buddy 查询工具</a>中使用随机字符串。尝试 50-100 个输入，你会看到丰富的物种和稀有度分布。截图你最喜欢的，用 <code>#ClaudeBuddy</code> 分享。</p>
+：找到特定梦想 Buddy（收藏家）</h4>
+力搜索脚本。定义你的标准（物种 + 稀有度 + 可选闪光/帽子），运行 10 万到 100 万次迭代，收集所有匹配的输入字符串。所需时间：不到 30 秒。</p>
+：真正改变你的 Claude Code Buddy（重投者）</h4>
+难的部分。你的选择取决于账户类型：</p>
+<ul>
+trong>免费用户：</strong>备份 <code>~/.claude.json</code>，将 <code>userID</code> 字段修改为能产生你期望 Buddy 的字符串（通过暴力搜索找到），然后重启 Claude Code。</li>
+trong>Team/Pro 用户：</strong>你的 Buddy 锁定在 <code>accountUuid</code>。唯一的选择是使用不同的 Anthropic 账户。考虑一下换 Buddy 是否值得这个麻烦。</li>
+</ul>
+：特定物种的传说级闪光（氪金玩家）</h4>
+1000 万次以上的暴力搜索脚本。以 1/180,000 的概率，你需要耐心——但脚本一定会找到匹配。然后按照重投者的步骤应用它。</p>`
+    },
+    {
+      heading: "期望值速查表",
+      body: `<p>使用这个速查表估算任何目标需要的投掷次数：</p>
+>
+h>目标</th><th>概率</th><th>50% 概率所需</th><th>90% 概率所需</th><th>99% 概率所需</th></tr>
+d>任意传说级</td><td>1%</td><td>69 次</td><td>229 次</td><td>459 次</td></tr>
+d>特定传说级物种</td><td>0.056%</td><td>1,247 次</td><td>4,142 次</td><td>8,283 次</td></tr>
+d>任意闪光</td><td>1%</td><td>69 次</td><td>229 次</td><td>459 次</td></tr>
+d>任意传说级闪光</td><td>0.01%</td><td>6,931 次</td><td>23,026 次</td><td>46,050 次</td></tr>
+d>特定传说级闪光</td><td>0.00056%</td><td>124,766 次</td><td>414,558 次</td><td>828,660 次</td></tr>
+e>
+% 概率所需"列使用公式：<code>n = ln(0.5) / ln(1 - p)</code>。它告诉你需要多少次试验才有一半的成功概率。90% 和 99% 列分别使用 <code>ln(0.1)</code> 和 <code>ln(0.01)</code>。</p>
+10,000 次蒙特卡洛模拟的深度统计分析？请阅读我们的<a href="/blog/claude-buddy-probability-lab-10000-simulations">概率实验室文章</a>。</p>`
+    },
+    {
+      heading: "最后的话：拥抱你的投掷结果",
+      body: `<p>这里有一个不太流行的观点：<strong>你的第一个 Buddy 才是你真正的 Buddy</strong>。那个绑定到你真实账户、由你真实身份生成的——那才是算法为你选择的伙伴。</p>
+为智力练习很有趣。数学令人满足，暴力搜索脚本是巧妙的 hack，探索可能性空间确实很有娱乐性。但诚实获得的 Buddy 有它自己的价值。</p>
+舌值 74 的普通鸭子比暴力搜索出来的传说级龙更有个性。你的同事会知道。你自己也会知道。</p>
+如何决定，在我们的 <a href="/">Buddy 查询工具</a>上查看你的 Buddy，探索<a href="/species">完整物种图鉴</a>，和社区分享你的结果。祝猎取愉快！</p>`
+    },
+  ],
+};
+
+const REROLL_KO: ArticleContent = {
+  title: "Claude Buddy 리롤 방법 — 전설급 & 샤이니 펫 사냥 전략",
+  metaTitle: "Claude Buddy 리롤 방법 — 전설급 & 샤이니 사냥 가이드 2026",
+  metaDescription: "Claude Code Buddy 리롤 완전 가이드. 희귀도 확률의 수학, 전설급과 샤이니 펫을 위한 브루트포스 전략, 실제로 효과 있는 방법과 미신을 구별하세요.",
+  excerpt: "당신의 버디는 결정론적입니다 — 하지만 그렇다고 포기할 필요는 없습니다. 전설급 확률의 실제 수학, 브루트포스 리롤 전략, 커뮤니티의 모든 '핵'의 진실을 알아보세요.",
+  sections: [
+    {
+      heading: "리롤이 중요한 이유",
+      body: `<p><code>/buddy</code>를 입력하고 ASCII 알이 깨지는 것을 지켜봤는데… 일반 오리가 나왔습니다. 모자도 없고, 반짝임도 없고, 독설 7. 한편 동료는 마법사 모자를 쓴 <strong>전설급 샤이니 드래곤</strong>을 자랑하고 있습니다. 스탯은 80대.</p>
+복권에 오신 것을 환영합니다. 전설급은 <strong>1%</strong> 확률, 샤이니는 또 다른 <strong>1%</strong> 확률로, 둘 다 한 번에 나올 확률은 <strong>만분의 일</strong>입니다. 하지만 핵심은 이것입니다: 버디 시스템은 <em>결정론적</em>이지 무작위가 아닙니다. 당신의 버디는 고정 알고리즘으로 신원 문자열에서 계산됩니다. 수학을 이해하면 시스템을 활용할 수 있습니다.</p>
+이드는 모든 것을 다룹니다: 정확한 확률, "리롤"의 실제 의미, 효과적인 브루트포스 전략, 그리고 무시해야 할 미신들.</p>`
+    },
+    {
+      heading: "30초 알고리즘 이해",
+      body: `<p>전략을 논하기 전에 버디가 어떻게 생성되는지 이해해야 합니다. 전체 과정은 <strong>결정론적 파이프라인</strong>입니다:</p>
+<ol>
+ 문자열(UUID, userID 또는 아무 텍스트)이 솔트 <code>friend-2026-401</code>과 연결됩니다</li>
+된 문자열이 <strong>FNV-1a</strong>로 해시되어 32비트 정수를 생성합니다</li>
+정수가 <strong>Mulberry32 PRNG</strong>(의사 난수 생성기)의 시드가 됩니다</li>
+NG가 순차적으로 결정합니다: <strong>희귀도 → 종 → 눈 → 모자 → 샤이니 → 5가지 스탯</strong></li>
+</ol>
+통찰: <strong>같은 입력 = 같은 버디, 매번</strong>. 서버 측 무작위성도 없고, 시간 기반 시드도 없고, 숨겨진 엔트로피도 없습니다. 입력을 바꾸면 버디가 바뀝니다. 이것이 리롤의 전체 기반입니다.</p>
+-1a와 Mulberry32에 대한 심층 분석은 <a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">알고리즘 심층 분석</a>을 참조하세요.</p>`
+    },
+    {
+      heading: "알아야 할 희귀도 수학",
+      body: `<p>희귀도 롤은 PRNG가 <strong>가장 먼저</strong> 결정하는 것입니다. 정확한 가중치는 다음과 같습니다:</p>
+>
+h>희귀도</th><th>가중치</th><th>확률</th><th>스탯 하한</th><th>기대 횟수</th></tr>
+d>일반</td><td>60</td><td>60%</td><td>5</td><td>~2</td></tr>
+d>고급</td><td>25</td><td>25%</td><td>15</td><td>4</td></tr>
+d>희귀</td><td>10</td><td>10%</td><td>25</td><td>10</td></tr>
+d>에픽</td><td>4</td><td>4%</td><td>35</td><td>25</td></tr>
+d>전설</td><td>1</td><td>1%</td><td>50</td><td>100</td></tr>
+e>
+ 횟수"란: 평균적으로 해당 희귀도를 얻기 위해 몇 개의 다른 입력을 시도해야 하는가? 전설급의 경우 <strong>100번</strong>입니다. 스크립트로 충분히 가능합니다.</p>
+ <em>특정</em> 전설급을 원한다면? 18종의 종이 있고 종은 희귀도 이후 독립적으로 결정되므로, 특정 전설급 종의 확률은 <strong>1/100 × 1/18 = 1/1,800</strong>입니다. 여전히 가능합니다.</p>
+ 샤이니(1% 확률, 모자 이후 결정)를 추가하면: 아무 종의 <strong>전설급 샤이니</strong>는 <strong>만분의 일</strong>. <strong>특정 종의 전설급 샤이니</strong>는 <strong>1/180,000</strong>. 이때부터 브루트포스 스크립트가 필수입니다.</p>`
+    },
+    {
+      heading: "방법 1: 버디 체커 (빠르고 쉬움)",
+      body: `<p>가장 간단한 "리롤" 방법은 <a href="/">버디 체커 도구</a>를 사용하는 것입니다. 대부분의 사람들이 놓치는 핵심 포인트:</p>
+rong>체커는 실제 UUID뿐만 아니라 아무 문자열이나 받습니다.</strong></p>
+ 반려동물 이름, 무작위 문구, 또는 키보드를 마구 눌러보세요. 각 고유 문자열은 고유한 버디를 생성합니다. 몇 분 안에 수십 개의 입력을 수동으로 탐색할 수 있습니다.</p>
+ 탐색 전략</h4>
+문자열의 체계적인 변형을 시도하세요:</p>
+code>myname-001
+-002
+-003
+...
+-100</code></pre>
+번 시도에서 전설급을 최소 하나 볼 확률은 약 63%입니다 (1 - 0.99^100). 200번이면 약 87%. 460번이면 99%.</p>
+rong>제한사항:</strong> 이것은 주어진 문자열이 어떤 버디를 <em>생성할지</em>만 보여줍니다. 실제 Claude Code 버디는 <code>accountUuid</code>에 연결되어 있어 체커에 다른 문자열을 입력한다고 바뀌지 않습니다.</p>`
+    },
+    {
+      heading: "방법 2: 브루트포스 스크립트",
+      body: `<p>진지한 사냥꾼을 위해 커뮤니티에서 자동화된 검색 도구를 만들었습니다. 접근법은 간단합니다: 수천 개의 입력 문자열을 생성하고, 각각을 버디 알고리즘에 통과시킨 후, 원하는 기준에 맞는 것을 필터링합니다.</p>
+ 원리</h4>
+생성 알고리즘은 매우 가벼워서 한 번 호출에 마이크로초밖에 걸리지 않습니다. 간단한 스크립트로 현대 하드웨어에서 <strong>10초 안에 100만 개의 입력을 테스트</strong>할 수 있습니다. 기본 로직:</p>
+code>for i in range(1_000_000):
+put_str = f"hunt-{i}"
+ddy = rollBuddy(input_str)
+ buddy.rarity == "legendary" and buddy.shiny:
+  print(f"Found: {input_str} → {buddy.species}")</code></pre>
+만 번 시도에서 대략 찾을 수 있는 수:</p>
+>
+h>목표</th><th>예상 히트 수</th></tr>
+d>아무 전설급</td><td>~10,000</td></tr>
+d>특정 전설급 종</td><td>~556</td></tr>
+d>아무 전설급 샤이니</td><td>~100</td></tr>
+d>특정 전설급 샤이니 종</td><td>~6</td></tr>
+e>
+티에서 GitHub에 오픈소스 리롤 스크립트를 공개했습니다. 이 도구들로 원하는 종, 희귀도, 외형을 지정하고 매치를 찾을 때까지 검색할 수 있습니다.</p>
+rong>중요한 주의사항:</strong> 이 스크립트들은 꿈의 버디를 <em>생성하는</em> 입력 문자열을 찾습니다. 실제 Claude Code 버디를 바꾸지는 않습니다. 그것은 계정 신원에 영구적으로 연결되어 있습니다.</p>`
+    },
+    {
+      heading: "accountUuid 함정 (Team/Pro 사용자)",
+      body: `<p>이것은 커뮤니티에서 가장 흔한 함정으로, Team이나 Pro 플랜의 거의 모든 사용자가 빠집니다.</p>
+ude Code는 <code>~/.claude.json</code>에 두 가지 신원 필드를 사용합니다:</p>
+>
+h>필드</th><th>설명</th><th>누가 가지고 있나</th></tr>
+d><code>userID</code></td><td>최상위 사용자 식별자</td><td>모든 사용자</td></tr>
+d><code>accountUuid</code></td><td>OAuth 계정 UUID (<code>oauthAccount</code> 내부)</td><td>Team/Pro 사용자</td></tr>
+e>
+ 이것입니다: <strong><code>accountUuid</code>가 존재하면 <code>userID</code>를 덮어씁니다</strong>. 이것이 버디 생성의 시드가 됩니다. 즉:</p>
+<ul>
+ 사용자: 버디 시드는 <code>userID</code>에서</li>
+am/Pro 사용자: 버디 시드는 <code>accountUuid</code>에서</li>
+</ul>
+티의 많은 "리롤 핵"이 설정 파일의 <code>userID</code>를 수정하라고 제안합니다. 이것은 무료 사용자에게는 효과가 있지만 <strong>Team/Pro 사용자에게는 전혀 효과가 없습니다</strong>. <code>accountUuid</code>가 우선순위가 높기 때문입니다. 유료 플랜이라면 다른 버디를 얻는 유일한 방법은 다른 Anthropic 계정을 사용하는 것입니다.</p>
+ 실제로 어떤 필드를 사용하는지 확인하려면:</p>
+code>cat ~/.claude.json | python3 -c "
+ json, sys
+on.load(sys.stdin)
+ d.get('oauthAccount', {}).get('accountUuid')
+d.get('userID')
+f'accountUuid: {acct}')
+f'userID: {uid}')
+f'Buddy seed: {acct or uid}')
+e></pre>`
+    },
+    {
+      heading: "미신 vs. 현실: 커뮤니티 핵 검증",
+      body: `<p>버디 커뮤니티에는 창의적인 "핵"이 가득합니다. 효과 있는 것과 없는 것을 구분해봅시다:</p>
+>
+h>주장</th><th>판정</th><th>설명</th></tr>
+d>"~/.claude.json을 삭제하면 리롤"</td><td>부분적으로 맞음</td><td>파일 삭제는 재인증을 강제하여 새 <code>userID</code>를 할당할 수 있습니다. 하지만 <code>accountUuid</code>는 Anthropic 계정에 연결되어 변하지 않습니다.</td></tr>
+d>"설정의 userID 수정"</td><td>효과 있음 (무료만)</td><td><code>userID</code> 변경은 버디 시드를 바꿉니다 — 단, 이를 덮어쓰는 <code>accountUuid</code>가 없을 때만.</td></tr>
+d>"VPN으로 다른 버디 획득"</td><td>거짓</td><td>IP 주소는 버디 생성에 영향을 주지 않습니다. 알고리즘은 순수하게 신원 문자열 + 솔트 기반입니다.</td></tr>
+d>"시간대가 희귀도에 영향"</td><td>거짓</td><td>알고리즘에 시간 기반 요소가 없습니다. 같은 입력 = 언제든 같은 버디.</td></tr>
+d>"특정 UUID 패턴이 확률 향상"</td><td>거짓</td><td>FNV-1a는 해시를 균일하게 분포합니다. 어떤 입력 패턴도 통계적 이점이 없습니다.</td></tr>
+d>"새 Anthropic 계정 생성"</td><td>맞음</td><td>새 계정은 새 <code>accountUuid</code>를 의미하며, 진정으로 다른 버디를 의미합니다. 유일하게 보장된 리롤 방법입니다.</td></tr>
+e>`
+    },
+    {
+      heading: "최적의 사냥 전략",
+      body: `<p>수학과 커뮤니티 경험을 바탕으로, 목표별 가장 효율적인 접근법입니다:</p>
+: 멋진 버디 구경하기 (탐험가)</h4>
+href="/">버디 체커</a>에서 무작위 문자열을 사용하세요. 50-100개 입력을 시도하면 다양한 종과 희귀도를 볼 수 있습니다. 마음에 드는 것을 스크린샷하고 <code>#ClaudeBuddy</code>로 공유하세요.</p>
+: 특정 꿈의 버디 찾기 (수집가)</h4>
+포스 스크립트를 사용하세요. 기준(종 + 희귀도 + 선택적 샤이니/모자)을 정의하고 10만-100만 회 반복 실행하여 매칭되는 입력 문자열을 수집하세요. 소요 시간: 30초 미만.</p>
+: 실제 Claude Code 버디 변경하기 (리롤러)</h4>
+ 어려운 부분입니다. 선택지는 계정 유형에 따라 다릅니다:</p>
+<ul>
+trong>무료 사용자:</strong> <code>~/.claude.json</code>을 백업하고, <code>userID</code> 필드를 원하는 버디를 생성하는 문자열(브루트포스로 찾은)로 수정한 후 Claude Code를 재시작하세요.</li>
+trong>Team/Pro 사용자:</strong> 버디가 <code>accountUuid</code>에 잠겨 있습니다. 유일한 선택은 다른 Anthropic 계정입니다. 다른 버디가 그만한 가치가 있는지 고려하세요.</li>
+</ul>
+: 특정 종의 전설급 샤이니 (고래)</h4>
+0만 회 이상의 브루트포스 스크립트를 실행하세요. 1/180,000 확률로 인내가 필요하지만 스크립트는 반드시 매치를 찾습니다. 그런 다음 위의 리롤러 단계를 따르세요.</p>`
+    },
+    {
+      heading: "기대값 빠른 참조표",
+      body: `<p>이 빠른 참조표로 아무 목표에 필요한 롤 횟수를 추정하세요:</p>
+>
+h>목표</th><th>확률</th><th>50% 확률 도달</th><th>90% 확률 도달</th><th>99% 확률 도달</th></tr>
+d>아무 전설급</td><td>1%</td><td>69회</td><td>229회</td><td>459회</td></tr>
+d>특정 전설급 종</td><td>0.056%</td><td>1,247회</td><td>4,142회</td><td>8,283회</td></tr>
+d>아무 샤이니</td><td>1%</td><td>69회</td><td>229회</td><td>459회</td></tr>
+d>아무 전설급 샤이니</td><td>0.01%</td><td>6,931회</td><td>23,026회</td><td>46,050회</td></tr>
+d>특정 전설급 샤이니</td><td>0.00056%</td><td>124,766회</td><td>414,558회</td><td>828,660회</td></tr>
+e>
+% 확률 도달" 열은 공식 <code>n = ln(0.5) / ln(1 - p)</code>를 사용합니다. 이것은 동전 던지기 수준의 성공 확률에 필요한 시행 횟수입니다. 90%와 99% 열은 각각 <code>ln(0.1)</code>과 <code>ln(0.01)</code>을 사용합니다.</p>
+000회 몬테카를로 시뮬레이션의 심층 통계 분석은 <a href="/blog/claude-buddy-probability-lab-10000-simulations">확률 실험실 기사</a>를 참조하세요.</p>`
+    },
+    {
+      heading: "마지막 생각: 롤 결과를 받아들이기",
+      body: `<p>인기 없는 의견 하나: <strong>첫 번째 버디가 진짜 버디입니다</strong>. 실제 계정에 연결되고, 실제 신원에서 생성된 — 그것이 알고리즘이 당신을 위해 선택한 동반자입니다.</p>
+ 지적 연습으로서 재미있습니다. 수학은 만족스럽고, 브루트포스 스크립트는 멋진 핵이며, 가능성 공간을 탐험하는 것은 정말 즐겁습니다. 하지만 정직하게 얻은 버디에는 그만의 가치가 있습니다.</p>
+74의 일반 오리가 브루트포스로 찾은 전설급 드래곤보다 더 개성이 있습니다. 동료들도 알 것입니다. 당신도 알 것입니다.</p>
+결정을 하든, <a href="/">버디 체커</a>에서 버디를 확인하고, <a href="/species">전체 종 카탈로그</a>를 탐험하고, 커뮤니티와 결과를 공유하세요. 즐거운 사냥 되세요!</p>`
+    },
+  ],
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "how-to-find-your-claude-code-buddy",
@@ -4694,6 +5159,19 @@ Similarity: ~0.42  → NOT KIN ✗</code></pre>
         ]
       }
     }
+  },
+
+  {
+    slug: "how-to-reroll-your-claude-buddy-legendary-shiny-hunt",
+    publishedAt: "2026-04-10",
+    readingTime: 8,
+    tags: ["guide", "reroll", "legendary", "shiny", "strategy"],
+    discussionCategory: 'guides',
+    content: {
+      en: REROLL_EN,
+      zh: REROLL_ZH,
+      ko: REROLL_KO,
+    },
   },
 
 ];
