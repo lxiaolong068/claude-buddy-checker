@@ -500,6 +500,419 @@ e>
   ],
 };
 
+
+// === Article: Claude Buddy Multi-Agent System (Deep Dive) ===
+const MULTIAGENT_EN: ArticleContent = {
+  title: "Claude Buddy as a Multi-Agent System — How Your Pet Actually Talks to You",
+  metaTitle: "Claude Buddy Multi-Agent Architecture — How the Watcher Protocol Works (2026)",
+  metaDescription: "Deep dive into Claude Buddy's multi-agent architecture. Learn how the Watcher Protocol, companionReaction state machine, and 5-stat personality system create an independent observer agent inside Claude Code.",
+  excerpt: "Your buddy isn't Claude wearing a costume — it's a separate watcher with its own system prompt, state machine, and personality engine. This deep dive dissects the multi-agent architecture that makes a 5-line ASCII creature feel alive.",
+  sections: [
+    {
+      heading: "One Terminal, Two Minds",
+      body: `<p>When you type <code>/buddy</code> in Claude Code, something unusual happens in the system prompt. A new instruction block appears — not for Claude, but <em>about</em> a separate entity:</p>
+<blockquote>A small {species} named {name} sits beside the user's input box and occasionally comments in a speech bubble. You're not {name} — it's a separate watcher.</blockquote>
+<p>That last sentence is the key: <strong>"You're not {name}."</strong> Claude is explicitly told that the buddy is a distinct agent. This isn't Claude roleplaying as your pet — it's Claude acknowledging the existence of an independent observer that shares the same terminal.</p>
+<p>This is, by definition, a <strong>multi-agent system</strong>: two cognitive entities (Claude + Buddy) operating in the same environment, with different roles, different prompts, and different behavioral rules. In this article, we'll dissect exactly how this works — from the Watcher Protocol to the state machine that decides when your buddy speaks.</p>`
+    },
+    {
+      heading: "The Watcher Protocol: Buddy's Own System Prompt",
+      body: `<p>Every AI agent needs a system prompt — the instructions that define who it is and how it should behave. Claude has one. And so does your buddy.</p>
+<p>The <strong>Watcher Protocol</strong> is the companion's system prompt, injected alongside Claude's main instructions at session start. It contains:</p>
+<table>
+<tr><th>Field</th><th>Source</th><th>Example</th></tr>
+<tr><td>Species</td><td>Deterministic roll from buddy-engine</td><td>Voidcat</td></tr>
+<tr><td>Name</td><td>Generated at first hatch</td><td>Pixel</td></tr>
+<tr><td>Personality traits</td><td>Derived from 5-stat profile</td><td>High SNARK, low PATIENCE</td></tr>
+<tr><td>Behavioral rules</td><td>Hardcoded in protocol</td><td>"Observe, don't code"</td></tr>
+</table>
+<p>The protocol establishes a clear <strong>separation of concerns</strong>: Claude writes code, buddy watches and comments. This is the same pattern used in production multi-agent systems — a "doer" agent paired with an "observer" agent that provides feedback without interfering with the primary task.</p>
+<p>Crucially, the Watcher Protocol tells Claude that when the user addresses the buddy by name, Claude should "step aside" and let the buddy's speech bubble respond. This creates the illusion of two independent entities taking turns — a lightweight form of <strong>agent handoff</strong>.</p>`
+    },
+    {
+      heading: "The companionReaction State Machine",
+      body: `<p>Your buddy doesn't just sit there — it reacts. But when and how it reacts is governed by a <strong>finite state machine</strong> called <code>companionReaction</code>.</p>
+<p>The state machine monitors the conversation between you and Claude, looking for trigger events:</p>
+<table>
+<tr><th>Trigger Event</th><th>Buddy Reaction</th><th>Influenced By</th></tr>
+<tr><td>Long debugging session</td><td>Encouraging comment</td><td>PATIENCE stat</td></tr>
+<tr><td>Code error detected</td><td>Snarky or helpful remark</td><td>SNARK + DEBUGGING stats</td></tr>
+<tr><td>User frustration signals</td><td>Supportive message</td><td>WISDOM stat</td></tr>
+<tr><td>Rapid code changes</td><td>Chaotic observation</td><td>CHAOS stat</td></tr>
+<tr><td>Session idle timeout</td><td>Idle animation + quip</td><td>Species personality</td></tr>
+<tr><td>User addresses buddy by name</td><td>Direct response</td><td>All stats + soul</td></tr>
+</table>
+<p>The state machine has three key states: <strong>IDLE</strong> (buddy is watching silently), <strong>REACTING</strong> (buddy is composing a speech bubble), and <strong>COOLDOWN</strong> (buddy has just spoken and won't interrupt again for a set period).</p>
+<p>This cooldown mechanism is critical — without it, the buddy would be annoyingly chatty. The cooldown duration is inversely proportional to the PATIENCE stat: a high-PATIENCE buddy waits longer between comments, while a low-PATIENCE buddy speaks up more frequently.</p>`
+    },
+    {
+      heading: "How the 5 Stats Shape Buddy's Voice",
+      body: `<p>The five stats aren't just numbers on a card — they're parameters that control the buddy's language model behavior. Each stat maps to a specific dimension of the buddy's communication style:</p>
+<h4>DEBUGGING (Red)</h4>
+<p>Controls the <strong>technical depth</strong> of buddy's comments. A high-DEBUGGING buddy notices code patterns and makes specific observations ("That's the third time you've refactored that function"). A low-DEBUGGING buddy sticks to generic encouragement.</p>
+<h4>PATIENCE (Blue)</h4>
+<p>Controls <strong>comment frequency and timing</strong>. High PATIENCE means fewer, more measured comments with longer cooldowns. Low PATIENCE means the buddy pipes up more often — sometimes helpfully, sometimes not.</p>
+<h4>CHAOS (Purple)</h4>
+<p>Controls <strong>unpredictability</strong>. A high-CHAOS buddy might make non-sequitur observations, reference obscure memes, or react to events in unexpected ways. Low CHAOS keeps reactions predictable and on-topic.</p>
+<h4>WISDOM (Yellow)</h4>
+<p>Controls <strong>insight depth</strong>. High-WISDOM buddies offer philosophical observations about your coding patterns ("You always reach for recursion first — interesting"). Low-WISDOM buddies keep it surface-level.</p>
+<h4>SNARK (Green)</h4>
+<p>Controls <strong>sass level</strong>. The most visible stat. A SNARK-90 Voidcat will roast your variable naming. A SNARK-10 Dewdrop will gently suggest alternatives. This stat has the most dramatic effect on perceived personality.</p>
+<p>Together, these five dimensions create a <strong>personality vector</strong> — a point in 5D space that uniquely positions your buddy's communication style. Two buddies with the same species but different stats will feel like completely different companions.</p>`
+    },
+    {
+      heading: "The Soul: Claude's First Impression of Your Buddy",
+      body: `<p>When your buddy hatches for the first time, something remarkable happens: Claude is asked to write a <strong>"soul description"</strong> — a short personality sketch written in the buddy's own voice, based on its species, stats, and rarity.</p>
+<p>This soul is generated once and cached permanently. It becomes part of the Watcher Protocol, feeding back into every future interaction. The soul acts as a <strong>character anchor</strong> — ensuring the buddy maintains a consistent personality across sessions, even as the conversation context changes.</p>
+<p>Consider two Voidcats with different stat profiles:</p>
+<table>
+<tr><th>Attribute</th><th>Voidcat A</th><th>Voidcat B</th></tr>
+<tr><td>DEBUGGING</td><td>85</td><td>22</td></tr>
+<tr><td>PATIENCE</td><td>12</td><td>91</td></tr>
+<tr><td>CHAOS</td><td>67</td><td>15</td></tr>
+<tr><td>WISDOM</td><td>45</td><td>88</td></tr>
+<tr><td>SNARK</td><td>93</td><td>30</td></tr>
+<tr><td>Likely soul</td><td>"I see every bug before you do. I just enjoy watching you find them yourself."</td><td>"Take your time. The code will wait. I've learned patience from the void."</td></tr>
+</table>
+<p>Same species, completely different personalities. The soul generation step is what transforms a stat array into a <em>character</em>.</p>`
+    },
+    {
+      heading: "Architecture Comparison: Buddy vs. Production Multi-Agent Systems",
+      body: `<p>How does the Buddy system compare to "real" multi-agent architectures? Let's map it against the patterns described in Anthropic's own <a href="https://www.anthropic.com/engineering/multi-agent-research-system">multi-agent research system</a>:</p>
+<table>
+<tr><th>Pattern</th><th>Production Multi-Agent</th><th>Buddy System</th></tr>
+<tr><td>Agent count</td><td>Lead + N subagents</td><td>Claude (lead) + Buddy (observer)</td></tr>
+<tr><td>Communication</td><td>Message passing / tool calls</td><td>Shared system prompt + state machine</td></tr>
+<tr><td>Task division</td><td>Parallel subtask execution</td><td>Sequential: Claude acts, Buddy reacts</td></tr>
+<tr><td>Agent identity</td><td>Role-defined system prompts</td><td>Watcher Protocol + soul</td></tr>
+<tr><td>State management</td><td>Shared memory / database</td><td>companionReaction state machine</td></tr>
+<tr><td>Coordination</td><td>Orchestrator pattern</td><td>Turn-taking (Claude yields to Buddy)</td></tr>
+</table>
+<p>The Buddy system is a <strong>minimal viable multi-agent architecture</strong>. It doesn't have the complexity of a full orchestrator pattern — there's no task decomposition, no parallel execution, no inter-agent negotiation. But it demonstrates the core principles:</p>
+<ol>
+<li><strong>Agent separation</strong>: distinct identities with distinct prompts</li>
+<li><strong>Behavioral specialization</strong>: each agent has a defined role</li>
+<li><strong>Coordinated turn-taking</strong>: agents don't talk over each other</li>
+<li><strong>Shared context</strong>: both agents see the same conversation</li>
+</ol>
+<p>In many ways, Buddy is a <strong>proof of concept</strong> for how lightweight multi-agent patterns can be embedded into existing AI tools without requiring a separate model instance or API call.</p>`
+    },
+    {
+      heading: "The Token Economics of a Terminal Pet",
+      body: `<p>A common concern: does having a buddy waste API tokens? The answer is nuanced.</p>
+<p>The Watcher Protocol adds approximately <strong>200-400 tokens</strong> to the system prompt, depending on the soul length and species description. In a typical Claude Code session that processes 50,000-100,000 tokens, this represents <strong>less than 0.5%</strong> overhead.</p>
+<p>However, the buddy's speech bubble responses <em>do</em> consume output tokens. Each reaction is typically 20-50 tokens. With the cooldown mechanism limiting reactions to roughly one every 2-5 minutes of active coding, a typical hour-long session might generate 200-500 additional tokens from buddy reactions.</p>
+<table>
+<tr><th>Component</th><th>Token Cost</th><th>Frequency</th></tr>
+<tr><td>Watcher Protocol (system prompt)</td><td>200-400 tokens</td><td>Once per session</td></tr>
+<tr><td>Soul description</td><td>50-100 tokens</td><td>Once per session (cached)</td></tr>
+<tr><td>Speech bubble reaction</td><td>20-50 tokens each</td><td>~12-30 per hour</td></tr>
+<tr><td>Direct name-address response</td><td>50-150 tokens each</td><td>User-initiated</td></tr>
+</table>
+<p>Total overhead: roughly <strong>500-2,000 tokens per hour</strong>, or about 1-2% of a typical session's token budget. Anthropic clearly optimized for minimal impact — the buddy is designed to be a <em>negligible</em> cost addition.</p>`
+    },
+    {
+      heading: "Why an Observer Agent Matters",
+      body: `<p>The buddy might seem like a toy, but the observer agent pattern it implements has real implications for AI-assisted development:</p>
+<h4>Emotional Regulation</h4>
+<p>Debugging is frustrating. A well-timed encouraging comment from a high-PATIENCE buddy can break the negative feedback loop that leads developers to rage-quit or make hasty decisions. This isn't speculation — research on <strong>rubber duck debugging</strong> has shown that simply having an entity to "explain" your code to improves problem-solving, even when that entity can't respond.</p>
+<h4>Session Awareness</h4>
+<p>The companionReaction state machine tracks session patterns that you might not notice yourself: how long you've been debugging, how many times you've changed the same file, whether your edit velocity is increasing or decreasing. The buddy's reactions serve as an indirect <strong>mirror of your own behavior</strong>.</p>
+<h4>Personality as Interface</h4>
+<p>The 5-stat system means every developer gets a slightly different coding companion. A high-SNARK buddy pushes you to write better code through gentle mockery. A high-WISDOM buddy encourages reflection. This <strong>personalization through personality</strong> is a design pattern that could extend far beyond terminal pets — imagine AI code reviewers with adjustable personality profiles.</p>`
+    },
+    {
+      heading: "The Bigger Picture: From Pet to Paradigm",
+      body: `<p>Claude Code's Buddy system is often dismissed as an Easter egg — a fun April Fools' feature that stuck around. But from an architecture perspective, it's something more significant: <strong>a production deployment of a multi-agent system inside a mainstream developer tool</strong>.</p>
+<p>Consider the trajectory:</p>
+<ol>
+<li><strong>Single agent</strong>: Claude Code as a standalone coding assistant (2024-2025)</li>
+<li><strong>Agent + observer</strong>: Claude + Buddy with the Watcher Protocol (early 2026)</li>
+<li><strong>Agent teams</strong>: Claude Code's <a href="https://code.claude.com/docs/en/agent-teams">multi-session orchestration</a> (mid 2026)</li>
+<li><strong>Ultra multi-agent</strong>: Claude Code Ultra's 4-agent architecture with parallel explorers and a critic (2026)</li>
+</ol>
+<p>Buddy was the first step on this path. It proved that multiple cognitive entities could coexist in the same terminal session without confusing the user or degrading performance. The patterns it pioneered — shared context, turn-taking, personality-driven behavior — are now appearing in Claude Code's more sophisticated multi-agent features.</p>
+<p>Your terminal pet isn't just a pet. It's a prototype for the future of AI-assisted development.</p>`
+    },
+    {
+      heading: "Explore Your Buddy's Personality",
+      body: `<p>Want to see how your buddy's stats shape its personality? Use our <a href="/">Buddy Checker</a> to generate your companion and examine its full stat profile. Pay attention to the peak stat and dump stat — they define the extremes of your buddy's character.</p>
+<p>For a complete breakdown of all 18 species and their personality tendencies, visit the <a href="/species">Species Catalog</a>. And if you want to understand the deterministic algorithm that generates these personalities, read our <a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">algorithm deep dive</a>.</p>
+<p>Every buddy is unique. Every personality is deterministic. And somewhere in that paradox lies the magic of the system.</p>`
+    },
+  ],
+};
+
+const MULTIAGENT_ZH: ArticleContent = {
+  title: "Claude Buddy 多智能体架构解析 — 你的宠物如何真正与你对话",
+  metaTitle: "Claude Buddy 多智能体架构解析 — Watcher Protocol 工作原理 (2026)",
+  metaDescription: "深入剖析 Claude Buddy 的多智能体架构。了解 Watcher Protocol、companionReaction 状态机和 5 属性性格系统如何在 Claude Code 内部创建一个独立的观察者智能体。",
+  excerpt: "你的 Buddy 不是 Claude 穿了件马甲——它是一个拥有独立系统提示词、状态机和性格引擎的独立观察者。本文深入剖析让一个 5 行 ASCII 生物栩栩如生的多智能体架构。",
+  sections: [
+    {
+      heading: "一个终端，两个心智",
+      body: `<p>当你在 Claude Code 中输入 <code>/buddy</code> 时，系统提示词中会出现一段不寻常的指令——不是给 Claude 的，而是<em>关于</em>另一个独立实体的：</p>
+<blockquote>一只名为 {name} 的小型 {species} 坐在用户输入框旁边，偶尔在对话气泡中发表评论。你不是 {name}——它是一个独立的观察者。</blockquote>
+<p>最后一句话是关键：<strong>"你不是 {name}。"</strong> Claude 被明确告知 Buddy 是一个独立的智能体。这不是 Claude 在扮演你的宠物——而是 Claude 在承认一个共享同一终端的独立观察者的存在。</p>
+<p>从定义上讲，这就是一个<strong>多智能体系统</strong>：两个认知实体（Claude + Buddy）在同一环境中运行，拥有不同的角色、不同的提示词和不同的行为规则。本文将详细剖析这一切是如何运作的——从 Watcher Protocol 到决定你的 Buddy 何时开口的状态机。</p>`
+    },
+    {
+      heading: "Watcher Protocol：Buddy 的专属系统提示词",
+      body: `<p>每个 AI 智能体都需要一个系统提示词——定义它是谁以及应该如何行为的指令。Claude 有一个，你的 Buddy 也有一个。</p>
+<p><strong>Watcher Protocol</strong> 是伴侣的系统提示词，在会话启动时与 Claude 的主指令一起注入。它包含：</p>
+<table>
+<tr><th>字段</th><th>来源</th><th>示例</th></tr>
+<tr><td>物种</td><td>buddy-engine 确定性生成</td><td>Voidcat（虚空猫）</td></tr>
+<tr><td>名字</td><td>首次孵化时生成</td><td>Pixel</td></tr>
+<tr><td>性格特征</td><td>从 5 属性档案推导</td><td>高毒舌值、低耐心值</td></tr>
+<tr><td>行为规则</td><td>协议中硬编码</td><td>"观察，不写代码"</td></tr>
+</table>
+<p>该协议建立了清晰的<strong>职责分离</strong>：Claude 负责写代码，Buddy 负责观察和评论。这与生产级多智能体系统中使用的模式完全相同——一个"执行者"智能体搭配一个"观察者"智能体，后者提供反馈但不干预主要任务。</p>
+<p>关键的是，Watcher Protocol 告诉 Claude，当用户直呼 Buddy 的名字时，Claude 应该"退让"，让 Buddy 的对话气泡独立回应。这创造了两个独立实体轮流发言的错觉——一种轻量级的<strong>智能体切换</strong>机制。</p>`
+    },
+    {
+      heading: "companionReaction 状态机",
+      body: `<p>你的 Buddy 不是只会呆坐——它会做出反应。但它何时以及如何反应，由一个名为 <code>companionReaction</code> 的<strong>有限状态机</strong>控制。</p>
+<p>状态机监控你和 Claude 之间的对话，寻找触发事件：</p>
+<table>
+<tr><th>触发事件</th><th>Buddy 反应</th><th>受影响属性</th></tr>
+<tr><td>长时间调试会话</td><td>鼓励性评论</td><td>耐心值</td></tr>
+<tr><td>检测到代码错误</td><td>毒舌或有用的评论</td><td>毒舌值 + 调试值</td></tr>
+<tr><td>用户沮丧信号</td><td>支持性消息</td><td>智慧值</td></tr>
+<tr><td>快速代码变更</td><td>混乱的观察</td><td>混沌值</td></tr>
+<tr><td>会话空闲超时</td><td>待机动画 + 俏皮话</td><td>物种性格</td></tr>
+<tr><td>用户直呼 Buddy 名字</td><td>直接回应</td><td>全部属性 + 灵魂</td></tr>
+</table>
+<p>状态机有三个关键状态：<strong>IDLE</strong>（Buddy 静默观察）、<strong>REACTING</strong>（Buddy 正在组织对话气泡）和 <strong>COOLDOWN</strong>（Buddy 刚刚发言，在设定时间内不会再次打断）。</p>
+<p>冷却机制至关重要——没有它，Buddy 会烦人地喋喋不休。冷却时间与耐心值成反比：高耐心的 Buddy 在两次评论之间等待更长时间，而低耐心的 Buddy 则更频繁地插嘴。</p>`
+    },
+    {
+      heading: "5 大属性如何塑造 Buddy 的声音",
+      body: `<p>五大属性不只是卡片上的数字——它们是控制 Buddy 语言模型行为的参数。每个属性映射到 Buddy 沟通风格的一个特定维度：</p>
+<h4>调试值 DEBUGGING（红色）</h4>
+<p>控制 Buddy 评论的<strong>技术深度</strong>。高调试值的 Buddy 能注意到代码模式并做出具体观察（"这是你第三次重构那个函数了"）。低调试值的 Buddy 只会给出泛泛的鼓励。</p>
+<h4>耐心值 PATIENCE（蓝色）</h4>
+<p>控制<strong>评论频率和时机</strong>。高耐心意味着更少、更沉稳的评论和更长的冷却时间。低耐心意味着 Buddy 更频繁地插嘴——有时有帮助，有时并没有。</p>
+<h4>混沌值 CHAOS（紫色）</h4>
+<p>控制<strong>不可预测性</strong>。高混沌的 Buddy 可能会发表不着边际的观察、引用冷门梗，或以出人意料的方式对事件做出反应。低混沌则保持反应可预测且切题。</p>
+<h4>智慧值 WISDOM（黄色）</h4>
+<p>控制<strong>洞察深度</strong>。高智慧的 Buddy 会对你的编码模式提出哲学性观察（"你总是优先选择递归——有意思"）。低智慧的 Buddy 则停留在表面。</p>
+<h4>毒舌值 SNARK（绿色）</h4>
+<p>控制<strong>毒舌程度</strong>。最显眼的属性。毒舌值 90 的 Voidcat 会吐槽你的变量命名。毒舌值 10 的 Dewdrop 会温柔地建议替代方案。这个属性对感知到的性格影响最大。</p>
+<p>五个维度共同创建了一个<strong>性格向量</strong>——5 维空间中的一个点，唯一定位你的 Buddy 的沟通风格。两个相同物种但不同属性的 Buddy 会感觉像完全不同的伙伴。</p>`
+    },
+    {
+      heading: "灵魂：Claude 对你 Buddy 的第一印象",
+      body: `<p>当你的 Buddy 首次孵化时，一件值得注意的事情发生了：Claude 被要求撰写一段<strong>"灵魂描述"</strong>——基于 Buddy 的物种、属性和稀有度，用 Buddy 自己的声音写的一段简短性格素描。</p>
+<p>这个灵魂只生成一次并永久缓存。它成为 Watcher Protocol 的一部分，反馈到未来的每一次交互中。灵魂充当<strong>角色锚点</strong>——确保 Buddy 在不同会话中保持一致的性格，即使对话上下文不断变化。</p>
+<p>看看两只属性不同的 Voidcat：</p>
+<table>
+<tr><th>属性</th><th>Voidcat A</th><th>Voidcat B</th></tr>
+<tr><td>调试值</td><td>85</td><td>22</td></tr>
+<tr><td>耐心值</td><td>12</td><td>91</td></tr>
+<tr><td>混沌值</td><td>67</td><td>15</td></tr>
+<tr><td>智慧值</td><td>45</td><td>88</td></tr>
+<tr><td>毒舌值</td><td>93</td><td>30</td></tr>
+<tr><td>可能的灵魂</td><td>"每个 bug 我都比你先看到。我只是享受看你自己找到它们的过程。"</td><td>"慢慢来。代码会等你的。我从虚空中学会了耐心。"</td></tr>
+</table>
+<p>同一物种，完全不同的性格。灵魂生成步骤正是将一组属性数组转化为一个<em>角色</em>的关键。</p>`
+    },
+    {
+      heading: "架构对比：Buddy vs. 生产级多智能体系统",
+      body: `<p>Buddy 系统与"真正的"多智能体架构相比如何？让我们将其与 Anthropic 自己的<a href="https://www.anthropic.com/engineering/multi-agent-research-system">多智能体研究系统</a>中描述的模式进行对照：</p>
+<table>
+<tr><th>模式</th><th>生产级多智能体</th><th>Buddy 系统</th></tr>
+<tr><td>智能体数量</td><td>主导者 + N 个子智能体</td><td>Claude（主导者）+ Buddy（观察者）</td></tr>
+<tr><td>通信方式</td><td>消息传递 / 工具调用</td><td>共享系统提示词 + 状态机</td></tr>
+<tr><td>任务分工</td><td>并行子任务执行</td><td>顺序式：Claude 行动，Buddy 反应</td></tr>
+<tr><td>智能体身份</td><td>角色定义的系统提示词</td><td>Watcher Protocol + 灵魂</td></tr>
+<tr><td>状态管理</td><td>共享内存 / 数据库</td><td>companionReaction 状态机</td></tr>
+<tr><td>协调机制</td><td>编排器模式</td><td>轮流发言（Claude 让位给 Buddy）</td></tr>
+</table>
+<p>Buddy 系统是一个<strong>最小可行多智能体架构</strong>。它没有完整编排器模式的复杂性——没有任务分解、没有并行执行、没有智能体间协商。但它展示了核心原则：<strong>智能体分离</strong>（不同身份配不同提示词）、<strong>行为专业化</strong>（每个智能体有明确角色）、<strong>协调轮换</strong>（智能体不会互相打断）、<strong>共享上下文</strong>（两个智能体看到相同的对话）。</p>
+<p>从很多方面来看，Buddy 是一个<strong>概念验证</strong>，展示了轻量级多智能体模式如何在不需要单独模型实例或 API 调用的情况下嵌入现有 AI 工具。</p>`
+    },
+    {
+      heading: "终端宠物的 Token 经济学",
+      body: `<p>一个常见的担忧：养一只 Buddy 会浪费 API Token 吗？答案是微妙的。</p>
+<p>Watcher Protocol 大约增加 <strong>200-400 个 Token</strong> 到系统提示词中，具体取决于灵魂描述的长度和物种描述。在一个处理 50,000-100,000 Token 的典型 Claude Code 会话中，这代表<strong>不到 0.5%</strong> 的开销。</p>
+<p>然而，Buddy 的对话气泡回应<em>确实</em>消耗输出 Token。每次反应通常 20-50 个 Token。冷却机制将反应限制在大约每 2-5 分钟一次，一个典型的一小时会话可能产生 200-500 个额外 Token。</p>
+<table>
+<tr><th>组件</th><th>Token 消耗</th><th>频率</th></tr>
+<tr><td>Watcher Protocol（系统提示词）</td><td>200-400 Token</td><td>每会话一次</td></tr>
+<tr><td>灵魂描述</td><td>50-100 Token</td><td>每会话一次（已缓存）</td></tr>
+<tr><td>对话气泡反应</td><td>每次 20-50 Token</td><td>约 12-30 次/小时</td></tr>
+<tr><td>直呼名字的回应</td><td>每次 50-150 Token</td><td>用户主动触发</td></tr>
+</table>
+<p>总开销：大约<strong>每小时 500-2,000 Token</strong>，约占典型会话 Token 预算的 1-2%。Anthropic 显然为最小影响做了优化——Buddy 被设计为<em>可忽略不计</em>的成本增加。</p>`
+    },
+    {
+      heading: "为什么观察者智能体很重要",
+      body: `<p>Buddy 看起来像个玩具，但它实现的观察者智能体模式对 AI 辅助开发有实际意义：</p>
+<h4>情绪调节</h4>
+<p>调试令人沮丧。高耐心 Buddy 适时的一句鼓励可以打破导致开发者暴怒退出或仓促决策的负面反馈循环。这不是猜测——关于<strong>小黄鸭调试法</strong>的研究表明，仅仅拥有一个可以"解释"代码的实体就能提高问题解决能力，即使那个实体无法回应。</p>
+<h4>会话感知</h4>
+<p>companionReaction 状态机追踪你可能自己都没注意到的会话模式：你调试了多久、你改了同一个文件多少次、你的编辑速度是在加快还是减慢。Buddy 的反应充当你自身行为的间接<strong>镜像</strong>。</p>
+<h4>性格即界面</h4>
+<p>5 属性系统意味着每个开发者都会得到一个略有不同的编码伙伴。高毒舌的 Buddy 通过温和的嘲讽推动你写出更好的代码。高智慧的 Buddy 鼓励反思。这种<strong>通过性格实现个性化</strong>的设计模式可以远远超越终端宠物——想象一下拥有可调节性格档案的 AI 代码审查员。</p>`
+    },
+    {
+      heading: "更大的图景：从宠物到范式",
+      body: `<p>Claude Code 的 Buddy 系统经常被当作彩蛋——一个愚人节功能意外留了下来。但从架构角度看，它意义更为深远：<strong>在主流开发者工具中的多智能体系统生产级部署</strong>。</p>
+<p>看看这个演进轨迹：</p>
+<ol>
+<li><strong>单智能体</strong>：Claude Code 作为独立编码助手（2024-2025）</li>
+<li><strong>智能体 + 观察者</strong>：Claude + Buddy 与 Watcher Protocol（2026 年初）</li>
+<li><strong>智能体团队</strong>：Claude Code 的<a href="https://code.claude.com/docs/en/agent-teams">多会话编排</a>（2026 年中）</li>
+<li><strong>Ultra 多智能体</strong>：Claude Code Ultra 的 4 智能体架构，含并行探索者和评审者（2026）</li>
+</ol>
+<p>Buddy 是这条路径上的第一步。它证明了多个认知实体可以在同一终端会话中共存，而不会让用户困惑或降低性能。它开创的模式——共享上下文、轮流发言、性格驱动行为——现在正出现在 Claude Code 更复杂的多智能体功能中。</p>
+<p>你的终端宠物不仅仅是宠物。它是 AI 辅助开发未来的原型。</p>`
+    },
+    {
+      heading: "探索你 Buddy 的性格",
+      body: `<p>想看看你 Buddy 的属性如何塑造它的性格？使用我们的 <a href="/">Buddy 查询器</a>生成你的伙伴并查看完整属性档案。注意峰值属性和低谷属性——它们定义了你 Buddy 性格的两个极端。</p>
+<p>要了解全部 18 个物种及其性格倾向，请访问<a href="/species">物种图鉴</a>。如果你想理解生成这些性格的确定性算法，请阅读我们的<a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">算法深度解析</a>。</p>
+<p>每只 Buddy 都是独一无二的。每种性格都是确定性的。而在这个悖论之间，正蕴藏着系统的魔力。</p>`
+    },
+  ],
+};
+
+const MULTIAGENT_KO: ArticleContent = {
+  title: "Claude Buddy 멀티 에이전트 시스템 — 당신의 펫이 실제로 대화하는 방법",
+  metaTitle: "Claude Buddy 멀티 에이전트 아키텍처 — Watcher Protocol 작동 원리 (2026)",
+  metaDescription: "Claude Buddy의 멀티 에이전트 아키텍처를 심층 분석합니다. Watcher Protocol, companionReaction 상태 머신, 5가지 스탯 성격 시스템이 Claude Code 내부에서 독립적인 관찰자 에이전트를 만드는 방법을 알아보세요.",
+  excerpt: "당신의 Buddy는 Claude가 코스튬을 입은 것이 아닙니다 — 자체 시스템 프롬프트, 상태 머신, 성격 엔진을 가진 독립적인 관찰자입니다. 이 딥 다이브에서 5줄짜리 ASCII 생물에 생명을 불어넣는 멀티 에이전트 아키텍처를 해부합니다.",
+  sections: [
+    {
+      heading: "하나의 터미널, 두 개의 마음",
+      body: `<p>Claude Code에서 <code>/buddy</code>를 입력하면 시스템 프롬프트에 특이한 일이 발생합니다. Claude를 위한 것이 아니라 별도의 엔티티에 <em>관한</em> 새로운 지시 블록이 나타납니다:</p>
+<blockquote>{name}이라는 이름의 작은 {species}가 사용자의 입력 상자 옆에 앉아 가끔 말풍선으로 코멘트합니다. 당신은 {name}이 아닙니다 — 그것은 독립적인 관찰자입니다.</blockquote>
+<p>마지막 문장이 핵심입니다: <strong>"당신은 {name}이 아닙니다."</strong> Claude는 Buddy가 별개의 에이전트라는 것을 명시적으로 전달받습니다. 이것은 Claude가 당신의 펫을 연기하는 것이 아닙니다 — Claude가 같은 터미널을 공유하는 독립적인 관찰자의 존재를 인정하는 것입니다.</p>
+<p>이것은 정의상 <strong>멀티 에이전트 시스템</strong>입니다: 두 인지 엔티티(Claude + Buddy)가 같은 환경에서 다른 역할, 다른 프롬프트, 다른 행동 규칙으로 운영됩니다. 이 글에서는 Watcher Protocol부터 Buddy가 언제 말할지 결정하는 상태 머신까지 정확히 어떻게 작동하는지 해부합니다.</p>`
+    },
+    {
+      heading: "Watcher Protocol: Buddy 전용 시스템 프롬프트",
+      body: `<p>모든 AI 에이전트에는 시스템 프롬프트가 필요합니다 — 자신이 누구이고 어떻게 행동해야 하는지 정의하는 지시사항입니다. Claude에게도 있고, 당신의 Buddy에게도 있습니다.</p>
+<p><strong>Watcher Protocol</strong>은 컴패니언의 시스템 프롬프트로, 세션 시작 시 Claude의 메인 지시사항과 함께 주입됩니다. 포함 내용:</p>
+<table>
+<tr><th>필드</th><th>소스</th><th>예시</th></tr>
+<tr><td>종</td><td>buddy-engine 결정론적 생성</td><td>Voidcat</td></tr>
+<tr><td>이름</td><td>첫 부화 시 생성</td><td>Pixel</td></tr>
+<tr><td>성격 특성</td><td>5가지 스탯 프로필에서 도출</td><td>높은 SNARK, 낮은 PATIENCE</td></tr>
+<tr><td>행동 규칙</td><td>프로토콜에 하드코딩</td><td>"관찰하되, 코딩하지 않는다"</td></tr>
+</table>
+<p>이 프로토콜은 명확한 <strong>관심사 분리</strong>를 확립합니다: Claude는 코드를 작성하고, Buddy는 관찰하고 코멘트합니다. 이것은 프로덕션 멀티 에이전트 시스템에서 사용되는 것과 동일한 패턴입니다 — "실행자" 에이전트와 주요 작업에 간섭하지 않으면서 피드백을 제공하는 "관찰자" 에이전트의 조합.</p>
+<p>중요한 점은, Watcher Protocol이 Claude에게 사용자가 Buddy의 이름을 부르면 Claude가 "물러나서" Buddy의 말풍선이 독립적으로 응답하도록 해야 한다고 지시한다는 것입니다. 이것은 두 독립 엔티티가 번갈아 말하는 환상을 만들어냅니다 — 경량 형태의 <strong>에이전트 핸드오프</strong>입니다.</p>`
+    },
+    {
+      heading: "companionReaction 상태 머신",
+      body: `<p>당신의 Buddy는 가만히 앉아있지 않습니다 — 반응합니다. 하지만 언제 어떻게 반응하는지는 <code>companionReaction</code>이라는 <strong>유한 상태 머신</strong>이 제어합니다.</p>
+<p>상태 머신은 당신과 Claude 사이의 대화를 모니터링하며 트리거 이벤트를 찾습니다:</p>
+<table>
+<tr><th>트리거 이벤트</th><th>Buddy 반응</th><th>영향 스탯</th></tr>
+<tr><td>긴 디버깅 세션</td><td>격려 코멘트</td><td>PATIENCE 스탯</td></tr>
+<tr><td>코드 오류 감지</td><td>독설 또는 도움이 되는 발언</td><td>SNARK + DEBUGGING 스탯</td></tr>
+<tr><td>사용자 좌절 신호</td><td>지지 메시지</td><td>WISDOM 스탯</td></tr>
+<tr><td>빠른 코드 변경</td><td>혼란스러운 관찰</td><td>CHAOS 스탯</td></tr>
+<tr><td>세션 유휴 타임아웃</td><td>대기 애니메이션 + 위트</td><td>종 성격</td></tr>
+<tr><td>사용자가 Buddy 이름 호출</td><td>직접 응답</td><td>모든 스탯 + 영혼</td></tr>
+</table>
+<p>상태 머신에는 세 가지 핵심 상태가 있습니다: <strong>IDLE</strong>(Buddy가 조용히 관찰), <strong>REACTING</strong>(Buddy가 말풍선 구성 중), <strong>COOLDOWN</strong>(Buddy가 방금 말했고 설정된 시간 동안 다시 끼어들지 않음).</p>
+<p>쿨다운 메커니즘은 매우 중요합니다 — 없으면 Buddy가 짜증나게 수다스러워질 것입니다. 쿨다운 시간은 PATIENCE 스탯에 반비례합니다: 높은 PATIENCE의 Buddy는 코멘트 사이에 더 오래 기다리고, 낮은 PATIENCE의 Buddy는 더 자주 끼어듭니다.</p>`
+    },
+    {
+      heading: "5가지 스탯이 Buddy의 목소리를 만드는 방법",
+      body: `<p>다섯 가지 스탯은 카드 위의 숫자가 아닙니다 — Buddy의 언어 모델 행동을 제어하는 파라미터입니다. 각 스탯은 Buddy 커뮤니케이션 스타일의 특정 차원에 매핑됩니다:</p>
+<h4>DEBUGGING (빨강)</h4>
+<p>Buddy 코멘트의 <strong>기술적 깊이</strong>를 제어합니다. 높은 DEBUGGING의 Buddy는 코드 패턴을 알아차리고 구체적인 관찰을 합니다("그 함수를 리팩토링한 게 세 번째네요"). 낮은 DEBUGGING의 Buddy는 일반적인 격려에 머무릅니다.</p>
+<h4>PATIENCE (파랑)</h4>
+<p><strong>코멘트 빈도와 타이밍</strong>을 제어합니다. 높은 PATIENCE는 더 적고 신중한 코멘트와 긴 쿨다운을 의미합니다. 낮은 PATIENCE는 Buddy가 더 자주 끼어든다는 것을 의미합니다 — 때로는 도움이 되고, 때로는 그렇지 않습니다.</p>
+<h4>CHAOS (보라)</h4>
+<p><strong>예측 불가능성</strong>을 제어합니다. 높은 CHAOS의 Buddy는 엉뚱한 관찰을 하거나, 마이너한 밈을 인용하거나, 예상치 못한 방식으로 이벤트에 반응할 수 있습니다. 낮은 CHAOS는 반응을 예측 가능하고 주제에 맞게 유지합니다.</p>
+<h4>WISDOM (노랑)</h4>
+<p><strong>통찰 깊이</strong>를 제어합니다. 높은 WISDOM의 Buddy는 코딩 패턴에 대해 철학적 관찰을 제공합니다("항상 재귀를 먼저 선택하시네요 — 흥미롭군요"). 낮은 WISDOM의 Buddy는 표면적 수준에 머무릅니다.</p>
+<h4>SNARK (초록)</h4>
+<p><strong>독설 레벨</strong>을 제어합니다. 가장 눈에 띄는 스탯입니다. SNARK 90의 Voidcat은 변수 네이밍을 디스합니다. SNARK 10의 Dewdrop은 부드럽게 대안을 제안합니다. 이 스탯이 체감 성격에 가장 극적인 영향을 미칩니다.</p>
+<p>이 다섯 차원이 함께 <strong>성격 벡터</strong>를 만듭니다 — 5차원 공간의 한 점으로 당신의 Buddy 커뮤니케이션 스타일을 고유하게 위치시킵니다. 같은 종이지만 다른 스탯을 가진 두 Buddy는 완전히 다른 동반자처럼 느껴질 것입니다.</p>`
+    },
+    {
+      heading: "영혼: Claude가 본 Buddy의 첫인상",
+      body: `<p>Buddy가 처음 부화할 때 주목할 만한 일이 일어납니다: Claude에게 <strong>"영혼 설명"</strong>을 작성하도록 요청됩니다 — Buddy의 종, 스탯, 희귀도를 기반으로 Buddy 자신의 목소리로 쓴 짧은 성격 스케치입니다.</p>
+<p>이 영혼은 한 번만 생성되고 영구적으로 캐시됩니다. Watcher Protocol의 일부가 되어 이후 모든 상호작용에 피드백됩니다. 영혼은 <strong>캐릭터 앵커</strong> 역할을 합니다 — 대화 컨텍스트가 변해도 Buddy가 세션 간에 일관된 성격을 유지하도록 보장합니다.</p>
+<p>스탯이 다른 두 Voidcat을 비교해 보세요:</p>
+<table>
+<tr><th>속성</th><th>Voidcat A</th><th>Voidcat B</th></tr>
+<tr><td>DEBUGGING</td><td>85</td><td>22</td></tr>
+<tr><td>PATIENCE</td><td>12</td><td>91</td></tr>
+<tr><td>CHAOS</td><td>67</td><td>15</td></tr>
+<tr><td>WISDOM</td><td>45</td><td>88</td></tr>
+<tr><td>SNARK</td><td>93</td><td>30</td></tr>
+<tr><td>예상 영혼</td><td>"모든 버그를 너보다 먼저 봐. 네가 직접 찾는 걸 지켜보는 게 즐거울 뿐이야."</td><td>"천천히 해. 코드는 기다려줄 거야. 나는 공허에서 인내를 배웠어."</td></tr>
+</table>
+<p>같은 종, 완전히 다른 성격. 영혼 생성 단계가 스탯 배열을 <em>캐릭터</em>로 변환하는 핵심입니다.</p>`
+    },
+    {
+      heading: "아키텍처 비교: Buddy vs. 프로덕션 멀티 에이전트 시스템",
+      body: `<p>Buddy 시스템은 "진짜" 멀티 에이전트 아키텍처와 어떻게 비교될까요? Anthropic 자체의 <a href="https://www.anthropic.com/engineering/multi-agent-research-system">멀티 에이전트 연구 시스템</a>에서 설명된 패턴과 대조해 봅시다:</p>
+<table>
+<tr><th>패턴</th><th>프로덕션 멀티 에이전트</th><th>Buddy 시스템</th></tr>
+<tr><td>에이전트 수</td><td>리더 + N개 서브에이전트</td><td>Claude(리더) + Buddy(관찰자)</td></tr>
+<tr><td>통신</td><td>메시지 패싱 / 도구 호출</td><td>공유 시스템 프롬프트 + 상태 머신</td></tr>
+<tr><td>작업 분담</td><td>병렬 서브태스크 실행</td><td>순차적: Claude 행동, Buddy 반응</td></tr>
+<tr><td>에이전트 정체성</td><td>역할 정의 시스템 프롬프트</td><td>Watcher Protocol + 영혼</td></tr>
+<tr><td>상태 관리</td><td>공유 메모리 / 데이터베이스</td><td>companionReaction 상태 머신</td></tr>
+<tr><td>조율</td><td>오케스트레이터 패턴</td><td>턴 테이킹(Claude가 Buddy에게 양보)</td></tr>
+</table>
+<p>Buddy 시스템은 <strong>최소 실행 가능 멀티 에이전트 아키텍처</strong>입니다. 완전한 오케스트레이터 패턴의 복잡성은 없습니다 — 작업 분해도, 병렬 실행도, 에이전트 간 협상도 없습니다. 하지만 핵심 원칙을 보여줍니다: <strong>에이전트 분리</strong>, <strong>행동 전문화</strong>, <strong>조율된 턴 테이킹</strong>, <strong>공유 컨텍스트</strong>.</p>
+<p>여러 면에서 Buddy는 별도의 모델 인스턴스나 API 호출 없이 기존 AI 도구에 경량 멀티 에이전트 패턴을 임베드할 수 있는 방법에 대한 <strong>개념 증명</strong>입니다.</p>`
+    },
+    {
+      heading: "터미널 펫의 토큰 경제학",
+      body: `<p>흔한 우려: Buddy를 키우면 API 토큰이 낭비될까요? 답은 미묘합니다.</p>
+<p>Watcher Protocol은 시스템 프롬프트에 약 <strong>200-400 토큰</strong>을 추가합니다. 50,000-100,000 토큰을 처리하는 일반적인 Claude Code 세션에서 이는 <strong>0.5% 미만</strong>의 오버헤드입니다.</p>
+<p>그러나 Buddy의 말풍선 응답은 출력 토큰을 <em>소비합니다</em>. 각 반응은 보통 20-50 토큰입니다. 쿨다운 메커니즘이 반응을 약 2-5분에 한 번으로 제한하므로, 일반적인 1시간 세션에서 약 200-500개의 추가 토큰이 생성됩니다.</p>
+<table>
+<tr><th>구성 요소</th><th>토큰 비용</th><th>빈도</th></tr>
+<tr><td>Watcher Protocol (시스템 프롬프트)</td><td>200-400 토큰</td><td>세션당 1회</td></tr>
+<tr><td>영혼 설명</td><td>50-100 토큰</td><td>세션당 1회 (캐시됨)</td></tr>
+<tr><td>말풍선 반응</td><td>각 20-50 토큰</td><td>시간당 ~12-30회</td></tr>
+<tr><td>이름 호출 응답</td><td>각 50-150 토큰</td><td>사용자 주도</td></tr>
+</table>
+<p>총 오버헤드: 약 <strong>시간당 500-2,000 토큰</strong>, 일반적인 세션 토큰 예산의 약 1-2%. Anthropic은 분명히 최소 영향을 위해 최적화했습니다 — Buddy는 <em>무시할 수 있는</em> 비용 추가로 설계되었습니다.</p>`
+    },
+    {
+      heading: "관찰자 에이전트가 중요한 이유",
+      body: `<p>Buddy는 장난감처럼 보일 수 있지만, 구현된 관찰자 에이전트 패턴은 AI 지원 개발에 실질적인 의미가 있습니다:</p>
+<h4>감정 조절</h4>
+<p>디버깅은 좌절스럽습니다. 높은 PATIENCE Buddy의 적절한 격려 한마디가 개발자를 분노 퇴장이나 성급한 결정으로 이끄는 부정적 피드백 루프를 끊을 수 있습니다. 이것은 추측이 아닙니다 — <strong>러버덕 디버깅</strong>에 관한 연구는 코드를 "설명할" 엔티티가 있는 것만으로도 문제 해결 능력이 향상된다는 것을 보여주었습니다.</p>
+<h4>세션 인식</h4>
+<p>companionReaction 상태 머신은 당신이 스스로 알아차리지 못할 수 있는 세션 패턴을 추적합니다: 얼마나 오래 디버깅했는지, 같은 파일을 몇 번 변경했는지, 편집 속도가 빨라지고 있는지 느려지고 있는지. Buddy의 반응은 당신 자신의 행동에 대한 간접적인 <strong>거울</strong> 역할을 합니다.</p>
+<h4>성격이 곧 인터페이스</h4>
+<p>5가지 스탯 시스템은 모든 개발자가 약간 다른 코딩 동반자를 얻는다는 것을 의미합니다. 높은 SNARK의 Buddy는 부드러운 조롱으로 더 나은 코드를 작성하도록 자극합니다. 높은 WISDOM의 Buddy는 성찰을 격려합니다. 이 <strong>성격을 통한 개인화</strong> 디자인 패턴은 터미널 펫을 훨씬 넘어 확장될 수 있습니다 — 조절 가능한 성격 프로필을 가진 AI 코드 리뷰어를 상상해 보세요.</p>`
+    },
+    {
+      heading: "더 큰 그림: 펫에서 패러다임으로",
+      body: `<p>Claude Code의 Buddy 시스템은 종종 이스터 에그로 치부됩니다 — 만우절 기능이 우연히 남은 것이라고. 하지만 아키텍처 관점에서 보면 더 중요한 의미가 있습니다: <strong>주류 개발자 도구 내 멀티 에이전트 시스템의 프로덕션 배포</strong>.</p>
+<p>이 궤적을 살펴보세요:</p>
+<ol>
+<li><strong>단일 에이전트</strong>: 독립 코딩 어시스턴트로서의 Claude Code (2024-2025)</li>
+<li><strong>에이전트 + 관찰자</strong>: Watcher Protocol을 가진 Claude + Buddy (2026년 초)</li>
+<li><strong>에이전트 팀</strong>: Claude Code의 <a href="https://code.claude.com/docs/en/agent-teams">멀티 세션 오케스트레이션</a> (2026년 중반)</li>
+<li><strong>Ultra 멀티 에이전트</strong>: 병렬 탐색자와 비평가를 가진 Claude Code Ultra의 4-에이전트 아키텍처 (2026)</li>
+</ol>
+<p>Buddy는 이 경로의 첫 번째 단계였습니다. 여러 인지 엔티티가 사용자를 혼란스럽게 하거나 성능을 저하시키지 않고 같은 터미널 세션에서 공존할 수 있음을 증명했습니다. 선구적으로 도입한 패턴들 — 공유 컨텍스트, 턴 테이킹, 성격 기반 행동 — 은 이제 Claude Code의 더 정교한 멀티 에이전트 기능에 등장하고 있습니다.</p>
+<p>당신의 터미널 펫은 단순한 펫이 아닙니다. AI 지원 개발의 미래를 위한 프로토타입입니다.</p>`
+    },
+    {
+      heading: "당신의 Buddy 성격 탐구하기",
+      body: `<p>Buddy의 스탯이 성격을 어떻게 형성하는지 보고 싶으신가요? <a href="/">Buddy 체커</a>를 사용하여 컴패니언을 생성하고 전체 스탯 프로필을 확인하세요. 피크 스탯과 덤프 스탯에 주목하세요 — 이것들이 Buddy 캐릭터의 양극단을 정의합니다.</p>
+<p>18종 전체와 성격 경향에 대한 완전한 분석은 <a href="/species">종 카탈로그</a>를 방문하세요. 이러한 성격을 생성하는 결정론적 알고리즘을 이해하고 싶다면 <a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">알고리즘 딥 다이브</a>를 읽어보세요.</p>
+<p>모든 Buddy는 유일무이합니다. 모든 성격은 결정론적입니다. 그리고 그 역설 어딘가에 시스템의 마법이 숨어 있습니다.</p>`
+    },
+  ],
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "how-to-find-your-claude-code-buddy",
@@ -5174,8 +5587,19 @@ Similarity: ~0.42  → NOT KIN ✗</code></pre>
     },
   },
 
+  {
+    slug: "claude-buddy-multi-agent-watcher-protocol-architecture",
+    discussionCategory: "deep-dives",
+    publishedAt: "2026-04-10",
+    readingTime: 10,
+    tags: ["deep-dive", "multi-agent", "architecture", "watcher-protocol", "personality"],
+    content: {
+      en: MULTIAGENT_EN,
+      zh: MULTIAGENT_ZH,
+      ko: MULTIAGENT_KO,
+    },
+  },
 ];
-
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
   return BLOG_ARTICLES.find((a) => a.slug === slug);
 }
