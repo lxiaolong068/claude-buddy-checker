@@ -311,6 +311,8 @@ export default function BlogIndex() {
     document.title = t("blog.indexTitle");
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) metaDesc.setAttribute("content", t("blog.indexMetaDesc"));
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute("href", `${SITE_URL}/blog`);
   }, [locale, t]);
 
   useHreflangLinks(`${SITE_URL}/blog`);
