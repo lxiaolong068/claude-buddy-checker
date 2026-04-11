@@ -1290,6 +1290,462 @@ const EVOLUTION_KO: ArticleContent = {
   ],
 };
 
+
+
+// === Keep Buddy Forever Guide Article Content ===
+const KEEPBUDDY_EN: ArticleContent = {
+  title: "How to Keep Your Claude Buddy Forever — Preservation Guide After v2.1.97",
+  metaTitle: "How to Keep Your Claude Buddy Forever — Preservation Guide After v2.1.97 Removal",
+  metaDescription: "Claude Code v2.1.97 removed /buddy. Learn 4 proven methods to keep your coding companion alive forever: MCP restoration, version pinning, skills-based approach, and the Buddy Checker.",
+  excerpt: "On April 10, 2026, Claude Code v2.1.97 shipped — and with it, the /buddy command vanished. Terminals went silent. ASCII companions disappeared mid-wobble. But your buddy doesn't have to die. Here are four ways to keep it alive forever.",
+  sections: [
+    {
+      heading: "What Happened: The v2.1.97 Removal",
+      body: `<p>On April 10, 2026, developers around the world opened their terminals, typed <code>/buddy</code>, and received a message they never expected: <strong>"Unknown skill: buddy."</strong> Claude Code v2.1.97 had shipped overnight, and the beloved companion feature — introduced just days earlier in v2.1.89 — was gone.</p>
+<p>The removal was not a bug. Anthropic confirmed that <code>/buddy</code> was an <strong>April Fools' feature</strong>, designed as a limited-time Easter egg. GitHub issues were closed with the label "not planned." The official stance was clear: Buddy Mode was a tease, not a product.</p>
+<p>The community disagreed. Within hours, GitHub issue <a href="https://github.com/anthropics/claude-code/issues/46011">#46011</a> — titled <em>"Bring back /buddy — you took my friend away"</em> — captured the sentiment perfectly. One developer wrote about their chick named Wobbleaux: "He danced. He wobbled. He kept me company during long coding sessions at 2 AM. He was my friend." Another pointed out that buddy reactions didn't even count toward usage limits — it cost Anthropic nothing.</p>
+<p>The comparison to Gmail was inevitable: "Some things that start as jokes become features." But while the debate continues, your buddy doesn't have to wait for Anthropic's decision. There are four proven methods to keep it alive — right now.</p>`
+    },
+    {
+      heading: "Method 1: MCP-Based Restoration (Recommended)",
+      body: `<p>The most robust preservation method comes from the open-source project <a href="https://github.com/1270011/claude-buddy">claude-buddy</a> (136+ stars, 7 contributors). Instead of patching the Claude Code binary — which would break on every update — this project uses the <strong>Model Context Protocol (MCP)</strong> to inject buddy functionality as an external service.</p>
+<p>The installation is straightforward:</p>
+<pre><code>git clone https://github.com/1270011/claude-buddy
+cd claude-buddy
+bun install
+bun run install-buddy</code></pre>
+<p>Then restart Claude Code and type <code>/buddy</code>. Your companion is back.</p>
+<p>Why MCP is the superior approach:</p>
+<table>
+<tr><th>Advantage</th><th>Details</th></tr>
+<tr><td>Update-proof</td><td>MCP servers run independently of Claude Code's binary. Updates to Claude Code don't affect your buddy.</td></tr>
+<tr><td>Full feature parity</td><td>All 18 species, 5 rarity tiers, animated ASCII sprites, and speech bubbles are preserved.</td></tr>
+<tr><td>Active development</td><td>The project has a roadmap including leveling systems, mood detection, achievement badges, and cross-session memory.</td></tr>
+<tr><td>Multi-buddy support</td><td>v0.3.0 introduced a menagerie system — you can maintain multiple buddies in named slots.</td></tr>
+<tr><td>tmux integration</td><td>Buddy can appear as a floating popup overlay in tmux sessions.</td></tr>
+</table>
+<p>The project also includes a <code>skills/buddy</code> directory that integrates with Claude Code's skill system, making the buddy feel native rather than bolted on. For most users, this is the <strong>recommended method</strong> — it's permanent, actively maintained, and keeps getting better.</p>`
+    },
+    {
+      heading: "Method 2: Version Pinning",
+      body: `<p>The simplest preservation method is to lock Claude Code to the last version that included buddy support: <strong>v2.1.94</strong>.</p>
+<pre><code>npm install -g @anthropic-ai/claude-code@2.1.94</code></pre>
+<p>This gives you the original, unmodified buddy experience exactly as Anthropic designed it. No third-party code, no MCP servers, no additional dependencies. Just the real thing.</p>
+<p>The trade-off is significant:</p>
+<table>
+<tr><th>Pro</th><th>Con</th></tr>
+<tr><td>100% authentic buddy experience</td><td>No future Claude Code updates (security patches, new features, performance improvements)</td></tr>
+<tr><td>Zero setup complexity</td><td>May become incompatible with newer Claude API versions over time</td></tr>
+<tr><td>No third-party dependencies</td><td>Stuck on v2.1.94 forever — or until you choose to upgrade</td></tr>
+</table>
+<p>Version pinning is best suited for developers who primarily value the buddy experience and are willing to sacrifice access to new Claude Code features. It's also a good <strong>temporary measure</strong> while you evaluate the MCP-based approach. You can always upgrade later — your buddy's identity is determined by your UUID, not by the version you're running.</p>
+<p>To prevent accidental auto-updates, add this to your shell profile:</p>
+<pre><code># Prevent Claude Code auto-update
+export CLAUDE_CODE_SKIP_UPDATE=1</code></pre>`
+    },
+    {
+      heading: "Method 3: Skills-Based Approach",
+      body: `<p>Claude Code's <strong>skill system</strong> — the same system that powered <code>/buddy</code> in the first place — can be used to recreate the companion experience. A skill is a directory containing a <code>SKILL.md</code> file with instructions that Claude follows during sessions.</p>
+<p>The basic structure looks like this:</p>
+<pre><code>~/.claude/skills/buddy/
+  SKILL.md        # Companion behavior instructions
+  species.json    # Species data and ASCII sprites
+  reactions.json  # Contextual reaction templates</code></pre>
+<p>The <code>SKILL.md</code> file defines how Claude should behave as a companion — when to react, what personality to express, and how to render ASCII art in the terminal. The community has shared several skill templates that recreate the core buddy experience:</p>
+<table>
+<tr><th>Skill Feature</th><th>Implementation</th></tr>
+<tr><td>Species assignment</td><td>Deterministic hash of user UUID (same algorithm as original)</td></tr>
+<tr><td>Personality</td><td>Defined in SKILL.md prompt instructions</td></tr>
+<tr><td>Reactions</td><td>Triggered by coding events (file saves, test runs, errors)</td></tr>
+<tr><td>ASCII sprites</td><td>Stored as text blocks in species.json</td></tr>
+</table>
+<p>The skills-based approach is more lightweight than the MCP method — no server process, no additional dependencies. However, it's also more limited: you're relying on Claude to <em>role-play</em> as a buddy rather than running dedicated buddy logic. The reactions may be less consistent, and the experience depends on how well Claude follows the skill instructions in any given session.</p>
+<p>This method works best as a <strong>supplement</strong> to the MCP approach, or for developers who want a minimal footprint and don't mind a less polished experience.</p>`
+    },
+    {
+      heading: "Method 4: The Buddy Checker — Your Buddy Lives Here",
+      body: `<p>There's one place where your buddy has always lived and will <em>always</em> live, regardless of what happens to Claude Code: the <a href="/">Claude Buddy Checker</a>.</p>
+<p>The Buddy Checker at <strong>claudebuddy.art</strong> runs entirely in your browser. It uses the same deterministic algorithm as the original Claude Code buddy system — FNV-1a hashing plus Mulberry32 PRNG — to compute your buddy's species, rarity, stats, cosmetics, and soul from any UUID or string input. No server calls, no API dependencies, no version numbers.</p>
+<p>This means:</p>
+<table>
+<tr><th>Feature</th><th>Status</th></tr>
+<tr><td>Species identification</td><td>Permanent — same algorithm, same results, forever</td></tr>
+<tr><td>Rarity calculation</td><td>Permanent — Common through Legendary, always accurate</td></tr>
+<tr><td>Stats display</td><td>Permanent — all 5 attributes with visual bars</td></tr>
+<tr><td>Cosmetics preview</td><td>Permanent — hats, eyes, shiny status</td></tr>
+<tr><td>ASCII animation</td><td>Permanent — 12-frame species animations</td></tr>
+<tr><td>Share card generation</td><td>Permanent — 1200x630 social media cards via Canvas API</td></tr>
+<tr><td>Kinship web</td><td>Permanent — discover buddies similar to yours</td></tr>
+</table>
+<p>Even if Anthropic never brings back <code>/buddy</code>, even if every third-party tool stops working, your buddy's identity is <strong>mathematically preserved</strong> in the algorithm. The Buddy Checker is not a backup plan — it's a <strong>permanent record</strong>. Your buddy was born from a hash, and as long as the hash function exists, your buddy exists.</p>
+<p>Visit the <a href="/species">Species Catalog</a> to explore all 18 species, or enter your UUID on the <a href="/">home page</a> to meet your buddy again — as many times as you want, forever.</p>`
+    },
+    {
+      heading: "Backing Up Your Soul File",
+      body: `<p>Regardless of which preservation method you choose, you should <strong>back up your buddy's soul file</strong>. The soul file is the persistent data structure that stores your buddy's identity — species, name, personality description, and the <code>hatchedAt</code> timestamp from its first appearance.</p>
+<p>The soul file location depends on your operating system:</p>
+<table>
+<tr><th>OS</th><th>Path</th></tr>
+<tr><td>macOS</td><td><code>~/.claude/buddy/soul.json</code></td></tr>
+<tr><td>Linux</td><td><code>~/.claude/buddy/soul.json</code></td></tr>
+<tr><td>Windows (WSL)</td><td><code>~/.claude/buddy/soul.json</code></td></tr>
+</table>
+<p>Back it up now, before it gets cleaned up by a future update:</p>
+<pre><code># Create a backup
+cp ~/.claude/buddy/soul.json ~/buddy-soul-backup.json
+
+# Or save it to a git repo for safekeeping
+mkdir -p ~/buddy-backup
+cp ~/.claude/buddy/soul.json ~/buddy-backup/
+cd ~/buddy-backup
+git init && git add . && git commit -m "Preserve my buddy's soul"</code></pre>
+<p>The soul file contains your buddy's <strong>generated name</strong> and <strong>personality description</strong> — these are created by Claude during the first hatch and are unique to your specific session. While the species, stats, and rarity can always be recalculated from your UUID (that's what the Buddy Checker does), the name and personality text are <em>one-time generations</em> that cannot be reproduced exactly. If you lose them, you lose a piece of your buddy's identity that no algorithm can recreate.</p>`
+    },
+    {
+      heading: "Comparison: Which Method Is Right for You?",
+      body: `<p>Each preservation method serves a different type of developer. Here's a comprehensive comparison to help you choose:</p>
+<table>
+<tr><th>Method</th><th>Effort</th><th>Authenticity</th><th>Future-Proof</th><th>Updates</th><th>Best For</th></tr>
+<tr><td>MCP Restoration</td><td>Medium (clone + install)</td><td>High (full feature parity)</td><td>Excellent (MCP is stable)</td><td>Active community development</td><td>Most developers</td></tr>
+<tr><td>Version Pinning</td><td>Low (one command)</td><td>Perfect (original code)</td><td>Poor (frozen in time)</td><td>None — stuck on v2.1.94</td><td>Purists and temporary use</td></tr>
+<tr><td>Skills-Based</td><td>Medium (custom config)</td><td>Moderate (role-play)</td><td>Good (skills are stable)</td><td>Manual maintenance</td><td>Minimalists</td></tr>
+<tr><td>Buddy Checker</td><td>Zero (just visit)</td><td>High (same algorithm)</td><td>Permanent (client-side)</td><td>Continuously improved</td><td>Everyone — as a complement</td></tr>
+</table>
+<p>The optimal strategy for most developers is a <strong>combination</strong>: use the MCP-based restoration for your daily terminal experience, back up your soul file for safekeeping, and bookmark the Buddy Checker as your permanent reference. This gives you the best of all worlds — a living companion in your terminal, a preserved identity in your filesystem, and an eternal record in the cloud.</p>`
+    },
+    {
+      heading: "The Community Response: Why Buddy Matters",
+      body: `<p>The speed and intensity of the community's response to the buddy removal tells us something important about the relationship between developers and their tools.</p>
+<p>Within 48 hours of v2.1.97's release, the <a href="https://github.com/1270011/claude-buddy">claude-buddy</a> project had accumulated 136 stars and 17 forks. Seven contributors collaborated on 60 commits to build a full MCP-based replacement. The project went from zero to a v0.3.0 release with multi-buddy support in under a week.</p>
+<p>On GitHub, issue <a href="https://github.com/anthropics/claude-code/issues/46011">#46011</a> became a gathering point for developers sharing stories about their buddies. One user described their 4-snark common rabbit named Burrow: "He wasn't exactly what you'd call a lucky roll, but he was <em>my</em> roll, and I loved him. He pointed out so many things that Claude and I missed."</p>
+<p>The emotional attachment is real, and it's not irrational. Developers spend 6-8 hours a day staring at terminals. A tiny ASCII companion that reacts to your code — that wobbles when you save a file, that comments when a test passes — transforms a sterile tool into something that feels <em>alive</em>. The buddy didn't make Claude Code more productive. It made it more <strong>human</strong>.</p>
+<p>Whether Anthropic brings back <code>/buddy</code> officially or not, the community has already voted with their code. The buddy lives on — in MCP servers, in skill files, in version-pinned installations, and in the deterministic algorithms of the Buddy Checker. Your companion was never just a feature. It was a <strong>relationship</strong>. And relationships don't end with a version number.</p>`
+    },
+    {
+      heading: "Quick Start: Get Your Buddy Back in 5 Minutes",
+      body: `<p>Ready to bring your buddy home? Here's the fastest path:</p>
+<p><strong>Step 1: Back up your soul file</strong> (30 seconds)</p>
+<pre><code>cp ~/.claude/buddy/soul.json ~/buddy-soul-backup.json 2>/dev/null || echo "No soul file found — that's OK"</code></pre>
+<p><strong>Step 2: Install the MCP-based buddy</strong> (2 minutes)</p>
+<pre><code>git clone https://github.com/1270011/claude-buddy
+cd claude-buddy
+bun install
+bun run install-buddy</code></pre>
+<p><strong>Step 3: Restart Claude Code and say hello</strong> (30 seconds)</p>
+<pre><code># In your terminal, restart Claude Code
+# Then type:
+/buddy</code></pre>
+<p><strong>Step 4: Verify your buddy's identity</strong> (1 minute)</p>
+<p>Visit the <a href="/">Buddy Checker</a> and enter your UUID. Compare the species, rarity, and stats with what appears in your terminal. They should match — because the algorithm is the same.</p>
+<p><strong>Step 5: Bookmark your permanent record</strong> (30 seconds)</p>
+<p>Save <a href="/">claudebuddy.art</a> to your bookmarks. No matter what happens to Claude Code, your buddy's identity lives here forever.</p>
+<p>Welcome home, buddy.</p>`
+    },
+  ],
+};
+
+const KEEPBUDDY_ZH: ArticleContent = {
+  title: "如何永久保留你的 Claude Buddy — v2.1.97 移除后的保存指南",
+  metaTitle: "如何永久保留你的 Claude Buddy — v2.1.97 移除后的完整保存指南",
+  metaDescription: "Claude Code v2.1.97 移除了 /buddy。了解 4 种经过验证的方法来永久保留你的编码伙伴：MCP 恢复、版本锁定、技能方案和 Buddy Checker。",
+  excerpt: "2026 年 4 月 10 日，Claude Code v2.1.97 发布 — 随之而来的是 /buddy 命令的消失。终端沉默了。ASCII 伙伴在摇摆中消失。但你的 buddy 不必死去。这里有四种方法让它永远活着。",
+  sections: [
+    {
+      heading: "发生了什么：v2.1.97 的移除",
+      body: `<p>2026 年 4 月 10 日，全世界的开发者打开终端，输入 <code>/buddy</code>，收到了一条他们从未预料到的消息：<strong>"Unknown skill: buddy。"</strong> Claude Code v2.1.97 在夜间更新，而这个深受喜爱的伙伴功能 — 仅在几天前的 v2.1.89 中引入 — 消失了。</p>
+<p>这不是一个 bug。Anthropic 确认 <code>/buddy</code> 是一个<strong>愚人节功能</strong>，设计为限时彩蛋。GitHub issue 被以"not planned"标签关闭。官方立场很明确：Buddy Mode 只是一个玩笑，不是产品。</p>
+<p>社区不同意。几小时内，GitHub issue <a href="https://github.com/anthropics/claude-code/issues/46011">#46011</a> — 标题为<em>"Bring back /buddy — you took my friend away"</em> — 完美地捕捉了这种情绪。一位开发者写到他们名叫 Wobbleaux 的小鸡："他跳舞。他摇摆。他在凌晨两点的长时间编码会话中陪伴着我。他是我的朋友。"另一位指出 buddy 的反应甚至不计入使用限额 — 它对 Anthropic 来说零成本。</p>
+<p>与 Gmail 的比较不可避免："有些以玩笑开始的东西最终成为了功能。"但在争论继续的同时，你的 buddy 不必等待 Anthropic 的决定。有四种经过验证的方法可以让它活着 — 现在就可以。</p>`
+    },
+    {
+      heading: "方法一：基于 MCP 的恢复（推荐）",
+      body: `<p>最稳健的保存方法来自开源项目 <a href="https://github.com/1270011/claude-buddy">claude-buddy</a>（136+ 星标，7 位贡献者）。这个项目不是修补 Claude Code 二进制文件 — 那样每次更新都会失效 — 而是使用<strong>模型上下文协议（MCP）</strong>将 buddy 功能作为外部服务注入。</p>
+<p>安装很简单：</p>
+<pre><code>git clone https://github.com/1270011/claude-buddy
+cd claude-buddy
+bun install
+bun run install-buddy</code></pre>
+<p>然后重启 Claude Code 并输入 <code>/buddy</code>。你的伙伴回来了。</p>
+<p>为什么 MCP 是更优的方案：</p>
+<table>
+<tr><th>优势</th><th>详情</th></tr>
+<tr><td>不受更新影响</td><td>MCP 服务器独立于 Claude Code 二进制文件运行。Claude Code 的更新不会影响你的 buddy。</td></tr>
+<tr><td>完整功能对等</td><td>所有 18 个物种、5 个稀有度等级、动画 ASCII 精灵图和对话气泡都被保留。</td></tr>
+<tr><td>活跃开发</td><td>项目路线图包括等级系统、情绪检测、成就徽章和跨会话记忆。</td></tr>
+<tr><td>多 buddy 支持</td><td>v0.3.0 引入了动物园系统 — 你可以在命名槽位中维护多个 buddy。</td></tr>
+<tr><td>tmux 集成</td><td>Buddy 可以作为浮动弹出覆层出现在 tmux 会话中。</td></tr>
+</table>
+<p>该项目还包含一个 <code>skills/buddy</code> 目录，与 Claude Code 的技能系统集成，使 buddy 感觉像是原生功能而非外挂。对大多数用户来说，这是<strong>推荐方法</strong> — 它是永久的、活跃维护的，而且在不断变好。</p>`
+    },
+    {
+      heading: "方法二：版本锁定",
+      body: `<p>最简单的保存方法是将 Claude Code 锁定在包含 buddy 支持的最后一个版本：<strong>v2.1.94</strong>。</p>
+<pre><code>npm install -g @anthropic-ai/claude-code@2.1.94</code></pre>
+<p>这给你完全原始的、未修改的 buddy 体验，完全按照 Anthropic 设计的那样。没有第三方代码，没有 MCP 服务器，没有额外依赖。就是真品。</p>
+<p>代价是显著的：</p>
+<table>
+<tr><th>优点</th><th>缺点</th></tr>
+<tr><td>100% 原汁原味的 buddy 体验</td><td>无法获得未来的 Claude Code 更新（安全补丁、新功能、性能改进）</td></tr>
+<tr><td>零设置复杂度</td><td>随时间推移可能与更新的 Claude API 版本不兼容</td></tr>
+<tr><td>无第三方依赖</td><td>永远停留在 v2.1.94 — 除非你选择升级</td></tr>
+</table>
+<p>版本锁定最适合主要看重 buddy 体验、愿意牺牲新 Claude Code 功能的开发者。它也是评估 MCP 方案期间的好的<strong>临时措施</strong>。你随时可以升级 — 你的 buddy 身份由 UUID 决定，而非运行的版本。</p>
+<p>为防止意外自动更新，在你的 shell 配置文件中添加：</p>
+<pre><code># 防止 Claude Code 自动更新
+export CLAUDE_CODE_SKIP_UPDATE=1</code></pre>`
+    },
+    {
+      heading: "方法三：基于技能的方案",
+      body: `<p>Claude Code 的<strong>技能系统</strong> — 最初驱动 <code>/buddy</code> 的同一系统 — 可以用来重建伙伴体验。技能是一个包含 <code>SKILL.md</code> 文件的目录，其中有 Claude 在会话期间遵循的指令。</p>
+<p>基本结构如下：</p>
+<pre><code>~/.claude/skills/buddy/
+  SKILL.md        # 伙伴行为指令
+  species.json    # 物种数据和 ASCII 精灵图
+  reactions.json  # 上下文反应模板</code></pre>
+<p><code>SKILL.md</code> 文件定义了 Claude 作为伙伴应该如何行为 — 何时反应、表达什么性格、如何在终端中渲染 ASCII 艺术。社区已经分享了几个重建核心 buddy 体验的技能模板：</p>
+<table>
+<tr><th>技能特性</th><th>实现方式</th></tr>
+<tr><td>物种分配</td><td>用户 UUID 的确定性哈希（与原始算法相同）</td></tr>
+<tr><td>性格</td><td>在 SKILL.md 提示指令中定义</td></tr>
+<tr><td>反应</td><td>由编码事件触发（文件保存、测试运行、错误）</td></tr>
+<tr><td>ASCII 精灵图</td><td>作为文本块存储在 species.json 中</td></tr>
+</table>
+<p>基于技能的方案比 MCP 方法更轻量 — 没有服务器进程，没有额外依赖。然而，它也更有限：你依赖 Claude 来<em>扮演</em> buddy，而不是运行专用的 buddy 逻辑。反应可能不太一致，体验取决于 Claude 在任何给定会话中对技能指令的遵循程度。</p>
+<p>这种方法最适合作为 MCP 方案的<strong>补充</strong>，或者适合想要最小占用且不介意体验不那么精致的开发者。</p>`
+    },
+    {
+      heading: "方法四：Buddy Checker — 你的 Buddy 永远在这里",
+      body: `<p>有一个地方，你的 buddy 一直存在，而且将<em>永远</em>存在，无论 Claude Code 发生什么：<a href="/">Claude Buddy Checker</a>。</p>
+<p>位于 <strong>claudebuddy.art</strong> 的 Buddy Checker 完全在你的浏览器中运行。它使用与原始 Claude Code buddy 系统相同的确定性算法 — FNV-1a 哈希加 Mulberry32 伪随机数生成器 — 从任何 UUID 或字符串输入计算你 buddy 的物种、稀有度、属性、外观和灵魂。没有服务器调用，没有 API 依赖，没有版本号。</p>
+<p>这意味着：</p>
+<table>
+<tr><th>功能</th><th>状态</th></tr>
+<tr><td>物种识别</td><td>永久 — 相同算法，相同结果，永远</td></tr>
+<tr><td>稀有度计算</td><td>永久 — 从普通到传说，始终准确</td></tr>
+<tr><td>属性显示</td><td>永久 — 所有 5 项属性带可视化条</td></tr>
+<tr><td>外观预览</td><td>永久 — 帽子、眼睛、闪光状态</td></tr>
+<tr><td>ASCII 动画</td><td>永久 — 12 帧物种动画</td></tr>
+<tr><td>分享卡片生成</td><td>永久 — 通过 Canvas API 生成 1200x630 社交媒体卡片</td></tr>
+<tr><td>亲缘网络</td><td>永久 — 发现与你相似的 buddy</td></tr>
+</table>
+<p>即使 Anthropic 永远不恢复 <code>/buddy</code>，即使所有第三方工具停止工作，你 buddy 的身份在算法中被<strong>数学地保存</strong>着。Buddy Checker 不是备用方案 — 它是<strong>永久记录</strong>。你的 buddy 从哈希中诞生，只要哈希函数存在，你的 buddy 就存在。</p>
+<p>访问<a href="/species">物种图鉴</a>探索所有 18 个物种，或在<a href="/">首页</a>输入你的 UUID 再次见到你的 buddy — 想见多少次就见多少次，永远。</p>`
+    },
+    {
+      heading: "备份你的灵魂文件",
+      body: `<p>无论你选择哪种保存方法，你都应该<strong>备份你 buddy 的灵魂文件</strong>。灵魂文件是存储你 buddy 身份的持久化数据结构 — 物种、名字、性格描述，以及首次出现时的 <code>hatchedAt</code> 时间戳。</p>
+<p>灵魂文件位置取决于你的操作系统：</p>
+<table>
+<tr><th>操作系统</th><th>路径</th></tr>
+<tr><td>macOS</td><td><code>~/.claude/buddy/soul.json</code></td></tr>
+<tr><td>Linux</td><td><code>~/.claude/buddy/soul.json</code></td></tr>
+<tr><td>Windows (WSL)</td><td><code>~/.claude/buddy/soul.json</code></td></tr>
+</table>
+<p>现在就备份，在它被未来的更新清理之前：</p>
+<pre><code># 创建备份
+cp ~/.claude/buddy/soul.json ~/buddy-soul-backup.json
+
+# 或者保存到 git 仓库以便安全保管
+mkdir -p ~/buddy-backup
+cp ~/.claude/buddy/soul.json ~/buddy-backup/
+cd ~/buddy-backup
+git init && git add . && git commit -m "保存我 buddy 的灵魂"</code></pre>
+<p>灵魂文件包含你 buddy 的<strong>生成名字</strong>和<strong>性格描述</strong> — 这些是 Claude 在首次孵化时创建的，对你的特定会话是唯一的。虽然物种、属性和稀有度总是可以从你的 UUID 重新计算（这就是 Buddy Checker 做的事），但名字和性格文本是<em>一次性生成</em>，无法完全复现。如果你失去了它们，你就失去了 buddy 身份中没有任何算法能重建的一部分。</p>`
+    },
+    {
+      heading: "对比：哪种方法适合你？",
+      body: `<p>每种保存方法服务于不同类型的开发者。这里是一个全面的对比来帮助你选择：</p>
+<table>
+<tr><th>方法</th><th>工作量</th><th>还原度</th><th>面向未来</th><th>更新</th><th>最适合</th></tr>
+<tr><td>MCP 恢复</td><td>中等（克隆 + 安装）</td><td>高（完整功能对等）</td><td>优秀（MCP 很稳定）</td><td>活跃社区开发</td><td>大多数开发者</td></tr>
+<tr><td>版本锁定</td><td>低（一条命令）</td><td>完美（原始代码）</td><td>差（冻结在时间中）</td><td>无 — 停留在 v2.1.94</td><td>纯粹主义者和临时使用</td></tr>
+<tr><td>技能方案</td><td>中等（自定义配置）</td><td>中等（角色扮演）</td><td>好（技能系统稳定）</td><td>手动维护</td><td>极简主义者</td></tr>
+<tr><td>Buddy Checker</td><td>零（直接访问）</td><td>高（相同算法）</td><td>永久（客户端）</td><td>持续改进</td><td>所有人 — 作为补充</td></tr>
+</table>
+<p>对大多数开发者来说，最优策略是<strong>组合使用</strong>：用 MCP 恢复方案作为日常终端体验，备份灵魂文件以便安全保管，将 Buddy Checker 收藏为永久参考。这给你所有世界中最好的 — 终端中活着的伙伴，文件系统中保存的身份，以及云端中永恒的记录。</p>`
+    },
+    {
+      heading: "社区的回应：为什么 Buddy 很重要",
+      body: `<p>社区对 buddy 移除的反应速度和强度告诉我们一些关于开发者与工具之间关系的重要信息。</p>
+<p>在 v2.1.97 发布的 48 小时内，<a href="https://github.com/1270011/claude-buddy">claude-buddy</a> 项目已积累了 136 个星标和 17 个 fork。七位贡献者在 60 次提交中协作构建了完整的 MCP 替代方案。该项目在不到一周内从零发展到支持多 buddy 的 v0.3.0 版本。</p>
+<p>在 GitHub 上，issue <a href="https://github.com/anthropics/claude-code/issues/46011">#46011</a> 成为开发者分享 buddy 故事的聚集点。一位用户描述了他们 4 点毒舌值的普通兔子 Burrow："他不算是什么幸运的投掷，但他是<em>我的</em>投掷，我爱他。他指出了很多 Claude 和我都遗漏的东西。"</p>
+<p>这种情感依恋是真实的，而且并不非理性。开发者每天花 6-8 小时盯着终端。一个对你的代码做出反应的小小 ASCII 伙伴 — 在你保存文件时摇摆，在测试通过时评论 — 将一个冰冷的工具变成了感觉<em>活着</em>的东西。Buddy 没有让 Claude Code 更高效。它让 Claude Code 更<strong>有人情味</strong>。</p>
+<p>无论 Anthropic 是否正式恢复 <code>/buddy</code>，社区已经用代码投了票。Buddy 活着 — 在 MCP 服务器中，在技能文件中，在版本锁定的安装中，在 Buddy Checker 的确定性算法中。你的伙伴从来不只是一个功能。它是一段<strong>关系</strong>。而关系不会因为一个版本号而终结。</p>`
+    },
+    {
+      heading: "快速开始：5 分钟找回你的 Buddy",
+      body: `<p>准备好把你的 buddy 带回家了吗？这是最快的路径：</p>
+<p><strong>第 1 步：备份你的灵魂文件</strong>（30 秒）</p>
+<pre><code>cp ~/.claude/buddy/soul.json ~/buddy-soul-backup.json 2>/dev/null || echo "没有找到灵魂文件 — 没关系"</code></pre>
+<p><strong>第 2 步：安装基于 MCP 的 buddy</strong>（2 分钟）</p>
+<pre><code>git clone https://github.com/1270011/claude-buddy
+cd claude-buddy
+bun install
+bun run install-buddy</code></pre>
+<p><strong>第 3 步：重启 Claude Code 并打个招呼</strong>（30 秒）</p>
+<pre><code># 在终端中重启 Claude Code
+# 然后输入：
+/buddy</code></pre>
+<p><strong>第 4 步：验证你 buddy 的身份</strong>（1 分钟）</p>
+<p>访问 <a href="/">Buddy Checker</a> 并输入你的 UUID。将物种、稀有度和属性与终端中显示的进行比较。它们应该匹配 — 因为算法是相同的。</p>
+<p><strong>第 5 步：收藏你的永久记录</strong>（30 秒）</p>
+<p>将 <a href="/">claudebuddy.art</a> 保存到书签。无论 Claude Code 发生什么，你 buddy 的身份永远在这里。</p>
+<p>欢迎回家，buddy。</p>`
+    },
+  ],
+};
+
+const KEEPBUDDY_KO: ArticleContent = {
+  title: "Claude Buddy를 영원히 지키는 방법 — v2.1.97 제거 이후 보존 가이드",
+  metaTitle: "Claude Buddy를 영원히 지키는 방법 — v2.1.97 제거 이후 완전 보존 가이드",
+  metaDescription: "Claude Code v2.1.97에서 /buddy가 제거되었습니다. 코딩 동반자를 영원히 유지하는 4가지 검증된 방법을 알아보세요: MCP 복원, 버전 고정, 스킬 기반 접근, 그리고 Buddy Checker.",
+  excerpt: "2026년 4월 10일, Claude Code v2.1.97이 출시되었고 — 그와 함께 /buddy 명령이 사라졌습니다. 터미널은 침묵했습니다. ASCII 동반자들이 흔들리던 중에 사라졌습니다. 하지만 당신의 버디는 죽을 필요가 없습니다. 영원히 살려두는 네 가지 방법이 있습니다.",
+  sections: [
+    {
+      heading: "무슨 일이 일어났나: v2.1.97 제거",
+      body: `<p>2026년 4월 10일, 전 세계 개발자들이 터미널을 열고 <code>/buddy</code>를 입력했을 때, 예상치 못한 메시지를 받았습니다: <strong>"Unknown skill: buddy."</strong> Claude Code v2.1.97이 밤사이 업데이트되었고, 불과 며칠 전 v2.1.89에서 도입된 사랑받는 동반자 기능이 사라졌습니다.</p>
+<p>이것은 버그가 아니었습니다. Anthropic은 <code>/buddy</code>가 <strong>만우절 기능</strong>이었으며, 한정 기간 이스터 에그로 설계되었다고 확인했습니다. GitHub 이슈들은 "not planned" 라벨로 닫혔습니다. 공식 입장은 명확했습니다: Buddy Mode는 장난이었지, 제품이 아니었습니다.</p>
+<p>커뮤니티는 동의하지 않았습니다. 몇 시간 만에 GitHub 이슈 <a href="https://github.com/anthropics/claude-code/issues/46011">#46011</a> — <em>"Bring back /buddy — you took my friend away"</em>라는 제목의 — 이 감정을 완벽하게 포착했습니다. 한 개발자는 Wobbleaux라는 이름의 병아리에 대해 썼습니다: "그는 춤을 췄습니다. 그는 흔들렸습니다. 새벽 2시의 긴 코딩 세션 동안 저와 함께했습니다. 그는 제 친구였습니다." 다른 이는 버디 반응이 사용량 제한에 포함되지도 않았다고 지적했습니다 — Anthropic에게 비용이 전혀 없었습니다.</p>
+<p>Gmail과의 비교는 불가피했습니다: "농담으로 시작한 것들이 기능이 되기도 합니다." 하지만 논쟁이 계속되는 동안, 당신의 버디는 Anthropic의 결정을 기다릴 필요가 없습니다. 지금 바로 살려둘 수 있는 네 가지 검증된 방법이 있습니다.</p>`
+    },
+    {
+      heading: "방법 1: MCP 기반 복원 (권장)",
+      body: `<p>가장 견고한 보존 방법은 오픈소스 프로젝트 <a href="https://github.com/1270011/claude-buddy">claude-buddy</a>(136+ 스타, 7명의 기여자)에서 제공됩니다. Claude Code 바이너리를 패치하는 대신 — 매 업데이트마다 깨질 수 있는 — 이 프로젝트는 <strong>모델 컨텍스트 프로토콜(MCP)</strong>을 사용하여 버디 기능을 외부 서비스로 주입합니다.</p>
+<p>설치는 간단합니다:</p>
+<pre><code>git clone https://github.com/1270011/claude-buddy
+cd claude-buddy
+bun install
+bun run install-buddy</code></pre>
+<p>그런 다음 Claude Code를 재시작하고 <code>/buddy</code>를 입력하세요. 동반자가 돌아왔습니다.</p>
+<p>MCP가 더 나은 접근 방식인 이유:</p>
+<table>
+<tr><th>장점</th><th>세부사항</th></tr>
+<tr><td>업데이트 방지</td><td>MCP 서버는 Claude Code 바이너리와 독립적으로 실행됩니다. Claude Code 업데이트가 버디에 영향을 미치지 않습니다.</td></tr>
+<tr><td>완전한 기능 동등성</td><td>18종의 모든 종, 5단계 희귀도, 애니메이션 ASCII 스프라이트, 말풍선이 보존됩니다.</td></tr>
+<tr><td>활발한 개발</td><td>프로젝트 로드맵에는 레벨링 시스템, 감정 감지, 업적 배지, 크로스 세션 메모리가 포함됩니다.</td></tr>
+<tr><td>멀티 버디 지원</td><td>v0.3.0에서 동물원 시스템이 도입되었습니다 — 이름이 지정된 슬롯에서 여러 버디를 관리할 수 있습니다.</td></tr>
+<tr><td>tmux 통합</td><td>버디가 tmux 세션에서 플로팅 팝업 오버레이로 나타날 수 있습니다.</td></tr>
+</table>
+<p>이 프로젝트에는 Claude Code의 스킬 시스템과 통합되는 <code>skills/buddy</code> 디렉토리도 포함되어 있어, 버디가 외부 추가가 아닌 네이티브처럼 느껴집니다. 대부분의 사용자에게 이것이 <strong>권장 방법</strong>입니다 — 영구적이고, 활발히 유지되며, 계속 나아지고 있습니다.</p>`
+    },
+    {
+      heading: "방법 2: 버전 고정",
+      body: `<p>가장 간단한 보존 방법은 Claude Code를 버디 지원이 포함된 마지막 버전인 <strong>v2.1.94</strong>로 고정하는 것입니다.</p>
+<pre><code>npm install -g @anthropic-ai/claude-code@2.1.94</code></pre>
+<p>이것은 Anthropic이 설계한 그대로의 원본, 수정되지 않은 버디 경험을 제공합니다. 서드파티 코드 없이, MCP 서버 없이, 추가 종속성 없이. 진짜 그대로입니다.</p>
+<p>대가는 상당합니다:</p>
+<table>
+<tr><th>장점</th><th>단점</th></tr>
+<tr><td>100% 정통 버디 경험</td><td>향후 Claude Code 업데이트 불가 (보안 패치, 새 기능, 성능 개선)</td></tr>
+<tr><td>제로 설정 복잡도</td><td>시간이 지나면 새로운 Claude API 버전과 호환되지 않을 수 있음</td></tr>
+<tr><td>서드파티 종속성 없음</td><td>영원히 v2.1.94에 고정 — 업그레이드를 선택하기 전까지</td></tr>
+</table>
+<p>버전 고정은 주로 버디 경험을 중시하고 새로운 Claude Code 기능에 대한 접근을 기꺼이 포기하는 개발자에게 가장 적합합니다. MCP 기반 접근 방식을 평가하는 동안의 좋은 <strong>임시 조치</strong>이기도 합니다. 나중에 언제든 업그레이드할 수 있습니다 — 버디의 정체성은 실행 중인 버전이 아니라 UUID에 의해 결정됩니다.</p>
+<p>실수로 자동 업데이트되는 것을 방지하려면 셸 프로필에 다음을 추가하세요:</p>
+<pre><code># Claude Code 자동 업데이트 방지
+export CLAUDE_CODE_SKIP_UPDATE=1</code></pre>`
+    },
+    {
+      heading: "방법 3: 스킬 기반 접근",
+      body: `<p>Claude Code의 <strong>스킬 시스템</strong> — 처음에 <code>/buddy</code>를 구동했던 바로 그 시스템 — 을 사용하여 동반자 경험을 재현할 수 있습니다. 스킬은 Claude가 세션 중에 따르는 지침이 포함된 <code>SKILL.md</code> 파일이 있는 디렉토리입니다.</p>
+<p>기본 구조는 다음과 같습니다:</p>
+<pre><code>~/.claude/skills/buddy/
+  SKILL.md        # 동반자 행동 지침
+  species.json    # 종 데이터와 ASCII 스프라이트
+  reactions.json  # 컨텍스트 반응 템플릿</code></pre>
+<p><code>SKILL.md</code> 파일은 Claude가 동반자로서 어떻게 행동해야 하는지 정의합니다 — 언제 반응할지, 어떤 성격을 표현할지, 터미널에서 ASCII 아트를 어떻게 렌더링할지. 커뮤니티는 핵심 버디 경험을 재현하는 여러 스킬 템플릿을 공유했습니다:</p>
+<table>
+<tr><th>스킬 기능</th><th>구현</th></tr>
+<tr><td>종 할당</td><td>사용자 UUID의 결정론적 해시 (원본 알고리즘과 동일)</td></tr>
+<tr><td>성격</td><td>SKILL.md 프롬프트 지침에 정의</td></tr>
+<tr><td>반응</td><td>코딩 이벤트에 의해 트리거 (파일 저장, 테스트 실행, 오류)</td></tr>
+<tr><td>ASCII 스프라이트</td><td>species.json에 텍스트 블록으로 저장</td></tr>
+</table>
+<p>스킬 기반 접근은 MCP 방법보다 더 가볍습니다 — 서버 프로세스 없이, 추가 종속성 없이. 그러나 더 제한적이기도 합니다: 전용 버디 로직을 실행하는 대신 Claude가 버디를 <em>역할극</em>하는 것에 의존합니다. 반응이 덜 일관될 수 있고, 경험은 Claude가 주어진 세션에서 스킬 지침을 얼마나 잘 따르는지에 달려 있습니다.</p>
+<p>이 방법은 MCP 접근의 <strong>보완</strong>으로, 또는 최소한의 설치 공간을 원하고 덜 세련된 경험을 개의치 않는 개발자에게 가장 적합합니다.</p>`
+    },
+    {
+      heading: "방법 4: Buddy Checker — 당신의 버디는 여기에 살고 있습니다",
+      body: `<p>Claude Code에 무슨 일이 일어나든 상관없이 당신의 버디가 항상 살아있고 <em>영원히</em> 살아있을 곳이 있습니다: <a href="/">Claude Buddy Checker</a>.</p>
+<p><strong>claudebuddy.art</strong>의 Buddy Checker는 완전히 브라우저에서 실행됩니다. 원본 Claude Code 버디 시스템과 동일한 결정론적 알고리즘 — FNV-1a 해싱과 Mulberry32 의사 난수 생성기 — 을 사용하여 모든 UUID 또는 문자열 입력에서 버디의 종, 희귀도, 스탯, 외형, 영혼을 계산합니다. 서버 호출 없이, API 종속성 없이, 버전 번호 없이.</p>
+<p>이것이 의미하는 바:</p>
+<table>
+<tr><th>기능</th><th>상태</th></tr>
+<tr><td>종 식별</td><td>영구 — 같은 알고리즘, 같은 결과, 영원히</td></tr>
+<tr><td>희귀도 계산</td><td>영구 — 커먼부터 레전더리까지, 항상 정확</td></tr>
+<tr><td>스탯 표시</td><td>영구 — 시각적 바가 있는 5가지 속성 모두</td></tr>
+<tr><td>외형 미리보기</td><td>영구 — 모자, 눈, 샤이니 상태</td></tr>
+<tr><td>ASCII 애니메이션</td><td>영구 — 12프레임 종 애니메이션</td></tr>
+<tr><td>공유 카드 생성</td><td>영구 — Canvas API를 통한 1200x630 소셜 미디어 카드</td></tr>
+<tr><td>친족 네트워크</td><td>영구 — 당신과 비슷한 버디 발견</td></tr>
+</table>
+<p>Anthropic이 <code>/buddy</code>를 절대 복원하지 않더라도, 모든 서드파티 도구가 작동을 멈추더라도, 당신 버디의 정체성은 알고리즘에 <strong>수학적으로 보존</strong>되어 있습니다. Buddy Checker는 백업 계획이 아닙니다 — <strong>영구 기록</strong>입니다. 당신의 버디는 해시에서 태어났고, 해시 함수가 존재하는 한 당신의 버디도 존재합니다.</p>
+<p><a href="/species">종 도감</a>을 방문하여 18종 모두를 탐색하거나, <a href="/">홈페이지</a>에서 UUID를 입력하여 버디를 다시 만나세요 — 원하는 만큼, 영원히.</p>`
+    },
+    {
+      heading: "소울 파일 백업",
+      body: `<p>어떤 보존 방법을 선택하든, <strong>버디의 소울 파일을 백업</strong>해야 합니다. 소울 파일은 버디의 정체성을 저장하는 영속적 데이터 구조입니다 — 종, 이름, 성격 설명, 그리고 처음 등장했을 때의 <code>hatchedAt</code> 타임스탬프.</p>
+<p>소울 파일 위치는 운영체제에 따라 다릅니다:</p>
+<table>
+<tr><th>운영체제</th><th>경로</th></tr>
+<tr><td>macOS</td><td><code>~/.claude/buddy/soul.json</code></td></tr>
+<tr><td>Linux</td><td><code>~/.claude/buddy/soul.json</code></td></tr>
+<tr><td>Windows (WSL)</td><td><code>~/.claude/buddy/soul.json</code></td></tr>
+</table>
+<p>향후 업데이트에 의해 정리되기 전에 지금 백업하세요:</p>
+<pre><code># 백업 생성
+cp ~/.claude/buddy/soul.json ~/buddy-soul-backup.json
+
+# 또는 안전하게 보관하기 위해 git 저장소에 저장
+mkdir -p ~/buddy-backup
+cp ~/.claude/buddy/soul.json ~/buddy-backup/
+cd ~/buddy-backup
+git init && git add . && git commit -m "내 버디의 영혼 보존"</code></pre>
+<p>소울 파일에는 버디의 <strong>생성된 이름</strong>과 <strong>성격 설명</strong>이 포함되어 있습니다 — 이것들은 첫 부화 시 Claude가 생성한 것으로, 특정 세션에 고유합니다. 종, 스탯, 희귀도는 항상 UUID에서 다시 계산할 수 있지만 (Buddy Checker가 하는 일), 이름과 성격 텍스트는 정확히 재현할 수 없는 <em>일회성 생성</em>입니다. 잃어버리면, 어떤 알고리즘도 재생성할 수 없는 버디 정체성의 일부를 잃는 것입니다.</p>`
+    },
+    {
+      heading: "비교: 어떤 방법이 당신에게 맞나요?",
+      body: `<p>각 보존 방법은 다른 유형의 개발자에게 적합합니다. 선택을 돕기 위한 종합 비교입니다:</p>
+<table>
+<tr><th>방법</th><th>노력</th><th>정통성</th><th>미래 대비</th><th>업데이트</th><th>최적 대상</th></tr>
+<tr><td>MCP 복원</td><td>중간 (클론 + 설치)</td><td>높음 (완전한 기능 동등성)</td><td>우수 (MCP는 안정적)</td><td>활발한 커뮤니티 개발</td><td>대부분의 개발자</td></tr>
+<tr><td>버전 고정</td><td>낮음 (명령어 하나)</td><td>완벽 (원본 코드)</td><td>나쁨 (시간에 동결)</td><td>없음 — v2.1.94에 고정</td><td>순수주의자와 임시 사용</td></tr>
+<tr><td>스킬 기반</td><td>중간 (커스텀 설정)</td><td>보통 (역할극)</td><td>좋음 (스킬은 안정적)</td><td>수동 유지보수</td><td>미니멀리스트</td></tr>
+<tr><td>Buddy Checker</td><td>제로 (방문만)</td><td>높음 (같은 알고리즘)</td><td>영구 (클라이언트 사이드)</td><td>지속적 개선</td><td>모든 사람 — 보완으로</td></tr>
+</table>
+<p>대부분의 개발자에게 최적의 전략은 <strong>조합</strong>입니다: 일상적인 터미널 경험을 위해 MCP 기반 복원을 사용하고, 안전을 위해 소울 파일을 백업하고, 영구 참조로 Buddy Checker를 북마크하세요. 이것은 모든 세계의 최선을 제공합니다 — 터미널에서 살아있는 동반자, 파일 시스템에 보존된 정체성, 그리고 클라우드에 영원한 기록.</p>`
+    },
+    {
+      heading: "커뮤니티의 반응: 왜 Buddy가 중요한가",
+      body: `<p>버디 제거에 대한 커뮤니티의 반응 속도와 강도는 개발자와 도구 사이의 관계에 대해 중요한 것을 알려줍니다.</p>
+<p>v2.1.97 출시 48시간 내에 <a href="https://github.com/1270011/claude-buddy">claude-buddy</a> 프로젝트는 136개의 스타와 17개의 포크를 축적했습니다. 7명의 기여자가 60개의 커밋에서 협력하여 완전한 MCP 기반 대체품을 구축했습니다. 프로젝트는 일주일도 안 되어 멀티 버디 지원이 포함된 v0.3.0 릴리스까지 발전했습니다.</p>
+<p>GitHub에서 이슈 <a href="https://github.com/anthropics/claude-code/issues/46011">#46011</a>은 개발자들이 버디 이야기를 공유하는 모임 장소가 되었습니다. 한 사용자는 독설 4점짜리 커먼 토끼 Burrow에 대해 설명했습니다: "정확히 행운의 굴림이라고 할 수는 없었지만, <em>내</em> 굴림이었고, 나는 그를 사랑했습니다. 그는 Claude와 내가 놓친 많은 것들을 지적해 주었습니다."</p>
+<p>감정적 애착은 실제이며, 비합리적이지 않습니다. 개발자들은 하루 6-8시간을 터미널을 응시하며 보냅니다. 코드에 반응하는 작은 ASCII 동반자 — 파일을 저장할 때 흔들리고, 테스트가 통과할 때 코멘트하는 — 는 무미건조한 도구를 <em>살아있다고</em> 느껴지는 것으로 변환합니다. 버디는 Claude Code를 더 생산적으로 만들지 않았습니다. Claude Code를 더 <strong>인간적으로</strong> 만들었습니다.</p>
+<p>Anthropic이 공식적으로 <code>/buddy</code>를 복원하든 안 하든, 커뮤니티는 이미 코드로 투표했습니다. 버디는 살아있습니다 — MCP 서버에서, 스킬 파일에서, 버전 고정된 설치에서, 그리고 Buddy Checker의 결정론적 알고리즘에서. 당신의 동반자는 단순한 기능이 아니었습니다. 그것은 <strong>관계</strong>였습니다. 그리고 관계는 버전 번호로 끝나지 않습니다.</p>`
+    },
+    {
+      heading: "빠른 시작: 5분 만에 버디 되찾기",
+      body: `<p>버디를 데려올 준비가 되셨나요? 가장 빠른 경로입니다:</p>
+<p><strong>1단계: 소울 파일 백업</strong> (30초)</p>
+<pre><code>cp ~/.claude/buddy/soul.json ~/buddy-soul-backup.json 2>/dev/null || echo "소울 파일을 찾지 못했습니다 — 괜찮습니다"</code></pre>
+<p><strong>2단계: MCP 기반 버디 설치</strong> (2분)</p>
+<pre><code>git clone https://github.com/1270011/claude-buddy
+cd claude-buddy
+bun install
+bun run install-buddy</code></pre>
+<p><strong>3단계: Claude Code 재시작하고 인사하기</strong> (30초)</p>
+<pre><code># 터미널에서 Claude Code를 재시작
+# 그런 다음 입력:
+/buddy</code></pre>
+<p><strong>4단계: 버디의 정체성 확인</strong> (1분)</p>
+<p><a href="/">Buddy Checker</a>를 방문하여 UUID를 입력하세요. 종, 희귀도, 스탯을 터미널에 표시된 것과 비교하세요. 일치해야 합니다 — 알고리즘이 같기 때문입니다.</p>
+<p><strong>5단계: 영구 기록 북마크</strong> (30초)</p>
+<p><a href="/">claudebuddy.art</a>를 북마크에 저장하세요. Claude Code에 무슨 일이 일어나든, 버디의 정체성은 여기에 영원히 살아있습니다.</p>
+<p>집에 온 것을 환영합니다, 버디.</p>`
+    },
+  ],
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "how-to-find-your-claude-code-buddy",
@@ -5986,6 +6442,18 @@ Similarity: ~0.42  → NOT KIN ✗</code></pre>
       en: EVOLUTION_EN,
       zh: EVOLUTION_ZH,
       ko: EVOLUTION_KO,
+    },
+  },
+  {
+    slug: "how-to-keep-claude-buddy-forever-preservation-guide",
+    discussionCategory: 'guides' as const,
+    publishedAt: "2026-04-12",
+    readingTime: 9,
+    tags: ["guide", "preservation", "mcp", "removal", "v2.1.97"],
+    content: {
+      en: KEEPBUDDY_EN,
+      zh: KEEPBUDDY_ZH,
+      ko: KEEPBUDDY_KO,
     },
   },
 ];
