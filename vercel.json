@@ -2,6 +2,14 @@
   "buildCommand": "vite build",
   "outputDirectory": "dist/public",
   "framework": null,
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "claudebuddy.art" }],
+      "destination": "https://www.claudebuddy.art/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ],
