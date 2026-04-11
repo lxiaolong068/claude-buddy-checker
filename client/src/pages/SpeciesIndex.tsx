@@ -159,6 +159,8 @@ export default function SpeciesIndex() {
     if (metaDesc) {
       metaDesc.setAttribute("content", t("speciesIndex.metaDesc"));
     }
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) canonical.setAttribute("href", `${SITE_URL}/species`);
   }, [t, locale]);
 
   useHreflangLinks(`${SITE_URL}/species`);
