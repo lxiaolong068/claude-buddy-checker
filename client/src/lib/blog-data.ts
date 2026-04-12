@@ -3274,6 +3274,53 @@ export const BLOG_ARTICLES: BlogArticle[] = [
 </ol>
 <p>Got a Dragon? Celebrate! Got a Snail? Embrace the slow life! Every species has its fans, and the community loves seeing all 18 represented. Browse the <a href="/species">complete species encyclopedia</a> to learn more about each one, or check the <a href="/blog/claude-code-buddy-rarity-guide">Rarity Guide</a> to understand how rarity affects your buddy's power.</p>`
           },
+          {
+            heading: "Explore All 18 Species — Quick Links",
+            body: `<p>Seen your tier? Now go deeper — every species page shows the full 12-frame ASCII sprite, rarity distribution, personality breakdown, and species-specific FAQ. Click any species below to explore it directly.</p>
+<h3>Animal Species (12)</h3>
+<table>
+<thead><tr><th>Species</th><th>Peak Stat</th><th>Tags</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/duck">Duck</a></td><td>PATIENCE</td><td>friendly, aquatic, cheerful</td></tr>
+<tr><td><a href="/species/goose">Goose</a></td><td>CHAOS</td><td>chaotic, loud, fearless</td></tr>
+<tr><td><a href="/species/cat">Cat</a></td><td>SNARK</td><td>independent, curious, elegant</td></tr>
+<tr><td><a href="/species/octopus">Octopus</a></td><td>WISDOM</td><td>intelligent, flexible, deep-sea</td></tr>
+<tr><td><a href="/species/owl">Owl</a></td><td>WISDOM</td><td>wise, nocturnal, observant</td></tr>
+<tr><td><a href="/species/penguin">Penguin</a></td><td>PATIENCE</td><td>resilient, social, arctic</td></tr>
+<tr><td><a href="/species/turtle">Turtle</a></td><td>PATIENCE</td><td>steady, armored, ancient</td></tr>
+<tr><td><a href="/species/snail">Snail</a></td><td>PATIENCE</td><td>slow, persistent, spiral</td></tr>
+<tr><td><a href="/species/axolotl">Axolotl</a></td><td>DEBUGGING</td><td>regenerative, aquatic, adorable</td></tr>
+<tr><td><a href="/species/capybara">Capybara</a></td><td>PATIENCE</td><td>chill, social, friendly</td></tr>
+<tr><td><a href="/species/rabbit">Rabbit</a></td><td>CHAOS</td><td>quick, fluffy, alert</td></tr>
+<tr><td><a href="/species/chonk">Chonk</a></td><td>SNARK</td><td>round, hefty, lovable</td></tr>
+</tbody>
+</table>
+<h3>Mythical Species (2)</h3>
+<table>
+<thead><tr><th>Species</th><th>Peak Stat</th><th>Tags</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/dragon">Dragon</a></td><td>DEBUGGING</td><td>powerful, ancient, majestic</td></tr>
+<tr><td><a href="/species/ghost">Ghost</a></td><td>CHAOS</td><td>ethereal, spooky, playful</td></tr>
+</tbody>
+</table>
+<h3>Object Species (3)</h3>
+<table>
+<thead><tr><th>Species</th><th>Peak Stat</th><th>Tags</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/cactus">Cactus</a></td><td>SNARK</td><td>prickly, resilient, desert</td></tr>
+<tr><td><a href="/species/robot">Robot</a></td><td>DEBUGGING</td><td>logical, mechanical, efficient</td></tr>
+<tr><td><a href="/species/mushroom">Mushroom</a></td><td>WISDOM</td><td>fungal, mysterious, forest</td></tr>
+</tbody>
+</table>
+<h3>Creature Species (1)</h3>
+<table>
+<thead><tr><th>Species</th><th>Peak Stat</th><th>Tags</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/blob">Blob</a></td><td>WISDOM</td><td>amorphous, calm, mysterious</td></tr>
+</tbody>
+</table>
+<p>Not sure which species is yours? <a href="/">Run the Buddy Checker</a> in 30 seconds — it reveals your species, rarity, all 5 stats, and your ASCII art.</p>`
+          },
         ],
       },
       zh: {
@@ -3426,6 +3473,53 @@ export const BLOG_ARTICLES: BlogArticle[] = [
 </ol>
 <p>抽到了龙？庆祝吧！抽到了蜗牛？拥抱慢生活！每个物种都有自己的粉丝。浏览<a href="/species">完整物种百科</a>了解更多，或查看<a href="/blog/claude-code-buddy-rarity-guide">稀有度指南</a>了解稀有度如何影响你 Buddy 的实力。</p>`
           },
+          {
+            heading: "探索全部 18 种物种 — 快速链接",
+            body: `<p>已经看完 Tier 排名？现在深入了解每个物种——每个物种页面展示完整的 12 帧 ASCII 精灵动画、稀有度分布、个性解析和专属常见问题解答。点击下方任意物种直接跳转探索。</p>
+<h3>动物物种（12 种）</h3>
+<table>
+<thead><tr><th>物种</th><th>主力属性</th><th>个性标签</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/duck">鸭子 Duck</a></td><td>耐心 PATIENCE</td><td>友善、水生、快乐</td></tr>
+<tr><td><a href="/species/goose">鹅 Goose</a></td><td>混乱 CHAOS</td><td>混乱、嘈杂、无畏</td></tr>
+<tr><td><a href="/species/cat">猫 Cat</a></td><td>毒舌 SNARK</td><td>独立、好奇、优雅</td></tr>
+<tr><td><a href="/species/octopus">章鱼 Octopus</a></td><td>智慧 WISDOM</td><td>聪明、灵活、深海</td></tr>
+<tr><td><a href="/species/owl">猫头鹰 Owl</a></td><td>智慧 WISDOM</td><td>睿智、夜行、洞察</td></tr>
+<tr><td><a href="/species/penguin">企鹅 Penguin</a></td><td>耐心 PATIENCE</td><td>坚韧、社交、北极</td></tr>
+<tr><td><a href="/species/turtle">乌龟 Turtle</a></td><td>耐心 PATIENCE</td><td>稳定、有甲、远古</td></tr>
+<tr><td><a href="/species/snail">蜗牛 Snail</a></td><td>耐心 PATIENCE</td><td>缓慢、坚持、螺旋</td></tr>
+<tr><td><a href="/species/axolotl">六角恐龙 Axolotl</a></td><td>调试 DEBUGGING</td><td>再生、水生、可爱</td></tr>
+<tr><td><a href="/species/capybara">水豚 Capybara</a></td><td>耐心 PATIENCE</td><td>淡定、社交、友善</td></tr>
+<tr><td><a href="/species/rabbit">兔子 Rabbit</a></td><td>混乱 CHAOS</td><td>敏捷、毛茸茸、警觉</td></tr>
+<tr><td><a href="/species/chonk">胖墩 Chonk</a></td><td>毒舌 SNARK</td><td>圆润、厚实、可爱</td></tr>
+</tbody>
+</table>
+<h3>神话物种（2 种）</h3>
+<table>
+<thead><tr><th>物种</th><th>主力属性</th><th>个性标签</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/dragon">龙 Dragon</a></td><td>调试 DEBUGGING</td><td>强大、远古、威严</td></tr>
+<tr><td><a href="/species/ghost">幽灵 Ghost</a></td><td>混乱 CHAOS</td><td>虚无、神秘、调皮</td></tr>
+</tbody>
+</table>
+<h3>物品物种（3 种）</h3>
+<table>
+<thead><tr><th>物种</th><th>主力属性</th><th>个性标签</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/cactus">仙人掌 Cactus</a></td><td>毒舌 SNARK</td><td>多刺、耐旱、沙漠</td></tr>
+<tr><td><a href="/species/robot">机器人 Robot</a></td><td>调试 DEBUGGING</td><td>逻辑、机械、高效</td></tr>
+<tr><td><a href="/species/mushroom">蘑菇 Mushroom</a></td><td>智慧 WISDOM</td><td>真菌、神秘、森林</td></tr>
+</tbody>
+</table>
+<h3>生物物种（1 种）</h3>
+<table>
+<thead><tr><th>物种</th><th>主力属性</th><th>个性标签</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/blob">史莱姆 Blob</a></td><td>智慧 WISDOM</td><td>无形、平静、神秘</td></tr>
+</tbody>
+</table>
+<p>还不知道自己抽到了哪个物种？<a href="/">30 秒运行 Buddy 查询工具</a>——立刻揭晓你的物种、稀有度、全部 5 项属性和 ASCII 艺术图。</p>`
+          },
         ],
       },
       ko: {
@@ -3577,6 +3671,53 @@ export const BLOG_ARTICLES: BlogArticle[] = [
 <li><strong>결과 공유</strong> — 공유 카드를 생성하고 <code>#ClaudeBuddy</code>로 게시하세요</li>
 </ol>
 <p>드래곤을 받았나요? 축하하세요! 달팽이를 받았나요? 느린 삶을 즐기세요! 모든 종에는 팬이 있습니다. <a href="/species">전체 종 백과사전</a>에서 더 알아보거나, <a href="/blog/claude-code-buddy-rarity-guide">희귀도 가이드</a>에서 희귀도가 버디의 힘에 어떤 영향을 미치는지 확인하세요.</p>`
+          },
+          {
+            heading: "전체 18종 탐색 — 빠른 링크",
+            body: `<p>티어를 확인했나요? 이제 더 깊이 들어가 보세요 — 각 종 페이지에는 12프레임 전체 ASCII 스프라이트, 희귀도 분포, 성격 분석, 종별 FAQ가 담겨 있습니다. 아래에서 원하는 종을 클릭해 바로 탐색하세요.</p>
+<h3>동물 종 (12종)</h3>
+<table>
+<thead><tr><th>종</th><th>주력 스탯</th><th>성격 태그</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/duck">오리 Duck</a></td><td>인내 PATIENCE</td><td>친근함, 수생, 활발함</td></tr>
+<tr><td><a href="/species/goose">거위 Goose</a></td><td>혼돈 CHAOS</td><td>혼돈, 시끄러움, 두려움 없음</td></tr>
+<tr><td><a href="/species/cat">고양이 Cat</a></td><td>독설 SNARK</td><td>독립적, 호기심, 우아함</td></tr>
+<tr><td><a href="/species/octopus">문어 Octopus</a></td><td>지혜 WISDOM</td><td>지능적, 유연함, 심해</td></tr>
+<tr><td><a href="/species/owl">부엉이 Owl</a></td><td>지혜 WISDOM</td><td>현명함, 야행성, 관찰력</td></tr>
+<tr><td><a href="/species/penguin">펭귄 Penguin</a></td><td>인내 PATIENCE</td><td>회복력, 사교적, 북극</td></tr>
+<tr><td><a href="/species/turtle">거북이 Turtle</a></td><td>인내 PATIENCE</td><td>안정적, 갑각, 고대</td></tr>
+<tr><td><a href="/species/snail">달팽이 Snail</a></td><td>인내 PATIENCE</td><td>느림, 끈기, 나선형</td></tr>
+<tr><td><a href="/species/axolotl">아홀로틀 Axolotl</a></td><td>디버깅 DEBUGGING</td><td>재생, 수생, 귀여움</td></tr>
+<tr><td><a href="/species/capybara">카피바라 Capybara</a></td><td>인내 PATIENCE</td><td>여유로움, 사교적, 친근함</td></tr>
+<tr><td><a href="/species/rabbit">토끼 Rabbit</a></td><td>혼돈 CHAOS</td><td>빠름, 털북숭이, 경계심</td></tr>
+<tr><td><a href="/species/chonk">뚱이 Chonk</a></td><td>독설 SNARK</td><td>둥글둥글, 묵직함, 사랑스러움</td></tr>
+</tbody>
+</table>
+<h3>신화 종 (2종)</h3>
+<table>
+<thead><tr><th>종</th><th>주력 스탯</th><th>성격 태그</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/dragon">드래곤 Dragon</a></td><td>디버깅 DEBUGGING</td><td>강력함, 고대, 웅장함</td></tr>
+<tr><td><a href="/species/ghost">유령 Ghost</a></td><td>혼돈 CHAOS</td><td>영묘함, 무서움, 장난스러움</td></tr>
+</tbody>
+</table>
+<h3>오브젝트 종 (3종)</h3>
+<table>
+<thead><tr><th>종</th><th>주력 스탯</th><th>성격 태그</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/cactus">선인장 Cactus</a></td><td>독설 SNARK</td><td>가시투성이, 강인함, 사막</td></tr>
+<tr><td><a href="/species/robot">로봇 Robot</a></td><td>디버깅 DEBUGGING</td><td>논리적, 기계적, 효율적</td></tr>
+<tr><td><a href="/species/mushroom">버섯 Mushroom</a></td><td>지혜 WISDOM</td><td>균류, 신비로움, 숲</td></tr>
+</tbody>
+</table>
+<h3>생물 종 (1종)</h3>
+<table>
+<thead><tr><th>종</th><th>주력 스탯</th><th>성격 태그</th></tr></thead>
+<tbody>
+<tr><td><a href="/species/blob">블롭 Blob</a></td><td>지혜 WISDOM</td><td>무정형, 평온함, 신비로움</td></tr>
+</tbody>
+</table>
+<p>내 종이 어떤 것인지 모르시나요? <a href="/">30초 안에 Buddy 체커를 실행하세요</a> — 종, 희귀도, 5가지 스탯, ASCII 아트가 즉시 공개됩니다.</p>`
           },
         ],
       },
