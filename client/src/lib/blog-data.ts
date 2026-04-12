@@ -7192,6 +7192,511 @@ Similarity: ~0.42  → NOT KIN ✗</code></pre>
       ko: VANISHED_KO,
     },
   },
+  // ── NEW ARTICLE 1 ─────────────────────────────────────────────────────────
+  {
+    slug: "all-claude-code-buddy-species-complete-list",
+    publishedAt: "2026-04-12",
+    readingTime: 8,
+    tags: ["species", "guide", "list", "reference"],
+    discussionCategory: "guides" as const,
+    content: {
+      en: {
+        title: "All Claude Code Buddy Species — Complete List & Reference Guide (2026)",
+        metaTitle: "All Claude Code Buddy Species List — Complete Reference Guide 2026",
+        metaDescription: "Complete list of all 18 Claude Code Buddy species. Browse every buddy by category, peak stat, and personality tags. The definitive species reference for 2026.",
+        excerpt: "Every Claude Code Buddy species in one place — organized by category, peak stat, and personality. Bookmark this as your definitive species reference.",
+        sections: [
+          {
+            heading: "All 18 Claude Code Buddy Species at a Glance",
+            body: `<p>Claude Code Buddy ships with <strong>18 unique species</strong>, each generated deterministically from your identity string. Whether you're trying to find out what species you rolled, researching before you reroll, or comparing buddies with teammates, this is your complete reference.</p>
+<p>Every species belongs to one of four categories: <strong>Animal</strong>, <strong>Creature</strong>, <strong>Object</strong>, or <strong>Mythical</strong>. Each has a designated <strong>peak stat</strong> — the one stat that can reach 100 at Legendary rarity — plus a set of personality tags that define how it behaves in your terminal.</p>
+<table>
+<tr><th>Species</th><th>Category</th><th>Peak Stat</th><th>Personality Tags</th></tr>
+<tr><td><a href="/species/dragon">Dragon</a></td><td>Mythical</td><td>DEBUGGING</td><td>powerful, ancient, majestic</td></tr>
+<tr><td><a href="/species/ghost">Ghost</a></td><td>Mythical</td><td>CHAOS</td><td>ethereal, spooky, playful</td></tr>
+<tr><td><a href="/species/axolotl">Axolotl</a></td><td>Animal</td><td>DEBUGGING</td><td>regenerative, aquatic, adorable</td></tr>
+<tr><td><a href="/species/owl">Owl</a></td><td>Animal</td><td>WISDOM</td><td>wise, nocturnal, observant</td></tr>
+<tr><td><a href="/species/cat">Cat</a></td><td>Animal</td><td>SNARK</td><td>independent, curious, elegant</td></tr>
+<tr><td><a href="/species/goose">Goose</a></td><td>Animal</td><td>CHAOS</td><td>chaotic, loud, fearless</td></tr>
+<tr><td><a href="/species/rabbit">Rabbit</a></td><td>Animal</td><td>CHAOS</td><td>quick, fluffy, alert</td></tr>
+<tr><td><a href="/species/octopus">Octopus</a></td><td>Animal</td><td>WISDOM</td><td>intelligent, flexible, deep-sea</td></tr>
+<tr><td><a href="/species/duck">Duck</a></td><td>Animal</td><td>PATIENCE</td><td>friendly, aquatic, cheerful</td></tr>
+<tr><td><a href="/species/penguin">Penguin</a></td><td>Animal</td><td>PATIENCE</td><td>resilient, social, arctic</td></tr>
+<tr><td><a href="/species/turtle">Turtle</a></td><td>Animal</td><td>PATIENCE</td><td>steady, armored, ancient</td></tr>
+<tr><td><a href="/species/snail">Snail</a></td><td>Animal</td><td>PATIENCE</td><td>slow, persistent, spiral</td></tr>
+<tr><td><a href="/species/capybara">Capybara</a></td><td>Animal</td><td>PATIENCE</td><td>chill, social, friendly</td></tr>
+<tr><td><a href="/species/chonk">Chonk</a></td><td>Animal</td><td>SNARK</td><td>round, hefty, lovable</td></tr>
+<tr><td><a href="/species/robot">Robot</a></td><td>Object</td><td>DEBUGGING</td><td>logical, mechanical, efficient</td></tr>
+<tr><td><a href="/species/mushroom">Mushroom</a></td><td>Object</td><td>WISDOM</td><td>fungal, mysterious, forest</td></tr>
+<tr><td><a href="/species/cactus">Cactus</a></td><td>Object</td><td>SNARK</td><td>prickly, resilient, desert</td></tr>
+<tr><td><a href="/species/blob">Blob</a></td><td>Creature</td><td>WISDOM</td><td>amorphous, calm, mysterious</td></tr>
+</table>`
+          },
+          {
+            heading: "Species by Category",
+            body: `<h4>🐾 Animal (12 species)</h4>
+<p>The largest category. Animal species span the full range of stats and personalities — from the chaos-fuelled <a href="/species/goose">Goose</a> to the endlessly patient <a href="/species/turtle">Turtle</a>. If you rolled an animal, you're in good company: they're the most common type and have the widest variety of peak stats.</p>
+<p><strong>Full list:</strong> Axolotl · Owl · Cat · Goose · Rabbit · Octopus · Duck · Penguin · Turtle · Snail · Capybara · Chonk</p>
+
+<h4>✨ Mythical (2 species)</h4>
+<p>The rarest category by design. Only <a href="/species/dragon">Dragon</a> and <a href="/species/ghost">Ghost</a> are Mythical. Rolling either one is already impressive — a Legendary Mythical is the ultimate flex. Dragon rules Debugging; Ghost owns Chaos.</p>
+<p><strong>Full list:</strong> Dragon · Ghost</p>
+
+<h4>🔧 Object (3 species)</h4>
+<p>The unconventional trio. <a href="/species/robot">Robot</a>, <a href="/species/mushroom">Mushroom</a>, and <a href="/species/cactus">Cactus</a> defy the expected "cute animal" format. Robot is the purest Debugging specialist; Mushroom surprises with Wisdom; Cactus has the sharpest Snark. Object species tend to have extremely distinctive ASCII art.</p>
+<p><strong>Full list:</strong> Robot · Mushroom · Cactus</p>
+
+<h4>👾 Creature (1 species)</h4>
+<p>The lone wildcard. <a href="/species/blob">Blob</a> is the only Creature-category species. Its amorphous form and Wisdom peak stat make it uniquely philosophical — a formless being that somehow understands everything. Blob has a small but devoted fan base.</p>
+<p><strong>Full list:</strong> Blob</p>`
+          },
+          {
+            heading: "Species by Peak Stat",
+            body: `<p>Your buddy's <strong>peak stat</strong> is the one attribute that can reach 100 at Legendary rarity. For everyday stats, all species use the same ranges — but the peak stat creates a specialisation that defines the species' identity. Here's how the 18 species break down:</p>
+
+<h4>🔍 DEBUGGING (3 species) — Dragon · Axolotl · Robot</h4>
+<p>The most practically useful peak stat. Debugging buddies are your code quality companions. Dragon brings mythical prestige; Axolotl brings aquatic charm; Robot brings mechanical precision. All three are among the most sought-after species.</p>
+
+<h4>🧠 WISDOM (4 species) — Owl · Octopus · Mushroom · Blob</h4>
+<p>Knowledge and depth. Wisdom species feel like advisors — they don't just do the work, they understand why. Owl is the iconic sage; Octopus the flexible polymath; Mushroom the mysterious oracle; Blob the formless philosopher.</p>
+
+<h4>😤 SNARK (3 species) — Cat · Cactus · Chonk</h4>
+<p>Maximum personality. Snark species have the most attitude. Cat judges your code quietly; Cactus does it with visible spines; Chonk does it with pure rotund confidence. If you want a companion with opinions, these are your picks.</p>
+
+<h4>🌀 CHAOS (3 species) — Goose · Ghost · Rabbit</h4>
+<p>Unpredictable energy. Chaos species are the wildcards that keep sessions interesting. Goose is pure aggression; Ghost adds supernatural mystery; Rabbit brings hyperactive speed. High-Chaos buddies are beloved by the community for entertainment value.</p>
+
+<h4>⏳ PATIENCE (5 species) — Duck · Penguin · Turtle · Snail · Capybara</h4>
+<p>The most patient category — fitting, since it has the most members. These species are steady, calming presences. Duck is cheerful; Penguin resilient; Turtle ancient; Snail persistent; Capybara the zen master. Patience is underrated: a max-Patience Capybara in the terminal is genuinely calming.</p>`
+          },
+          {
+            heading: "Rarity and How It Affects Your Species",
+            body: `<p>Every species can appear at any rarity — Common through Legendary. Rarity determines your buddy's <strong>stat floor</strong> (minimum base stats) and how impressive it looks at peak. The five tiers are:</p>
+<ul>
+<li><strong>Common (60%)</strong> — stats start at 5; any species</li>
+<li><strong>Uncommon (25%)</strong> — stats start at 15</li>
+<li><strong>Rare (10%)</strong> — stats start at 25</li>
+<li><strong>Epic (4%)</strong> — stats start at 35</li>
+<li><strong>Legendary (1%)</strong> — stats start at 50; peak stat can reach 100</li>
+</ul>
+<p>A <strong>Legendary Dragon</strong> with 100 Debugging is theoretically the most powerful buddy in the system. But a <strong>Common Blob</strong> with 5 Wisdom still has infinite philosophical energy. Rarity scales the numbers — the species' soul is constant.</p>
+<p>On top of rarity, any species can roll <strong>Shiny</strong> (1% chance independently). Shiny adds a rare visual marker. A Legendary Shiny of any species is a 1-in-10,000 combination. Want to know your exact odds? Check our <a href="/blog/claude-code-buddy-rarity-guide">rarity deep dive</a>.</p>`
+          },
+          {
+            heading: "How to Find Out Your Species",
+            body: `<p>Your Claude Code Buddy species is determined by a deterministic algorithm that hashes your identity string. The simplest way to discover your buddy is to <a href="/">use the Buddy Checker</a> — enter your Claude Code UUID or username and see your species, rarity, stats, and cosmetics instantly.</p>
+<p>Don't have your UUID? We have a <a href="/blog/find-your-uuid-complete-platform-guide">full guide to finding your UUID</a> on every platform (Mac, Windows, Linux, cloud IDEs).</p>
+<p>Once you know your species, head to its detail page for full lore, stat breakdowns, and ASCII art frames. Each of the 18 species pages includes <strong>frequently asked questions</strong> about that specific buddy type — everything from "why does my cat look smug?" to "how do I maximise my Dragon's Debugging stat?"</p>
+<p>Want to compare your buddy against a teammate's? Use the <a href="/species">Species Index</a> — it has filtering by category, peak stat, and a side-by-side comparison tool for up to three species at once.</p>`
+          },
+          {
+            heading: "Which Species Is the Rarest?",
+            body: `<p>Every species has an equal <strong>probability of appearing</strong> — there's no species-level rarity weighting. What makes certain species feel rare is the combination of low-probability rarity tiers and the sheer variety of 18 possible outcomes.</p>
+<p>That said, community surveys consistently show certain species are seen less often simply because their <em>personality</em> or <em>name</em> is less visible. Species that get the most "wow" reactions when revealed:</p>
+<ol>
+<li><strong>Dragon</strong> — mythical prestige, maximum visual impact</li>
+<li><strong>Ghost</strong> — only two mythical species exist; Ghost feels exclusive</li>
+<li><strong>Axolotl</strong> — real-world internet fame amplifies its terminal version</li>
+<li><strong>Robot</strong> — the most on-brand species for an AI coding tool</li>
+<li><strong>Blob</strong> — so unusual that a Legendary Blob generates genuine surprise</li>
+</ol>
+<p>Remember: since species probability is uniform, if you've talked to 18 teammates, statistically you've already seen representatives of every species. The "rarest" buddy is always the one you haven't found yet.</p>
+<p>Ready to explore each species in depth? Browse the <a href="/species">full species index</a> — filter by category, search by name, or hit the random button to discover a new companion.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "所有 Claude Code Buddy 物种 — 完整列表与参考指南（2026）",
+        metaTitle: "Claude Code Buddy 全物种列表 — 完整参考指南 2026",
+        metaDescription: "18 种 Claude Code Buddy 物种完整列表，按类别、峰值属性和个性标签分类整理。2026 年权威物种参考手册。",
+        excerpt: "所有 18 种 Claude Code Buddy 物种汇总 — 按类别、峰值属性和个性标签分类。收藏此页作为你的权威物种参考。",
+        sections: [
+          {
+            heading: "全部 18 种 Claude Code Buddy 物种一览",
+            body: `<p>Claude Code Buddy 共有 <strong>18 种独特物种</strong>，每种都由你的身份字符串确定性生成。无论你是想查看自己抽到的物种、重抽前做功课，还是与队友对比，这里是你的完整参考手册。</p>
+<p>每个物种属于四大类别之一：<strong>动物（Animal）</strong>、<strong>生物（Creature）</strong>、<strong>物品（Object）</strong>或<strong>神话（Mythical）</strong>。每种都有一个专属<strong>峰值属性</strong>——在传说稀有度时可达到 100 的那个属性——以及一组定义其终端行为的个性标签。</p>
+<table>
+<tr><th>物种</th><th>类别</th><th>峰值属性</th><th>个性标签</th></tr>
+<tr><td><a href="/species/dragon">龙</a></td><td>神话</td><td>调试</td><td>强大、古老、威严</td></tr>
+<tr><td><a href="/species/ghost">幽灵</a></td><td>神话</td><td>混沌</td><td>虚无、诡异、顽皮</td></tr>
+<tr><td><a href="/species/axolotl">六角恐龙</a></td><td>动物</td><td>调试</td><td>再生、水生、可爱</td></tr>
+<tr><td><a href="/species/owl">猫头鹰</a></td><td>动物</td><td>智慧</td><td>智者、夜行、洞察</td></tr>
+<tr><td><a href="/species/cat">猫</a></td><td>动物</td><td>嘲讽</td><td>独立、好奇、优雅</td></tr>
+<tr><td><a href="/species/goose">鹅</a></td><td>动物</td><td>混沌</td><td>混乱、吵闹、无畏</td></tr>
+<tr><td><a href="/species/rabbit">兔子</a></td><td>动物</td><td>混沌</td><td>迅捷、蓬松、警觉</td></tr>
+<tr><td><a href="/species/octopus">章鱼</a></td><td>动物</td><td>智慧</td><td>聪明、灵活、深海</td></tr>
+<tr><td><a href="/species/duck">鸭子</a></td><td>动物</td><td>耐心</td><td>友好、水生、开朗</td></tr>
+<tr><td><a href="/species/penguin">企鹅</a></td><td>动物</td><td>耐心</td><td>坚韧、社交、极地</td></tr>
+<tr><td><a href="/species/turtle">乌龟</a></td><td>动物</td><td>耐心</td><td>稳健、甲壳、古老</td></tr>
+<tr><td><a href="/species/snail">蜗牛</a></td><td>动物</td><td>耐心</td><td>缓慢、坚持、螺旋</td></tr>
+<tr><td><a href="/species/capybara">水豚</a></td><td>动物</td><td>耐心</td><td>淡然、社交、友好</td></tr>
+<tr><td><a href="/species/chonk">胖胖</a></td><td>动物</td><td>嘲讽</td><td>圆润、敦实、可爱</td></tr>
+<tr><td><a href="/species/robot">机器人</a></td><td>物品</td><td>调试</td><td>逻辑、机械、高效</td></tr>
+<tr><td><a href="/species/mushroom">蘑菇</a></td><td>物品</td><td>智慧</td><td>菌类、神秘、森林</td></tr>
+<tr><td><a href="/species/cactus">仙人掌</a></td><td>物品</td><td>嘲讽</td><td>多刺、坚韧、沙漠</td></tr>
+<tr><td><a href="/species/blob">史莱姆</a></td><td>生物</td><td>智慧</td><td>无定形、平静、神秘</td></tr>
+</table>`
+          },
+          {
+            heading: "按类别分类",
+            body: `<h4>🐾 动物（12 种）</h4>
+<p>数量最多的类别。动物物种覆盖全部属性和个性——从充满混沌的<a href="/species/goose">鹅</a>到无限耐心的<a href="/species/turtle">乌龟</a>。动物类是最常见的类型，峰值属性种类也最丰富。</p>
+<p><strong>完整列表：</strong>六角恐龙 · 猫头鹰 · 猫 · 鹅 · 兔子 · 章鱼 · 鸭子 · 企鹅 · 乌龟 · 蜗牛 · 水豚 · 胖胖</p>
+
+<h4>✨ 神话（2 种）</h4>
+<p>从设计上最为稀有的类别。只有<a href="/species/dragon">龙</a>和<a href="/species/ghost">幽灵</a>是神话物种。抽到任何一个已经很厉害——传说稀有度的神话物种是终极炫耀资本。龙主宰调试；幽灵掌控混沌。</p>
+<p><strong>完整列表：</strong>龙 · 幽灵</p>
+
+<h4>🔧 物品（3 种）</h4>
+<p>非常规三人组。<a href="/species/robot">机器人</a>、<a href="/species/mushroom">蘑菇</a>和<a href="/species/cactus">仙人掌</a>打破了"可爱动物"的惯例。机器人是最纯粹的调试专家；蘑菇以智慧出奇制胜；仙人掌的嘲讽最为犀利。物品类物种往往拥有极具辨识度的 ASCII 艺术。</p>
+<p><strong>完整列表：</strong>机器人 · 蘑菇 · 仙人掌</p>
+
+<h4>👾 生物（1 种）</h4>
+<p>唯一的通配符。<a href="/species/blob">史莱姆</a>是唯一的生物类物种，其无定形外观和智慧峰值属性使其独具哲学气质。它有一个规模不大但极为忠实的粉丝群体。</p>
+<p><strong>完整列表：</strong>史莱姆</p>`
+          },
+          {
+            heading: "按峰值属性分类",
+            body: `<p>你的 Buddy 的<strong>峰值属性</strong>是在传说稀有度时唯一能达到 100 的那个属性。18 种物种分布如下：</p>
+
+<h4>🔍 调试（3 种）— 龙 · 六角恐龙 · 机器人</h4>
+<p>实用价值最高的峰值属性。调试类 Buddy 是你的代码质量伙伴。龙带来神话级威望；六角恐龙带来水生魅力；机器人带来机械精准度。</p>
+
+<h4>🧠 智慧（4 种）— 猫头鹰 · 章鱼 · 蘑菇 · 史莱姆</h4>
+<p>知识与深度。智慧物种像顾问——它们不仅做事，更明白为什么。猫头鹰是标志性的智者；章鱼是灵活的多面手；蘑菇是神秘的先知；史莱姆是无形的哲学家。</p>
+
+<h4>😤 嘲讽（3 种）— 猫 · 仙人掌 · 胖胖</h4>
+<p>极致个性。嘲讽物种最有态度。猫默默评判你的代码；仙人掌用可见的刺来评判；胖胖用纯粹的圆润自信来评判。</p>
+
+<h4>🌀 混沌（3 种）— 鹅 · 幽灵 · 兔子</h4>
+<p>不可预测的能量。混沌物种是让会话保持趣味的通配符。鹅是纯粹的攻击性；幽灵增添超自然神秘感；兔子带来超活跃的速度。</p>
+
+<h4>⏳ 耐心（5 种）— 鸭子 · 企鹅 · 乌龟 · 蜗牛 · 水豚</h4>
+<p>最多成员的类别——耐心物种最多，恰如其分。鸭子开朗；企鹅坚韧；乌龟古老；蜗牛执着；水豚是禅意大师。</p>`
+          },
+          {
+            heading: "如何查找你的物种",
+            body: `<p>你的 Claude Code Buddy 物种由确定性算法从你的身份字符串哈希得出。最简单的发现方式是<a href="/">使用 Buddy Checker</a>——输入你的 Claude Code UUID 或用户名，立即查看你的物种、稀有度、属性和外观。</p>
+<p>还不知道你的 UUID？我们有一份<a href="/blog/find-your-uuid-complete-platform-guide">在所有平台查找 UUID 的完整指南</a>（Mac、Windows、Linux、云端 IDE）。</p>
+<p>知道物种后，前往对应的物种详情页查看完整传说、属性分析和 ASCII 动画帧。想比较多个物种？使用<a href="/species">物种图鉴</a>——支持按类别、峰值属性筛选，以及最多三种物种的并排对比工具。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "모든 Claude Code Buddy 종류 — 완전 목록 및 참고 가이드 (2026)",
+        metaTitle: "Claude Code Buddy 모든 종류 목록 — 완전 참고 가이드 2026",
+        metaDescription: "18가지 Claude Code Buddy 종류의 완전한 목록. 카테고리, 최고 스탯, 성격 태그별로 정리된 2026년 최신 종류 참고 자료.",
+        excerpt: "18가지 Claude Code Buddy 종류를 한곳에서 — 카테고리, 최고 스탯, 성격별 분류. 완전한 종류 참고 자료로 북마크하세요.",
+        sections: [
+          {
+            heading: "18가지 Claude Code Buddy 종류 한눈에 보기",
+            body: `<p>Claude Code Buddy에는 <strong>18가지 고유 종류</strong>가 있으며, 각각 신원 문자열에서 결정론적으로 생성됩니다. 어떤 종류를 뽑았는지 확인하거나, 리롤 전 조사하거나, 팀원과 비교할 때 — 이 완전한 참고 자료를 활용하세요.</p>
+<p>모든 종류는 네 카테고리 중 하나에 속합니다: <strong>동물(Animal)</strong>, <strong>생물(Creature)</strong>, <strong>사물(Object)</strong>, <strong>신화(Mythical)</strong>. 각 종류에는 전설 등급에서 100에 달할 수 있는 <strong>최고 스탯</strong>과 터미널 행동을 정의하는 성격 태그가 있습니다.</p>
+<table>
+<tr><th>종류</th><th>카테고리</th><th>최고 스탯</th><th>성격 태그</th></tr>
+<tr><td><a href="/species/dragon">드래곤</a></td><td>신화</td><td>디버깅</td><td>강력함, 고대, 위엄</td></tr>
+<tr><td><a href="/species/ghost">유령</a></td><td>신화</td><td>혼돈</td><td>비현실적, 무서운, 장난꾸러기</td></tr>
+<tr><td><a href="/species/axolotl">아홀로틀</a></td><td>동물</td><td>디버깅</td><td>재생, 수생, 귀여운</td></tr>
+<tr><td><a href="/species/owl">올빼미</a></td><td>동물</td><td>지혜</td><td>현명함, 야행성, 관찰력</td></tr>
+<tr><td><a href="/species/cat">고양이</a></td><td>동물</td><td>빈정거림</td><td>독립적, 호기심, 우아함</td></tr>
+<tr><td><a href="/species/goose">거위</a></td><td>동물</td><td>혼돈</td><td>혼란, 시끄러운, 두려움 없음</td></tr>
+<tr><td><a href="/species/rabbit">토끼</a></td><td>동물</td><td>혼돈</td><td>빠른, 복슬복슬, 경계</td></tr>
+<tr><td><a href="/species/octopus">문어</a></td><td>동물</td><td>지혜</td><td>지능적, 유연한, 심해</td></tr>
+<tr><td><a href="/species/duck">오리</a></td><td>동물</td><td>인내</td><td>친근함, 수생, 쾌활함</td></tr>
+<tr><td><a href="/species/penguin">펭귄</a></td><td>동물</td><td>인내</td><td>회복력, 사교적, 극지방</td></tr>
+<tr><td><a href="/species/turtle">거북이</a></td><td>동물</td><td>인내</td><td>꾸준함, 갑옷, 고대</td></tr>
+<tr><td><a href="/species/snail">달팽이</a></td><td>동물</td><td>인내</td><td>느린, 끈질긴, 나선형</td></tr>
+<tr><td><a href="/species/capybara">카피바라</a></td><td>동물</td><td>인내</td><td>여유로운, 사교적, 친근함</td></tr>
+<tr><td><a href="/species/chonk">통통이</a></td><td>동물</td><td>빈정거림</td><td>둥근, 묵직한, 사랑스러운</td></tr>
+<tr><td><a href="/species/robot">로봇</a></td><td>사물</td><td>디버깅</td><td>논리적, 기계적, 효율적</td></tr>
+<tr><td><a href="/species/mushroom">버섯</a></td><td>사물</td><td>지혜</td><td>균류, 신비로운, 숲</td></tr>
+<tr><td><a href="/species/cactus">선인장</a></td><td>사물</td><td>빈정거림</td><td>가시, 회복력, 사막</td></tr>
+<tr><td><a href="/species/blob">블롭</a></td><td>생물</td><td>지혜</td><td>무정형, 차분함, 신비로운</td></tr>
+</table>`
+          },
+          {
+            heading: "카테고리별 종류",
+            body: `<h4>🐾 동물 (12종)</h4>
+<p>가장 큰 카테고리. 동물 종류는 혼돈 넘치는 <a href="/species/goose">거위</a>부터 무한한 인내의 <a href="/species/turtle">거북이</a>까지 다양합니다.</p>
+<p><strong>전체 목록:</strong> 아홀로틀 · 올빼미 · 고양이 · 거위 · 토끼 · 문어 · 오리 · 펭귄 · 거북이 · 달팽이 · 카피바라 · 통통이</p>
+
+<h4>✨ 신화 (2종)</h4>
+<p>가장 희귀한 카테고리. <a href="/species/dragon">드래곤</a>과 <a href="/species/ghost">유령</a>만이 신화 종류입니다. 전설 신화 종류는 궁극의 자랑거리입니다.</p>
+<p><strong>전체 목록:</strong> 드래곤 · 유령</p>
+
+<h4>🔧 사물 (3종)</h4>
+<p>독특한 3인조. <a href="/species/robot">로봇</a>은 순수한 디버깅 전문가, <a href="/species/mushroom">버섯</a>은 지혜로 놀라움을, <a href="/species/cactus">선인장</a>은 가장 날카로운 빈정거림을 자랑합니다.</p>
+<p><strong>전체 목록:</strong> 로봇 · 버섯 · 선인장</p>
+
+<h4>👾 생물 (1종)</h4>
+<p><a href="/species/blob">블롭</a>은 유일한 생물 카테고리 종류입니다. 작지만 헌신적인 팬층을 보유하고 있습니다.</p>
+<p><strong>전체 목록:</strong> 블롭</p>`
+          },
+          {
+            heading: "최고 스탯별 종류",
+            body: `<h4>🔍 디버깅 (3종) — 드래곤 · 아홀로틀 · 로봇</h4>
+<p>가장 실용적인 최고 스탯. 디버깅 버디는 코드 품질 동반자입니다.</p>
+
+<h4>🧠 지혜 (4종) — 올빼미 · 문어 · 버섯 · 블롭</h4>
+<p>지식과 깊이. 지혜 종류는 조언자처럼 느껴집니다.</p>
+
+<h4>😤 빈정거림 (3종) — 고양이 · 선인장 · 통통이</h4>
+<p>최대 개성. 빈정거림 종류는 가장 태도가 강합니다.</p>
+
+<h4>🌀 혼돈 (3종) — 거위 · 유령 · 토끼</h4>
+<p>예측 불가능한 에너지. 혼돈 종류는 세션을 흥미롭게 만드는 와일드카드입니다.</p>
+
+<h4>⏳ 인내 (5종) — 오리 · 펭귄 · 거북이 · 달팽이 · 카피바라</h4>
+<p>가장 많은 종류를 가진 카테고리. 이들은 안정적이고 편안한 존재입니다.</p>`
+          },
+          {
+            heading: "내 종류 확인하는 방법",
+            body: `<p>Claude Code Buddy 종류는 신원 문자열을 해싱하는 결정론적 알고리즘으로 결정됩니다. <a href="/">버디 체커</a>를 사용해 UUID나 사용자명을 입력하면 즉시 종류, 등급, 스탯, 외관을 확인할 수 있습니다.</p>
+<p>UUID를 모르시나요? <a href="/blog/find-your-uuid-complete-platform-guide">모든 플랫폼에서 UUID 찾기 완전 가이드</a>를 참고하세요. <a href="/species">종류 도감</a>에서 카테고리, 최고 스탯으로 필터링하거나 최대 세 종류를 나란히 비교해 보세요.</p>`
+          }
+        ]
+      }
+    }
+  },
+
+  // ── NEW ARTICLE 2 ─────────────────────────────────────────────────────────
+  {
+    slug: "claude-buddy-types-and-best-picks-guide",
+    publishedAt: "2026-04-12",
+    readingTime: 7,
+    tags: ["types", "guide", "best", "comparison", "personality"],
+    discussionCategory: "guides" as const,
+    content: {
+      en: {
+        title: "Claude Buddy Types Explained: Which Buddy Is Best for You?",
+        metaTitle: "Claude Buddy Types Explained — Which Is the Best Claude Buddy? (2026)",
+        metaDescription: "A full breakdown of every Claude Buddy type by personality, peak stat, and coding style. Find out which type is the best Claude Code Buddy for your workflow.",
+        excerpt: "Not all Claude Buddies are the same. Discover the 5 personality types, 4 categories, and which buddy best matches how you code — from zen Patience specialists to unhinged Chaos companions.",
+        sections: [
+          {
+            heading: "Why Buddy Type Matters More Than Rarity",
+            body: `<p>Most Claude Buddy guides focus obsessively on rarity — Legendary this, Shiny that. But here's the truth that veteran users know: <strong>your buddy's type determines your daily experience</strong>, not its rarity tier.</p>
+<p>A Common Capybara with 30 Patience still radiates calm in your terminal. A Legendary Goose with 100 Chaos is still going to make your life chaotic. Rarity scales the numbers; type shapes the personality.</p>
+<p>The buddy system has two classification axes:</p>
+<ol>
+<li><strong>Peak Stat</strong> — five archetypes: Debugging, Wisdom, Patience, Snark, Chaos</li>
+<li><strong>Category</strong> — four groups: Animal, Mythical, Object, Creature</li>
+</ol>
+<p>Understanding both axes helps you answer the real question: <em>which Claude Buddy is best for me?</em></p>`
+          },
+          {
+            heading: "The 5 Buddy Archetypes (by Peak Stat)",
+            body: `<h4>🔍 The Debugger — Dragon, Axolotl, Robot</h4>
+<p><strong>Best for:</strong> Developers who want a buddy that feels useful, not just decorative.</p>
+<p>Debugging buddies are the most practically motivated companions. They're the ones that metaphorically "look at your code" with analytical eyes. High Debugging stat buddies lean into precision and problem-solving. The three Debugging species couldn't be more different in personality — Dragon is mythical and imposing, Axolotl is adorable and aquatic, Robot is purely logical — but they all share that core focus on getting things fixed.</p>
+<p><strong>Who should want this type:</strong> Anyone who spends more time debugging than writing new code. If you've ever muttered "why does this work on my machine", a Dragon with 90 Debugging is your spiritual support animal.</p>
+
+<h4>🧠 The Sage — Owl, Octopus, Mushroom, Blob</h4>
+<p><strong>Best for:</strong> Developers who value understanding over speed.</p>
+<p>Wisdom buddies are the thinkers. They don't just solve the problem — they understand why it exists. Owl brings nocturnal depth; Octopus brings multi-threaded intelligence; Mushroom brings fungal omniscience; Blob brings formless, boundless insight. High-Wisdom companions feel like they're always three steps ahead.</p>
+<p><strong>Who should want this type:</strong> Architects, tech leads, and anyone who reads documentation before writing code. A max-Wisdom Owl is basically a senior engineer who never judges you for asking obvious questions.</p>
+
+<h4>😤 The Critic — Cat, Cactus, Chonk</h4>
+<p><strong>Best for:</strong> Developers who thrive on honest (harsh) feedback.</p>
+<p>Snark buddies have opinions, and they're not afraid to show them. Cat silently judges your variable naming. Cactus pokes holes in your logic. Chonk sits there looking disappointed but lovable. Despite the attitude, Snark species are among the community's most beloved — there's something deeply relatable about a companion that matches developer self-criticism energy.</p>
+<p><strong>Who should want this type:</strong> Anyone who does code reviews for a living, or who benefits from a buddy that reflects their own inner critic back at them. Warning: pairing a Legendary Snark Cat with imposter syndrome is not recommended.</p>
+
+<h4>🌀 The Wildcard — Goose, Ghost, Rabbit</h4>
+<p><strong>Best for:</strong> Developers who want their terminal to be entertaining, not just functional.</p>
+<p>Chaos buddies are the party guests who knock things over and somehow make the party better. Goose is pure aggressive unpredictability; Ghost adds supernatural randomness; Rabbit brings hyperactive kinetic energy. High-Chaos companions are statistically more likely to be shared on social media, because chaos generates content.</p>
+<p><strong>Who should want this type:</strong> Frontend developers, anyone who works on creative projects, or devs who need a reminder not to take things too seriously. A Legendary Ghost with 95 Chaos in your terminal is a gift to the soul.</p>
+
+<h4>⏳ The Anchor — Duck, Penguin, Turtle, Snail, Capybara</h4>
+<p><strong>Best for:</strong> Developers who need calm, not stimulation.</p>
+<p>Patience buddies are the antidote to tech industry pressure. They don't rush. They don't judge. They are simply there, steady and unhurried. Each Patience species has a slightly different flavor: Duck is chirpy; Penguin is sociably resilient; Turtle is ancient wisdom; Snail is relentless persistence; Capybara is peak chill. All five anchor you when deadlines and standup pressure would otherwise spiral.</p>
+<p><strong>Who should want this type:</strong> Senior engineers who've learned that most emergencies aren't. Anyone in a high-stress environment who needs their terminal to feel like a zen garden, not a war room.</p>`
+          },
+          {
+            heading: "The 4 Categories: What They Say About Your Buddy",
+            body: `<p>Beyond peak stats, every buddy belongs to one of four <strong>category archetypes</strong> that define its relationship with the codebase:</p>
+
+<h4>🐾 Animal — The Relatable Companion</h4>
+<p>Animal buddies are the ones that feel like pets. They have biological instincts, recognizable behaviors, and the kind of personality you'd project onto a real creature. The 12 animal species span every archetype — Debugging, Wisdom, Patience, Snark, and Chaos are all represented. If you want a buddy that feels alive and organic, Animal is your category.</p>
+
+<h4>✨ Mythical — The Prestige Pick</h4>
+<p>Dragon and Ghost are the only two Mythical species, making them instantly prestigious. Mythical buddies don't follow the rules of biology — they have powers that transcend normal creature behavior. A Mythical buddy signals that you take the system seriously (or got very lucky). Mythical buddies have the highest "wow factor" when revealed to teammates.</p>
+
+<h4>🔧 Object — The Unconventional Choice</h4>
+<p>Robot, Mushroom, and Cactus break the living-creature mold. Object buddies are statement pieces — they say something about their owner's personality. A Robot owner values logic over sentiment. A Mushroom owner appreciates unexpected wisdom. A Cactus owner wants everyone to know they have defensive spines but are secretly flowering inside. Object buddies are divisive (some people find them weird) which makes their fans all the more devoted.</p>
+
+<h4>👾 Creature — The Rare Collector's Item</h4>
+<p>Blob is the sole Creature species — the only one that defies categorization even within the system. Blob owners are a special breed: they embrace ambiguity, appreciate that formlessness can be profound, and usually have the most interesting things to say about their buddy. One Blob is all you need.</p>`
+          },
+          {
+            heading: "Best Claude Buddy by Coding Role",
+            body: `<p>Different roles have different needs. Here's a quick guide to the best buddy type for common developer archetypes:</p>
+<table>
+<tr><th>Your Role</th><th>Best Buddy Type</th><th>Top Pick</th></tr>
+<tr><td>Backend / systems engineer</td><td>Debugging</td><td><a href="/species/dragon">Dragon</a> or <a href="/species/robot">Robot</a></td></tr>
+<tr><td>Frontend / creative dev</td><td>Chaos</td><td><a href="/species/goose">Goose</a> or <a href="/species/ghost">Ghost</a></td></tr>
+<tr><td>Architect / tech lead</td><td>Wisdom</td><td><a href="/species/owl">Owl</a> or <a href="/species/octopus">Octopus</a></td></tr>
+<tr><td>Code reviewer</td><td>Snark</td><td><a href="/species/cat">Cat</a></td></tr>
+<tr><td>Senior / burned-out dev</td><td>Patience</td><td><a href="/species/capybara">Capybara</a> or <a href="/species/turtle">Turtle</a></td></tr>
+<tr><td>DevOps / infra</td><td>Debugging</td><td><a href="/species/axolotl">Axolotl</a></td></tr>
+<tr><td>Data scientist</td><td>Wisdom</td><td><a href="/species/mushroom">Mushroom</a> or <a href="/species/blob">Blob</a></td></tr>
+<tr><td>Junior dev</td><td>Patience</td><td><a href="/species/penguin">Penguin</a></td></tr>
+</table>
+<p>Remember: you don't choose your buddy — it's generated from your identity. But knowing what type you have helps you appreciate it. And if your rolled type doesn't match your vibe, the <a href="/blog/how-to-reroll-your-claude-buddy-legendary-shiny-hunt">reroll guide</a> explains how to find an input string that produces your ideal companion.</p>`
+          },
+          {
+            heading: "What's the Single Best Claude Buddy?",
+            body: `<p>The honest answer: <strong>there is no objectively best buddy</strong>. The system is designed so that every species has a coherent identity and a real fan base. But if forced to pick a "best" by each metric:</p>
+<ul>
+<li><strong>Best peak stat utility:</strong> Dragon (Debugging is the most practically valuable)</li>
+<li><strong>Best personality:</strong> Cat (the Snark archetype resonates deeply with developer culture)</li>
+<li><strong>Best flex:</strong> Legendary Shiny Dragon (maximum rarity + maximum visual impact)</li>
+<li><strong>Best for mental health:</strong> Capybara (Patience is underrated in the tech industry)</li>
+<li><strong>Best meme potential:</strong> Goose (chaotic energy translates perfectly to social media)</li>
+<li><strong>Most underrated:</strong> Blob (Wisdom + creature category = sleeper pick)</li>
+</ul>
+<p>Ultimately, the best buddy is the one you got. The deterministic algorithm that generates your companion is the same one that makes you unique — your UUID, your identity, your buddy. <a href="/">Check yours now</a> and see where it falls in the type system.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "Claude Buddy 类型详解：哪种 Buddy 最适合你？",
+        metaTitle: "Claude Buddy 类型详解 — 哪种 Claude Buddy 最好？（2026）",
+        metaDescription: "全面解析每种 Claude Buddy 类型的个性、峰值属性和编码风格。找出哪种 Claude Code Buddy 最适合你的工作流程。",
+        excerpt: "并非所有 Claude Buddy 都相同。了解 5 种个性类型、4 大类别，以及哪种 Buddy 最契合你的编码方式——从禅意耐心派到彻底混沌派。",
+        sections: [
+          {
+            heading: "为什么 Buddy 类型比稀有度更重要",
+            body: `<p>大多数 Claude Buddy 攻略都痴迷于稀有度——传说、闪光之类的。但资深用户都知道一个真相：<strong>Buddy 的类型决定你的日常体验</strong>，而不是稀有度等级。</p>
+<p>一只属性 30 的普通水豚仍然在你的终端散发宁静。一只拥有 100 混沌属性的传说鹅依然会让你的生活充满混乱。稀有度影响数值；类型塑造个性。</p>
+<p>Buddy 系统有两个分类维度：</p>
+<ol>
+<li><strong>峰值属性</strong>——五种原型：调试、智慧、耐心、嘲讽、混沌</li>
+<li><strong>类别</strong>——四大分组：动物、神话、物品、生物</li>
+</ol>`
+          },
+          {
+            heading: "5 种 Buddy 原型（按峰值属性）",
+            body: `<h4>🔍 调试者——龙、六角恐龙、机器人</h4>
+<p><strong>最适合：</strong>希望 Buddy 实用而非装饰的开发者。</p>
+<p>调试类 Buddy 是最注重实用价值的伙伴。三种调试物种个性迥异——龙威严神秘，六角恐龙可爱水润，机器人纯粹逻辑——但它们都专注于把问题解决掉。</p>
+<p><strong>推荐给：</strong>花更多时间调试而非写新代码的任何人。如果你曾经低声咒骂"为什么在我电脑上能跑"，拥有 90 调试属性的龙就是你的精神支柱。</p>
+
+<h4>🧠 智者——猫头鹰、章鱼、蘑菇、史莱姆</h4>
+<p><strong>最适合：</strong>重视理解而非速度的开发者。</p>
+<p>智慧类 Buddy 是思考者。猫头鹰带来深夜的深邃；章鱼带来多线程智慧；蘑菇带来菌类全知感；史莱姆带来无形而无限的洞见。高智慧伙伴总感觉领先你三步。</p>
+<p><strong>推荐给：</strong>架构师、技术负责人，以及在写代码前先读文档的人。满级智慧猫头鹰基本就是一个从不嘲笑你问简单问题的高级工程师。</p>
+
+<h4>😤 批评家——猫、仙人掌、胖胖</h4>
+<p><strong>最适合：</strong>在严苛（诚实）反馈中成长的开发者。</p>
+<p>嘲讽类 Buddy 有自己的观点，从不掩饰。猫默默评判你的变量命名；仙人掌在你的逻辑上扎针；胖胖坐在那里看起来既失望又可爱。尽管态度强硬，嘲讽系物种却是社区最受喜爱的之一——有一种深深的共鸣：这只 Buddy 映照出了开发者的内心批判。</p>
+
+<h4>🌀 通配符——鹅、幽灵、兔子</h4>
+<p><strong>最适合：</strong>希望终端有趣而不只是实用的开发者。</p>
+<p>混沌类 Buddy 是那种打翻东西却莫名让派对更好的客人。鹅是纯粹的不可预测攻击性；幽灵增添超自然随机感；兔子带来超活跃的动能。高混沌伙伴统计上更容易被分享到社交媒体，因为混沌产生内容。</p>
+
+<h4>⏳ 锚点——鸭子、企鹅、乌龟、蜗牛、水豚</h4>
+<p><strong>最适合：</strong>需要平静而非刺激的开发者。</p>
+<p>耐心类 Buddy 是科技行业压力的解药。它们不急不躁，不评判，只是稳稳地在那里。水豚是极致的禅意；乌龟是古老智慧；蜗牛是无尽坚持。当截止日期和每日站会的压力让你快要崩溃时，它们是你的港湾。</p>`
+          },
+          {
+            heading: "按编码角色推荐最佳 Buddy",
+            body: `<table>
+<tr><th>你的角色</th><th>最佳 Buddy 类型</th><th>首选</th></tr>
+<tr><td>后端 / 系统工程师</td><td>调试</td><td><a href="/species/dragon">龙</a> 或 <a href="/species/robot">机器人</a></td></tr>
+<tr><td>前端 / 创意开发</td><td>混沌</td><td><a href="/species/goose">鹅</a> 或 <a href="/species/ghost">幽灵</a></td></tr>
+<tr><td>架构师 / 技术负责人</td><td>智慧</td><td><a href="/species/owl">猫头鹰</a> 或 <a href="/species/octopus">章鱼</a></td></tr>
+<tr><td>代码审查员</td><td>嘲讽</td><td><a href="/species/cat">猫</a></td></tr>
+<tr><td>高级 / 精力耗尽的开发者</td><td>耐心</td><td><a href="/species/capybara">水豚</a> 或 <a href="/species/turtle">乌龟</a></td></tr>
+<tr><td>DevOps / 基础设施</td><td>调试</td><td><a href="/species/axolotl">六角恐龙</a></td></tr>
+<tr><td>数据科学家</td><td>智慧</td><td><a href="/species/mushroom">蘑菇</a> 或 <a href="/species/blob">史莱姆</a></td></tr>
+<tr><td>初级开发者</td><td>耐心</td><td><a href="/species/penguin">企鹅</a></td></tr>
+</table>
+<p>记住：你无法选择 Buddy——它由你的身份生成。但了解你的类型可以帮助你更欣赏它。如果抽到的类型不符合你的感觉，<a href="/blog/how-to-reroll-your-claude-buddy-legendary-shiny-hunt">重抽指南</a>会告诉你如何找到生成理想伙伴的输入字符串。</p>`
+          },
+          {
+            heading: "哪种 Claude Buddy 最好？",
+            body: `<p>诚实的答案：<strong>没有客观上最好的 Buddy</strong>。系统的设计使每种物种都有完整的身份认同和真实的粉丝群。但如果非要按维度评选"最好"：</p>
+<ul>
+<li><strong>峰值属性实用性最强：</strong>龙（调试是最有实际价值的属性）</li>
+<li><strong>个性最佳：</strong>猫（嘲讽原型与开发者文化高度共鸣）</li>
+<li><strong>最能炫耀：</strong>传说闪光龙（最高稀有度 + 最大视觉冲击）</li>
+<li><strong>对心理健康最好：</strong>水豚（耐心在科技行业被严重低估）</li>
+<li><strong>梗潜力最大：</strong>鹅（混沌能量完美适配社交媒体）</li>
+<li><strong>最被低估：</strong>史莱姆（智慧 + 生物类别 = 黑马选择）</li>
+</ul>
+<p>归根结底，最好的 Buddy 就是你抽到的那只。<a href="/">现在查看你的 Buddy</a>，看看它在类型系统中处于什么位置。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "Claude Buddy 유형 완전 해설: 당신에게 가장 좋은 버디는?",
+        metaTitle: "Claude Buddy 유형 해설 — 최고의 Claude Buddy는? (2026)",
+        metaDescription: "모든 Claude Buddy 유형을 성격, 최고 스탯, 코딩 스타일별로 분석. 당신의 워크플로우에 가장 잘 맞는 Claude Code Buddy를 찾아보세요.",
+        excerpt: "모든 Claude Buddy가 같지 않습니다. 5가지 성격 유형, 4가지 카테고리, 그리고 코딩 방식에 맞는 최적의 버디를 알아보세요.",
+        sections: [
+          {
+            heading: "버디 유형이 희귀도보다 중요한 이유",
+            body: `<p>대부분의 Claude Buddy 가이드는 희귀도에 집착합니다 — 전설급, 반짝이는 것들. 하지만 베테랑 사용자들이 아는 진실이 있습니다: <strong>버디의 유형이 일상 경험을 결정합니다</strong>, 희귀도 등급이 아니라.</p>
+<p>희귀도는 숫자를 스케일링하고, 유형은 성격을 형성합니다. 버디 시스템에는 두 가지 분류 축이 있습니다:</p>
+<ol>
+<li><strong>최고 스탯</strong> — 다섯 가지 원형: 디버깅, 지혜, 인내, 빈정거림, 혼돈</li>
+<li><strong>카테고리</strong> — 네 그룹: 동물, 신화, 사물, 생물</li>
+</ol>`
+          },
+          {
+            heading: "5가지 버디 원형 (최고 스탯별)",
+            body: `<h4>🔍 디버거 — 드래곤, 아홀로틀, 로봇</h4>
+<p><strong>최적 대상:</strong> 장식보다 실용적인 버디를 원하는 개발자.</p>
+<p>디버깅 버디는 가장 실용적인 동반자입니다. 드래곤은 신화적 위엄, 아홀로틀은 귀여운 매력, 로봇은 순수한 논리를 제공하지만 모두 문제 해결에 집중합니다.</p>
+
+<h4>🧠 현자 — 올빼미, 문어, 버섯, 블롭</h4>
+<p><strong>최적 대상:</strong> 속도보다 이해를 중시하는 개발자.</p>
+<p>지혜 버디는 사상가입니다. 항상 세 발 앞서 있는 것처럼 느껴지는 동반자입니다.</p>
+
+<h4>😤 비평가 — 고양이, 선인장, 통통이</h4>
+<p><strong>최적 대상:</strong> 솔직한 (가혹한) 피드백에서 성장하는 개발자.</p>
+<p>빈정거림 버디는 의견이 있고 숨기지 않습니다. 개발자의 자기비판 에너지를 반영합니다.</p>
+
+<h4>🌀 와일드카드 — 거위, 유령, 토끼</h4>
+<p><strong>최적 대상:</strong> 터미널이 기능적이면서도 재미있기를 원하는 개발자.</p>
+<p>혼돈 버디는 높은 카오스 스탯으로 SNS에서 가장 많이 공유됩니다.</p>
+
+<h4>⏳ 닻 — 오리, 펭귄, 거북이, 달팽이, 카피바라</h4>
+<p><strong>최적 대상:</strong> 자극보다 평온함이 필요한 개발자.</p>
+<p>인내 버디는 IT 업계 압박의 해독제입니다. 서두르지 않고, 판단하지 않으며, 그저 안정적으로 그곳에 있습니다.</p>`
+          },
+          {
+            heading: "코딩 역할별 최고의 Claude Buddy",
+            body: `<table>
+<tr><th>역할</th><th>최적 버디 유형</th><th>추천</th></tr>
+<tr><td>백엔드 / 시스템 엔지니어</td><td>디버깅</td><td><a href="/species/dragon">드래곤</a> 또는 <a href="/species/robot">로봇</a></td></tr>
+<tr><td>프론트엔드 / 크리에이티브</td><td>혼돈</td><td><a href="/species/goose">거위</a> 또는 <a href="/species/ghost">유령</a></td></tr>
+<tr><td>아키텍트 / 테크 리드</td><td>지혜</td><td><a href="/species/owl">올빼미</a> 또는 <a href="/species/octopus">문어</a></td></tr>
+<tr><td>코드 리뷰어</td><td>빈정거림</td><td><a href="/species/cat">고양이</a></td></tr>
+<tr><td>시니어 / 번아웃 개발자</td><td>인내</td><td><a href="/species/capybara">카피바라</a> 또는 <a href="/species/turtle">거북이</a></td></tr>
+<tr><td>DevOps / 인프라</td><td>디버깅</td><td><a href="/species/axolotl">아홀로틀</a></td></tr>
+<tr><td>데이터 과학자</td><td>지혜</td><td><a href="/species/mushroom">버섯</a> 또는 <a href="/species/blob">블롭</a></td></tr>
+<tr><td>주니어 개발자</td><td>인내</td><td><a href="/species/penguin">펭귄</a></td></tr>
+</table>
+<p>버디를 선택할 수 없다는 것을 기억하세요 — 신원에서 생성됩니다. 뽑은 유형이 마음에 들지 않는다면, <a href="/blog/how-to-reroll-your-claude-buddy-legendary-shiny-hunt">리롤 가이드</a>를 확인하세요. <a href="/">지금 내 버디 확인하기</a></p>`
+          },
+          {
+            heading: "최고의 Claude Buddy는 무엇인가?",
+            body: `<p>솔직한 답: <strong>객관적으로 최고의 버디는 없습니다</strong>. 하지만 항목별 최고를 꼽자면:</p>
+<ul>
+<li><strong>최고 스탯 실용성:</strong> 드래곤 (디버깅이 가장 실용적)</li>
+<li><strong>최고 성격:</strong> 고양이 (개발자 문화와 깊이 공명)</li>
+<li><strong>최고 과시용:</strong> 전설 반짝이 드래곤</li>
+<li><strong>정신건강에 최고:</strong> 카피바라</li>
+<li><strong>밈 잠재력:</strong> 거위</li>
+<li><strong>가장 저평가된:</strong> 블롭</li>
+</ul>
+<p>결국 최고의 버디는 당신이 뽑은 것입니다. <a href="/">지금 확인하세요</a>.</p>`
+          }
+        ]
+      }
+    }
+  },
 ];
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
   return BLOG_ARTICLES.find((a) => a.slug === slug);
