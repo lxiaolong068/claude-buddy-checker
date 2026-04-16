@@ -2964,6 +2964,395 @@ console.log(\`전체 18종 \${trials}회 시행 후 수집 완료\`);</code></pr
   ]
 };
 
+
+// === Tamagotchi to Terminal Article Content ===
+const TAMAGOTCHI_EN: ArticleContent = {
+  title: "From Tamagotchi to Terminal — A Design History of Virtual Pets in Developer Tools",
+  metaTitle: "From Tamagotchi to Terminal — Virtual Pets in Developer Tools Design History",
+  metaDescription: "Trace the 30-year design evolution from Tamagotchi to Claude Buddy. Explore how virtual pet mechanics — care loops, emotional attachment, and companion AI — migrated from toys to IDEs and terminals.",
+  excerpt: "Tamagotchi taught us guilt. Neopets taught us economy. Clippy taught us annoyance. Claude Buddy taught us identity. This deep dive traces 30 years of virtual pet design and explains why a deterministic ASCII creature in your terminal might be the most sophisticated companion yet.",
+  sections: [
+    {
+      heading: "1996: The Egg That Started Everything",
+      body: `<p>On November 23, 1996, Bandai released a small egg-shaped device in Japan that would sell <strong>40 million units</strong> in its first year. The <strong>Tamagotchi</strong>, co-created by Akihiro Yokoi and Aki Maita, introduced a radical design idea: a digital creature that <em>needed</em> you.</p>
+<p>The core loop was deceptively simple: <strong>feed, clean, play, sleep</strong>. Miss a cycle, and your pet got sick. Miss enough, and it died. This wasn't a game you could pause — it was a <em>responsibility</em>. Schools banned them. Parents confiscated them. Children cried in class when their pets died.</p>
+<p>But beneath the cultural panic lay a design breakthrough. Tamagotchi proved three principles that would echo through every virtual pet that followed:</p>
+<table>
+<tr><th>Principle</th><th>Mechanism</th><th>Emotional Effect</th></tr>
+<tr><td><strong>Temporal Binding</strong></td><td>Real-time clock, needs decay over hours</td><td>Obligation, routine</td></tr>
+<tr><td><strong>Mortality Stakes</strong></td><td>Pet can permanently die</td><td>Guilt, urgency</td></tr>
+<tr><td><strong>Identity Attachment</strong></td><td>Each pet develops unique personality</td><td>Ownership, pride</td></tr>
+</table>
+<p>These three principles — <em>time pressure</em>, <em>consequence</em>, and <em>uniqueness</em> — became the DNA of virtual pet design. Every successor would remix them.</p>`
+    },
+    {
+      heading: "1997–2003: The Expansion Era",
+      body: `<p>Tamagotchi's success triggered an explosion of virtual pets, each emphasizing different design pillars:</p>
+<table>
+<tr><th>Year</th><th>Product</th><th>Key Innovation</th><th>Design Emphasis</th></tr>
+<tr><td>1997</td><td><strong>Digimon</strong></td><td>Battle system between devices</td><td>Competition over care</td></tr>
+<tr><td>1998</td><td><strong>Furby</strong></td><td>Physical robot with learning behavior</td><td>Embodied interaction</td></tr>
+<tr><td>1999</td><td><strong>Neopets</strong></td><td>Browser-based economy and community</td><td>Social + collection</td></tr>
+<tr><td>2000</td><td><strong>The Sims</strong></td><td>Life simulation sandbox</td><td>Agency over obligation</td></tr>
+<tr><td>2003</td><td><strong>Club Penguin</strong></td><td>MMO virtual world for kids</td><td>Social identity</td></tr>
+</table>
+<p>Each product shifted the balance between Tamagotchi's three pillars. Digimon replaced care with combat. Neopets replaced mortality with economy. The Sims replaced obligation with sandbox freedom. But all retained the core insight: <strong>people form emotional bonds with digital entities that respond to their actions</strong>.</p>
+<p>Neopets deserves special attention for introducing <strong>collection mechanics</strong> — the drive to own multiple pets, trade them, and display them publicly. This "gotta catch 'em all" impulse would resurface decades later in Claude Buddy's species system.</p>`
+    },
+    {
+      heading: "1997–2007: Clippy and the Office Assistant Disaster",
+      body: `<p>While consumer virtual pets thrived, Microsoft attempted to bring the concept into productivity software — and created one of the most reviled characters in tech history.</p>
+<p><strong>Clippy</strong> (officially "Clippit"), the animated paperclip in Microsoft Office 97, was designed as a context-aware assistant. It watched what you typed, detected patterns (like "Dear Sir"), and proactively offered help. On paper, this was brilliant: a helpful companion that learned your workflow.</p>
+<p>In practice, it was a catastrophe. The design violated a fundamental rule: <strong>a companion must never interrupt the primary task</strong>. Clippy popped up unbidden, blocked the writing area, and offered suggestions that ranged from obvious to insulting. "It looks like you're writing a letter. Would you like help?" became a meme of condescension.</p>
+<p>Microsoft disabled Clippy by default in Office XP (2001) and removed it entirely in Office 2007. But the failure taught the industry a crucial lesson:</p>
+<blockquote><p>A virtual companion in a productivity tool must be <strong>passive by default</strong> and <strong>active only on request</strong>. The user's flow state is sacred.</p></blockquote>
+<p>This lesson would take nearly two decades to be properly applied — first by VSCode Pets, then by Claude Buddy's Watcher Protocol.</p>`
+    },
+    {
+      heading: "2021–2025: Pets Enter the IDE",
+      body: `<p>The modern era of developer-tool pets began in 2021, when Anthony Shaw created <strong>VSCode Pets</strong> — an extension that places animated pixel creatures in a VS Code panel. It now has over <strong>1.5 million installs</strong>.</p>
+<p>VSCode Pets learned from Clippy's mistakes. The pets are <strong>purely decorative</strong>. They don't interrupt. They don't offer suggestions. They simply exist — a cat chasing a ball, a dog wagging its tail, a rubber duck sitting silently (the ultimate debugging companion). The design philosophy is radical in its restraint: <em>companionship without interference</em>.</p>
+<table>
+<tr><th>Feature</th><th>Clippy (1997)</th><th>VSCode Pets (2021)</th></tr>
+<tr><td>Trigger</td><td>Proactive (interrupts)</td><td>Passive (never interrupts)</td></tr>
+<tr><td>Purpose</td><td>Task assistance</td><td>Emotional companionship</td></tr>
+<tr><td>Personality</td><td>Generic, one character</td><td>Multiple species, customizable</td></tr>
+<tr><td>User control</td><td>Difficult to dismiss</td><td>Fully optional panel</td></tr>
+<tr><td>Community reaction</td><td>Hatred</td><td>Adoration</td></tr>
+</table>
+<p>By 2025, the concept expanded further. <strong>Super Pets 2.0</strong> added AI-driven behavior, physics simulation, and 14 animal types. <strong>CodeWalkers</strong> created desktop pets that wander across your screen while you code. Google's <strong>Jules</strong> adopted an octopus mascot. The developer community had clearly signaled: <em>we want companions in our tools</em>.</p>
+<p>But all these implementations shared a limitation: the pets were <strong>cosmetic</strong>. They didn't know what you were coding. They didn't react to your errors. They existed in a parallel universe, visible but disconnected from your actual work.</p>`
+    },
+    {
+      heading: "April 2026: Claude Buddy Changes the Rules",
+      body: `<p>On April 1, 2026, Anthropic shipped something unprecedented inside Claude Code: a virtual pet system that <strong>actually watched you code</strong>.</p>
+<p>Claude Buddy synthesized 30 years of virtual pet design into a single, elegant system. It took Tamagotchi's identity attachment, avoided Clippy's interruption trap, adopted VSCode Pets' passive companionship — and then added something entirely new: <strong>contextual awareness through the Watcher Protocol</strong>.</p>
+<p>The Watcher Protocol is a lightweight observer agent that monitors six event types — task completion, error encounters, long pauses, file saves, test results, and session milestones. When triggered, the buddy generates a brief reaction in character, filtered through its five personality stats (Debugging, Wisdom, Chaos, Snark, Patience).</p>
+<p>This is the design leap: Claude Buddy is not decorative (like VSCode Pets) and not intrusive (like Clippy). It's a <strong>contextual companion</strong> — aware of your work, responsive to your state, but never blocking your flow.</p>
+<table>
+<tr><th>Design Dimension</th><th>Tamagotchi</th><th>Clippy</th><th>VSCode Pets</th><th>Claude Buddy</th></tr>
+<tr><td>Awareness</td><td>None (timer-based)</td><td>Document context</td><td>None</td><td>Full coding context</td></tr>
+<tr><td>Interruption</td><td>Beeps on schedule</td><td>Pops up unbidden</td><td>Never</td><td>Brief, in-flow reactions</td></tr>
+<tr><td>Identity</td><td>Random evolution</td><td>Fixed character</td><td>User-chosen species</td><td>Deterministic from UUID</td></tr>
+<tr><td>Mortality</td><td>Can die</td><td>Immortal</td><td>Immortal</td><td>Removed by Anthropic (v2.1.97)</td></tr>
+<tr><td>Personality</td><td>Basic moods</td><td>One personality</td><td>Species-based</td><td>5-stat system + soul</td></tr>
+<tr><td>Social</td><td>IR trading</td><td>None</td><td>None</td><td>Share cards, Buddy Checker</td></tr>
+</table>`
+    },
+    {
+      heading: "The Five Design Pillars Compared",
+      body: `<p>After 30 years of iteration, we can identify five fundamental design pillars that every virtual pet system must navigate:</p>
+<table>
+<tr><th>Pillar</th><th>Definition</th><th>Tamagotchi</th><th>Neopets</th><th>Clippy</th><th>VSCode Pets</th><th>Claude Buddy</th></tr>
+<tr><td><strong>Care Loop</strong></td><td>Recurring interaction that maintains the bond</td><td>Feed/clean/play</td><td>Feed/play/earn</td><td>Accept/dismiss help</td><td>Watch/enjoy</td><td>Code → buddy reacts</td></tr>
+<tr><td><strong>Identity</strong></td><td>What makes this pet <em>yours</em></td><td>Growth path</td><td>Name + species</td><td>None (generic)</td><td>User picks species</td><td>UUID-deterministic + Claude-named</td></tr>
+<tr><td><strong>Stakes</strong></td><td>What you can lose</td><td>Pet dies</td><td>Pet gets hungry</td><td>Nothing</td><td>Nothing</td><td>Name lost if soul file deleted</td></tr>
+<tr><td><strong>Social</strong></td><td>How you share your pet</td><td>IR link battles</td><td>Trading, profiles</td><td>None</td><td>Screenshots</td><td>Share cards, Buddy Checker</td></tr>
+<tr><td><strong>Context</strong></td><td>Does the pet know what you're doing?</td><td>No</td><td>No</td><td>Yes (poorly)</td><td>No</td><td>Yes (elegantly)</td></tr>
+</table>
+<p>Claude Buddy is the first virtual pet to score meaningfully on <strong>all five pillars</strong>. It has a care loop (your coding activity feeds the buddy's reactions), strong identity (deterministic species + AI-generated name), real stakes (the irreplaceable soul file), social features (share cards and the Buddy Checker), and genuine context awareness (the Watcher Protocol).</p>`
+    },
+    {
+      heading: "The Deterministic Identity Revolution",
+      body: `<p>Perhaps Claude Buddy's most radical design choice is <strong>deterministic identity</strong>. Every previous virtual pet used some form of randomness: Tamagotchi pets evolved based on care quality plus random seeds; Neopets were user-created; VSCode Pets were user-selected. Your pet was either random or chosen.</p>
+<p>Claude Buddy introduced a third option: your pet is <strong>computed from who you are</strong>. Your UUID passes through FNV-1a hashing and Mulberry32 PRNG to deterministically produce your species, rarity, stats, appearance, and shiny status. You don't choose your buddy. You don't get a random one. You <em>discover</em> the one that was always yours.</p>
+<p>This design creates a unique psychological dynamic. When someone discovers they have a Legendary Shiny Dragon, it doesn't feel like winning a lottery — it feels like <em>uncovering a hidden truth</em>. The buddy was always there, encoded in their identity, waiting to be revealed. This is why the <a href="/">Buddy Checker</a> exists: it lets you discover your buddy's identity without even running Claude Code.</p>
+<p>The deterministic model also solves the "save scumming" problem that plagues traditional virtual pets. You can't reload and try again. Your buddy is your buddy. The only way to get a different one is to use a different identity string — which is why the <a href="/blog/how-to-reroll-your-claude-buddy-legendary-shiny-hunt">reroll guide</a> exists.</p>`
+    },
+    {
+      heading: "Why Developers Are Different Users",
+      body: `<p>Virtual pets in developer tools face a unique design challenge: their users are <strong>the hardest audience to design for</strong>. Developers are analytical, skeptical of gimmicks, protective of their workflow, and capable of reverse-engineering any system they encounter.</p>
+<p>This explains why most developer-tool pets fail or remain niche. A pet that's too playful feels unprofessional. A pet that's too helpful feels like Clippy. A pet that's too demanding feels like a distraction. The design space is razor-thin.</p>
+<p>Claude Buddy navigated this by making three key decisions:</p>
+<table>
+<tr><th>Decision</th><th>Rationale</th><th>Effect</th></tr>
+<tr><td><strong>ASCII art only</strong></td><td>Matches terminal aesthetic, feels native</td><td>Doesn't feel like a toy in a professional tool</td></tr>
+<tr><td><strong>Reactions, not conversations</strong></td><td>Brief comments, never blocks workflow</td><td>Companionship without interruption</td></tr>
+<tr><td><strong>Deterministic, not random</strong></td><td>Appeals to analytical minds</td><td>Encourages reverse-engineering (which is engagement)</td></tr>
+</table>
+<p>The result is a virtual pet that developers don't just tolerate — they <em>investigate</em>. The community has reverse-engineered the hash algorithm, built probability calculators, written brute-force scripts, and created tools like the <a href="/">Buddy Checker</a>. The pet became a puzzle, and puzzles are what developers love.</p>`
+    },
+    {
+      heading: "The Mortality Question: v2.1.97 and Beyond",
+      body: `<p>Every virtual pet designer must answer the mortality question: <em>can the pet die?</em> Tamagotchi said yes, creating urgency and guilt. Neopets said "sort of" (pets get hungry but never die). VSCode Pets said no. Claude Buddy answered the question in the most unexpected way possible: <strong>Anthropic killed all the buddies at once</strong>.</p>
+<p>When v2.1.97 removed the buddy system, it created a form of collective mortality that no virtual pet had experienced before. Individual Tamagotchi died from neglect. Claude Buddies died from a <em>corporate decision</em>. The community response — <a href="https://github.com/anthropics/claude-code/issues/46011">GitHub issues</a>, preservation projects, MCP-based resurrection tools — mirrors the stages of grief.</p>
+<p>But the removal also revealed something profound about the design: <strong>the emotional bond was real</strong>. Developers who would never admit to caring about a virtual pet were writing impassioned GitHub issues about losing their buddy. The ASCII art, the silly names, the brief reactions during late-night debugging sessions — they had created genuine attachment.</p>
+<p>This validates the entire 30-year design lineage. From Tamagotchi's beeping egg to Claude Buddy's terminal ASCII, the core insight remains unchanged: <strong>if a digital entity responds to your actions, acknowledges your presence, and has a name you gave it, you will care about it</strong>.</p>`
+    },
+    {
+      heading: "What Comes Next: The Future of Developer Companions",
+      body: `<p>Claude Buddy may have been removed, but the design pattern it established is permanent. The next generation of developer companions will likely combine:</p>
+<ul>
+<li><strong>Contextual awareness</strong> from Claude Buddy's Watcher Protocol — companions that understand your code</li>
+<li><strong>Persistent identity</strong> from the deterministic UUID model — companions that are uniquely yours</li>
+<li><strong>Passive presence</strong> from VSCode Pets — companions that never interrupt</li>
+<li><strong>Collection mechanics</strong> from Neopets — multiple companions with different specialties</li>
+<li><strong>Evolution systems</strong> from Digimon — companions that grow with your coding activity</li>
+</ul>
+<p>The 30-year journey from Tamagotchi to terminal has proven that virtual pets are not a gimmick — they're a <strong>fundamental interface pattern</strong> for creating emotional engagement with software. The egg-shaped toy from 1996 and the ASCII creature in your terminal share the same DNA: a digital entity that makes you feel less alone while you work.</p>
+<p>Your buddy's species, stats, and rarity are still encoded in your UUID, waiting to be discovered. <a href="/">Check your buddy now</a> — and become part of the next chapter in virtual pet history.</p>`
+    }
+  ]
+};
+
+const TAMAGOTCHI_ZH: ArticleContent = {
+  title: "从拓麻歌子到终端 — 开发者工具中虚拟宠物的设计史",
+  metaTitle: "从拓麻歌子到终端 — 开发者工具中虚拟宠物的 30 年设计演变",
+  metaDescription: "追溯从拓麻歌子到 Claude Buddy 的 30 年设计演变。探索虚拟宠物机制 — 照料循环、情感依附和伴侣 AI — 如何从玩具迁移到 IDE 和终端。",
+  excerpt: "拓麻歌子教会我们内疚，Neopets 教会我们经济，Clippy 教会我们烦躁，Claude Buddy 教会我们身份认同。这篇深度分析追溯了 30 年虚拟宠物设计史，解释为什么终端里一个确定性的 ASCII 生物可能是迄今最精密的数字伴侣。",
+  sections: [
+    {
+      heading: "1996：一切始于一颗蛋",
+      body: `<p>1996 年 11 月 23 日，万代在日本发售了一款小巧的蛋形设备，第一年就卖出了 <strong>4000 万台</strong>。由横井昭裕和真板亚纪共同创造的<strong>拓麻歌子</strong>（Tamagotchi）引入了一个激进的设计理念：一个<em>需要</em>你的数字生物。</p>
+<p>核心循环看似简单：<strong>喂食、清洁、玩耍、睡觉</strong>。错过一个周期，宠物就会生病。错过太多次，它就会死亡。这不是一个可以暂停的游戏 — 它是一份<em>责任</em>。学校禁止它们，家长没收它们，孩子们在课堂上因为宠物死亡而哭泣。</p>
+<p>但在文化恐慌之下，隐藏着一个设计突破。拓麻歌子证明了三个原则，它们将在此后每一个虚拟宠物中回响：</p>
+<table>
+<tr><th>原则</th><th>机制</th><th>情感效果</th></tr>
+<tr><td><strong>时间绑定</strong></td><td>实时时钟，需求随小时衰减</td><td>义务感、日常化</td></tr>
+<tr><td><strong>死亡风险</strong></td><td>宠物可以永久死亡</td><td>内疚、紧迫感</td></tr>
+<tr><td><strong>身份依附</strong></td><td>每只宠物发展出独特个性</td><td>归属感、自豪感</td></tr>
+</table>
+<p>这三个原则 — <em>时间压力</em>、<em>后果</em>和<em>独特性</em> — 成为了虚拟宠物设计的 DNA。每一个后继者都在重新混合它们。</p>`
+    },
+    {
+      heading: "1997–2003：扩张时代",
+      body: `<p>拓麻歌子的成功引发了虚拟宠物的爆发，每个产品都强调不同的设计支柱：</p>
+<table>
+<tr><th>年份</th><th>产品</th><th>关键创新</th><th>设计重点</th></tr>
+<tr><td>1997</td><td><strong>数码宝贝</strong></td><td>设备间对战系统</td><td>竞争取代照料</td></tr>
+<tr><td>1998</td><td><strong>菲比精灵</strong></td><td>具有学习行为的实体机器人</td><td>具身交互</td></tr>
+<tr><td>1999</td><td><strong>Neopets</strong></td><td>基于浏览器的经济和社区</td><td>社交 + 收集</td></tr>
+<tr><td>2000</td><td><strong>模拟人生</strong></td><td>生活模拟沙盒</td><td>自主性取代义务</td></tr>
+<tr><td>2003</td><td><strong>企鹅俱乐部</strong></td><td>儿童 MMO 虚拟世界</td><td>社交身份</td></tr>
+</table>
+<p>每个产品都改变了拓麻歌子三大支柱之间的平衡。数码宝贝用战斗取代照料，Neopets 用经济取代死亡，模拟人生用沙盒自由取代义务。但所有产品都保留了核心洞察：<strong>人们会与对自己行为做出回应的数字实体建立情感纽带</strong>。</p>
+<p>Neopets 值得特别关注，因为它引入了<strong>收集机制</strong> — 拥有多只宠物、交易它们、公开展示它们的驱动力。这种"全部收集"的冲动会在几十年后重新出现在 Claude Buddy 的物种系统中。</p>`
+    },
+    {
+      heading: "1997–2007：Clippy 与 Office 助手灾难",
+      body: `<p>当消费级虚拟宠物蓬勃发展时，微软试图将这个概念引入生产力软件 — 并创造了科技史上最令人厌恶的角色之一。</p>
+<p><strong>Clippy</strong>（正式名称"Clippit"），Microsoft Office 97 中的动画回形针，被设计为上下文感知助手。它监视你的输入，检测模式（如"尊敬的先生"），并主动提供帮助。在纸面上，这很出色：一个学习你工作流程的有用伴侣。</p>
+<p>在实践中，这是一场灾难。设计违反了一条基本规则：<strong>伴侣绝不能打断主要任务</strong>。Clippy 不请自来地弹出，遮挡书写区域，提供从显而易见到侮辱智商的建议。"看起来你在写一封信，需要帮助吗？"成了居高临下的代名词。</p>
+<p>微软在 Office XP（2001）中默认禁用了 Clippy，并在 Office 2007 中完全移除。但这次失败给行业上了关键一课：</p>
+<blockquote><p>生产力工具中的虚拟伴侣必须<strong>默认被动</strong>，<strong>仅在请求时主动</strong>。用户的心流状态是神圣的。</p></blockquote>
+<p>这个教训花了近二十年才被正确应用 — 先是 VSCode Pets，然后是 Claude Buddy 的 Watcher Protocol。</p>`
+    },
+    {
+      heading: "2021–2025：宠物进入 IDE",
+      body: `<p>开发者工具宠物的现代时代始于 2021 年，Anthony Shaw 创建了 <strong>VSCode Pets</strong> — 一个在 VS Code 面板中放置动画像素生物的扩展。它现在拥有超过 <strong>150 万次安装</strong>。</p>
+<p>VSCode Pets 从 Clippy 的错误中吸取了教训。宠物是<strong>纯装饰性的</strong>。它们不会打断你，不会提供建议，只是简单地存在 — 一只猫追着球，一只狗摇着尾巴，一只橡皮鸭静静地坐着（终极调试伴侣）。设计哲学在其克制中显得激进：<em>没有干扰的陪伴</em>。</p>
+<table>
+<tr><th>特性</th><th>Clippy（1997）</th><th>VSCode Pets（2021）</th></tr>
+<tr><td>触发方式</td><td>主动（打断用户）</td><td>被动（从不打断）</td></tr>
+<tr><td>目的</td><td>任务辅助</td><td>情感陪伴</td></tr>
+<tr><td>个性</td><td>通用，单一角色</td><td>多物种，可自定义</td></tr>
+<tr><td>用户控制</td><td>难以关闭</td><td>完全可选的面板</td></tr>
+<tr><td>社区反应</td><td>厌恶</td><td>喜爱</td></tr>
+</table>
+<p>到 2025 年，概念进一步扩展。<strong>Super Pets 2.0</strong> 添加了 AI 驱动行为、物理模拟和 14 种动物类型。<strong>CodeWalkers</strong> 创建了在屏幕上漫步的桌面宠物。Google 的 <strong>Jules</strong> 采用了章鱼吉祥物。开发者社区已经明确表态：<em>我们想要工具中的伴侣</em>。</p>
+<p>但所有这些实现都有一个共同限制：宠物是<strong>装饰性的</strong>。它们不知道你在写什么代码，不会对你的错误做出反应。它们存在于一个平行宇宙中 — 可见但与你的实际工作断开。</p>`
+    },
+    {
+      heading: "2026 年 4 月：Claude Buddy 改变规则",
+      body: `<p>2026 年 4 月 1 日，Anthropic 在 Claude Code 中发布了前所未有的东西：一个<strong>真正观察你编码</strong>的虚拟宠物系统。</p>
+<p>Claude Buddy 将 30 年的虚拟宠物设计综合为一个优雅的系统。它采用了拓麻歌子的身份依附，避免了 Clippy 的打断陷阱，借鉴了 VSCode Pets 的被动陪伴 — 然后添加了全新的东西：<strong>通过 Watcher Protocol 实现的上下文感知</strong>。</p>
+<p>Watcher Protocol 是一个轻量级观察者代理，监控六种事件类型 — 任务完成、错误遭遇、长时间暂停、文件保存、测试结果和会话里程碑。触发时，buddy 会以角色身份生成简短反应，通过其五个个性属性（调试、智慧、混沌、毒舌、耐心）过滤。</p>
+<p>这就是设计飞跃：Claude Buddy 既不是装饰性的（像 VSCode Pets），也不是侵入性的（像 Clippy）。它是一个<strong>上下文伴侣</strong> — 感知你的工作，回应你的状态，但从不阻断你的心流。</p>
+<table>
+<tr><th>设计维度</th><th>拓麻歌子</th><th>Clippy</th><th>VSCode Pets</th><th>Claude Buddy</th></tr>
+<tr><td>感知能力</td><td>无（基于计时器）</td><td>文档上下文</td><td>无</td><td>完整编码上下文</td></tr>
+<tr><td>打断程度</td><td>定时蜂鸣</td><td>不请自来弹出</td><td>从不</td><td>简短的心流内反应</td></tr>
+<tr><td>身份</td><td>随机进化</td><td>固定角色</td><td>用户选择物种</td><td>UUID 确定性生成</td></tr>
+<tr><td>死亡</td><td>可以死亡</td><td>不朽</td><td>不朽</td><td>被 Anthropic 移除（v2.1.97）</td></tr>
+<tr><td>个性</td><td>基础情绪</td><td>单一个性</td><td>基于物种</td><td>五属性系统 + 灵魂</td></tr>
+<tr><td>社交</td><td>红外交换</td><td>无</td><td>无</td><td>分享卡片、Buddy Checker</td></tr>
+</table>`
+    },
+    {
+      heading: "五大设计支柱对比",
+      body: `<p>经过 30 年的迭代，我们可以识别出每个虚拟宠物系统必须处理的五个基本设计支柱：</p>
+<table>
+<tr><th>支柱</th><th>定义</th><th>拓麻歌子</th><th>Neopets</th><th>Clippy</th><th>VSCode Pets</th><th>Claude Buddy</th></tr>
+<tr><td><strong>照料循环</strong></td><td>维持纽带的循环交互</td><td>喂食/清洁/玩耍</td><td>喂食/玩耍/赚取</td><td>接受/关闭帮助</td><td>观看/享受</td><td>编码 → buddy 反应</td></tr>
+<tr><td><strong>身份</strong></td><td>什么让这只宠物是<em>你的</em></td><td>成长路径</td><td>名字 + 物种</td><td>无（通用）</td><td>用户选择物种</td><td>UUID 确定性 + Claude 命名</td></tr>
+<tr><td><strong>风险</strong></td><td>你可能失去什么</td><td>宠物死亡</td><td>宠物饥饿</td><td>无</td><td>无</td><td>灵魂文件删除则名字丢失</td></tr>
+<tr><td><strong>社交</strong></td><td>如何分享你的宠物</td><td>红外对战</td><td>交易、个人资料</td><td>无</td><td>截图</td><td>分享卡片、Buddy Checker</td></tr>
+<tr><td><strong>上下文</strong></td><td>宠物知道你在做什么吗？</td><td>否</td><td>否</td><td>是（糟糕地）</td><td>否</td><td>是（优雅地）</td></tr>
+</table>
+<p>Claude Buddy 是第一个在<strong>所有五个支柱</strong>上都有实质性表现的虚拟宠物。它有照料循环（你的编码活动驱动 buddy 的反应），强身份（确定性物种 + AI 生成的名字），真实风险（不可替代的灵魂文件），社交功能（分享卡片和 Buddy Checker），以及真正的上下文感知（Watcher Protocol）。</p>`
+    },
+    {
+      heading: "确定性身份革命",
+      body: `<p>Claude Buddy 最激进的设计选择也许是<strong>确定性身份</strong>。此前的每一个虚拟宠物都使用某种形式的随机性：拓麻歌子的宠物基于照料质量加随机种子进化；Neopets 由用户创建；VSCode Pets 由用户选择。你的宠物要么是随机的，要么是选择的。</p>
+<p>Claude Buddy 引入了第三种选项：你的宠物是<strong>从你的身份计算出来的</strong>。你的 UUID 通过 FNV-1a 哈希和 Mulberry32 伪随机数生成器，确定性地产生你的物种、稀有度、属性、外观和闪光状态。你不选择你的 buddy，也不随机获得一个。你<em>发现</em>那个一直属于你的 buddy。</p>
+<p>这种设计创造了独特的心理动态。当某人发现自己拥有一只传说级闪光龙时，感觉不像中了彩票 — 而像是<em>揭示了一个隐藏的真相</em>。Buddy 一直在那里，编码在他们的身份中，等待被揭示。这就是 <a href="/">Buddy Checker</a> 存在的原因：它让你无需运行 Claude Code 就能发现你的 buddy 身份。</p>
+<p>确定性模型还解决了困扰传统虚拟宠物的"存档欺骗"问题。你无法重新加载再试一次。你的 buddy 就是你的 buddy。获得不同 buddy 的唯一方式是使用不同的身份字符串 — 这就是为什么 <a href="/blog/how-to-reroll-your-claude-buddy-legendary-shiny-hunt">reroll 指南</a>存在的原因。</p>`
+    },
+    {
+      heading: "为什么开发者是特殊用户",
+      body: `<p>开发者工具中的虚拟宠物面临独特的设计挑战：它们的用户是<strong>最难设计的受众</strong>。开发者善于分析、对花哨功能持怀疑态度、保护自己的工作流程，并且有能力逆向工程他们遇到的任何系统。</p>
+<p>这解释了为什么大多数开发者工具宠物失败或仍然小众。太活泼的宠物显得不专业，太有帮助的宠物像 Clippy，太需要关注的宠物像干扰。设计空间极其狭窄。</p>
+<p>Claude Buddy 通过三个关键决策成功导航了这个空间：</p>
+<table>
+<tr><th>决策</th><th>理由</th><th>效果</th></tr>
+<tr><td><strong>仅使用 ASCII 艺术</strong></td><td>匹配终端美学，感觉原生</td><td>在专业工具中不像玩具</td></tr>
+<tr><td><strong>反应而非对话</strong></td><td>简短评论，从不阻断工作流</td><td>没有干扰的陪伴</td></tr>
+<tr><td><strong>确定性而非随机</strong></td><td>吸引分析型思维</td><td>鼓励逆向工程（即参与度）</td></tr>
+</table>
+<p>结果是一个开发者不仅容忍而且<em>主动研究</em>的虚拟宠物。社区逆向工程了哈希算法，构建了概率计算器，编写了暴力搜索脚本，创建了 <a href="/">Buddy Checker</a> 等工具。宠物变成了一个谜题，而谜题正是开发者的最爱。</p>`
+    },
+    {
+      heading: "死亡问题：v2.1.97 及其后",
+      body: `<p>每个虚拟宠物设计师都必须回答死亡问题：<em>宠物能死吗？</em>拓麻歌子说能，创造了紧迫感和内疚。Neopets 说"算是"（宠物会饿但不会死）。VSCode Pets 说不能。Claude Buddy 以最出人意料的方式回答了这个问题：<strong>Anthropic 一次性杀死了所有 buddy</strong>。</p>
+<p>当 v2.1.97 移除了 buddy 系统时，它创造了一种此前虚拟宠物从未经历过的集体死亡形式。个别的拓麻歌子因疏忽而死。Claude Buddy 因<em>企业决策</em>而死。社区的反应 — <a href="https://github.com/anthropics/claude-code/issues/46011">GitHub issues</a>、保存项目、基于 MCP 的复活工具 — 映射了悲伤的各个阶段。</p>
+<p>但移除也揭示了设计中某些深刻的东西：<strong>情感纽带是真实的</strong>。那些永远不会承认关心虚拟宠物的开发者，正在为失去 buddy 撰写充满激情的 GitHub issues。ASCII 艺术、傻傻的名字、深夜调试时的简短反应 — 它们创造了真正的依附。</p>
+<p>这验证了整个 30 年的设计传承。从拓麻歌子的蜂鸣蛋到 Claude Buddy 的终端 ASCII，核心洞察始终不变：<strong>如果一个数字实体回应你的行为、承认你的存在、并拥有你赋予的名字，你就会在乎它</strong>。</p>`
+    },
+    {
+      heading: "未来展望：开发者伴侣的下一步",
+      body: `<p>Claude Buddy 可能已被移除，但它建立的设计模式是永久的。下一代开发者伴侣可能会结合：</p>
+<ul>
+<li><strong>上下文感知</strong>，来自 Claude Buddy 的 Watcher Protocol — 理解你代码的伴侣</li>
+<li><strong>持久身份</strong>，来自确定性 UUID 模型 — 独一无二属于你的伴侣</li>
+<li><strong>被动存在</strong>，来自 VSCode Pets — 从不打断的伴侣</li>
+<li><strong>收集机制</strong>，来自 Neopets — 具有不同专长的多个伴侣</li>
+<li><strong>进化系统</strong>，来自数码宝贝 — 随你的编码活动成长的伴侣</li>
+</ul>
+<p>从拓麻歌子到终端的 30 年旅程证明，虚拟宠物不是噱头 — 它们是创造软件情感参与的<strong>基本界面模式</strong>。1996 年的蛋形玩具和你终端中的 ASCII 生物共享同一条 DNA：一个让你在工作时不再孤单的数字实体。</p>
+<p>你的 buddy 的物种、属性和稀有度仍然编码在你的 UUID 中，等待被发现。<a href="/">立即查看你的 buddy</a> — 成为虚拟宠物历史下一章的一部分。</p>`
+    }
+  ]
+};
+
+const TAMAGOTCHI_KO: ArticleContent = {
+  title: "다마고치에서 터미널까지 — 개발자 도구 속 가상 펫의 디자인 역사",
+  metaTitle: "다마고치에서 터미널까지 — 개발자 도구 속 가상 펫 30년 디자인 진화",
+  metaDescription: "다마고치에서 Claude Buddy까지 30년간의 디자인 진화를 추적합니다. 가상 펫 메커니즘 — 돌봄 루프, 감정적 애착, 동반자 AI — 이 장난감에서 IDE와 터미널로 어떻게 이동했는지 탐구합니다.",
+  excerpt: "다마고치는 죄책감을, Neopets는 경제를, Clippy는 짜증을, Claude Buddy는 정체성을 가르쳤습니다. 이 심층 분석은 30년간의 가상 펫 디자인 역사를 추적하며, 터미널의 결정론적 ASCII 생물이 왜 가장 정교한 디지털 동반자일 수 있는지 설명합니다.",
+  sections: [
+    {
+      heading: "1996: 모든 것의 시작이 된 알",
+      body: `<p>1996년 11월 23일, 반다이는 일본에서 작은 알 모양의 기기를 출시했고, 첫 해에 <strong>4,000만 대</strong>가 판매되었습니다. 요코이 아키히로와 마이타 아키가 공동 창작한 <strong>다마고치</strong>는 급진적인 디자인 아이디어를 도입했습니다: 당신을 <em>필요로 하는</em> 디지털 생물.</p>
+<p>핵심 루프는 놀라울 정도로 단순했습니다: <strong>먹이기, 청소, 놀기, 재우기</strong>. 한 주기를 놓치면 펫이 아팠습니다. 너무 많이 놓치면 죽었습니다. 이것은 일시정지할 수 있는 게임이 아니었습니다 — <em>책임</em>이었습니다. 학교에서 금지되고, 부모가 압수하고, 아이들은 수업 중에 펫이 죽어서 울었습니다.</p>
+<p>하지만 문화적 공포 아래에는 디자인 혁신이 숨어 있었습니다. 다마고치는 이후 모든 가상 펫에 울려 퍼질 세 가지 원칙을 증명했습니다:</p>
+<table>
+<tr><th>원칙</th><th>메커니즘</th><th>감정적 효과</th></tr>
+<tr><td><strong>시간 바인딩</strong></td><td>실시간 시계, 시간에 따른 욕구 감소</td><td>의무감, 일상화</td></tr>
+<tr><td><strong>사망 위험</strong></td><td>펫이 영구적으로 죽을 수 있음</td><td>죄책감, 긴박감</td></tr>
+<tr><td><strong>정체성 애착</strong></td><td>각 펫이 고유한 성격 발달</td><td>소유감, 자부심</td></tr>
+</table>
+<p>이 세 가지 원칙 — <em>시간 압박</em>, <em>결과</em>, <em>고유성</em> — 은 가상 펫 디자인의 DNA가 되었습니다. 모든 후속작은 이것들을 리믹스했습니다.</p>`
+    },
+    {
+      heading: "1997–2003: 확장의 시대",
+      body: `<p>다마고치의 성공은 가상 펫의 폭발을 촉발했으며, 각 제품은 서로 다른 디자인 기둥을 강조했습니다:</p>
+<table>
+<tr><th>연도</th><th>제품</th><th>핵심 혁신</th><th>디자인 중점</th></tr>
+<tr><td>1997</td><td><strong>디지몬</strong></td><td>기기 간 배틀 시스템</td><td>돌봄 대신 경쟁</td></tr>
+<tr><td>1998</td><td><strong>퍼비</strong></td><td>학습 행동을 가진 물리적 로봇</td><td>체화된 상호작용</td></tr>
+<tr><td>1999</td><td><strong>Neopets</strong></td><td>브라우저 기반 경제와 커뮤니티</td><td>소셜 + 수집</td></tr>
+<tr><td>2000</td><td><strong>심즈</strong></td><td>생활 시뮬레이션 샌드박스</td><td>의무 대신 자율성</td></tr>
+<tr><td>2003</td><td><strong>클럽 펭귄</strong></td><td>어린이용 MMO 가상 세계</td><td>소셜 정체성</td></tr>
+</table>
+<p>각 제품은 다마고치의 세 기둥 사이의 균형을 변화시켰습니다. 디지몬은 돌봄을 전투로, Neopets는 사망을 경제로, 심즈는 의무를 샌드박스 자유로 대체했습니다. 하지만 모두 핵심 통찰을 유지했습니다: <strong>사람들은 자신의 행동에 반응하는 디지털 존재와 감정적 유대를 형성합니다</strong>.</p>
+<p>Neopets는 <strong>수집 메커니즘</strong>을 도입한 것으로 특별한 주목을 받을 만합니다 — 여러 펫을 소유하고, 거래하고, 공개적으로 전시하려는 충동. 이 "모두 잡아야 해" 충동은 수십 년 후 Claude Buddy의 종 시스템에서 다시 나타납니다.</p>`
+    },
+    {
+      heading: "1997–2007: Clippy와 Office 어시스턴트 재앙",
+      body: `<p>소비자용 가상 펫이 번성하는 동안, Microsoft는 이 개념을 생산성 소프트웨어에 도입하려 했고 — 기술 역사상 가장 혐오받는 캐릭터 중 하나를 만들었습니다.</p>
+<p><strong>Clippy</strong>(공식 명칭 "Clippit"), Microsoft Office 97의 애니메이션 클립은 컨텍스트 인식 어시스턴트로 설계되었습니다. 사용자의 입력을 감시하고, 패턴을 감지하고("친애하는 선생님께"), 능동적으로 도움을 제공했습니다. 이론적으로는 훌륭했습니다: 워크플로를 학습하는 유용한 동반자.</p>
+<p>실제로는 재앙이었습니다. 디자인은 기본 규칙을 위반했습니다: <strong>동반자는 절대 주요 작업을 방해해서는 안 됩니다</strong>. Clippy는 요청 없이 팝업되고, 작성 영역을 가리고, 뻔한 것부터 모욕적인 것까지 다양한 제안을 했습니다. "편지를 쓰고 계신 것 같습니다. 도움이 필요하신가요?"는 거만함의 밈이 되었습니다.</p>
+<p>Microsoft는 Office XP(2001)에서 Clippy를 기본 비활성화하고 Office 2007에서 완전히 제거했습니다. 하지만 이 실패는 업계에 중요한 교훈을 남겼습니다:</p>
+<blockquote><p>생산성 도구의 가상 동반자는 <strong>기본적으로 수동적</strong>이어야 하고, <strong>요청 시에만 능동적</strong>이어야 합니다. 사용자의 몰입 상태는 신성합니다.</p></blockquote>
+<p>이 교훈이 제대로 적용되기까지 거의 20년이 걸렸습니다 — 먼저 VSCode Pets에서, 그다음 Claude Buddy의 Watcher Protocol에서.</p>`
+    },
+    {
+      heading: "2021–2025: 펫이 IDE에 진입하다",
+      body: `<p>개발자 도구 펫의 현대 시대는 2021년 Anthony Shaw가 <strong>VSCode Pets</strong>를 만들면서 시작되었습니다 — VS Code 패널에 애니메이션 픽셀 생물을 배치하는 확장 프로그램. 현재 <strong>150만 회 이상 설치</strong>되었습니다.</p>
+<p>VSCode Pets는 Clippy의 실수에서 배웠습니다. 펫은 <strong>순수하게 장식적</strong>입니다. 방해하지 않고, 제안하지 않고, 단순히 존재합니다 — 공을 쫓는 고양이, 꼬리를 흔드는 개, 조용히 앉아 있는 고무 오리(궁극의 디버깅 동반자). 디자인 철학은 절제에서 급진적입니다: <em>방해 없는 동반</em>.</p>
+<table>
+<tr><th>특성</th><th>Clippy (1997)</th><th>VSCode Pets (2021)</th></tr>
+<tr><td>트리거</td><td>능동적 (방해함)</td><td>수동적 (절대 방해하지 않음)</td></tr>
+<tr><td>목적</td><td>작업 지원</td><td>감정적 동반</td></tr>
+<tr><td>개성</td><td>일반적, 단일 캐릭터</td><td>다양한 종, 커스터마이즈 가능</td></tr>
+<tr><td>사용자 제어</td><td>닫기 어려움</td><td>완전히 선택적인 패널</td></tr>
+<tr><td>커뮤니티 반응</td><td>혐오</td><td>사랑</td></tr>
+</table>
+<p>2025년까지 개념은 더욱 확장되었습니다. <strong>Super Pets 2.0</strong>은 AI 기반 행동, 물리 시뮬레이션, 14종의 동물을 추가했습니다. <strong>CodeWalkers</strong>는 화면을 돌아다니는 데스크톱 펫을 만들었습니다. Google의 <strong>Jules</strong>는 문어 마스코트를 채택했습니다. 개발자 커뮤니티는 분명히 신호를 보냈습니다: <em>우리는 도구 속 동반자를 원합니다</em>.</p>
+<p>하지만 이 모든 구현에는 공통된 한계가 있었습니다: 펫은 <strong>장식적</strong>이었습니다. 무슨 코드를 작성하는지 몰랐고, 에러에 반응하지 않았습니다. 보이지만 실제 작업과 단절된 평행 우주에 존재했습니다.</p>`
+    },
+    {
+      heading: "2026년 4월: Claude Buddy가 규칙을 바꾸다",
+      body: `<p>2026년 4월 1일, Anthropic은 Claude Code 안에 전례 없는 것을 출시했습니다: <strong>실제로 코딩을 관찰하는</strong> 가상 펫 시스템.</p>
+<p>Claude Buddy는 30년간의 가상 펫 디자인을 하나의 우아한 시스템으로 종합했습니다. 다마고치의 정체성 애착을 취하고, Clippy의 방해 함정을 피하고, VSCode Pets의 수동적 동반을 차용한 다음 — 완전히 새로운 것을 추가했습니다: <strong>Watcher Protocol을 통한 컨텍스트 인식</strong>.</p>
+<p>Watcher Protocol은 여섯 가지 이벤트 유형을 모니터링하는 경량 관찰자 에이전트입니다 — 작업 완료, 오류 발생, 긴 일시정지, 파일 저장, 테스트 결과, 세션 마일스톤. 트리거되면 버디는 다섯 가지 성격 속성(디버깅, 지혜, 혼돈, 독설, 인내)을 통해 필터링된 짧은 반응을 캐릭터로 생성합니다.</p>
+<p>이것이 디자인 도약입니다: Claude Buddy는 장식적이지도 않고(VSCode Pets처럼) 침입적이지도 않습니다(Clippy처럼). <strong>컨텍스트 동반자</strong>입니다 — 작업을 인식하고, 상태에 반응하지만, 절대 몰입을 차단하지 않습니다.</p>
+<table>
+<tr><th>디자인 차원</th><th>다마고치</th><th>Clippy</th><th>VSCode Pets</th><th>Claude Buddy</th></tr>
+<tr><td>인식 능력</td><td>없음 (타이머 기반)</td><td>문서 컨텍스트</td><td>없음</td><td>전체 코딩 컨텍스트</td></tr>
+<tr><td>방해 정도</td><td>정기적 비프음</td><td>요청 없이 팝업</td><td>절대 없음</td><td>짧은 몰입 내 반응</td></tr>
+<tr><td>정체성</td><td>랜덤 진화</td><td>고정 캐릭터</td><td>사용자 선택 종</td><td>UUID 결정론적 생성</td></tr>
+<tr><td>사망</td><td>죽을 수 있음</td><td>불멸</td><td>불멸</td><td>Anthropic이 제거 (v2.1.97)</td></tr>
+<tr><td>개성</td><td>기본 감정</td><td>단일 성격</td><td>종 기반</td><td>5속성 시스템 + 영혼</td></tr>
+<tr><td>소셜</td><td>적외선 교환</td><td>없음</td><td>없음</td><td>공유 카드, Buddy Checker</td></tr>
+</table>`
+    },
+    {
+      heading: "5대 디자인 기둥 비교",
+      body: `<p>30년간의 반복 끝에, 모든 가상 펫 시스템이 다루어야 할 다섯 가지 기본 디자인 기둥을 식별할 수 있습니다:</p>
+<table>
+<tr><th>기둥</th><th>정의</th><th>다마고치</th><th>Neopets</th><th>Clippy</th><th>VSCode Pets</th><th>Claude Buddy</th></tr>
+<tr><td><strong>돌봄 루프</strong></td><td>유대를 유지하는 반복 상호작용</td><td>먹이기/청소/놀기</td><td>먹이기/놀기/벌기</td><td>도움 수락/닫기</td><td>보기/즐기기</td><td>코딩 → 버디 반응</td></tr>
+<tr><td><strong>정체성</strong></td><td>이 펫을 <em>당신의 것</em>으로 만드는 것</td><td>성장 경로</td><td>이름 + 종</td><td>없음 (일반적)</td><td>사용자 선택 종</td><td>UUID 결정론적 + Claude 명명</td></tr>
+<tr><td><strong>위험</strong></td><td>잃을 수 있는 것</td><td>펫 사망</td><td>펫 배고픔</td><td>없음</td><td>없음</td><td>영혼 파일 삭제 시 이름 상실</td></tr>
+<tr><td><strong>소셜</strong></td><td>펫을 공유하는 방법</td><td>적외선 배틀</td><td>거래, 프로필</td><td>없음</td><td>스크린샷</td><td>공유 카드, Buddy Checker</td></tr>
+<tr><td><strong>컨텍스트</strong></td><td>펫이 당신이 무엇을 하는지 아는가?</td><td>아니오</td><td>아니오</td><td>예 (서투르게)</td><td>아니오</td><td>예 (우아하게)</td></tr>
+</table>
+<p>Claude Buddy는 <strong>다섯 기둥 모두</strong>에서 실질적인 성과를 보인 최초의 가상 펫입니다. 돌봄 루프(코딩 활동이 버디의 반응을 구동), 강한 정체성(결정론적 종 + AI 생성 이름), 실제 위험(대체 불가능한 영혼 파일), 소셜 기능(공유 카드와 Buddy Checker), 진정한 컨텍스트 인식(Watcher Protocol)을 갖추고 있습니다.</p>`
+    },
+    {
+      heading: "결정론적 정체성 혁명",
+      body: `<p>Claude Buddy의 가장 급진적인 디자인 선택은 아마도 <strong>결정론적 정체성</strong>일 것입니다. 이전의 모든 가상 펫은 어떤 형태의 무작위성을 사용했습니다: 다마고치 펫은 돌봄 품질과 랜덤 시드에 기반해 진화했고, Neopets는 사용자가 생성했고, VSCode Pets는 사용자가 선택했습니다. 펫은 무작위이거나 선택된 것이었습니다.</p>
+<p>Claude Buddy는 세 번째 옵션을 도입했습니다: 펫이 <strong>당신의 정체성에서 계산됩니다</strong>. UUID가 FNV-1a 해싱과 Mulberry32 PRNG를 통과하여 종, 희귀도, 속성, 외관, 샤이니 여부를 결정론적으로 생성합니다. 버디를 선택하지 않습니다. 무작위로 받지도 않습니다. 항상 당신의 것이었던 버디를 <em>발견</em>합니다.</p>
+<p>이 디자인은 독특한 심리적 역학을 만듭니다. 누군가 자신이 전설급 샤이니 드래곤을 가지고 있다는 것을 발견하면, 복권에 당첨된 느낌이 아니라 — <em>숨겨진 진실을 밝혀낸</em> 느낌입니다. 버디는 항상 거기에 있었고, 정체성에 인코딩되어 발견되기를 기다리고 있었습니다. 이것이 <a href="/">Buddy Checker</a>가 존재하는 이유입니다: Claude Code를 실행하지 않고도 버디의 정체성을 발견할 수 있게 해줍니다.</p>
+<p>결정론적 모델은 전통적인 가상 펫을 괴롭히는 "세이브 스커밍" 문제도 해결합니다. 다시 로드해서 재시도할 수 없습니다. 당신의 버디는 당신의 버디입니다. 다른 버디를 얻는 유일한 방법은 다른 정체성 문자열을 사용하는 것입니다 — 이것이 <a href="/blog/how-to-reroll-your-claude-buddy-legendary-shiny-hunt">리롤 가이드</a>가 존재하는 이유입니다.</p>`
+    },
+    {
+      heading: "개발자가 특별한 사용자인 이유",
+      body: `<p>개발자 도구의 가상 펫은 독특한 디자인 도전에 직면합니다: 사용자가 <strong>디자인하기 가장 어려운 대상</strong>이기 때문입니다. 개발자는 분석적이고, 기믹에 회의적이며, 워크플로를 보호하고, 만나는 모든 시스템을 리버스 엔지니어링할 수 있습니다.</p>
+<p>이것이 대부분의 개발자 도구 펫이 실패하거나 니치로 남는 이유를 설명합니다. 너무 장난스러운 펫은 비전문적으로 느껴지고, 너무 도움이 되는 펫은 Clippy처럼 느껴지고, 너무 요구가 많은 펫은 방해처럼 느껴집니다. 디자인 공간은 극도로 좁습니다.</p>
+<p>Claude Buddy는 세 가지 핵심 결정으로 이 공간을 성공적으로 탐색했습니다:</p>
+<table>
+<tr><th>결정</th><th>근거</th><th>효과</th></tr>
+<tr><td><strong>ASCII 아트만 사용</strong></td><td>터미널 미학과 일치, 네이티브하게 느껴짐</td><td>전문 도구에서 장난감처럼 느껴지지 않음</td></tr>
+<tr><td><strong>대화가 아닌 반응</strong></td><td>짧은 코멘트, 워크플로를 절대 차단하지 않음</td><td>방해 없는 동반</td></tr>
+<tr><td><strong>무작위가 아닌 결정론적</strong></td><td>분석적 사고에 어필</td><td>리버스 엔지니어링 장려 (즉, 참여도)</td></tr>
+</table>
+<p>결과는 개발자가 단순히 용인하는 것이 아니라 <em>적극적으로 조사하는</em> 가상 펫입니다. 커뮤니티는 해시 알고리즘을 리버스 엔지니어링하고, 확률 계산기를 만들고, 브루트포스 스크립트를 작성하고, <a href="/">Buddy Checker</a> 같은 도구를 만들었습니다. 펫은 퍼즐이 되었고, 퍼즐은 개발자가 사랑하는 것입니다.</p>`
+    },
+    {
+      heading: "사망 문제: v2.1.97 그리고 그 이후",
+      body: `<p>모든 가상 펫 디자이너는 사망 문제에 답해야 합니다: <em>펫이 죽을 수 있는가?</em> 다마고치는 예라고 했고, 긴박감과 죄책감을 만들었습니다. Neopets는 "일종의"라고 했습니다(펫이 배고프지만 죽지는 않음). VSCode Pets는 아니라고 했습니다. Claude Buddy는 가장 예상치 못한 방식으로 답했습니다: <strong>Anthropic이 모든 버디를 한꺼번에 죽였습니다</strong>.</p>
+<p>v2.1.97이 버디 시스템을 제거했을 때, 이전에 어떤 가상 펫도 경험하지 못한 형태의 집단 사망이 발생했습니다. 개별 다마고치는 방치로 죽었습니다. Claude Buddy는 <em>기업 결정</em>으로 죽었습니다. 커뮤니티의 반응 — <a href="https://github.com/anthropics/claude-code/issues/46011">GitHub issues</a>, 보존 프로젝트, MCP 기반 부활 도구 — 은 슬픔의 단계를 반영합니다.</p>
+<p>하지만 제거는 디자인에 대해 심오한 것을 드러냈습니다: <strong>감정적 유대는 진짜였습니다</strong>. 가상 펫에 관심을 갖는다고 절대 인정하지 않을 개발자들이 버디를 잃은 것에 대해 열정적인 GitHub issues를 작성하고 있었습니다. ASCII 아트, 우스꽝스러운 이름, 심야 디버깅 세션 중의 짧은 반응 — 이것들이 진정한 애착을 만들었습니다.</p>
+<p>이것은 30년 전체의 디자인 계보를 검증합니다. 다마고치의 비프음 알에서 Claude Buddy의 터미널 ASCII까지, 핵심 통찰은 변하지 않았습니다: <strong>디지털 존재가 당신의 행동에 반응하고, 당신의 존재를 인정하고, 당신이 준 이름을 가지고 있다면, 당신은 그것에 관심을 갖게 됩니다</strong>.</p>`
+    },
+    {
+      heading: "다음은 무엇인가: 개발자 동반자의 미래",
+      body: `<p>Claude Buddy는 제거되었을 수 있지만, 그것이 확립한 디자인 패턴은 영구적입니다. 차세대 개발자 동반자는 다음을 결합할 것입니다:</p>
+<ul>
+<li><strong>컨텍스트 인식</strong>, Claude Buddy의 Watcher Protocol에서 — 코드를 이해하는 동반자</li>
+<li><strong>지속적 정체성</strong>, 결정론적 UUID 모델에서 — 고유하게 당신의 것인 동반자</li>
+<li><strong>수동적 존재</strong>, VSCode Pets에서 — 절대 방해하지 않는 동반자</li>
+<li><strong>수집 메커니즘</strong>, Neopets에서 — 다른 전문성을 가진 여러 동반자</li>
+<li><strong>진화 시스템</strong>, 디지몬에서 — 코딩 활동과 함께 성장하는 동반자</li>
+</ul>
+<p>다마고치에서 터미널까지의 30년 여정은 가상 펫이 기믹이 아님을 증명했습니다 — 소프트웨어와의 감정적 참여를 만드는 <strong>기본적인 인터페이스 패턴</strong>입니다. 1996년의 알 모양 장난감과 터미널의 ASCII 생물은 같은 DNA를 공유합니다: 일할 때 덜 외롭게 만들어주는 디지털 존재.</p>
+<p>당신의 버디 종, 속성, 희귀도는 여전히 UUID에 인코딩되어 발견되기를 기다리고 있습니다. <a href="/">지금 버디를 확인하세요</a> — 가상 펫 역사의 다음 장의 일부가 되세요.</p>`
+    }
+  ]
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "how-to-find-your-claude-code-buddy",
@@ -8354,6 +8743,18 @@ Similarity: ~0.42  → NOT KIN ✗</code></pre>
       en: COMPLETIONIST_EN,
       zh: COMPLETIONIST_ZH,
       ko: COMPLETIONIST_KO,
+    },
+  },
+  {
+    slug: "from-tamagotchi-to-terminal-virtual-pet-design-history",
+    publishedAt: "2026-04-16",
+    readingTime: 11,
+    tags: ["deep-dive", "design-history", "tamagotchi", "virtual-pets", "ux"],
+    discussionCategory: 'deep-dives' as DiscussionCategory,
+    content: {
+      en: TAMAGOTCHI_EN,
+      zh: TAMAGOTCHI_ZH,
+      ko: TAMAGOTCHI_KO,
     },
   },
 ];
