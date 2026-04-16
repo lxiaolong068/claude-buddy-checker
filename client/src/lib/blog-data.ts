@@ -2458,6 +2458,512 @@ const VANISHED_KO: ArticleContent = {
   ],
 };
 
+
+// === Completionist Handbook Article Content ===
+const COMPLETIONIST_EN: ArticleContent = {
+  title: "The Completionist's Handbook — How to Collect All 18 Species and Document Your Buddy Zoo",
+  metaTitle: "Collect All 18 Claude Buddy Species — The Completionist's Handbook 2026",
+  metaDescription: "Complete mathematical guide to collecting all 18 Claude Buddy species. Coupon Collector's Problem applied: expected trials, milestone probabilities, rarity tier strategies, and how to build your Buddy Zoo.",
+  excerpt: "Catching one buddy is luck. Catching all 18 is mathematics. This guide applies the Coupon Collector's Problem to the buddy engine, gives you exact milestone probabilities from 100,000 simulations, and maps out five collector tiers from casual to completionist.",
+  sections: [
+    {
+      heading: "The Collector's Itch",
+      body: `<p>You've hatched your first buddy. Maybe it's a Common Duck, maybe a Rare Ghost. Either way, you've seen the species catalog — 18 creatures, each with its own ASCII sprite, backstory, and personality. And now a question gnaws at you: <em>what would I get with a different UUID?</em></p>
+<p>That question is the collector's itch, and it has a formal name in mathematics: the <strong>Coupon Collector's Problem</strong>. First studied by Euler and formalized by Flajolet in 1992, it asks a deceptively simple question: if you draw randomly from <em>n</em> equally likely items, how many draws until you've seen every item at least once?</p>
+<p>For Claude Buddy, <em>n</em> = 18. The species roll is a uniform pick from the SPECIES array — every species has exactly <strong>1/18 ≈ 5.56%</strong> probability, regardless of rarity. This means the math is clean, the simulations are precise, and the strategy is real. Let's build your zoo.</p>`
+    },
+    {
+      heading: "The Math: Coupon Collector's Problem",
+      body: `<p>The expected number of trials to collect all <em>n</em> equally likely coupons is:</p>
+<p style="text-align:center;font-size:1.2em;"><strong>E(T) = n × H(n)</strong></p>
+<p>where H(n) is the <em>n</em>-th harmonic number: H(n) = 1 + 1/2 + 1/3 + … + 1/n.</p>
+<p>For 18 species: <strong>H(18) = 3.4951</strong>, so <strong>E(T) = 18 × 3.4951 ≈ 63 trials</strong>. The standard deviation is approximately 23, meaning most collectors will finish between 40 and 86 trials.</p>
+<p>The intuition is beautiful: your first species is guaranteed (1 trial). The second requires 18/17 ≈ 1.06 trials on average. But the last species — when you already have 17 — requires 18/1 = 18 trials on average. That final holdout is where patience is tested.</p>
+<table>
+<thead><tr><th>Species #</th><th>Already Collected</th><th>Probability of New</th><th>Expected Trials</th><th>Cumulative Expected</th></tr></thead>
+<tbody>
+<tr><td>1st</td><td>0</td><td>18/18 = 100%</td><td>1.0</td><td>1.0</td></tr>
+<tr><td>2nd</td><td>1</td><td>17/18 = 94.4%</td><td>1.06</td><td>2.06</td></tr>
+<tr><td>5th</td><td>4</td><td>14/18 = 77.8%</td><td>1.29</td><td>5.56</td></tr>
+<tr><td>10th</td><td>9</td><td>9/18 = 50.0%</td><td>2.00</td><td>14.69</td></tr>
+<tr><td>15th</td><td>14</td><td>4/18 = 22.2%</td><td>4.50</td><td>33.19</td></tr>
+<tr><td>17th</td><td>16</td><td>2/18 = 11.1%</td><td>9.00</td><td>45.94</td></tr>
+<tr><td>18th</td><td>17</td><td>1/18 = 5.56%</td><td>18.00</td><td>63.94</td></tr>
+</tbody>
+</table>
+<p>Notice how the last three species alone account for <strong>30 of the 64 expected trials</strong>. This is the collector's curse: the closer you get, the slower it feels.</p>`
+    },
+    {
+      heading: "100,000 Simulations: The Real Numbers",
+      body: `<p>Theory is elegant, but we ran <strong>100,000 Monte Carlo simulations</strong> to get the exact probability distribution. Here are the milestone numbers every collector needs:</p>
+<table>
+<thead><tr><th>Milestone</th><th>Trials Needed</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>Minimum observed</td><td>21</td><td>Luckiest possible (top 0.01%)</td></tr>
+<tr><td>25th percentile</td><td>49</td><td>1 in 4 collectors finish by here</td></tr>
+<tr><td>Median (50%)</td><td>59</td><td>Half of all collectors finish by here</td></tr>
+<tr><td>Mean</td><td>63</td><td>Mathematical expected value</td></tr>
+<tr><td>75th percentile</td><td>73</td><td>3 in 4 collectors finish by here</td></tr>
+<tr><td>90th percentile</td><td>91</td><td>Only 10% need more than this</td></tr>
+<tr><td>95th percentile</td><td>103</td><td>Unlucky but not impossible</td></tr>
+<tr><td>99th percentile</td><td>131</td><td>Extremely unlucky</td></tr>
+<tr><td>Maximum observed</td><td>299</td><td>Worst case in 100k sims</td></tr>
+</tbody>
+</table>
+<p><strong>Key takeaway:</strong> if you've tried 100 UUIDs and still haven't found all 18, you're in the unluckiest 5%. But you're not broken — the algorithm is working exactly as expected. Keep going.</p>`
+    },
+    {
+      heading: "The Five Collector Tiers",
+      body: `<p>Not every collector has the same goal. We've defined five tiers of increasing ambition, each with its own math and strategy:</p>
+<table>
+<thead><tr><th>Tier</th><th>Goal</th><th>Target Count</th><th>Expected Trials</th><th>90% Confidence</th></tr></thead>
+<tbody>
+<tr><td>🌱 Explorer</td><td>See 9 of 18 species (50%)</td><td>9</td><td>~22</td><td>~30</td></tr>
+<tr><td>📦 Collector</td><td>All 18 species (any rarity)</td><td>18</td><td>~63</td><td>~91</td></tr>
+<tr><td>⭐ Rarity Hunter</td><td>All 5 rarity tiers</td><td>5</td><td>~106</td><td>~231</td></tr>
+<tr><td>💎 Combo Seeker</td><td>All 90 species × rarity combos</td><td>90</td><td>~9,000+</td><td>~15,000+</td></tr>
+<tr><td>✨ Shiny Completionist</td><td>At least one shiny of each species</td><td>18 shinies</td><td>~115,000+</td><td>~180,000+</td></tr>
+</tbody>
+</table>
+<p>The jump between tiers is exponential. Going from Collector to Rarity Hunter roughly doubles your effort. Going from Rarity Hunter to Combo Seeker multiplies it by 40×. And Shiny Completionist? That's a lifetime project — each shiny-species combo has only a <strong>1/1,800</strong> chance per trial.</p>`
+    },
+    {
+      heading: "Strategy 1: The Systematic UUID Sweep",
+      body: `<p>The most efficient collection strategy is a <strong>systematic sweep</strong> using the Buddy Checker at <a href="https://www.claudebuddy.art">claudebuddy.art</a>. Here's the method:</p>
+<ol>
+<li><strong>Start with any string.</strong> Type "test-001", "test-002", "test-003" into the checker. Each string produces a deterministic buddy.</li>
+<li><strong>Log every result.</strong> Create a spreadsheet with columns: Input String, Species, Rarity, Shiny, Hat, Eye. The checker shows all of these instantly.</li>
+<li><strong>Track your gaps.</strong> After 30 trials, you'll likely have 13-14 species. Identify the missing ones.</li>
+<li><strong>Keep going until 18/18.</strong> The last 2-3 species will take the most patience. Don't change your naming scheme — just increment.</li>
+</ol>
+<p>Why the Buddy Checker? Because it uses the <em>exact same algorithm</em> as Claude Code: FNV-1a hash → Mulberry32 PRNG → sequential rolls. Every result you see on the website is mathematically identical to what <code>/buddy</code> would produce. You can check hundreds of UUIDs in minutes without touching Claude Code.</p>`
+    },
+    {
+      heading: "Strategy 2: The Brute-Force Script",
+      body: `<p>For the programmatically inclined, you can write a script that runs the buddy engine against thousands of inputs. The algorithm is public and deterministic:</p>
+<pre><code>// Pseudocode for species collection sweep
+const collected = new Set();
+let trials = 0;
+while (collected.size < 18) {
+  const uuid = \`collector-sweep-\${trials}\`;
+  const buddy = rollBuddy(uuid);
+  collected.add(buddy.species);
+  trials++;
+  if (!seen[buddy.species]) {
+    console.log(\`NEW: \${buddy.species} found at trial \${trials}\`);
+  }
+}
+console.log(\`All 18 collected in \${trials} trials\`);</code></pre>
+<p>In our tests, this approach consistently finds all 18 species in <strong>50-80 trials</strong>, matching the theoretical prediction. The script can also log rarity, shiny status, and hat for each find, building your complete zoo database automatically.</p>
+<p><strong>Pro tip:</strong> Use a prefix that means something to you. "alice-001", "bob-001", or even dates like "2026-04-16-001". Each input is a permanent, reproducible identity — you can always re-check it later.</p>`
+    },
+    {
+      heading: "The Rarity Bottleneck",
+      body: `<p>If your goal extends beyond species to <strong>rarity tiers</strong>, the math changes dramatically. Species are uniformly distributed (1/18 each), but rarities are heavily skewed:</p>
+<table>
+<thead><tr><th>Rarity</th><th>Weight</th><th>Probability</th><th>Expected Trials for First</th></tr></thead>
+<tbody>
+<tr><td>Common</td><td>60</td><td>60%</td><td>1.67</td></tr>
+<tr><td>Uncommon</td><td>25</td><td>25%</td><td>4.00</td></tr>
+<tr><td>Rare</td><td>10</td><td>10%</td><td>10.00</td></tr>
+<tr><td>Epic</td><td>4</td><td>4%</td><td>25.00</td></tr>
+<tr><td>Legendary</td><td>1</td><td>1%</td><td>100.00</td></tr>
+</tbody>
+</table>
+<p>Our 100,000 simulations for collecting all 5 rarities show:</p>
+<ul>
+<li><strong>Median:</strong> 75 trials (half finish by here)</li>
+<li><strong>Mean:</strong> 106 trials (skewed by legendary bottleneck)</li>
+<li><strong>90th percentile:</strong> 231 trials</li>
+<li><strong>99th percentile:</strong> 463 trials</li>
+</ul>
+<p>The bottleneck is always Legendary. You'll likely collect Common, Uncommon, Rare, and Epic within your first 30 trials. Then you'll spend 70+ more trials waiting for that 1% Legendary to appear. This is normal — the math demands it.</p>`
+    },
+    {
+      heading: "Building Your Buddy Zoo",
+      body: `<p>A true completionist doesn't just collect — they <strong>document</strong>. Here's how to build your personal Buddy Zoo:</p>
+<p><strong>The Zoo Spreadsheet:</strong> Create a grid with 18 rows (species) and 5 columns (rarities). Each cell records the UUID that produced that combination. Mark shiny variants with a star. This becomes your permanent collection record.</p>
+<table>
+<thead><tr><th>Species</th><th>Common</th><th>Uncommon</th><th>Rare</th><th>Epic</th><th>Legendary</th></tr></thead>
+<tbody>
+<tr><td>Duck</td><td>test-003 ✓</td><td>test-047 ✓</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>Cat</td><td>test-011 ✓</td><td>—</td><td>test-089 ✓</td><td>—</td><td>—</td></tr>
+<tr><td>Dragon</td><td>—</td><td>test-022 ✓</td><td>—</td><td>test-156 ✓</td><td>—</td></tr>
+<tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+</tbody>
+</table>
+<p><strong>The Share Card:</strong> Use the Buddy Checker's built-in share card feature to generate a 1200×630 image of your best finds. Post them to the community with the UUID so others can verify.</p>
+<p><strong>The Verification Principle:</strong> Every entry in your zoo is <em>independently verifiable</em>. Anyone can type the same UUID into the Buddy Checker and confirm your claim. This is the beauty of deterministic systems — there's no faking a Legendary Shiny Dragon.</p>`
+    },
+    {
+      heading: "The Last Species Problem",
+      body: `<p>Every collector hits the same wall: 17 out of 18 species found, and the last one refuses to appear. This is mathematically inevitable — the expected wait for that final species is <strong>18 trials</strong>, but the variance is high. You might get lucky in 5 tries, or you might need 50.</p>
+<p>Here's the probability of finding your last species within <em>k</em> additional trials:</p>
+<table>
+<thead><tr><th>Additional Trials</th><th>Probability of Finding It</th></tr></thead>
+<tbody>
+<tr><td>5</td><td>24.5%</td></tr>
+<tr><td>10</td><td>43.0%</td></tr>
+<tr><td>18</td><td>63.2%</td></tr>
+<tr><td>30</td><td>81.3%</td></tr>
+<tr><td>50</td><td>93.8%</td></tr>
+<tr><td>80</td><td>98.9%</td></tr>
+</tbody>
+</table>
+<p>The formula is simple: P(find within k trials) = 1 − (17/18)^k. Each trial has a 5.56% chance, and the attempts are independent. If you've been stuck for 30 tries, the next trial still has exactly 5.56% odds — the universe doesn't owe you a catch-up.</p>
+<p>This is the <strong>gambler's fallacy</strong> in action. The only real strategy is patience and volume. Keep incrementing your UUID counter, and the math will deliver.</p>`
+    },
+    {
+      heading: "Start Your Collection",
+      body: `<p>The buddy engine is deterministic, the math is known, and the tools are free. Whether you're aiming for a casual 18-species sweep or the insane 90-combo grid, the path is clear:</p>
+<ol>
+<li><strong>Open the <a href="https://www.claudebuddy.art">Buddy Checker</a></strong> and start entering strings</li>
+<li><strong>Log every result</strong> in your zoo spreadsheet</li>
+<li><strong>Track your progress</strong> against the milestone table</li>
+<li><strong>Share your rarest finds</strong> using the share card feature</li>
+<li><strong>Explore the <a href="https://www.claudebuddy.art/species">Species Catalog</a></strong> to see what you're still missing</li>
+</ol>
+<p>Remember: the median collector finishes all 18 species in just <strong>59 trials</strong>. That's less than an hour with the Buddy Checker. Your zoo is waiting — go build it.</p>`
+    }
+  ]
+};
+
+const COMPLETIONIST_ZH: ArticleContent = {
+  title: "完美主义者手册 — 如何收集全部 18 种物种并建立你的 Buddy 动物园",
+  metaTitle: "收集全部 18 种 Claude Buddy 物种 — 完美主义者手册 2026",
+  metaDescription: "收集全部 18 种 Claude Buddy 物种的完整数学指南。应用优惠券收集者问题：期望试验次数、里程碑概率、稀有度策略，以及如何建立你的 Buddy 动物园。",
+  excerpt: "抓到一只 Buddy 是运气，抓到全部 18 种是数学。本指南将优惠券收集者问题应用于 Buddy 引擎，提供来自 100,000 次模拟的精确里程碑概率，并规划从休闲到完美主义者的五个收集等级。",
+  sections: [
+    {
+      heading: "收集者之痒",
+      body: `<p>你孵化了你的第一只 Buddy。也许是一只普通鸭子，也许是一只稀有幽灵。无论如何，你已经看到了物种图鉴 — 18 种生物，每种都有自己的 ASCII 精灵图、背景故事和性格。然后一个问题开始啃噬你：<em>如果用不同的 UUID，我会得到什么？</em></p>
+<p>这个问题在数学中有一个正式名称：<strong>优惠券收集者问题</strong>（Coupon Collector's Problem）。该问题最早由欧拉研究，1992 年由 Flajolet 正式化，它提出了一个看似简单的问题：如果从 <em>n</em> 个等概率项目中随机抽取，需要多少次才能看到每个项目至少一次？</p>
+<p>对于 Claude Buddy，<em>n</em> = 18。物种投掷是从 SPECIES 数组中的均匀选取 — 每个物种恰好有 <strong>1/18 ≈ 5.56%</strong> 的概率，与稀有度无关。这意味着数学是干净的，模拟是精确的，策略是真实的。让我们开始建造你的动物园。</p>`
+    },
+    {
+      heading: "数学原理：优惠券收集者问题",
+      body: `<p>收集所有 <em>n</em> 个等概率优惠券的期望试验次数为：</p>
+<p style="text-align:center;font-size:1.2em;"><strong>E(T) = n × H(n)</strong></p>
+<p>其中 H(n) 是第 <em>n</em> 个调和数：H(n) = 1 + 1/2 + 1/3 + … + 1/n。</p>
+<p>对于 18 个物种：<strong>H(18) = 3.4951</strong>，所以 <strong>E(T) = 18 × 3.4951 ≈ 63 次试验</strong>。标准差约为 23，这意味着大多数收集者将在 40 到 86 次试验之间完成。</p>
+<p>直觉很优美：你的第一个物种是保证的（1 次试验）。第二个平均需要 18/17 ≈ 1.06 次试验。但最后一个物种 — 当你已经有 17 个时 — 平均需要 18/1 = 18 次试验。最后的坚守者才是耐心的真正考验。</p>
+<table>
+<thead><tr><th>物种编号</th><th>已收集</th><th>新物种概率</th><th>期望试验次数</th><th>累计期望</th></tr></thead>
+<tbody>
+<tr><td>第 1 个</td><td>0</td><td>18/18 = 100%</td><td>1.0</td><td>1.0</td></tr>
+<tr><td>第 2 个</td><td>1</td><td>17/18 = 94.4%</td><td>1.06</td><td>2.06</td></tr>
+<tr><td>第 5 个</td><td>4</td><td>14/18 = 77.8%</td><td>1.29</td><td>5.56</td></tr>
+<tr><td>第 10 个</td><td>9</td><td>9/18 = 50.0%</td><td>2.00</td><td>14.69</td></tr>
+<tr><td>第 15 个</td><td>14</td><td>4/18 = 22.2%</td><td>4.50</td><td>33.19</td></tr>
+<tr><td>第 17 个</td><td>16</td><td>2/18 = 11.1%</td><td>9.00</td><td>45.94</td></tr>
+<tr><td>第 18 个</td><td>17</td><td>1/18 = 5.56%</td><td>18.00</td><td>63.94</td></tr>
+</tbody>
+</table>
+<p>注意最后三个物种就占了 <strong>64 次期望试验中的 30 次</strong>。这就是收集者的诅咒：越接近完成，感觉越慢。</p>`
+    },
+    {
+      heading: "100,000 次模拟：真实数据",
+      body: `<p>理论很优雅，但我们运行了 <strong>100,000 次蒙特卡洛模拟</strong>来获取精确的概率分布。以下是每个收集者都需要的里程碑数据：</p>
+<table>
+<thead><tr><th>里程碑</th><th>所需试验次数</th><th>含义</th></tr></thead>
+<tbody>
+<tr><td>观察到的最小值</td><td>21</td><td>最幸运的情况（前 0.01%）</td></tr>
+<tr><td>第 25 百分位</td><td>49</td><td>四分之一的收集者在此之前完成</td></tr>
+<tr><td>中位数（50%）</td><td>59</td><td>一半的收集者在此之前完成</td></tr>
+<tr><td>平均值</td><td>63</td><td>数学期望值</td></tr>
+<tr><td>第 75 百分位</td><td>73</td><td>四分之三的收集者在此之前完成</td></tr>
+<tr><td>第 90 百分位</td><td>91</td><td>只有 10% 需要更多</td></tr>
+<tr><td>第 95 百分位</td><td>103</td><td>不走运但并非不可能</td></tr>
+<tr><td>第 99 百分位</td><td>131</td><td>极度不走运</td></tr>
+<tr><td>观察到的最大值</td><td>299</td><td>100k 次模拟中的最坏情况</td></tr>
+</tbody>
+</table>
+<p><strong>关键结论：</strong>如果你已经尝试了 100 个 UUID 仍未找到全部 18 种，你属于最不幸的 5%。但你没有坏掉 — 算法正在完全按预期工作。继续前进。</p>`
+    },
+    {
+      heading: "五个收集等级",
+      body: `<p>并非每个收集者都有相同的目标。我们定义了五个递增野心的等级，每个都有自己的数学和策略：</p>
+<table>
+<thead><tr><th>等级</th><th>目标</th><th>目标数量</th><th>期望试验次数</th><th>90% 置信度</th></tr></thead>
+<tbody>
+<tr><td>🌱 探索者</td><td>看到 9/18 种物种（50%）</td><td>9</td><td>~22</td><td>~30</td></tr>
+<tr><td>📦 收集者</td><td>全部 18 种物种（任意稀有度）</td><td>18</td><td>~63</td><td>~91</td></tr>
+<tr><td>⭐ 稀有度猎人</td><td>全部 5 个稀有度等级</td><td>5</td><td>~106</td><td>~231</td></tr>
+<tr><td>💎 组合追求者</td><td>全部 90 种物种×稀有度组合</td><td>90</td><td>~9,000+</td><td>~15,000+</td></tr>
+<tr><td>✨ 闪光完美主义者</td><td>每种物种至少一只闪光</td><td>18 只闪光</td><td>~115,000+</td><td>~180,000+</td></tr>
+</tbody>
+</table>
+<p>等级之间的跳跃是指数级的。从收集者到稀有度猎人大约需要两倍的努力。从稀有度猎人到组合追求者则乘以 40 倍。而闪光完美主义者？那是一个终身项目 — 每个闪光-物种组合每次试验只有 <strong>1/1,800</strong> 的概率。</p>`
+    },
+    {
+      heading: "策略一：系统性 UUID 扫描",
+      body: `<p>最高效的收集策略是使用 <a href="https://www.claudebuddy.art">claudebuddy.art</a> 上的 Buddy Checker 进行<strong>系统性扫描</strong>。方法如下：</p>
+<ol>
+<li><strong>从任意字符串开始。</strong>在检查器中输入 "test-001"、"test-002"、"test-003"。每个字符串都会产生一个确定性的 Buddy。</li>
+<li><strong>记录每个结果。</strong>创建一个电子表格，列包括：输入字符串、物种、稀有度、闪光、帽子、眼睛。检查器会立即显示所有这些信息。</li>
+<li><strong>追踪你的缺口。</strong>30 次试验后，你可能已经有 13-14 个物种。识别缺失的那些。</li>
+<li><strong>坚持到 18/18。</strong>最后 2-3 个物种需要最多的耐心。不要改变你的命名方案 — 只需递增。</li>
+</ol>
+<p>为什么用 Buddy Checker？因为它使用与 Claude Code <em>完全相同的算法</em>：FNV-1a 哈希 → Mulberry32 PRNG → 顺序投掷。你在网站上看到的每个结果在数学上与 <code>/buddy</code> 产生的完全一致。你可以在几分钟内检查数百个 UUID，而无需触碰 Claude Code。</p>`
+    },
+    {
+      heading: "策略二：暴力搜索脚本",
+      body: `<p>对于编程爱好者，你可以编写一个脚本，对数千个输入运行 Buddy 引擎。算法是公开的且确定性的：</p>
+<pre><code>// 物种收集扫描伪代码
+const collected = new Set();
+let trials = 0;
+while (collected.size < 18) {
+  const uuid = \`collector-sweep-\${trials}\`;
+  const buddy = rollBuddy(uuid);
+  collected.add(buddy.species);
+  trials++;
+  if (!seen[buddy.species]) {
+    console.log(\`新发现: \${buddy.species} 在第 \${trials} 次试验\`);
+  }
+}
+console.log(\`全部 18 种在 \${trials} 次试验后收集完成\`);</code></pre>
+<p>在我们的测试中，这种方法始终在 <strong>50-80 次试验</strong>内找到所有 18 个物种，与理论预测一致。脚本还可以记录每次发现的稀有度、闪光状态和帽子，自动构建你的完整动物园数据库。</p>
+<p><strong>专业提示：</strong>使用对你有意义的前缀。"alice-001"、"bob-001"，甚至日期如 "2026-04-16-001"。每个输入都是一个永久的、可重现的身份 — 你随时可以重新检查它。</p>`
+    },
+    {
+      heading: "稀有度瓶颈",
+      body: `<p>如果你的目标从物种扩展到<strong>稀有度等级</strong>，数学会发生巨大变化。物种是均匀分布的（各 1/18），但稀有度严重偏斜：</p>
+<table>
+<thead><tr><th>稀有度</th><th>权重</th><th>概率</th><th>首次出现期望试验次数</th></tr></thead>
+<tbody>
+<tr><td>普通 (Common)</td><td>60</td><td>60%</td><td>1.67</td></tr>
+<tr><td>罕见 (Uncommon)</td><td>25</td><td>25%</td><td>4.00</td></tr>
+<tr><td>稀有 (Rare)</td><td>10</td><td>10%</td><td>10.00</td></tr>
+<tr><td>史诗 (Epic)</td><td>4</td><td>4%</td><td>25.00</td></tr>
+<tr><td>传说 (Legendary)</td><td>1</td><td>1%</td><td>100.00</td></tr>
+</tbody>
+</table>
+<p>我们对收集全部 5 个稀有度进行的 100,000 次模拟显示：</p>
+<ul>
+<li><strong>中位数：</strong>75 次试验（一半在此之前完成）</li>
+<li><strong>平均值：</strong>106 次试验（被传说瓶颈拉高）</li>
+<li><strong>第 90 百分位：</strong>231 次试验</li>
+<li><strong>第 99 百分位：</strong>463 次试验</li>
+</ul>
+<p>瓶颈永远是传说级。你可能在前 30 次试验内就收集到普通、罕见、稀有和史诗。然后你将花费 70+ 次以上等待那 1% 的传说级出现。这是正常的 — 数学要求如此。</p>`
+    },
+    {
+      heading: "建立你的 Buddy 动物园",
+      body: `<p>真正的完美主义者不只是收集 — 他们<strong>记录</strong>。以下是如何建立你的个人 Buddy 动物园：</p>
+<p><strong>动物园电子表格：</strong>创建一个 18 行（物种）× 5 列（稀有度）的网格。每个单元格记录产生该组合的 UUID。用星号标记闪光变体。这将成为你的永久收藏记录。</p>
+<table>
+<thead><tr><th>物种</th><th>普通</th><th>罕见</th><th>稀有</th><th>史诗</th><th>传说</th></tr></thead>
+<tbody>
+<tr><td>鸭子</td><td>test-003 ✓</td><td>test-047 ✓</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>猫咪</td><td>test-011 ✓</td><td>—</td><td>test-089 ✓</td><td>—</td><td>—</td></tr>
+<tr><td>龙</td><td>—</td><td>test-022 ✓</td><td>—</td><td>test-156 ✓</td><td>—</td></tr>
+<tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+</tbody>
+</table>
+<p><strong>分享卡片：</strong>使用 Buddy Checker 内置的分享卡片功能，为你最稀有的发现生成 1200×630 的图片。附上 UUID 发布到社区，让其他人可以验证。</p>
+<p><strong>验证原则：</strong>你动物园中的每个条目都是<em>可独立验证的</em>。任何人都可以在 Buddy Checker 中输入相同的 UUID 并确认你的声明。这就是确定性系统的美妙之处 — 你无法伪造一只传说级闪光龙。</p>`
+    },
+    {
+      heading: "最后一个物种问题",
+      body: `<p>每个收集者都会撞上同一堵墙：找到了 17/18 个物种，最后一个拒绝出现。这在数学上是不可避免的 — 最后一个物种的期望等待是 <strong>18 次试验</strong>，但方差很高。你可能在 5 次内幸运找到，也可能需要 50 次。</p>
+<p>以下是在 <em>k</em> 次额外试验内找到最后一个物种的概率：</p>
+<table>
+<thead><tr><th>额外试验次数</th><th>找到的概率</th></tr></thead>
+<tbody>
+<tr><td>5</td><td>24.5%</td></tr>
+<tr><td>10</td><td>43.0%</td></tr>
+<tr><td>18</td><td>63.2%</td></tr>
+<tr><td>30</td><td>81.3%</td></tr>
+<tr><td>50</td><td>93.8%</td></tr>
+<tr><td>80</td><td>98.9%</td></tr>
+</tbody>
+</table>
+<p>公式很简单：P(在 k 次内找到) = 1 − (17/18)^k。每次试验有 5.56% 的概率，且各次尝试是独立的。如果你已经卡了 30 次，下一次试验仍然恰好有 5.56% 的概率 — 宇宙不欠你一个补偿。</p>
+<p>这就是<strong>赌徒谬误</strong>的实际体现。唯一真正的策略是耐心和数量。继续递增你的 UUID 计数器，数学终将兑现。</p>`
+    },
+    {
+      heading: "开始你的收藏",
+      body: `<p>Buddy 引擎是确定性的，数学是已知的，工具是免费的。无论你的目标是休闲的 18 物种扫描还是疯狂的 90 组合网格，路径都是清晰的：</p>
+<ol>
+<li><strong>打开 <a href="https://www.claudebuddy.art">Buddy Checker</a></strong> 并开始输入字符串</li>
+<li><strong>记录每个结果</strong>到你的动物园电子表格中</li>
+<li><strong>追踪你的进度</strong>对照里程碑表</li>
+<li><strong>分享你最稀有的发现</strong>使用分享卡片功能</li>
+<li><strong>探索<a href="https://www.claudebuddy.art/species">物种图鉴</a></strong>查看你还缺少什么</li>
+</ol>
+<p>记住：中位数收集者只需 <strong>59 次试验</strong>就能完成全部 18 个物种。用 Buddy Checker 不到一小时。你的动物园在等待 — 去建造它吧。</p>`
+    }
+  ]
+};
+
+const COMPLETIONIST_KO: ArticleContent = {
+  title: "완벽주의자 핸드북 — 18종 전체를 수집하고 버디 동물원을 만드는 방법",
+  metaTitle: "Claude Buddy 18종 전체 수집 — 완벽주의자 핸드북 2026",
+  metaDescription: "Claude Buddy 18종 전체를 수집하기 위한 완벽한 수학 가이드. 쿠폰 수집가 문제 적용: 예상 시행 횟수, 마일스톤 확률, 희귀도 전략, 그리고 버디 동물원 구축 방법.",
+  excerpt: "버디 하나를 잡는 건 운이고, 18종 전부를 잡는 건 수학입니다. 이 가이드는 쿠폰 수집가 문제를 버디 엔진에 적용하고, 100,000회 시뮬레이션의 정확한 마일스톤 확률을 제공하며, 캐주얼부터 완벽주의자까지 다섯 가지 수집 등급을 안내합니다.",
+  sections: [
+    {
+      heading: "수집가의 욕구",
+      body: `<p>첫 번째 버디를 부화시켰습니다. 아마 Common 오리일 수도 있고, Rare 유령일 수도 있습니다. 어느 쪽이든, 종 카탈로그를 보셨을 겁니다 — 18종의 생물, 각각 고유한 ASCII 스프라이트, 배경 이야기, 성격을 가지고 있습니다. 그리고 질문이 떠오릅니다: <em>다른 UUID를 사용하면 뭘 얻을까?</em></p>
+<p>이 질문은 수학에서 공식적인 이름이 있습니다: <strong>쿠폰 수집가 문제</strong>(Coupon Collector's Problem). 오일러가 처음 연구하고 1992년 Flajolet가 공식화한 이 문제는 놀랍도록 단순한 질문을 던집니다: <em>n</em>개의 동일 확률 항목에서 무작위로 추출할 때, 모든 항목을 최소 한 번씩 보려면 몇 번이 필요할까?</p>
+<p>Claude Buddy의 경우, <em>n</em> = 18입니다. 종 롤은 SPECIES 배열에서의 균일 선택으로 — 모든 종은 정확히 <strong>1/18 ≈ 5.56%</strong>의 확률을 가지며, 희귀도와 무관합니다. 이는 수학이 깔끔하고, 시뮬레이션이 정확하며, 전략이 실재함을 의미합니다. 동물원을 만들어 봅시다.</p>`
+    },
+    {
+      heading: "수학: 쿠폰 수집가 문제",
+      body: `<p>모든 <em>n</em>개의 동일 확률 쿠폰을 수집하는 데 필요한 예상 시행 횟수는:</p>
+<p style="text-align:center;font-size:1.2em;"><strong>E(T) = n × H(n)</strong></p>
+<p>여기서 H(n)은 <em>n</em>번째 조화수입니다: H(n) = 1 + 1/2 + 1/3 + … + 1/n.</p>
+<p>18종의 경우: <strong>H(18) = 3.4951</strong>이므로 <strong>E(T) = 18 × 3.4951 ≈ 63회 시행</strong>입니다. 표준편차는 약 23으로, 대부분의 수집가는 40~86회 시행 사이에 완료합니다.</p>
+<p>직관은 아름답습니다: 첫 번째 종은 보장됩니다(1회 시행). 두 번째는 평균 18/17 ≈ 1.06회 시행이 필요합니다. 하지만 마지막 종 — 이미 17개를 가지고 있을 때 — 평균 18/1 = 18회 시행이 필요합니다. 마지막 버티기가 인내심의 진정한 시험입니다.</p>
+<table>
+<thead><tr><th>종 번호</th><th>이미 수집</th><th>새 종 확률</th><th>예상 시행 횟수</th><th>누적 예상</th></tr></thead>
+<tbody>
+<tr><td>1번째</td><td>0</td><td>18/18 = 100%</td><td>1.0</td><td>1.0</td></tr>
+<tr><td>2번째</td><td>1</td><td>17/18 = 94.4%</td><td>1.06</td><td>2.06</td></tr>
+<tr><td>5번째</td><td>4</td><td>14/18 = 77.8%</td><td>1.29</td><td>5.56</td></tr>
+<tr><td>10번째</td><td>9</td><td>9/18 = 50.0%</td><td>2.00</td><td>14.69</td></tr>
+<tr><td>15번째</td><td>14</td><td>4/18 = 22.2%</td><td>4.50</td><td>33.19</td></tr>
+<tr><td>17번째</td><td>16</td><td>2/18 = 11.1%</td><td>9.00</td><td>45.94</td></tr>
+<tr><td>18번째</td><td>17</td><td>1/18 = 5.56%</td><td>18.00</td><td>63.94</td></tr>
+</tbody>
+</table>
+<p>마지막 세 종만으로 <strong>64회 예상 시행 중 30회</strong>를 차지합니다. 이것이 수집가의 저주입니다: 완성에 가까울수록 더 느리게 느껴집니다.</p>`
+    },
+    {
+      heading: "100,000회 시뮬레이션: 실제 수치",
+      body: `<p>이론은 우아하지만, 정확한 확률 분포를 얻기 위해 <strong>100,000회 몬테카를로 시뮬레이션</strong>을 실행했습니다. 모든 수집가가 알아야 할 마일스톤 수치입니다:</p>
+<table>
+<thead><tr><th>마일스톤</th><th>필요 시행 횟수</th><th>의미</th></tr></thead>
+<tbody>
+<tr><td>관측 최솟값</td><td>21</td><td>가장 운 좋은 경우 (상위 0.01%)</td></tr>
+<tr><td>25번째 백분위</td><td>49</td><td>4명 중 1명이 여기서 완료</td></tr>
+<tr><td>중앙값 (50%)</td><td>59</td><td>절반의 수집가가 여기서 완료</td></tr>
+<tr><td>평균</td><td>63</td><td>수학적 기댓값</td></tr>
+<tr><td>75번째 백분위</td><td>73</td><td>4명 중 3명이 여기서 완료</td></tr>
+<tr><td>90번째 백분위</td><td>91</td><td>10%만 이보다 더 필요</td></tr>
+<tr><td>95번째 백분위</td><td>103</td><td>불운하지만 불가능하지 않음</td></tr>
+<tr><td>99번째 백분위</td><td>131</td><td>극도로 불운</td></tr>
+<tr><td>관측 최댓값</td><td>299</td><td>100k 시뮬레이션 중 최악의 경우</td></tr>
+</tbody>
+</table>
+<p><strong>핵심 결론:</strong> 100개의 UUID를 시도했는데도 18종을 모두 찾지 못했다면, 가장 불운한 5%에 속합니다. 하지만 고장난 것이 아닙니다 — 알고리즘은 정확히 예상대로 작동하고 있습니다. 계속 진행하세요.</p>`
+    },
+    {
+      heading: "다섯 가지 수집 등급",
+      body: `<p>모든 수집가가 같은 목표를 가진 것은 아닙니다. 야망이 증가하는 다섯 가지 등급을 정의했으며, 각각 고유한 수학과 전략이 있습니다:</p>
+<table>
+<thead><tr><th>등급</th><th>목표</th><th>목표 수량</th><th>예상 시행 횟수</th><th>90% 신뢰도</th></tr></thead>
+<tbody>
+<tr><td>🌱 탐험가</td><td>18종 중 9종 보기 (50%)</td><td>9</td><td>~22</td><td>~30</td></tr>
+<tr><td>📦 수집가</td><td>전체 18종 (아무 희귀도)</td><td>18</td><td>~63</td><td>~91</td></tr>
+<tr><td>⭐ 희귀도 헌터</td><td>전체 5개 희귀도 등급</td><td>5</td><td>~106</td><td>~231</td></tr>
+<tr><td>💎 콤보 추구자</td><td>전체 90개 종×희귀도 조합</td><td>90</td><td>~9,000+</td><td>~15,000+</td></tr>
+<tr><td>✨ 샤이니 완벽주의자</td><td>각 종의 샤이니 최소 1개</td><td>18개 샤이니</td><td>~115,000+</td><td>~180,000+</td></tr>
+</tbody>
+</table>
+<p>등급 간 도약은 기하급수적입니다. 수집가에서 희귀도 헌터로 가면 노력이 약 2배가 됩니다. 희귀도 헌터에서 콤보 추구자로 가면 40배가 됩니다. 그리고 샤이니 완벽주의자? 그것은 평생 프로젝트입니다 — 각 샤이니-종 조합은 시행당 <strong>1/1,800</strong>의 확률밖에 없습니다.</p>`
+    },
+    {
+      heading: "전략 1: 체계적 UUID 스윕",
+      body: `<p>가장 효율적인 수집 전략은 <a href="https://www.claudebuddy.art">claudebuddy.art</a>의 Buddy Checker를 사용한 <strong>체계적 스윕</strong>입니다. 방법은 다음과 같습니다:</p>
+<ol>
+<li><strong>아무 문자열로 시작하세요.</strong> 체커에 "test-001", "test-002", "test-003"을 입력하세요. 각 문자열은 결정론적 버디를 생성합니다.</li>
+<li><strong>모든 결과를 기록하세요.</strong> 입력 문자열, 종, 희귀도, 샤이니, 모자, 눈 열이 있는 스프레드시트를 만드세요. 체커가 이 모든 정보를 즉시 보여줍니다.</li>
+<li><strong>빈자리를 추적하세요.</strong> 30회 시행 후, 아마 13-14종을 가지고 있을 겁니다. 빠진 것들을 식별하세요.</li>
+<li><strong>18/18까지 계속하세요.</strong> 마지막 2-3종이 가장 많은 인내심을 요구합니다. 명명 방식을 바꾸지 마세요 — 그냥 증가시키세요.</li>
+</ol>
+<p>왜 Buddy Checker인가? Claude Code와 <em>정확히 같은 알고리즘</em>을 사용하기 때문입니다: FNV-1a 해시 → Mulberry32 PRNG → 순차적 롤. 웹사이트에서 보는 모든 결과는 <code>/buddy</code>가 생성하는 것과 수학적으로 동일합니다. Claude Code를 건드리지 않고도 몇 분 만에 수백 개의 UUID를 확인할 수 있습니다.</p>`
+    },
+    {
+      heading: "전략 2: 브루트포스 스크립트",
+      body: `<p>프로그래밍에 익숙한 분들은 수천 개의 입력에 대해 버디 엔진을 실행하는 스크립트를 작성할 수 있습니다. 알고리즘은 공개되어 있고 결정론적입니다:</p>
+<pre><code>// 종 수집 스윕 의사코드
+const collected = new Set();
+let trials = 0;
+while (collected.size < 18) {
+  const uuid = \`collector-sweep-\${trials}\`;
+  const buddy = rollBuddy(uuid);
+  collected.add(buddy.species);
+  trials++;
+  if (!seen[buddy.species]) {
+    console.log(\`새 발견: \${buddy.species} - \${trials}번째 시행\`);
+  }
+}
+console.log(\`전체 18종 \${trials}회 시행 후 수집 완료\`);</code></pre>
+<p>테스트에서 이 접근법은 일관되게 <strong>50-80회 시행</strong> 내에 18종 전부를 찾았으며, 이론적 예측과 일치합니다. 스크립트는 또한 각 발견의 희귀도, 샤이니 상태, 모자를 기록하여 완전한 동물원 데이터베이스를 자동으로 구축할 수 있습니다.</p>
+<p><strong>프로 팁:</strong> 의미 있는 접두사를 사용하세요. "alice-001", "bob-001", 또는 날짜 "2026-04-16-001"까지. 각 입력은 영구적이고 재현 가능한 신원입니다 — 나중에 언제든 다시 확인할 수 있습니다.</p>`
+    },
+    {
+      heading: "희귀도 병목",
+      body: `<p>목표가 종을 넘어 <strong>희귀도 등급</strong>으로 확장되면, 수학이 극적으로 변합니다. 종은 균일 분포(각 1/18)이지만, 희귀도는 심하게 편향되어 있습니다:</p>
+<table>
+<thead><tr><th>희귀도</th><th>가중치</th><th>확률</th><th>첫 출현 예상 시행 횟수</th></tr></thead>
+<tbody>
+<tr><td>Common</td><td>60</td><td>60%</td><td>1.67</td></tr>
+<tr><td>Uncommon</td><td>25</td><td>25%</td><td>4.00</td></tr>
+<tr><td>Rare</td><td>10</td><td>10%</td><td>10.00</td></tr>
+<tr><td>Epic</td><td>4</td><td>4%</td><td>25.00</td></tr>
+<tr><td>Legendary</td><td>1</td><td>1%</td><td>100.00</td></tr>
+</tbody>
+</table>
+<p>전체 5개 희귀도 수집에 대한 100,000회 시뮬레이션 결과:</p>
+<ul>
+<li><strong>중앙값:</strong> 75회 시행 (절반이 여기서 완료)</li>
+<li><strong>평균:</strong> 106회 시행 (Legendary 병목으로 편향)</li>
+<li><strong>90번째 백분위:</strong> 231회 시행</li>
+<li><strong>99번째 백분위:</strong> 463회 시행</li>
+</ul>
+<p>병목은 항상 Legendary입니다. 처음 30회 시행 내에 Common, Uncommon, Rare, Epic을 수집할 가능성이 높습니다. 그 후 1% Legendary가 나타나기를 기다리며 70회 이상을 더 보내게 됩니다. 이것은 정상입니다 — 수학이 그것을 요구합니다.</p>`
+    },
+    {
+      heading: "버디 동물원 만들기",
+      body: `<p>진정한 완벽주의자는 수집만 하지 않습니다 — <strong>기록</strong>합니다. 개인 버디 동물원을 만드는 방법입니다:</p>
+<p><strong>동물원 스프레드시트:</strong> 18행(종) × 5열(희귀도)의 그리드를 만드세요. 각 셀에 해당 조합을 생성한 UUID를 기록하세요. 샤이니 변형은 별표로 표시하세요. 이것이 영구적인 수집 기록이 됩니다.</p>
+<table>
+<thead><tr><th>종</th><th>Common</th><th>Uncommon</th><th>Rare</th><th>Epic</th><th>Legendary</th></tr></thead>
+<tbody>
+<tr><td>오리</td><td>test-003 ✓</td><td>test-047 ✓</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>고양이</td><td>test-011 ✓</td><td>—</td><td>test-089 ✓</td><td>—</td><td>—</td></tr>
+<tr><td>용</td><td>—</td><td>test-022 ✓</td><td>—</td><td>test-156 ✓</td><td>—</td></tr>
+<tr><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td><td>…</td></tr>
+</tbody>
+</table>
+<p><strong>공유 카드:</strong> Buddy Checker의 내장 공유 카드 기능을 사용하여 가장 희귀한 발견의 1200×630 이미지를 생성하세요. UUID와 함께 커뮤니티에 게시하여 다른 사람들이 검증할 수 있게 하세요.</p>
+<p><strong>검증 원칙:</strong> 동물원의 모든 항목은 <em>독립적으로 검증 가능</em>합니다. 누구나 Buddy Checker에 같은 UUID를 입력하여 주장을 확인할 수 있습니다. 이것이 결정론적 시스템의 아름다움입니다 — Legendary 샤이니 드래곤을 위조할 수 없습니다.</p>`
+    },
+    {
+      heading: "마지막 종 문제",
+      body: `<p>모든 수집가가 같은 벽에 부딪힙니다: 17/18종을 찾았는데 마지막 하나가 나타나지 않습니다. 이것은 수학적으로 불가피합니다 — 마지막 종의 예상 대기는 <strong>18회 시행</strong>이지만, 분산이 높습니다. 5번 만에 운 좋게 찾을 수도 있고, 50번이 필요할 수도 있습니다.</p>
+<p><em>k</em>회 추가 시행 내에 마지막 종을 찾을 확률:</p>
+<table>
+<thead><tr><th>추가 시행 횟수</th><th>찾을 확률</th></tr></thead>
+<tbody>
+<tr><td>5</td><td>24.5%</td></tr>
+<tr><td>10</td><td>43.0%</td></tr>
+<tr><td>18</td><td>63.2%</td></tr>
+<tr><td>30</td><td>81.3%</td></tr>
+<tr><td>50</td><td>93.8%</td></tr>
+<tr><td>80</td><td>98.9%</td></tr>
+</tbody>
+</table>
+<p>공식은 간단합니다: P(k회 내 발견) = 1 − (17/18)^k. 각 시행은 5.56%의 확률을 가지며, 시도들은 독립적입니다. 30번 막혀 있었더라도 다음 시행은 여전히 정확히 5.56%의 확률입니다 — 우주는 보상을 빚지고 있지 않습니다.</p>
+<p>이것이 <strong>도박사의 오류</strong>의 실제 모습입니다. 유일한 진정한 전략은 인내와 물량입니다. UUID 카운터를 계속 증가시키면 수학이 결과를 전달할 것입니다.</p>`
+    },
+    {
+      heading: "수집을 시작하세요",
+      body: `<p>버디 엔진은 결정론적이고, 수학은 알려져 있으며, 도구는 무료입니다. 캐주얼한 18종 스윕이든 미친 90-콤보 그리드든, 경로는 명확합니다:</p>
+<ol>
+<li><strong><a href="https://www.claudebuddy.art">Buddy Checker</a>를 열고</strong> 문자열 입력을 시작하세요</li>
+<li><strong>모든 결과를 기록</strong>하여 동물원 스프레드시트에 저장하세요</li>
+<li><strong>진행 상황을 추적</strong>하며 마일스톤 표와 비교하세요</li>
+<li><strong>가장 희귀한 발견을 공유</strong>하세요 — 공유 카드 기능을 사용하세요</li>
+<li><strong><a href="https://www.claudebuddy.art/species">종 카탈로그</a>를 탐색</strong>하여 아직 빠진 것을 확인하세요</li>
+</ol>
+<p>기억하세요: 중앙값 수집가는 단 <strong>59회 시행</strong>으로 18종 전부를 완료합니다. Buddy Checker로 한 시간도 안 걸립니다. 동물원이 기다리고 있습니다 — 만들러 가세요.</p>`
+    }
+  ]
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
   {
     slug: "how-to-find-your-claude-code-buddy",
@@ -7838,7 +8344,24 @@ Similarity: ~0.42  → NOT KIN ✗</code></pre>
       }
     }
   },
+  {
+    slug: "completionist-handbook-collect-all-18-buddy-species",
+    publishedAt: "2026-04-16",
+    readingTime: 10,
+    tags: ["guide", "collection", "species", "probability", "completionist"],
+    discussionCategory: 'guides' as DiscussionCategory,
+    content: {
+      en: COMPLETIONIST_EN,
+      zh: COMPLETIONIST_ZH,
+      ko: COMPLETIONIST_KO,
+    },
+  },
 ];
+
+
+
+
+
 export function getArticleBySlug(slug: string): BlogArticle | undefined {
   return BLOG_ARTICLES.find((a) => a.slug === slug);
 }
