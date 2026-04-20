@@ -71,6 +71,20 @@ export default function SiteHeader() {
 
           <Divider />
 
+          {/* Revive — highlighted in amber */}
+          <Link
+            href="/revive"
+            className={`text-[10px] uppercase tracking-widest transition-colors px-1.5 py-0.5 rounded-sm whitespace-nowrap font-bold ${
+              location === "/revive"
+                ? "text-crt-amber"
+                : "text-crt-amber/50 hover:text-crt-amber/80"
+            }`}
+          >
+            REVIVE
+          </Link>
+
+          <Divider />
+
           {/* Discovery group */}
           <NavLink href="/species" label="SPECIES" current={location} />
           <NavLink href="/blog"    label="BLOG"    current={location} />
