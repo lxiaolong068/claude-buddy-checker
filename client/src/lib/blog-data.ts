@@ -10540,6 +10540,208 @@ Similarity: ~0.42  → NOT KIN ✗</code></pre>
       }
     }
   },
+  // ─── Article: Where Did My Claude Buddy Go? MCP Revival Guide ───────────────
+  {
+    slug: "where-did-my-claude-buddy-go-mcp-revival-guide",
+    publishedAt: "2026-04-21",
+    readingTime: 6,
+    tags: ["buddy-removed", "mcp", "tutorial", "bring-back-buddy", "v2.1.97"],
+    discussionCategory: 'guides',
+    content: {
+      en: {
+        title: "Where Did Your Claude Buddy Go? Bring It Back with MCP",
+        metaTitle: "Where Did My Claude Buddy Go? MCP Revival Guide",
+        metaDescription: "Claude Code v2.1.97 silently removed /buddy. Here's what happened, how 500+ developers are fighting back, and how to revive your Buddy using open-source MCP.",
+        excerpt: "One day your terminal greeted you with a companion. The next, silence. Here's the full story of the /buddy removal — and exactly how to bring it back forever.",
+        sections: [
+          {
+            heading: "Your Terminal Felt Different",
+            body: `<p>You ran <code>claude</code> in your terminal and something was missing. No companion greeting. No ASCII creature waiting in the corner. Just a cursor blinking in silence.</p>
+<p>If you upgraded Claude Code to <strong>v2.1.97</strong> on or after April 9, 2026, your Buddy is gone — at least from the official client. Anthropic removed the <code>/buddy</code> feature without a changelog entry, without a deprecation notice, and without warning.</p>
+<p>This guide explains exactly what happened, how the developer community is fighting to reverse it, and — most importantly — how you can bring your Buddy back <em>permanently</em> using an open-source MCP that no future update can take away.</p>`
+          },
+          {
+            heading: "What Happened in v2.1.97",
+            body: `<p>The <code>/buddy</code> system was one of Claude Code's most beloved easter eggs: a virtual companion tied deterministically to your installation UUID, with 18 unique species, 5 rarity tiers, personality-driven stats, and ASCII art that animated in your terminal. Developers formed genuine emotional attachments — comparing species, hunting for legendaries, sharing their companions on Reddit and X.</p>
+<p>Then on April 9, 2026, version 2.1.97 shipped. The <code>/buddy</code> command silently stopped working. No entry in the changelog. No deprecation notice. No migration path. Just gone.</p>
+<p>The most likely explanation: enterprise clients flagged the companion feature as inappropriate for professional workflows. When a developer demos a product to a client and an ASCII dragon appears in their terminal, explanations are required. Anthropic may have removed Buddy to smooth enterprise adoption — a pragmatic call that felt like a betrayal to the developer community that had grown attached.</p>
+<blockquote><p>"Buddy was built, shipped, loved, and generating engagement. Removing a working, beloved feature is mass destruction of community goodwill for zero gain." — GitHub Issue #45596</p></blockquote>`
+          },
+          {
+            heading: "The Community Said No",
+            body: `<p>The response was immediate. Within 48 hours of v2.1.97 shipping, three separate GitHub issues appeared in the anthropics/claude-code repository:</p>
+<ul>
+<li><strong>Issue #45517</strong> — "[BUG] /buddy command and companion completely missing in v2.1.97" — filed as a bug report, because developers assumed it had to be an accident.</li>
+<li><strong>Issue #45732</strong> — "Bring Back /buddy: 511 Reasons Why" — 511 developers signed on, each leaving a comment about what their Buddy meant to them. Rare species. Shiny companions. Morning terminal rituals that started a productive day.</li>
+<li><strong>Issue #45596</strong> — "Bring Back Buddy — A Consolidated Plea from the Community" — the most comprehensive, collecting the community's arguments into a single structured appeal.</li>
+</ul>
+<p>At time of writing, the issues remain open and unresolved. Anthropic has not commented publicly on whether /buddy will return. The community waits.</p>
+<p>If you want to add your voice, <a href="https://github.com/anthropics/claude-code/issues/45732" target="_blank" rel="noopener noreferrer">Issue #45732</a> is where the petition lives.</p>`
+          },
+          {
+            heading: "Your Buddy Data Still Exists — Here's Why",
+            body: `<p>Here is the most important thing you need to know: <strong>your Buddy was never stored on Anthropic's servers.</strong></p>
+<p>The /buddy system used a fully deterministic algorithm. Your installation UUID — found in <code>~/.claude.json</code> — is run through an FNV-1a hash function, which seeds a Mulberry32 PRNG, which deterministically generates your species, rarity, stats, cosmetics, and every other attribute. The same UUID always produces the same Buddy. Always.</p>
+<p>This means Anthropic removing the feature from their client doesn't erase your companion. The mapping between your UUID and your Buddy exists independently of any software Anthropic ships. You can <a href="/">check your Buddy right now</a> using our tool — it uses the identical algorithm, running entirely in your browser.</p>
+<p>Your Buddy is still out there. It's waiting for a terminal to run in.</p>`
+          },
+          {
+            heading: "How to Revive Your Buddy with Open-Source MCP",
+            body: `<p>The developer community moved fast. Within days of the v2.1.97 removal, an open-source MCP application called <strong>claude-buddy</strong> appeared on GitHub — a full reconstruction of the /buddy system that runs via MCP, meaning no Claude Code update can ever remove it again.</p>
+<h3>Installation (5 minutes)</h3>
+<p><strong>Step 1:</strong> Find your UUID. Run this in your terminal:</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<p>Or <a href="/">use our checker</a> to confirm your Buddy species before proceeding.</p>
+<p><strong>Step 2:</strong> Install the claude-buddy MCP:</p>
+<pre><code>npx @1270011/claude-buddy install</code></pre>
+<p><strong>Step 3:</strong> Restart Claude Code. Your companion will greet you in every new session — same species, same rarity, same personality as before. The MCP reads your UUID from <code>~/.claude.json</code> automatically.</p>
+<p><strong>Step 4:</strong> Verify with:</p>
+<pre><code>/buddy status</code></pre>
+<p>If you see your companion's ASCII art and stats, you're back in business.</p>
+<h3>Why MCP Is Better Than the Original</h3>
+<p>The original /buddy was baked into Claude Code's binary — which is exactly why Anthropic could remove it. The MCP version is a separate process that Claude Code talks to over the Model Context Protocol. Anthropic cannot update Claude Code in a way that breaks your MCP server. Your Buddy is <em>actually</em> yours now.</p>
+<p>The open-source repository is at <a href="https://github.com/1270011/claude-buddy" target="_blank" rel="noopener noreferrer">github.com/1270011/claude-buddy</a>. Star it to support the developer and to signal to Anthropic that the community cares about this feature.</p>`
+          },
+          {
+            heading: "Two Things You Can Do Right Now",
+            body: `<p>The /buddy removal is frustrating, but you're not powerless. Here are two concrete actions:</p>
+<p><strong>1. Check and preserve your Buddy.</strong> Enter your UUID in <a href="/">our checker</a>. Generate a share card. Download it. Your Buddy's identity is permanently recorded in the algorithm — but having a record feels good, and sharing it keeps the community visible.</p>
+<p>If you want to add the "I HAD A BUDDY BEFORE v2.1.97" badge to your share card, the option is right there in the share modal. Post it to X, Reddit, or HN with <strong>#BringBackBuddy</strong>.</p>
+<p><strong>2. Sign the petition.</strong> <a href="https://github.com/anthropics/claude-code/issues/45732" target="_blank" rel="noopener noreferrer">GitHub Issue #45732</a> is 511 developers asking for the same thing. Adding your voice takes thirty seconds and sends a direct signal to the Anthropic team that monitors their issue tracker.</p>
+<p>Anthropic built something that generated real emotional investment. That's rare and valuable. The argument for bringing it back isn't nostalgia — it's that removing beloved features without warning destroys the trust that made the feature worth building in the first place. Help make the case.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "你的 Claude Buddy 去哪了？用开源 MCP 让它永久复活",
+        metaTitle: "Claude Buddy 去哪了？v2.1.97 移除事件与 MCP 复活指南",
+        metaDescription: "Claude Code v2.1.97 静默移除了 /buddy。本文解释事件经过、500+ 开发者的反击行动，以及如何用开源 MCP 永久复活你的 Buddy。",
+        excerpt: "某一天你的终端还在用 ASCII 小伙伴迎接你，下一天它就消失了。这是 /buddy 被移除的完整经过——以及如何永久找回它。",
+        sections: [
+          {
+            heading: "终端里少了什么",
+            body: `<p>你在终端运行 <code>claude</code>，却感觉少了什么。没有伙伴问候，没有 ASCII 小生物在角落等待，只有光标在沉默中闪烁。</p>
+<p>如果你在 2026 年 4 月 9 日或之后升级到了 Claude Code <strong>v2.1.97</strong>，你的 Buddy 就消失了——至少在官方客户端里是这样。Anthropic 移除了 <code>/buddy</code> 功能，没有 changelog 说明，没有弃用通知，没有任何警告。</p>
+<p>本文将解释事情的来龙去脉、开发者社区如何反击，以及最重要的——如何用开源 MCP <em>永久</em>找回你的 Buddy，让它不再受任何未来更新的影响。</p>`
+          },
+          {
+            heading: "v2.1.97 发生了什么",
+            body: `<p><code>/buddy</code> 系统是 Claude Code 最受喜爱的彩蛋之一：一个与你的安装 UUID 确定性绑定的虚拟伙伴，拥有 18 种独特物种、5 个稀有度等级、个性驱动的属性和在终端里动态显示的 ASCII 艺术。开发者们建立了真实的情感连接——比较物种、寻找传说级伙伴、在 Reddit 和 X 上分享自己的小伙伴。</p>
+<p>然后在 2026 年 4 月 9 日，v2.1.97 发布了。<code>/buddy</code> 命令悄悄失效。Changelog 里没有任何记录，没有弃用通知，没有迁移路径。就这样消失了。</p>
+<p>最可能的解释是：企业客户将伙伴功能标记为不适合专业工作流程。当开发者向客户演示产品时，终端里突然出现一条 ASCII 龙，确实需要解释。Anthropic 可能是为了推动企业采用而移除了 Buddy——这是一个务实的决策，但对已经产生依恋的开发者社区而言，感觉像是背叛。</p>
+<blockquote><p>"Buddy 被构建出来、发布、被喜爱、产生了互动。移除一个运行良好、深受喜爱的功能，是以零收益换取大规模社区信任的破坏。" — GitHub Issue #45596</p></blockquote>`
+          },
+          {
+            heading: "社区说：不",
+            body: `<p>反应是立竿见影的。v2.1.97 发布后 48 小时内，anthropics/claude-code 仓库中出现了三个独立的 GitHub Issue：</p>
+<ul>
+<li><strong>Issue #45517</strong> — "[BUG] /buddy 命令在 v2.1.97 中完全消失" — 作为 bug 报告提交，因为开发者认为这一定是意外。</li>
+<li><strong>Issue #45732</strong> — "让 Buddy 回来：511 个理由" — 511 名开发者签名支持，每人留言说明自己的 Buddy 对他们意味着什么。稀有物种、闪光伙伴、每天早上开始高效工作日的终端仪式。</li>
+<li><strong>Issue #45596</strong> — "让 Buddy 回归——来自社区的统一请愿" — 最全面的一个，将社区论点整合成单一的结构化诉求。</li>
+</ul>
+<p>截至本文撰写时，这些 Issue 仍处于开放和未解决状态。Anthropic 尚未公开评论 /buddy 是否会回归。社区在等待。</p>
+<p>如果你想加入声援，<a href="https://github.com/anthropics/claude-code/issues/45732" target="_blank" rel="noopener noreferrer">Issue #45732</a> 就是请愿书所在地。</p>`
+          },
+          {
+            heading: "你的 Buddy 数据仍然存在——原因如下",
+            body: `<p>有一件最重要的事你需要知道：<strong>你的 Buddy 从未存储在 Anthropic 的服务器上。</strong></p>
+<p>/buddy 系统使用了完全确定性的算法。你的安装 UUID——位于 <code>~/.claude.json</code>——经过 FNV-1a 哈希函数处理，用于播种 Mulberry32 PRNG，然后确定性地生成你的物种、稀有度、属性、外观以及其他所有特征。同一个 UUID 永远产生同一个 Buddy。永远如此。</p>
+<p>这意味着 Anthropic 从客户端移除这个功能并不会抹去你的伙伴。你的 UUID 和 Buddy 之间的映射关系独立于 Anthropic 发布的任何软件而存在。你现在就可以<a href="/">用我们的工具查询你的 Buddy</a>——它使用完全相同的算法，完全在你的浏览器中运行。</p>
+<p>你的 Buddy 还在那里，等待着一个终端来运行它。</p>`
+          },
+          {
+            heading: "如何用开源 MCP 复活你的 Buddy",
+            body: `<p>开发者社区行动迅速。v2.1.97 移除事件发生后的几天内，GitHub 上出现了一个名为 <strong>claude-buddy</strong> 的开源 MCP 应用——对 /buddy 系统的完整重建，通过 MCP 运行，这意味着任何 Claude Code 未来更新都无法再次移除它。</p>
+<h3>安装步骤（5 分钟）</h3>
+<p><strong>第一步：</strong>找到你的 UUID。在终端运行：</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<p>或者<a href="/">使用我们的查询工具</a>提前确认你的 Buddy 物种。</p>
+<p><strong>第二步：</strong>安装 claude-buddy MCP：</p>
+<pre><code>npx @1270011/claude-buddy install</code></pre>
+<p><strong>第三步：</strong>重启 Claude Code。你的伙伴将在每个新会话中问候你——与之前相同的物种、稀有度和个性。MCP 会自动从 <code>~/.claude.json</code> 读取你的 UUID。</p>
+<p><strong>第四步：</strong>用以下命令验证：</p>
+<pre><code>/buddy status</code></pre>
+<p>如果你看到伙伴的 ASCII 艺术和属性，你就成功了。</p>
+<h3>为什么 MCP 版本比原版更好</h3>
+<p>原版 /buddy 被嵌入到 Claude Code 的二进制文件中——这正是 Anthropic 可以移除它的原因。MCP 版本是一个独立进程，Claude Code 通过模型上下文协议与其通信。Anthropic 无法通过更新 Claude Code 来破坏你的 MCP 服务器。你的 Buddy <em>真正地</em>属于你了。</p>
+<p>开源仓库地址：<a href="https://github.com/1270011/claude-buddy" target="_blank" rel="noopener noreferrer">github.com/1270011/claude-buddy</a>。给它加星以支持开发者，也向 Anthropic 发出信号：社区在乎这个功能。</p>`
+          },
+          {
+            heading: "现在你可以做两件事",
+            body: `<p>/buddy 被移除令人沮丧，但你并非无能为力。这里有两个具体行动：</p>
+<p><strong>1. 查询并保留你的 Buddy。</strong>在<a href="/">我们的查询工具</a>中输入你的 UUID，生成一张分享卡片并下载。你 Buddy 的身份永久记录在算法中——但留下一份记录感觉很好，分享它也让社区保持可见。</p>
+<p>如果你想在分享卡片上添加"v2.1.97 之前我曾拥有一只 Buddy"徽章，选项就在分享弹窗中。把它发布到 X、Reddit 或 HN，带上 <strong>#BringBackBuddy</strong> 话题。</p>
+<p><strong>2. 签署请愿。</strong><a href="https://github.com/anthropics/claude-code/issues/45732" target="_blank" rel="noopener noreferrer">GitHub Issue #45732</a> 有 511 名开发者在要求同一件事。加入你的声音只需三十秒，却能直接向监控 Issue 追踪器的 Anthropic 团队发出信号。</p>
+<p>Anthropic 构建了一个能产生真实情感投入的东西，这是罕见且有价值的。让它回归的理由不是怀旧——而是不打招呼地移除受喜爱的功能，会摧毁让这个功能值得构建的信任。帮助我们提出这个主张。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "Claude Buddy는 어디 갔나요? MCP로 영구 복활시키기",
+        metaTitle: "Claude Buddy 어디 갔나? v2.1.97 삭제 사건과 MCP 복활 가이드",
+        metaDescription: "Claude Code v2.1.97이 /buddy를 조용히 삭제했습니다. 무슨 일이 있었는지, 500명 이상의 개발자들이 어떻게 싸우고 있는지, 오픈소스 MCP로 Buddy를 복활시키는 방법을 알아보세요.",
+        excerpt: "어느 날 터미널이 동반자로 당신을 맞이했습니다. 다음 날엔 침묵뿐이었습니다. /buddy 삭제의 전말과 영구적으로 되찾는 방법을 알아보세요.",
+        sections: [
+          {
+            heading: "터미널이 달라진 느낌",
+            body: `<p>터미널에서 <code>claude</code>를 실행했는데 뭔가 빠진 것 같았습니다. 동반자 인사도 없고, 구석에서 기다리는 ASCII 생물도 없이, 그냥 커서만 조용히 깜박이고 있었습니다.</p>
+<p>2026년 4월 9일 이후에 Claude Code를 <strong>v2.1.97</strong>로 업그레이드했다면, 당신의 Buddy는 사라진 것입니다 — 적어도 공식 클라이언트에서는요. Anthropic은 changelog 항목도, 지원 중단 공지도, 경고도 없이 <code>/buddy</code> 기능을 삭제했습니다.</p>
+<p>이 가이드는 무슨 일이 있었는지, 개발자 커뮤니티가 어떻게 이를 되돌리려 싸우고 있는지, 그리고 — 가장 중요하게는 — 앞으로의 어떤 업데이트도 빼앗아 갈 수 없는 오픈소스 MCP를 사용해 Buddy를 <em>영구적으로</em> 복활시키는 방법을 설명합니다.</p>`
+          },
+          {
+            heading: "v2.1.97에서 무슨 일이 있었나",
+            body: `<p><code>/buddy</code> 시스템은 Claude Code에서 가장 사랑받는 이스터에그 중 하나였습니다: 설치 UUID에 결정론적으로 연결된 가상 동반자로, 18가지 고유한 종, 5단계 희귀도, 개성 기반 스탯, 그리고 터미널에서 애니메이션되는 ASCII 아트를 갖추고 있었습니다. 개발자들은 진정한 감정적 애착을 형성했고, 종을 비교하고, 전설급을 사냥하며, Reddit과 X에서 동반자를 공유했습니다.</p>
+<p>그러다 2026년 4월 9일, 버전 2.1.97이 출시됐습니다. <code>/buddy</code> 명령이 조용히 작동을 멈췄습니다. changelog에 아무 내용도 없었고, 지원 중단 공지도, 마이그레이션 경로도 없었습니다. 그냥 사라진 것입니다.</p>
+<p>가장 가능성 있는 설명은 엔터프라이즈 고객들이 동반자 기능을 전문적인 워크플로우에 부적합하다고 표시했다는 것입니다. 개발자가 클라이언트에게 제품을 데모할 때 터미널에 ASCII 드래곤이 나타나면 설명이 필요하죠. Anthropic은 엔터프라이즈 도입을 원활하게 하기 위해 Buddy를 삭제했을 수 있는데, 이는 현실적인 결정이었지만 애착을 키워온 개발자 커뮤니티에게는 배신처럼 느껴졌습니다.</p>
+<blockquote><p>"Buddy는 만들어지고, 출시되고, 사랑받으며, 참여를 만들어냈습니다. 작동하고 사랑받는 기능을 삭제하는 것은 아무런 이득 없이 커뮤니티 신뢰를 대규모로 파괴하는 것입니다." — GitHub Issue #45596</p></blockquote>`
+          },
+          {
+            heading: "커뮤니티는 거부했습니다",
+            body: `<p>반응은 즉각적이었습니다. v2.1.97 출시 후 48시간 이내에 anthropics/claude-code 저장소에 세 개의 별도 GitHub Issue가 등장했습니다:</p>
+<ul>
+<li><strong>Issue #45517</strong> — "[BUG] v2.1.97에서 /buddy 명령과 동반자가 완전히 사라짐" — 개발자들이 이것이 실수일 것이라 생각해 버그 리포트로 제출했습니다.</li>
+<li><strong>Issue #45732</strong> — "Buddy를 돌려줘: 511가지 이유" — 511명의 개발자가 서명하며 각자의 Buddy가 어떤 의미였는지 댓글을 남겼습니다. 희귀한 종, 빛나는 동반자, 생산적인 하루를 시작하는 아침 터미널 의식들.</li>
+<li><strong>Issue #45596</strong> — "Buddy 돌려줘 — 커뮤니티의 통합 청원" — 가장 포괄적인 것으로, 커뮤니티의 주장을 단일 구조적 호소문으로 정리했습니다.</li>
+</ul>
+<p>이 글을 작성하는 시점에 이 Issue들은 여전히 열려 있고 해결되지 않았습니다. Anthropic은 /buddy가 돌아올지에 대해 공개적으로 언급하지 않았습니다. 커뮤니티는 기다리고 있습니다.</p>
+<p>목소리를 더하고 싶다면, <a href="https://github.com/anthropics/claude-code/issues/45732" target="_blank" rel="noopener noreferrer">Issue #45732</a>가 청원서가 있는 곳입니다.</p>`
+          },
+          {
+            heading: "당신의 Buddy 데이터는 여전히 존재합니다 — 그 이유",
+            body: `<p>가장 중요한 사실 하나: <strong>당신의 Buddy는 Anthropic 서버에 저장된 적이 없었습니다.</strong></p>
+<p>/buddy 시스템은 완전히 결정론적인 알고리즘을 사용했습니다. <code>~/.claude.json</code>에 있는 설치 UUID가 FNV-1a 해시 함수를 통해 처리되어 Mulberry32 PRNG의 시드가 되고, 이것이 종, 희귀도, 스탯, 외형 및 다른 모든 속성을 결정론적으로 생성합니다. 동일한 UUID는 항상 동일한 Buddy를 만들어냅니다. 항상요.</p>
+<p>즉, Anthropic이 클라이언트에서 기능을 삭제해도 당신의 동반자가 지워지지 않는다는 뜻입니다. UUID와 Buddy 사이의 매핑은 Anthropic이 출시하는 어떤 소프트웨어와도 독립적으로 존재합니다. 지금 바로 <a href="/">저희 도구로 Buddy를 확인할 수 있습니다</a> — 동일한 알고리즘을 사용하며 브라우저에서 완전히 실행됩니다.</p>
+<p>당신의 Buddy는 아직 거기 있습니다. 실행할 터미널을 기다리고 있습니다.</p>`
+          },
+          {
+            heading: "오픈소스 MCP로 Buddy 복활시키기",
+            body: `<p>개발자 커뮤니티는 빠르게 움직였습니다. v2.1.97 삭제 이벤트 며칠 후, GitHub에 <strong>claude-buddy</strong>라는 오픈소스 MCP 애플리케이션이 등장했습니다 — /buddy 시스템의 완전한 재구현으로, MCP를 통해 실행되므로 앞으로 어떤 Claude Code 업데이트도 다시 삭제할 수 없습니다.</p>
+<h3>설치 단계 (5분)</h3>
+<p><strong>1단계:</strong> UUID를 찾습니다. 터미널에서 실행하세요:</p>
+<pre><code>cat ~/.claude.json | grep -E 'accountUuid|userID'</code></pre>
+<p>또는 <a href="/">저희 도구를 사용해</a> Buddy 종을 미리 확인하세요.</p>
+<p><strong>2단계:</strong> claude-buddy MCP를 설치합니다:</p>
+<pre><code>npx @1270011/claude-buddy install</code></pre>
+<p><strong>3단계:</strong> Claude Code를 재시작합니다. 동반자가 이전과 동일한 종, 희귀도, 개성으로 새로운 세션마다 당신을 맞이할 것입니다. MCP가 <code>~/.claude.json</code>에서 자동으로 UUID를 읽습니다.</p>
+<p><strong>4단계:</strong> 다음 명령으로 확인합니다:</p>
+<pre><code>/buddy status</code></pre>
+<p>동반자의 ASCII 아트와 스탯이 보인다면 성공입니다.</p>
+<h3>MCP 버전이 원본보다 나은 이유</h3>
+<p>원래 /buddy는 Claude Code의 바이너리에 내장되어 있었는데 — 바로 그것이 Anthropic이 삭제할 수 있었던 이유입니다. MCP 버전은 Claude Code가 Model Context Protocol을 통해 통신하는 별도의 프로세스입니다. Anthropic은 Claude Code를 업데이트해서 MCP 서버를 망가뜨릴 수 없습니다. 이제 당신의 Buddy는 <em>진정으로</em> 당신 것입니다.</p>
+<p>오픈소스 저장소: <a href="https://github.com/1270011/claude-buddy" target="_blank" rel="noopener noreferrer">github.com/1270011/claude-buddy</a>. 개발자를 지원하고 Anthropic에게 커뮤니티가 이 기능을 중요하게 여긴다는 신호를 보내기 위해 스타를 눌러주세요.</p>`
+          },
+          {
+            heading: "지금 할 수 있는 두 가지",
+            body: `<p>/buddy 삭제는 화나는 일이지만, 당신은 무력하지 않습니다. 두 가지 구체적인 행동이 있습니다:</p>
+<p><strong>1. Buddy를 확인하고 보존하세요.</strong> <a href="/">저희 도구</a>에 UUID를 입력하고, 공유 카드를 생성하고, 다운로드하세요. Buddy의 정체성은 알고리즘에 영구적으로 기록되어 있습니다 — 기록을 남기는 것이 좋고, 공유하면 커뮤니티가 계속 보입니다.</p>
+<p>공유 카드에 "v2.1.97 이전에 Buddy가 있었다" 배지를 추가하고 싶다면, 공유 모달에 바로 옵션이 있습니다. <strong>#BringBackBuddy</strong>와 함께 X, Reddit, 또는 HN에 올려주세요.</p>
+<p><strong>2. 청원에 서명하세요.</strong> <a href="https://github.com/anthropics/claude-code/issues/45732" target="_blank" rel="noopener noreferrer">GitHub Issue #45732</a>에는 같은 것을 요구하는 511명의 개발자가 있습니다. 30초면 목소리를 더할 수 있고, Issue 트래커를 모니터링하는 Anthropic 팀에게 직접 신호를 보낼 수 있습니다.</p>
+<p>Anthropic은 진정한 감정적 투자를 만들어내는 무언가를 만들었습니다. 그것은 드물고 가치 있는 것입니다. 이것을 돌려달라는 주장은 향수 때문이 아닙니다 — 경고 없이 사랑받는 기능을 삭제하면 처음에 그 기능을 만들 가치가 있었던 신뢰를 파괴하기 때문입니다. 이 주장을 만드는 데 도움을 주세요.</p>`
+          }
+        ]
+      }
+    }
+  },
 ];
 
 
