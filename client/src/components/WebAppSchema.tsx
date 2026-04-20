@@ -54,15 +54,8 @@ export default function WebAppSchema() {
       url: siteUrl,
     },
     datePublished: "2026-04-01",
-    dateModified: "2026-04-02",
+    dateModified: "2026-04-21",
     softwareVersion: "1.0.0",
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      ratingCount: "156",
-      bestRating: "5",
-      worstRating: "1",
-    },
   };
 
   // WebSite Schema with SearchAction
