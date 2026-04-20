@@ -6,9 +6,9 @@ import type { en } from "./en";
 
 export const zh: typeof en = {
   meta: {
-    title: "Claude Buddy 查询器 - 你永恒的终端伙伴",
+    title: "Claude Code 工具集 & Buddy 查询器 — claudebuddy.art",
     description:
-      "你的 Buddy 永远活在算法中。即使 v2.1.97 将 Buddy 从 Claude Code 中移除，每个 UUID 仍然对应一只独一无二的伙伴。输入你的 UUID，发现——或重新发现——你永恒的 Buddy。",
+      "UUID → Buddy 查询、MCP 复活指南、源码泄露分析、物种图鉴等全部工具。你的 Claude Code 开发者工具箱——所有计算均在本地完成。",
   },
   hero: {
     h1: "查看你的 Claude Code Buddy",
@@ -238,6 +238,20 @@ export const zh: typeof en = {
     ctaSign: "签署请愿",
     ctaView: "查看所有 Issue",
     dismiss: "关闭提示",
+  },
+  toolsHub: {
+    title: "// CLAUDE CODE 工具集",
+    subtitle: "claudebuddy.art 的全部工具——你的 Claude Code 开发者工具箱。",
+    tools: [
+      { label: "BUDDY 查询器",     desc: "UUID → 伙伴查询",                  href: "/",                icon: "◈" },
+      { label: "REVIVE (MCP)",    desc: "v2.1.97 后恢复 /buddy",            href: "/revive",          icon: "↺" },
+      { label: "泄露特性分析",       desc: "KAIROS、ULTRAPLAN 及 44 个隐藏标志", href: "/hidden-features", icon: "⌖" },
+      { label: "物种图鉴",          desc: "全部 18 种 Buddy 百科",            href: "/species",         icon: "◉" },
+      { label: "我的收藏",          desc: "追踪已发现的物种",                  href: "/collection",      icon: "◫" },
+      { label: "比较",             desc: "Buddy 并排对比",                    href: "/compare",         icon: "⇄" },
+      { label: "/POWERUP 追踪器",  desc: "追踪 Claude Code 技能课程",          href: "/powerup-tracker", icon: "▲" },
+      { label: "博客",             desc: "指南、深度分析和资讯",               href: "/blog",            icon: "▤" },
+    ],
   },
   footer: {
     line1: "由社区构建，与 Anthropic 无关。",

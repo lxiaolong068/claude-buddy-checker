@@ -4,9 +4,9 @@
 
 export const en = {
   meta: {
-    title: "Claude Buddy Checker - Your Eternal Terminal Companion",
+    title: "Claude Code Tools & Buddy Checker — claudebuddy.art",
     description:
-      "Your Buddy lives forever in the algorithm. Even after v2.1.97 removed Buddy from Claude Code, every UUID still maps to a unique companion. Discover — or rediscover — yours.",
+      "UUID → Buddy lookup, MCP revival guide, source leak analysis, species encyclopedia and more. Your Claude Code developer toolkit — all computation runs locally.",
   },
   hero: {
     h1: "Check Your Claude Code Buddy",
@@ -236,6 +236,20 @@ export const en = {
     ctaSign: "Sign the petition",
     ctaView: "View all issues",
     dismiss: "Dismiss banner",
+  },
+  toolsHub: {
+    title: "// CLAUDE CODE TOOLS",
+    subtitle: "Everything on claudebuddy.art — your Claude Code developer toolkit.",
+    tools: [
+      { label: "BUDDY CHECKER",   desc: "UUID → companion lookup",              href: "/",                icon: "◈" },
+      { label: "REVIVE (MCP)",    desc: "Restore /buddy after v2.1.97",         href: "/revive",          icon: "↺" },
+      { label: "LEAK ANALYSIS",   desc: "KAIROS, ULTRAPLAN & 44 hidden flags",  href: "/hidden-features", icon: "⌖" },
+      { label: "SPECIES GUIDE",   desc: "All 18 buddy species encyclopedia",     href: "/species",         icon: "◉" },
+      { label: "MY COLLECTION",   desc: "Track discovered species",             href: "/collection",      icon: "◫" },
+      { label: "COMPARE",        desc: "Side-by-side buddy comparison",         href: "/compare",         icon: "⇄" },
+      { label: "/POWERUP TRACKER",desc: "Track Claude Code skill lessons",      href: "/powerup-tracker", icon: "▲" },
+      { label: "BLOG",            desc: "Guides, deep-dives & news",            href: "/blog",            icon: "▤" },
+    ],
   },
   footer: {
     line1: "Built by the community. Not affiliated with Anthropic.",

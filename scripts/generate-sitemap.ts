@@ -54,9 +54,11 @@ function generateSitemap(options: SitemapPluginOptions): string {
   }
 
   // Tool pages
-  entries.push(urlEntry(`${BASE_URL}/powerup-tracker`, today, "weekly", "0.8"));
-  entries.push(urlEntry(`${BASE_URL}/collection`, today, "weekly", "0.7"));
-  entries.push(urlEntry(`${BASE_URL}/compare`, today, "weekly", "0.7"));
+  entries.push(urlEntry(`${BASE_URL}/revive`,           today, "weekly", "0.9"));
+  entries.push(urlEntry(`${BASE_URL}/hidden-features`,  today, "weekly", "0.9"));
+  entries.push(urlEntry(`${BASE_URL}/powerup-tracker`,  today, "weekly", "0.8"));
+  entries.push(urlEntry(`${BASE_URL}/collection`,       today, "weekly", "0.7"));
+  entries.push(urlEntry(`${BASE_URL}/compare`,          today, "weekly", "0.7"));
 
   // Blog index
   entries.push(urlEntry(`${BASE_URL}/blog`, today, "weekly", "0.9"));

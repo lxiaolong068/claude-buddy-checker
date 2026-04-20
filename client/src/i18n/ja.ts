@@ -6,9 +6,9 @@ import type { en } from "./en";
 
 export const ja: typeof en = {
   meta: {
-    title: "Claude Buddy チェッカー - あなたの永遠のターミナル仲間",
+    title: "Claude Code ツール集 & Buddy チェッカー — claudebuddy.art",
     description:
-      "Buddy はアルゴリズムの中に永遠に生きています。v2.1.97 で Claude Code から削除された後も、すべての UUID は固有の仲間に紐付けられています。あなたの Buddy を発見、または再発見しましょう。",
+      "UUID → Buddy検索、MCP復活ガイド、ソースリーク分析、種族図鑑など全ツール。Claude Code開発者ツールキット — すべての計算はローカルで実行。",
   },
   hero: {
     h1: "Claude Code Buddy を確認しよう",
@@ -238,6 +238,20 @@ export const ja: typeof en = {
     ctaSign: "請願に署名する",
     ctaView: "全 Issue を見る",
     dismiss: "閉じる",
+  },
+  toolsHub: {
+    title: "// CLAUDE CODE ツール集",
+    subtitle: "claudebuddy.artのすべてのツール — Claude Code開発者ツールキット。",
+    tools: [
+      { label: "BUDDYチェッカー",   desc: "UUID → コンパニオン検索",           href: "/",                icon: "◈" },
+      { label: "REVIVE (MCP)",    desc: "v2.1.97以降の/buddy復活",          href: "/revive",          icon: "↺" },
+      { label: "リーク機能分析",     desc: "KAIROS、ULTRAPLANと44の隠しフラグ",  href: "/hidden-features", icon: "⌖" },
+      { label: "種族図鑑",          desc: "全18種のBuddy百科事典",             href: "/species",         icon: "◉" },
+      { label: "マイコレクション",   desc: "発見した種族を追跡",                 href: "/collection",      icon: "◫" },
+      { label: "比較",             desc: "Buddyを並べて比較",                 href: "/compare",         icon: "⇄" },
+      { label: "/POWERUPトラッカー", desc: "Claude Codeスキルレッスンを追跡",    href: "/powerup-tracker", icon: "▲" },
+      { label: "ブログ",            desc: "ガイド、詳細分析とニュース",            href: "/blog",            icon: "▤" },
+    ],
   },
   footer: {
     line1: "コミュニティが構築。Anthropic とは無関係です。",

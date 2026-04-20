@@ -24,6 +24,7 @@ import { recordQuery } from "@/lib/community-stats";
 import { addToCollection } from "@/lib/storage";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 import BringBackBanner from "@/components/BringBackBanner";
+import ToolsHubSection from "@/components/ToolsHubSection";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp";
 const GRID_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/buddy-showcase-grid-dzj2bCjKycQ4bgSaUeRV58.webp";
@@ -547,6 +548,9 @@ export default function Home() {
             })}
           </div>
         </div>
+
+        {/* Tools Hub — Claude Code Developer Center */}
+        <ToolsHubSection />
 
         {/* Footer */}
         <footer className="border-t border-border/30 pt-6 pb-8 text-center text-xs text-muted-foreground space-y-2">

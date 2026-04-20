@@ -6,9 +6,9 @@ import type { en } from "./en";
 
 export const ko: typeof en = {
   meta: {
-    title: "Claude Buddy 확인기 - 당신의 영원한 터미널 동반자",
+    title: "Claude Code 도구 모음 & Buddy 체커 — claudebuddy.art",
     description:
-      "당신의 Buddy는 알고리즘 속에서 영원히 살아있습니다. v2.1.97이 Buddy를 Claude Code에서 제거한 후에도, 모든 UUID는 여전히 고유한 동반자와 연결됩니다. 당신의 영원한 Buddy를 발견하거나 재발견하세요.",
+      "UUID → Buddy 조회, MCP 복활 가이드, 소스 유출 분석, 종 도감 등 모든 도구. Claude Code 개발자 툴킷 — 모든 계산은 로컬에서 실행됩니다.",
   },
   hero: {
     h1: "당신의 Claude Code Buddy 확인하기",
@@ -238,6 +238,20 @@ export const ko: typeof en = {
     ctaSign: "청원 서명하기",
     ctaView: "전체 이슈 보기",
     dismiss: "닫기",
+  },
+  toolsHub: {
+    title: "// CLAUDE CODE 도구 모음",
+    subtitle: "claudebuddy.art의 모든 도구 — Claude Code 개발자 툴킷.",
+    tools: [
+      { label: "BUDDY 체커",       desc: "UUID → 동반자 조회",               href: "/",                icon: "◈" },
+      { label: "REVIVE (MCP)",    desc: "v2.1.97 이후 /buddy 복원",         href: "/revive",          icon: "↺" },
+      { label: "유출 기능 분석",     desc: "KAIROS, ULTRAPLAN 및 44개 숨겨진 플래그", href: "/hidden-features", icon: "⌖" },
+      { label: "종 도감",           desc: "18가지 버디 종 백과사전",            href: "/species",         icon: "◉" },
+      { label: "내 컬렉션",         desc: "발견한 종 추적",                   href: "/collection",      icon: "◫" },
+      { label: "비교",             desc: "버디 나란히 비교",                   href: "/compare",         icon: "⇄" },
+      { label: "/POWERUP 트래커",  desc: "Claude Code 스킬 레슨 추적",        href: "/powerup-tracker", icon: "▲" },
+      { label: "블로그",            desc: "가이드, 심층 분석 및 뉴스",           href: "/blog",            icon: "▤" },
+    ],
   },
   footer: {
     line1: "커뮤니티에서 제작. Anthropic과 무관합니다.",
