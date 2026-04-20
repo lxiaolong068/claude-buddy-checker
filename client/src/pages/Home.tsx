@@ -23,6 +23,7 @@ import CommunityStats from "@/components/CommunityStats";
 import { recordQuery } from "@/lib/community-stats";
 import { addToCollection } from "@/lib/storage";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
+import BringBackBanner from "@/components/BringBackBanner";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp";
 const GRID_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/buddy-showcase-grid-dzj2bCjKycQ4bgSaUeRV58.webp";
@@ -223,6 +224,9 @@ export default function Home() {
           {" // "}
           {t("privacy.text")}
         </div>
+
+        {/* Bring Back Buddy — Community Petition Banner */}
+        <BringBackBanner />
 
         {/* Input Section */}
         <div className="mb-8">

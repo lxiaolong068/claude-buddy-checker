@@ -223,6 +223,16 @@ export const zh: typeof en = {
     random: "随机物种",
     hint: "按 ? 查看快捷键",
   },
+  bringBack: {
+    ariaLabel: "请愿恢复 Claude Buddy 的社区活动",
+    tag: "社区请愿",
+    removed: "v2.1.97 · /buddy 已被静默移除",
+    headline: "让 Buddy 回归",
+    body: "Anthropic 在 v2.1.97 中悄悄移除了 /buddy 伴侣功能，毫无通知。社区正在努力让它回归。如果你曾经深爱过你的 Buddy，请发声。",
+    ctaSign: "签署请愿",
+    ctaView: "查看所有 Issue",
+    dismiss: "关闭提示",
+  },
   footer: {
     line1: "由社区构建，与 Anthropic 无关。",
     line2: "所有计算均在本地完成，不收集或传输任何数据。",

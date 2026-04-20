@@ -223,6 +223,16 @@ export const ko: typeof en = {
     random: "랜덤 종",
     hint: "? 키를 눌러 단축키 보기",
   },
+  bringBack: {
+    ariaLabel: "Claude Buddy 복원을 위한 커뮤니티 청원",
+    tag: "커뮤니티 청원",
+    removed: "v2.1.97 · /buddy 공지 없이 제거됨",
+    headline: "Buddy를 돌려줘",
+    body: "Anthropic이 v2.1.97에서 /buddy 기능을 아무 공지 없이 삭제했습니다. 커뮤니티가 복원을 요청하고 있습니다. Buddy를 사랑했다면 목소리를 내주세요.",
+    ctaSign: "청원 서명하기",
+    ctaView: "전체 이슈 보기",
+    dismiss: "닫기",
+  },
   footer: {
     line1: "커뮤니티에서 제작. Anthropic과 무관합니다.",
     line2: "모든 계산은 로컬에서 수행됩니다. 데이터를 수집하거나 전송하지 않습니다.",

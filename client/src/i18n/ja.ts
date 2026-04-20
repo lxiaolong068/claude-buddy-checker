@@ -223,6 +223,16 @@ export const ja: typeof en = {
     random: "ランダム種族",
     hint: "? でショートカットを表示",
   },
+  bringBack: {
+    ariaLabel: "Claude Buddy 復活を求めるコミュニティ請願",
+    tag: "コミュニティ請願",
+    removed: "v2.1.97 · /buddy が予告なく削除",
+    headline: "Buddy を返して",
+    body: "Anthropic は v2.1.97 で /buddy コンパニオンを何の告知もなく削除しました。コミュニティは復活を求めて戦っています。Buddy を愛していたなら、声を上げてください。",
+    ctaSign: "請願に署名する",
+    ctaView: "全 Issue を見る",
+    dismiss: "閉じる",
+  },
   footer: {
     line1: "コミュニティが構築。Anthropic とは無関係です。",
     line2: "すべての計算はローカルです。データは収集・送信されません。",

@@ -221,6 +221,16 @@ export const en = {
     random: "Random species",
     hint: "Press ? for shortcuts",
   },
+  bringBack: {
+    ariaLabel: "Community petition to restore Claude Buddy",
+    tag: "COMMUNITY PETITION",
+    removed: "v2.1.97 · /buddy removed without notice",
+    headline: "Bring Back Buddy",
+    body: "Anthropic removed the /buddy companion in v2.1.97 with no announcement. The community is fighting to get it back. If you loved your Buddy, make your voice heard.",
+    ctaSign: "Sign the petition",
+    ctaView: "View all issues",
+    dismiss: "Dismiss banner",
+  },
   footer: {
     line1: "Built by the community. Not affiliated with Anthropic.",
     line2: "All computation is local. No data is collected or transmitted.",
