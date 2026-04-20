@@ -53,6 +53,11 @@ function generateSitemap(options: SitemapPluginOptions): string {
     entries.push(urlEntry(`${BASE_URL}/species/${slug}`, today, "monthly", "0.8"));
   }
 
+  // Tool pages
+  entries.push(urlEntry(`${BASE_URL}/powerup-tracker`, today, "weekly", "0.8"));
+  entries.push(urlEntry(`${BASE_URL}/collection`, today, "weekly", "0.7"));
+  entries.push(urlEntry(`${BASE_URL}/compare`, today, "weekly", "0.7"));
+
   // Blog index
   entries.push(urlEntry(`${BASE_URL}/blog`, today, "weekly", "0.9"));
 

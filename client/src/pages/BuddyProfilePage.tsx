@@ -2,7 +2,7 @@
  * Buddy Profile Page — /buddy/:uuid
  * Permanent shareable URL for any UUID's deterministic Buddy.
  * Reuses BuddyResultCard for full display + share card generation.
- * Meta tags set client-side; OG image wired to Edge Function (Task 3.5).
+ * Meta tags set client-side; OG image uses the site-wide hero image.
  */
 
 import { useEffect, useState, useCallback } from "react";
@@ -82,10 +82,10 @@ export default function BuddyProfilePage() {
     setMeta('meta[property="og:title"]',         `${species} Buddy — ${shortId}… | claudebuddy.art`);
     setMeta('meta[property="og:description"]',   desc);
     setMeta('meta[property="og:url"]',           pageUrl);
-    setMeta('meta[property="og:image"]',         `${SITE_URL}/api/og/buddy/${uuid}`);
+    setMeta('meta[property="og:image"]',         'https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp');
     setMeta('meta[name="twitter:title"]',        `${species} Buddy — ${shortId}…`);
     setMeta('meta[name="twitter:description"]',  desc);
-    setMeta('meta[name="twitter:image"]',        `${SITE_URL}/api/og/buddy/${uuid}`);
+    setMeta('meta[name="twitter:image"]',        'https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp');
   }, [uuid, buddy, species, pageUrl]);
 
   const handleCopyLink = useCallback(async () => {
