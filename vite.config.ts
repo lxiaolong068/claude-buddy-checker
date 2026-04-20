@@ -5,6 +5,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { defineConfig, type Plugin, type ViteDevServer } from "vite";
 import { vitePluginManusRuntime } from "vite-plugin-manus-runtime";
+import { BLOG_ARTICLES } from "./client/src/lib/blog-data";
+import { ALL_SPECIES_SLUGS } from "./client/src/lib/species-data";
+import { generateSitemapPlugin } from "./scripts/generate-sitemap";
 
 // =============================================================================
 // Manus Debug Collector - Vite Plugin
@@ -150,7 +153,17 @@ function vitePluginManusDebugCollector(): Plugin {
   };
 }
 
-const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector()];
+const sitemapPlugin = generateSitemapPlugin({
+  articles: BLOG_ARTICLES.map((a) => ({
+    slug: a.slug,
+    publishedAt: a.publishedAt,
+    title: a.content.en.title,
+  })),
+  speciesSlugs: ALL_SPECIES_SLUGS,
+  outDir: path.resolve(import.meta.dirname, "dist/public"),
+});
+
+const plugins = [react(), tailwindcss(), jsxLocPlugin(), vitePluginManusRuntime(), vitePluginManusDebugCollector(), sitemapPlugin];
 
 export default defineConfig({
   plugins,

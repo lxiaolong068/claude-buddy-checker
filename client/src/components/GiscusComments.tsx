@@ -20,6 +20,7 @@ const GISCUS_LANG: Record<Locale, string> = {
   en: "en",
   zh: "zh-CN",
   ko: "ko",
+  ja: "ja",
 };
 
 /**

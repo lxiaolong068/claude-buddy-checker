@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const LOCALES = ["en", "zh", "ko", "x-default"] as const;
+const LOCALES = ["en", "zh", "ko", "ja", "x-default"] as const;
 
 export function useHreflangLinks(url: string) {
   useEffect(() => {

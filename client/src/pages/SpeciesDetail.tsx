@@ -25,9 +25,8 @@ import BuddySprite from "@/components/BuddySprite";
 import StatBar from "@/components/StatBar";
 import ShareButton from "@/components/ShareButton";
 import ShareCardModal from "@/components/ShareCardModal";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import ThemeToggle from "@/components/ThemeToggle";
 import type { ShareCardSpeciesData } from "@/lib/share-card-renderer";
+import SiteHeader from "@/components/SiteHeader";
 import { SPECIES_FAQS } from "@/lib/species-faq";
 import FAQSection from "@/components/FAQSection";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -197,33 +196,7 @@ export default function SpeciesDetail() {
       <KeyboardShortcutsHelp shortcuts={detailShortcuts} />
       <TableOfContents items={tocItems} title={t("speciesDetail.tocTitle")} />
 
-      {/* Navigation */}
-      <nav className="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur border-b border-[#33ff33]/20">
-        <div className="container max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <Link
-              href="/species"
-              className="text-[#33ff33]/60 hover:text-[#33ff33] transition-colors text-sm"
-            >
-              {t("speciesDetail.backToIndex")}
-            </Link>
-            <span className="text-[#33ff33]/30">|</span>
-            <Link
-              href="/"
-              className="text-[#33ff33]/60 hover:text-[#33ff33] transition-colors text-sm"
-            >
-              {t("speciesDetail.backToChecker")}
-            </Link>
-          </div>
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            <LanguageSwitcher />
-            <span className="text-[#33ff33]/40 text-xs hidden sm:inline">
-              /species/{slug}
-            </span>
-          </div>
-        </div>
-      </nav>
+      <SiteHeader />
 
       <main className="container max-w-5xl mx-auto px-4 py-8 space-y-10">
         {/* Hero: Species Name + ASCII Art */}

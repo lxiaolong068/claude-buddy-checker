@@ -13,15 +13,15 @@ import { rollBuddy, type BuddyResult, SPECIES } from "@/lib/buddy-engine";
 import { getAllArticles } from "@/lib/blog-data";
 import BuddyResultCard from "@/components/BuddyResultCard";
 import TypewriterText from "@/components/TypewriterText";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import ThemeToggle from "@/components/ThemeToggle";
 import { useI18n } from "@/contexts/I18nContext";
+import SiteHeader from "@/components/SiteHeader";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import WebAppSchema from "@/components/WebAppSchema";
 import LazyImage from "@/components/LazyImage";
 import DailySpecies from "@/components/DailySpecies";
 import CommunityStats from "@/components/CommunityStats";
 import { recordQuery } from "@/lib/community-stats";
+import { addToCollection } from "@/lib/storage";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 
 const HERO_IMG = "https://d2xsxph8kpxj0f.cloudfront.net/310519663372140411/Y5jHNXbtf5LuBgzrPqTPag/hero-crt-terminal-5fvRpoNY7GsFPkvdJ2QQKy.webp";
@@ -118,12 +118,33 @@ export default function Home() {
       setShowResult(true);
       // Record query for community stats (non-blocking)
       recordQuery(trimmed, result.species, result.rarity);
+      addToCollection({ uuid: trimmed, species: result.species, rarity: result.rarity, shiny: result.shiny, hat: result.hat, eye: result.eye, stats: result.stats, discoveredAt: new Date().toISOString() });
       window.dispatchEvent(new CustomEvent("buddy-query"));
       setTimeout(() => {
         resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
     }, 800);
   }, [uuid, t]);
+
+  const handleRandom = useCallback(() => {
+    const randomUuid = crypto.randomUUID();
+    setUuid(randomUuid);
+    setError("");
+    setIsLoading(true);
+    setShowResult(false);
+    setTimeout(() => {
+      const result = rollBuddy(randomUuid);
+      setBuddy(result);
+      setIsLoading(false);
+      setShowResult(true);
+      recordQuery(randomUuid, result.species, result.rarity);
+      addToCollection({ uuid: randomUuid, species: result.species, rarity: result.rarity, shiny: result.shiny, hat: result.hat, eye: result.eye, stats: result.stats, discoveredAt: new Date().toISOString() });
+      window.dispatchEvent(new CustomEvent("buddy-query"));
+      setTimeout(() => {
+        resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 100);
+    }, 800);
+  }, []);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter") handleCheck();
@@ -159,6 +180,7 @@ export default function Home() {
     <div className="min-h-screen relative">
       {/* JSON-LD Structured Data */}
       <WebAppSchema />
+      <SiteHeader />
 
       {/* CRT Scan Lines Overlay */}
       <div className="crt-scanlines" />
@@ -166,22 +188,6 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="relative z-10 max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
-
-        {/* Top Bar: Navigation + Language Switcher */}
-        <div className="flex items-center justify-between mb-4">
-          <nav className="flex items-center gap-4 text-xs">
-            <Link href="/species" className="text-muted-foreground hover:text-crt-green transition-colors uppercase tracking-wider">
-              /species
-            </Link>
-            <Link href="/blog" className="text-muted-foreground hover:text-crt-green transition-colors uppercase tracking-wider">
-              /blog
-            </Link>
-          </nav>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <LanguageSwitcher />
-          </div>
-        </div>
 
         {/* ASCII Logo */}
         <div className="mb-8 overflow-hidden">
@@ -297,6 +303,19 @@ export default function Home() {
                     [/]
                   </span>
                 )}
+                {/* Random UUID dice button */}
+                <button
+                  onClick={handleRandom}
+                  disabled={isLoading}
+                  title={t("input.randomUuid")}
+                  className="ml-2 shrink-0 text-muted-foreground/40 hover:text-crt-amber transition-colors disabled:opacity-30"
+                  aria-label={t("input.randomUuid")}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+                    <path d="M16 8h.01M12 12h.01M8 16h.01M8 8h.01M16 16h.01"/>
+                  </svg>
+                </button>
               </div>
 
               {/* UUID format detection hint */}

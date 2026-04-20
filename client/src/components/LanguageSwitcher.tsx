@@ -6,7 +6,7 @@
 import { useState, useRef, useEffect } from "react";
 import { useI18n, LOCALE_LABELS, LOCALE_FLAGS, type Locale } from "@/contexts/I18nContext";
 
-const LOCALES: Locale[] = ["en", "zh", "ko"];
+const LOCALES: Locale[] = ["en", "zh", "ko", "ja"];
 
 export default function LanguageSwitcher() {
   const { locale, setLocale } = useI18n();

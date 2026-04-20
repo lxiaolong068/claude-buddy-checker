@@ -5,15 +5,14 @@
  * SEO: Optimized for blog listing with structured data
  */
 
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useHreflangLinks } from "@/hooks/useHreflangLinks";
 import { SITE_URL } from "@/lib/constants";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
-import { getAllArticles, type BlogArticle, type DiscussionCategory } from "@/lib/blog-data";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import ThemeToggle from "@/components/ThemeToggle";
+import { getAllArticles, type BlogArticle, type DiscussionCategory, type Pillar } from "@/lib/blog-data";
 import BlogListSchema from "@/components/BlogListSchema";
+import SiteHeader from "@/components/SiteHeader";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import { useQueryFilters } from "@/hooks/useQueryFilters";
@@ -91,6 +90,60 @@ function CategoryButton({
       }`}>
         ({count})
       </span>
+    </button>
+  );
+}
+
+/** Pillar filter button — five CRT colors */
+const PILLAR_CONFIG: Record<Pillar, { label: string; activeClasses: string; inactiveClasses: string }> = {
+  buddy: {
+    label: "Buddy",
+    activeClasses: "border-crt-green/60 bg-crt-green/15 text-crt-green",
+    inactiveClasses: "border-border/40 text-muted-foreground/50 hover:border-crt-green/30 hover:text-muted-foreground/70",
+  },
+  "claude-code": {
+    label: "/powerup",
+    activeClasses: "border-crt-amber/60 bg-crt-amber/15 text-crt-amber",
+    inactiveClasses: "border-border/40 text-muted-foreground/50 hover:border-crt-amber/30 hover:text-muted-foreground/70",
+  },
+  "ide-pets": {
+    label: "IDE Pets",
+    activeClasses: "border-crt-blue/60 bg-crt-blue/15 text-crt-blue",
+    inactiveClasses: "border-border/40 text-muted-foreground/50 hover:border-crt-blue/30 hover:text-muted-foreground/70",
+  },
+  achievements: {
+    label: "Achievements",
+    activeClasses: "border-crt-purple/60 bg-crt-purple/15 text-crt-purple",
+    inactiveClasses: "border-border/40 text-muted-foreground/50 hover:border-crt-purple/30 hover:text-muted-foreground/70",
+  },
+  trends: {
+    label: "Trends",
+    activeClasses: "border-crt-gold/60 bg-crt-gold/15 text-crt-gold",
+    inactiveClasses: "border-border/40 text-muted-foreground/50 hover:border-crt-gold/30 hover:text-muted-foreground/70",
+  },
+};
+
+function PillarButton({
+  pillar,
+  active,
+  onClick,
+  count,
+}: {
+  pillar: Pillar;
+  active: boolean;
+  onClick: () => void;
+  count: number;
+}) {
+  const cfg = PILLAR_CONFIG[pillar];
+  return (
+    <button
+      onClick={onClick}
+      className={`px-2.5 py-1 text-[10px] uppercase tracking-wider border transition-all whitespace-nowrap flex items-center gap-1.5 ${
+        active ? cfg.activeClasses : cfg.inactiveClasses
+      }`}
+    >
+      {cfg.label}
+      <span className={`text-[9px] ${active ? "opacity-60" : "opacity-30"}`}>({count})</span>
     </button>
   );
 }
@@ -210,6 +263,7 @@ export default function BlogIndex() {
   const { t, locale } = useI18n();
   const articles = getAllArticles();
   const searchInputRef = useRef<HTMLInputElement>(null);
+  const [activePillar, setActivePillar] = useState<Pillar | null>(null);
 
   // Collect all unique tags from articles
   const allTags = useMemo(() => {
@@ -265,8 +319,17 @@ export default function BlogIndex() {
       result = result.filter((a) => a.tags.includes(activeTag));
     }
 
+    // Apply pillar filter (undefined pillar articles match 'buddy' by default)
+    if (activePillar) {
+      result = result.filter((a) =>
+        activePillar === 'buddy'
+          ? (!a.pillar || a.pillar === 'buddy')
+          : a.pillar === activePillar
+      );
+    }
+
     return result;
-  }, [articles, debouncedQuery, activeTag, activeCategory, locale]);
+  }, [articles, debouncedQuery, activeTag, activeCategory, activePillar, locale]);
 
   // Sort filtered articles
   const sortedArticles = useMemo(() => {
@@ -321,7 +384,7 @@ export default function BlogIndex() {
     setActiveTag(activeTag === tag ? null : tag);
   };
 
-  const hasActiveFilters = searchQuery.trim() || activeTag || activeCategory;
+  const hasActiveFilters = searchQuery.trim() || activeTag || activeCategory || activePillar;
 
   // Count articles per category
   const categoryCounts = useMemo(() => {
@@ -332,6 +395,21 @@ export default function BlogIndex() {
     return counts;
   }, [articles]);
 
+  // Count articles per pillar (undefined pillar → 'buddy')
+  const pillarCounts = useMemo(() => {
+    const counts: Record<Pillar, number> = { buddy: 0, 'claude-code': 0, 'ide-pets': 0, achievements: 0, trends: 0 };
+    articles.forEach((a) => {
+      const p = a.pillar ?? 'buddy';
+      counts[p] = (counts[p] || 0) + 1;
+    });
+    return counts;
+  }, [articles]);
+
+  const clearAllWithPillar = () => {
+    clearAll();
+    setActivePillar(null);
+  };
+
   // Keyboard shortcuts
   useKeyboardShortcuts({
     "/": (e) => {
@@ -339,8 +417,8 @@ export default function BlogIndex() {
       searchInputRef.current?.focus();
     },
     "Escape": () => {
-      if (searchQuery || activeTag || activeCategory) {
-        clearAll();
+      if (searchQuery || activeTag || activeCategory || activePillar) {
+        clearAllWithPillar();
         searchInputRef.current?.blur();
       }
     },
@@ -354,25 +432,11 @@ export default function BlogIndex() {
   return (
     <div className="min-h-screen relative">
       <BlogListSchema articles={articles} locale={locale} />
+      <SiteHeader />
       <div className="crt-scanlines" />
       <KeyboardShortcutsHelp shortcuts={blogShortcuts} />
 
       <div className="relative z-10 max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        {/* Top Bar */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4 text-xs">
-            <Link
-              href="/"
-              className="text-muted-foreground hover:text-crt-green transition-colors uppercase tracking-wider"
-            >
-              {t("blog.backToChecker")}
-            </Link>
-          </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <LanguageSwitcher />
-          </div>
-        </div>
 
         {/* Header */}
         <div className="mb-6">
@@ -502,6 +566,37 @@ export default function BlogIndex() {
               </div>
             </div>
 
+            {/* Pillar Filter Row */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-[10px] text-crt-green/50 uppercase tracking-wider font-semibold min-w-[52px]">
+                Pillar:
+              </span>
+              <div className="flex gap-1.5 flex-wrap">
+                <button
+                  onClick={() => setActivePillar(null)}
+                  className={`px-2.5 py-1 text-[10px] uppercase tracking-wider border transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                    activePillar === null
+                      ? "border-crt-green/60 bg-crt-green/15 text-crt-green"
+                      : "border-border/40 text-muted-foreground/50 hover:border-crt-green/30 hover:text-muted-foreground/70"
+                  }`}
+                >
+                  All
+                  <span className={`text-[9px] ${activePillar === null ? "opacity-60" : "opacity-30"}`}>
+                    ({articles.length})
+                  </span>
+                </button>
+                {(Object.keys(PILLAR_CONFIG) as Pillar[]).map((p) => (
+                  <PillarButton
+                    key={p}
+                    pillar={p}
+                    active={activePillar === p}
+                    onClick={() => setActivePillar(activePillar === p ? null : p)}
+                    count={pillarCounts[p]}
+                  />
+                ))}
+              </div>
+            </div>
+
             {/* Tag Filter Row */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-[10px] text-crt-amber/50 uppercase tracking-wider font-semibold min-w-[52px]">
@@ -541,7 +636,7 @@ export default function BlogIndex() {
               </span>
               {hasActiveFilters && (
                 <button
-                  onClick={clearAll}
+                  onClick={clearAllWithPillar}
                   className="text-[10px] text-crt-red/60 hover:text-crt-red uppercase tracking-wider transition-colors"
                 >
                   [{t("blog.clearFilter")}]

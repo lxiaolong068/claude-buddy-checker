@@ -13,7 +13,7 @@ import { SPECIES_DATA, ALL_SPECIES_SLUGS } from "@/lib/species-data";
 import { BODIES, type Species } from "@/lib/buddy-engine";
 import ComparePanel from "@/components/ComparePanel";
 import DailySpecies from "@/components/DailySpecies";
-import ThemeToggle from "@/components/ThemeToggle";
+import SiteHeader from "@/components/SiteHeader";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 
@@ -182,21 +182,7 @@ export default function SpeciesIndex() {
       <div className="pointer-events-none fixed inset-0 z-50 bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.15)_0px,rgba(0,0,0,0.15)_1px,transparent_1px,transparent_2px)]" />
       <KeyboardShortcutsHelp shortcuts={speciesShortcuts} />
 
-      {/* Navigation */}
-      <nav className="sticky top-0 z-40 bg-[#0a0a0a]/95 backdrop-blur border-b border-[#33ff33]/20">
-        <div className="container max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link
-            href="/"
-            className="text-[#33ff33]/60 hover:text-[#33ff33] transition-colors text-sm"
-          >
-            {t("speciesIndex.backHome")}
-          </Link>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <span className="text-[#33ff33]/40 text-xs">/species</span>
-          </div>
-        </div>
-      </nav>
+      <SiteHeader />
 
       <main className={`container max-w-6xl mx-auto px-4 pt-8 ${selectedSlugs.length > 0 ? "pb-28" : "pb-8"}`}>
         {/* Header */}

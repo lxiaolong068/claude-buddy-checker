@@ -10,9 +10,8 @@ import TableOfContents, { type TocItem } from "@/components/TableOfContents";
 import { Link, useParams } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
 import { getArticleBySlug, getAllArticles, getAdjacentArticles, getRelatedArticles, type RelatedArticleMatch } from "@/lib/blog-data";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
-import ThemeToggle from "@/components/ThemeToggle";
 import ArticleSchema from "@/components/ArticleSchema";
+import SiteHeader from "@/components/SiteHeader";
 import ScrollToTop from "@/components/ScrollToTop";
 import GiscusComments from "@/components/GiscusComments";
 import ReadingProgress from "@/components/ReadingProgress";
@@ -126,20 +125,9 @@ export default function BlogPost() {
   if (!article || !content) {
     return (
       <div className="min-h-screen relative">
+        <SiteHeader />
         <div className="crt-scanlines" />
         <div className="relative z-10 max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
-          <div className="flex items-center justify-between mb-8">
-            <Link
-              href="/blog"
-              className="text-xs text-muted-foreground hover:text-crt-green transition-colors uppercase tracking-wider"
-            >
-              {t("blog.backToBlog")}
-            </Link>
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
-              <LanguageSwitcher />
-            </div>
-          </div>
           <div className="border border-border bg-card p-8 text-center">
             <p className="text-crt-red text-sm">{t("blog.errorNotFound")}</p>
             <p className="text-xs text-muted-foreground mt-2">
@@ -153,6 +141,8 @@ export default function BlogPost() {
 
   return (
     <div className="min-h-screen relative">
+      <SiteHeader />
+
       {/* Reading progress bar */}
       <ReadingProgress />
 
@@ -169,28 +159,6 @@ export default function BlogPost() {
       )}
 
       <div className="relative z-10 max-w-[800px] mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        {/* Top Bar */}
-        <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-4 text-xs">
-            <Link
-              href="/"
-              className="text-muted-foreground hover:text-crt-green transition-colors uppercase tracking-wider"
-            >
-              {t("blog.backToChecker")}
-            </Link>
-            <span className="text-border">/</span>
-            <Link
-              href="/blog"
-              className="text-muted-foreground hover:text-crt-green transition-colors uppercase tracking-wider"
-            >
-              {t("blog.backToBlog")}
-            </Link>
-          </div>
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <LanguageSwitcher />
-          </div>
-        </div>
 
         {/* Article Header */}
         <article>

@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://claudebuddy.art/sitemap.xml
+Sitemap: https://www.claudebuddy.art/sitemap.xml

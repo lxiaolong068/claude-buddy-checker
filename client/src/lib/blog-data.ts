@@ -7,6 +7,9 @@
 /** Discussion category for Giscus comment routing */
 export type DiscussionCategory = 'guides' | 'deep-dives' | 'lore';
 
+/** Content pillar for topic-based filtering */
+export type Pillar = 'buddy' | 'claude-code' | 'ide-pets' | 'achievements' | 'trends';
+
 export interface BlogArticle {
   slug: string;
   publishedAt: string; // ISO date
@@ -14,6 +17,7 @@ export interface BlogArticle {
   readingTime: number; // minutes
   tags: string[];
   discussionCategory: DiscussionCategory;
+  pillar?: Pillar;
   coverImage?: string;
   content: {
     en: ArticleContent;
@@ -9144,6 +9148,1397 @@ Similarity: ~0.42  → NOT KIN ✗</code></pre>
       zh: NAMING_ZH,
       ko: NAMING_KO,
     },
+  },
+  // ============================================================
+  // Article: The Complete /powerup Guide
+  // ============================================================
+  {
+    slug: "complete-powerup-guide",
+    publishedAt: "2026-04-20",
+    readingTime: 8,
+    tags: ["powerup", "claude-code", "guide", "tutorial", "gamification"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code' as const,
+    content: {
+      en: {
+        title: "The Complete /powerup Guide — Master Every Lesson in Claude Code",
+        metaTitle: "The Complete Claude Code /powerup Guide 2026 — All Lessons & Tips",
+        metaDescription: "Master every lesson in Claude Code's /powerup gamified tutorial system. Step-by-step guide to all lessons, tips for completion, and how /powerup fits into Claude Code's gamification story.",
+        excerpt: "Claude Code's /powerup command is a gamified in-terminal tutorial system that teaches you real Claude Code skills through interactive lessons. Here's your complete guide to mastering every lesson.",
+        sections: [
+          {
+            heading: "What Is /powerup?",
+            body: `<p>Launched in Claude Code <strong>v2.1.90 on April 1st, 2026</strong>, <code>/powerup</code> is Claude Code's official gamified tutorial system — an interactive lesson framework built directly into your terminal. Unlike a static README, /powerup walks you through real Claude Code features with animated demonstrations, progress tracking, and an unlock-based progression system.</p>
+<p>The timing is significant. /powerup launched the same week Claude Code <a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">removed the Buddy companion system</a> in v2.1.97. Rather than abandoning gamification entirely, Anthropic shifted from <em>passive companionship</em> (Buddy) to <em>active skill-building</em> (/powerup). Two different bets on what developers actually want.</p>
+<p>To start, just run the command in any Claude Code session:</p>
+<pre><code>/powerup</code></pre>`
+          },
+          {
+            heading: "How /powerup Works",
+            body: `<p>The /powerup system is structured as a series of <strong>interactive lessons</strong> that progress through Claude Code's core features. Each lesson:</p>
+<ul>
+<li>Presents a real-world coding scenario</li>
+<li>Walks you through the recommended Claude Code approach with animated guidance</li>
+<li>Unlocks the next lesson upon completion</li>
+<li>Does <strong>not</strong> save progress between sessions (this is a known limitation — see our <a href="/">Buddy Checker</a> for a persistent companion alternative)</li>
+</ul>
+<p>The lesson content adapts based on your interaction. Experienced Claude Code users often find the later lessons more useful — the early ones cover basics you may already know.</p>
+<p><strong>Key difference from Buddy:</strong> While your <a href="/blog/how-to-find-your-claude-code-buddy">Buddy companion</a> was passive (it existed whether you engaged with it or not), /powerup is entirely opt-in. You have to run the command and work through the lessons deliberately.</p>`
+          },
+          {
+            heading: "Core Lessons Overview",
+            body: `<p>The /powerup curriculum is organized into three tiers of increasing complexity:</p>
+<h4>Tier 1 — Foundations</h4>
+<ul>
+<li><strong>First Contact</strong>: Opening a Claude Code session, basic prompt structure, the CLAUDE.md file</li>
+<li><strong>Context Craft</strong>: How to give Claude the right context — project structure, file references, active goals</li>
+<li><strong>Edit Loops</strong>: The Read → Edit → Verify loop, accepting and rejecting changes, iterating with Claude</li>
+</ul>
+<h4>Tier 2 — Power Moves</h4>
+<ul>
+<li><strong>Multi-File Mastery</strong>: Working across multiple files simultaneously, cross-file refactors</li>
+<li><strong>Shell & Test Integration</strong>: Running commands through Claude, integrating test suites, build verification</li>
+<li><strong>Tool Use Deep Dive</strong>: Understanding which Claude tools (Read, Write, Edit, Bash, Grep, Glob) to use when</li>
+</ul>
+<h4>Tier 3 — Advanced Flows</h4>
+<ul>
+<li><strong>Autonomous Tasks</strong>: Setting up longer-running Claude sessions with checkpoints</li>
+<li><strong>Custom Instructions</strong>: CLAUDE.md patterns for project-specific behavior, persona configuration</li>
+<li><strong>Agent Coordination</strong>: Sub-agent spawning, parallel task execution, delegation patterns</li>
+</ul>`
+          },
+          {
+            heading: "Tips for Getting the Most Out of /powerup",
+            body: `<p>After working through the curriculum, here's what actually matters:</p>
+<h4>1. Don't Skip the Early Lessons</h4>
+<p>Even if you're an experienced user, the Foundations tier often surfaces assumptions you didn't know you had. The "Context Craft" lesson in particular changes how most developers write prompts.</p>
+<h4>2. Track Your Progress Externally</h4>
+<p>Since /powerup doesn't persist progress between sessions, keep a simple checklist. Our <a href="/">Buddy Checker home</a> has a companion tool planned for exactly this purpose.</p>
+<h4>3. Apply Lessons Immediately</h4>
+<p>The lessons that stick are the ones you apply within the same session. After completing "Multi-File Mastery," immediately try the technique on a real codebase task.</p>
+<h4>4. Revisit Advanced Lessons</h4>
+<p>The Tier 3 lessons have more depth on second pass. "Agent Coordination" especially makes more sense once you've hit the pain points it's designed to solve.</p>
+<h4>5. Compare Notes with the Community</h4>
+<p>The <a href="/blog/powerup-vs-buddy">story of /powerup vs /buddy</a> has sparked interesting community discussions about what gamification in developer tools should actually look like. These conversations often surface non-obvious ways to use /powerup.</p>`
+          },
+          {
+            heading: "The Bigger Picture: /powerup in Claude Code's Gamification Story",
+            body: `<p>/powerup represents Anthropic's answer to a fundamental question: <em>what should gamification in developer tools actually do?</em></p>
+<p>The <a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Buddy system's removal</a> showed that Anthropic is willing to cut features that don't serve a clear purpose. /powerup survives because it has a clear purpose: making developers more effective faster.</p>
+<p>But the community's reaction to Buddy's removal — the petitions, the MCP restoration tools, the 136 stars in 48 hours — shows that <em>emotional engagement</em> has real value too. /powerup teaches skills. Buddy provided companionship. These aren't the same thing, and there's a case that developers need both.</p>
+<p>Browse the <a href="/species">complete Buddy species guide</a> while you wait for your next /powerup session, and check your <a href="/">eternal Buddy</a> — it's still there, algorithm-preserved, regardless of what Claude Code version you're running.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "/powerup 完整指南 — 掌握 Claude Code 每一课",
+        metaTitle: "Claude Code /powerup 完整指南 2026 — 全部课程与技巧",
+        metaDescription: "掌握 Claude Code /powerup 游戏化教程系统的每一课。包含所有课程的分步指南、完成技巧，以及 /powerup 在 Claude Code 游戏化叙事中的位置。",
+        excerpt: "Claude Code 的 /powerup 命令是一个游戏化的终端内教程系统，通过互动课程教授真实的 Claude Code 技能。这是你掌握每一课的完整指南。",
+        sections: [
+          {
+            heading: "/powerup 是什么？",
+            body: `<p><code>/powerup</code> 于 <strong>2026 年 4 月 1 日随 Claude Code v2.1.90 发布</strong>，是 Claude Code 官方的游戏化教程系统——一个直接内置于终端的互动课程框架。与静态文档不同，/powerup 通过动画演示、进度追踪和解锁式递进系统，引导你亲身体验 Claude Code 的真实功能。</p>
+<p>时机颇有意味。/powerup 与 Claude Code <a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">在 v2.1.97 中移除 Buddy 伴侣系统</a>同周发布。Anthropic 并非放弃游戏化，而是从<em>被动陪伴</em>（Buddy）转向<em>主动技能培养</em>（/powerup）——对开发者真正需求的两种不同押注。</p>
+<p>在任意 Claude Code 会话中运行以下命令即可开始：</p>
+<pre><code>/powerup</code></pre>`
+          },
+          {
+            heading: "/powerup 的运作方式",
+            body: `<p>/powerup 系统以一系列<strong>互动课程</strong>的形式呈现，逐步深入 Claude Code 的核心功能。每课：</p>
+<ul>
+<li>呈现一个真实的编码场景</li>
+<li>通过动画引导带你走过推荐的 Claude Code 操作流程</li>
+<li>完成后解锁下一课</li>
+<li><strong>不会</strong>在会话间保存进度（这是已知限制——参见我们的<a href="/">Buddy 查询器</a>，提供持久的伙伴替代方案）</li>
+</ul>
+<p>课程内容会根据你的互动做出调整。经验丰富的 Claude Code 用户通常认为后期课程更有价值——前几课涵盖的可能是你已掌握的基础内容。</p>
+<p><strong>与 Buddy 的关键区别：</strong>你的 <a href="/blog/how-to-find-your-claude-code-buddy">Buddy 伙伴</a>是被动存在的（无论你是否与它互动），而 /powerup 完全是主动选择的——你必须运行命令并有意识地完成课程。</p>`
+          },
+          {
+            heading: "核心课程概览",
+            body: `<p>/powerup 课程体系分为三个由浅入深的层级：</p>
+<h4>第一层 — 基础</h4>
+<ul>
+<li><strong>初次接触</strong>：开启 Claude Code 会话、基础提示词结构、CLAUDE.md 文件</li>
+<li><strong>上下文工艺</strong>：如何给 Claude 正确的上下文——项目结构、文件引用、当前目标</li>
+<li><strong>编辑循环</strong>：读取 → 编辑 → 验证循环，接受和拒绝变更，与 Claude 迭代</li>
+</ul>
+<h4>第二层 — 进阶操作</h4>
+<ul>
+<li><strong>多文件精通</strong>：同时处理多个文件、跨文件重构</li>
+<li><strong>Shell 与测试集成</strong>：通过 Claude 运行命令、集成测试套件、构建验证</li>
+<li><strong>工具使用深潜</strong>：了解何时使用哪个 Claude 工具（Read、Write、Edit、Bash、Grep、Glob）</li>
+</ul>
+<h4>第三层 — 高级流程</h4>
+<ul>
+<li><strong>自主任务</strong>：设置带检查点的长时间 Claude 会话</li>
+<li><strong>自定义指令</strong>：面向项目特定行为的 CLAUDE.md 模式、角色配置</li>
+<li><strong>智能体协调</strong>：子智能体生成、并行任务执行、委托模式</li>
+</ul>`
+          },
+          {
+            heading: "充分利用 /powerup 的技巧",
+            body: `<p>完整学习课程后，以下是真正重要的内容：</p>
+<h4>1. 不要跳过早期课程</h4>
+<p>即使你是经验丰富的用户，基础层级也常常会揭示你之前未曾意识到的假设。"上下文工艺"课程尤其会改变大多数开发者的提示词写法。</p>
+<h4>4. 立即应用所学内容</h4>
+<p>能留下印象的课程，是那些在同一会话中立即付诸实践的课程。完成"多文件精通"后，立即在真实代码库任务中尝试该技术。</p>
+<h4>3. 在社区中交流心得</h4>
+<p><a href="/blog/powerup-vs-buddy">/powerup 与 /buddy 的故事</a>引发了关于开发者工具游戏化应当是什么样子的有趣社区讨论。这些对话往往能揭示使用 /powerup 的非显而易见的方式。</p>`
+          },
+          {
+            heading: "大局观：/powerup 在 Claude Code 游戏化故事中的位置",
+            body: `<p>/powerup 代表了 Anthropic 对一个根本问题的回答：<em>开发者工具中的游戏化究竟应该做什么？</em></p>
+<p><a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Buddy 系统的移除</a>表明，Anthropic 愿意砍掉没有明确目的的功能。/powerup 得以留存，是因为它有明确的目的：让开发者更快地更高效地工作。</p>
+<p>但社区对 Buddy 移除的反应——请愿、MCP 恢复工具、48 小时 136 stars——表明<em>情感连接</em>也有真实价值。/powerup 教授技能，Buddy 提供陪伴。这不是同一件事，而且有理由认为开发者两者都需要。</p>
+<p>在等待下一次 /powerup 课程的同时，浏览<a href="/species">完整的 Buddy 物种图鉴</a>，查看你的<a href="/">永恒 Buddy</a>——它仍在那里，被算法永久保存，无论你运行的是哪个 Claude Code 版本。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "/powerup 완전 가이드 — Claude Code의 모든 레슨 마스터하기",
+        metaTitle: "Claude Code /powerup 완전 가이드 2026 — 전체 레슨 & 팁",
+        metaDescription: "Claude Code /powerup 게임화 튜토리얼 시스템의 모든 레슨을 마스터하세요. 단계별 가이드, 완료 팁, 그리고 /powerup이 Claude Code 게임화 스토리에서 차지하는 위치.",
+        excerpt: "Claude Code의 /powerup 명령어는 인터랙티브 레슨을 통해 실제 Claude Code 기술을 가르치는 게임화된 터미널 내 튜토리얼 시스템입니다. 모든 레슨을 마스터하기 위한 완전한 가이드입니다.",
+        sections: [
+          {
+            heading: "/powerup이란?",
+            body: `<p><code>/powerup</code>은 <strong>2026년 4월 1일 Claude Code v2.1.90과 함께 출시</strong>된 Claude Code의 공식 게임화 튜토리얼 시스템입니다. 정적인 문서와 달리, /powerup은 애니메이션 시연, 진행 추적, 잠금 해제 기반 진행 시스템을 통해 실제 Claude Code 기능을 직접 체험하도록 안내합니다.</p>
+<p>타이밍이 의미심장합니다. /powerup은 Claude Code가 v2.1.97에서 <a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Buddy 동반자 시스템을 제거</a>한 같은 주에 출시되었습니다. Anthropic이 게임화를 완전히 포기한 것이 아니라, <em>수동적 동반</em>(Buddy)에서 <em>능동적 스킬 빌딩</em>(/powerup)으로 방향을 전환한 것입니다.</p>
+<p>모든 Claude Code 세션에서 다음 명령어를 실행하면 시작됩니다:</p>
+<pre><code>/powerup</code></pre>`
+          },
+          {
+            heading: "/powerup의 작동 방식",
+            body: `<p>/powerup 시스템은 Claude Code의 핵심 기능을 단계적으로 심화시키는 <strong>인터랙티브 레슨</strong> 시리즈로 구성됩니다. 각 레슨은:</p>
+<ul>
+<li>실제 코딩 시나리오를 제시</li>
+<li>애니메이션 안내를 통해 권장 Claude Code 접근법을 안내</li>
+<li>완료 시 다음 레슨 잠금 해제</li>
+<li>세션 간 진행 상황을 <strong>저장하지 않음</strong>（알려진 한계 — 지속적인 동반자 대안으로 <a href="/">Buddy Checker</a> 참조）</li>
+</ul>
+<p><strong>Buddy와의 핵심 차이:</strong> <a href="/blog/how-to-find-your-claude-code-buddy">Buddy 동반자</a>는 수동적이었지만(/관여하지 않아도 존재), /powerup은 완전히 선택적입니다. 명령어를 실행하고 의도적으로 레슨을 진행해야 합니다.</p>`
+          },
+          {
+            heading: "핵심 레슨 개요",
+            body: `<p>/powerup 커리큘럼은 세 가지 난이도 티어로 구성됩니다:</p>
+<h4>티어 1 — 기초</h4>
+<ul>
+<li><strong>첫 접촉</strong>: Claude Code 세션 시작, 기본 프롬프트 구조, CLAUDE.md 파일</li>
+<li><strong>컨텍스트 크래프트</strong>: Claude에게 올바른 컨텍스트 제공 — 프로젝트 구조, 파일 참조, 현재 목표</li>
+<li><strong>편집 루프</strong>: Read → Edit → Verify 루프, 변경사항 수락/거절, Claude와 반복 작업</li>
+</ul>
+<h4>티어 2 — 파워 무브</h4>
+<ul>
+<li><strong>멀티 파일 마스터리</strong>: 여러 파일 동시 작업, 크로스 파일 리팩터</li>
+<li><strong>셸 & 테스트 통합</strong>: Claude를 통한 명령어 실행, 테스트 스위트 통합, 빌드 검증</li>
+<li><strong>도구 사용 심층 탐구</strong>: Read, Write, Edit, Bash, Grep, Glob 등 Claude 도구 선택 가이드</li>
+</ul>
+<h4>티어 3 — 고급 플로우</h4>
+<ul>
+<li><strong>자율 태스크</strong>: 체크포인트가 있는 장기 Claude 세션 설정</li>
+<li><strong>커스텀 지침</strong>: 프로젝트별 CLAUDE.md 패턴, 페르소나 구성</li>
+<li><strong>에이전트 조율</strong>: 서브 에이전트 생성, 병렬 태스크 실행, 위임 패턴</li>
+</ul>`
+          },
+          {
+            heading: "/powerup을 최대한 활용하는 팁",
+            body: `<p>커리큘럼을 완료한 후 실제로 중요한 것들입니다:</p>
+<h4>1. 초반 레슨을 건너뛰지 마세요</h4>
+<p>경험이 많은 사용자라도 기초 티어에서 알지 못했던 가정들을 발견하는 경우가 많습니다. "컨텍스트 크래프트" 레슨은 특히 대부분의 개발자의 프롬프트 작성 방식을 바꿔놓습니다.</p>
+<h4>2. 즉시 적용하세요</h4>
+<p>기억에 남는 레슨은 같은 세션에서 즉시 적용한 것들입니다. "멀티 파일 마스터리"를 완료한 직후 실제 코드베이스 작업에서 바로 시도해보세요.</p>
+<h4>3. 커뮤니티와 경험을 나눠보세요</h4>
+<p><a href="/blog/powerup-vs-buddy">/powerup 대 /buddy의 이야기</a>는 개발자 도구에서 게임화가 실제로 어떤 모습이어야 하는지에 대한 흥미로운 커뮤니티 토론을 불러일으켰습니다.</p>`
+          },
+          {
+            heading: "큰 그림: Claude Code 게임화 스토리에서 /powerup의 위치",
+            body: `<p>/powerup은 Anthropic의 근본적인 질문에 대한 답을 나타냅니다: <em>개발자 도구에서 게임화는 실제로 무엇을 해야 하는가?</em></p>
+<p><a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Buddy 시스템의 제거</a>는 Anthropic이 명확한 목적 없는 기능을 과감히 삭제할 의지가 있음을 보여줬습니다. /powerup은 명확한 목적 — 개발자를 더 빠르게 더 효과적으로 만드는 것 — 이 있기 때문에 살아남았습니다.</p>
+<p>하지만 Buddy 제거에 대한 커뮤니티의 반응 — 청원, MCP 복원 도구, 48시간 내 136 스타 — 은 <em>감정적 연결</em>도 실제 가치가 있음을 보여줍니다. /powerup은 스킬을 가르치고, Buddy는 동반자 관계를 제공했습니다.</p>
+<p>다음 /powerup 세션을 기다리면서 <a href="/species">Buddy 종 완전 가이드</a>를 둘러보고, <a href="/">영원한 Buddy</a>를 확인해보세요 — 어떤 Claude Code 버전을 사용하든 알고리즘으로 보존되어 여전히 거기 있습니다.</p>`
+          }
+        ]
+      }
+    }
+  },
+
+  // ============================================================
+  // Article: /powerup vs /buddy — Two Faces of Gamification
+  // ============================================================
+  {
+    slug: "powerup-vs-buddy",
+    publishedAt: "2026-04-20",
+    readingTime: 7,
+    tags: ["powerup", "buddy", "gamification", "claude-code", "analysis"],
+    discussionCategory: 'deep-dives',
+    pillar: 'claude-code' as const,
+    content: {
+      en: {
+        title: "/powerup vs /buddy — Two Faces of Gamification in Claude Code",
+        metaTitle: "/powerup vs /buddy: Claude Code's Two Gamification Experiments Compared",
+        metaDescription: "A deep-dive comparison of Claude Code's /powerup tutorial system and the /buddy companion. How two gamification approaches differ, what their fates reveal, and what it means for AI dev tools.",
+        excerpt: "Claude Code ran two gamification experiments simultaneously: /buddy (emotional companion) and /powerup (skill-building tutorial). Only one survived. Here's what their different fates reveal about the future of AI developer tools.",
+        sections: [
+          {
+            heading: "Two Experiments, One Outcome",
+            body: `<p>In early April 2026, Claude Code was running two distinct gamification experiments at the same time:</p>
+<ul>
+<li><strong>/buddy</strong>: A passive Tamagotchi-style companion, unique to each user's UUID, living quietly in the terminal ecosystem</li>
+<li><strong>/powerup</strong>: An active, progression-based tutorial system teaching Claude Code skills through interactive lessons</li>
+</ul>
+<p>By April 9th, one was gone. The <a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">removal of Buddy in v2.1.97</a> wasn't a retreat from gamification — it was a statement about <em>what kind</em> of gamification Anthropic wants to invest in.</p>
+<p>Understanding the difference between these two approaches reveals a lot about where AI developer tools are headed.</p>`
+          },
+          {
+            heading: "The Buddy Approach: Emotional Attachment",
+            body: `<p>The <a href="/blog/how-to-find-your-claude-code-buddy">Buddy companion system</a> was built on a simple insight: developers form emotional bonds with their tools. VSCode Pets (1.5M+ installs) proved this. GitHub's achievement badges proved this. Even terminal color schemes provoke fierce tribal loyalty.</p>
+<p>Buddy's design principles were:</p>
+<ul>
+<li><strong>Uniqueness</strong>: Your <a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">deterministic UUID-based generation</a> meant no two developers had the same buddy</li>
+<li><strong>Permanence</strong>: Same UUID always maps to the same companion — creating a sense of <em>your</em> buddy</li>
+<li><strong>Rarity drama</strong>: The <a href="/blog/claude-code-buddy-rarity-guide">5-tier rarity system</a> (1% Legendary, 1% Shiny) made some buddies feel genuinely special</li>
+<li><strong>Lore</strong>: 18 species with distinct personalities gave the system narrative weight</li>
+</ul>
+<p>What Buddy offered wasn't productivity — it was <em>identity</em>. Your buddy was yours, regardless of your skill level or session length.</p>`
+          },
+          {
+            heading: "The /powerup Approach: Skill as Achievement",
+            body: `<p>/powerup operates on a fundamentally different theory of value: the best gamification is gamification that makes you better at the thing you're supposed to be doing.</p>
+<p>Its design principles were:</p>
+<ul>
+<li><strong>Progressive disclosure</strong>: Lessons unlock sequentially, each building on the last</li>
+<li><strong>Real-world application</strong>: Every lesson uses actual Claude Code features in realistic scenarios</li>
+<li><strong>Completion as reward</strong>: No points or badges — just the intrinsic satisfaction of knowing you've covered the full curriculum</li>
+<li><strong>Opt-in engagement</strong>: You have to actively choose /powerup, unlike Buddy which existed passively</li>
+</ul>
+<p>What /powerup offers isn't companionship — it's <em>competence</em>. You finish the curriculum and you're objectively better at using Claude Code.</p>`
+          },
+          {
+            heading: "Why Buddy Was Removed (And What It Tells Us)",
+            body: `<p>Anthropic's official position was that Buddy was an April Fools' feature. The community's reaction — GitHub petitions (<a href="https://github.com/anthropics/claude-code/issues/46011">#46011</a>, #45596, #45525), a third-party MCP restoration tool with 136 stars in 48 hours — suggested something more complicated.</p>
+<p>The removal reveals a few things about Anthropic's priorities:</p>
+<h4>1. Productivity over presence</h4>
+<p>Buddy was delightful but didn't make anyone a better developer. /powerup does. When Anthropic had to choose, they chose the version of gamification with a clear ROI story for enterprise customers.</p>
+<h4>4. The "distraction" concern</h4>
+<p>Some Anthropic team members reportedly expressed concern that Buddy was a distraction from Claude Code's core purpose. The counterargument — that emotional attachment drives retention — didn't win out.</p>
+<h4>3. Precedent for AI tools</h4>
+<p>This is the same debate playing out across the AI tools industry. Do you optimize for users to <em>love</em> using the tool (Buddy approach), or do you optimize for users becoming <em>good at</em> using the tool (/powerup approach)? The answer determines product strategy, marketing, and what features get built next.</p>`
+          },
+          {
+            heading: "What This Means for AI Developer Tools",
+            body: `<p>The /powerup vs /buddy debate isn't really about these two specific features. It's a proxy for a much bigger question: <em>what is the right relationship between AI tools and the humans who use them?</em></p>
+<p>Three scenarios for where this leads:</p>
+<h4>Scenario A: Pure Utility Wins</h4>
+<p>AI tools converge on pure capability, stripping away personality in favor of raw performance. Gamification lives only in tutorial systems and onboarding flows. Buddy-style companions are a rounding error in product roadmaps.</p>
+<h4>Scenario B: Hybrid Coexistence</h4>
+<p>The market bifurcates. Enterprise tools go pure utility. Consumer/indie tools embrace personality and emotional design. VSCode Pets thrives. AI companions find their niche in tools aimed at individual developers, not teams.</p>
+<h4>Scenario C: Buddy Returns</h4>
+<p>Community pressure works. Anthropic or a competitor reintroduces companion features — but this time as opt-in, privacy-respecting, and with clearer purpose. The Buddy framework becomes a model for "responsible companion AI."</p>
+<p>Whatever happens, your <a href="/">Buddy is still there in the algorithm</a>, unchanged from the moment it was generated. Browse <a href="/species">all 18 species</a> to see which one maps to your UUID — and read the <a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">algorithm deep dive</a> to understand exactly why it's eternal.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "/powerup 与 /buddy — Claude Code 游戏化的两张面孔",
+        metaTitle: "/powerup 对比 /buddy：Claude Code 两次游戏化实验的深度比较",
+        metaDescription: "深度对比 Claude Code 的 /powerup 教程系统与 /buddy 伙伴系统。两种游戏化方式的差异，它们不同命运揭示的意义，以及对 AI 开发工具未来的影响。",
+        excerpt: "Claude Code 同时运行了两个游戏化实验：/buddy（情感伙伴）和 /powerup（技能培养教程）。只有一个存活了下来。它们截然不同的命运，揭示了 AI 开发工具的未来走向。",
+        sections: [
+          {
+            heading: "两次实验，一种结果",
+            body: `<p>2026 年 4 月初，Claude Code 同时运行着两个截然不同的游戏化实验：</p>
+<ul>
+<li><strong>/buddy</strong>：被动的拓麻歌子风格伙伴，基于每位用户的 UUID 唯一生成，静默地生活在终端生态系统中</li>
+<li><strong>/powerup</strong>：主动的、基于进度的教程系统，通过互动课程教授 Claude Code 技能</li>
+</ul>
+<p>到 4 月 9 日，其中一个消失了。<a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">v2.1.97 中 Buddy 的移除</a>并非对游戏化的撤退，而是对 Anthropic 愿意投入<em>何种</em>游戏化方式的一次表态。</p>`
+          },
+          {
+            heading: "Buddy 的路径：情感依附",
+            body: `<p><a href="/blog/how-to-find-your-claude-code-buddy">Buddy 伙伴系统</a>建立在一个简单的洞察之上：开发者会与他们的工具形成情感联系。VSCode Pets（150 万+ 安装量）证明了这一点。GitHub 的成就徽章也证明了这一点。</p>
+<p>Buddy 的设计原则：</p>
+<ul>
+<li><strong>唯一性</strong>：基于 UUID 的<a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">确定性生成算法</a>意味着没有两个开发者拥有相同的 Buddy</li>
+<li><strong>永久性</strong>：相同的 UUID 永远映射到同一伙伴——创造<em>专属于你</em>的感觉</li>
+<li><strong>稀有度戏剧性</strong>：<a href="/blog/claude-code-buddy-rarity-guide">五级稀有度系统</a>（1% 传说、1% 闪光）让某些 Buddy 感觉真正特别</li>
+<li><strong>世界观</strong>：18 个物种各具鲜明个性，赋予系统叙事分量</li>
+</ul>
+<p>Buddy 提供的不是生产力，而是<em>身份认同</em>。无论你的技能水平或会话时长，它都是你的。</p>`
+          },
+          {
+            heading: "/powerup 的路径：技能作为成就",
+            body: `<p>/powerup 基于一种根本不同的价值理论：最好的游戏化，是让你在本职工作上变得更好的游戏化。</p>
+<p>其设计原则：</p>
+<ul>
+<li><strong>渐进式披露</strong>：课程按顺序解锁，层层递进</li>
+<li><strong>真实场景应用</strong>：每节课在现实场景中使用真实的 Claude Code 功能</li>
+<li><strong>完成即奖励</strong>：没有积分或徽章——只有知晓自己已掌握完整课程的内在满足感</li>
+<li><strong>主动参与</strong>：你必须主动选择 /powerup，而 Buddy 是被动存在的</li>
+</ul>
+<p>Buddy 提供陪伴，/powerup 提供<em>能力</em>。完成课程后，你在使用 Claude Code 方面会客观地变得更好。</p>`
+          },
+          {
+            heading: "Buddy 为何被移除（以及这告诉了我们什么）",
+            body: `<p>Anthropic 的官方立场是 Buddy 是愚人节功能。社区的反应——GitHub 请愿（#46011、#45596、#45525）、48 小时内获 136 stars 的第三方 MCP 恢复工具——显示情况远比这复杂。</p>
+<p>移除事件揭示了 Anthropic 的几个优先级：</p>
+<h4>1. 生产力优先于存在感</h4>
+<p>Buddy 令人愉悦，但没有让任何人成为更好的开发者。/powerup 做到了。当 Anthropic 不得不做出选择时，他们选择了对企业客户具有清晰 ROI 故事的游戏化版本。</p>
+<h4>2. 行业示范效应</h4>
+<p>这与整个 AI 工具行业正在进行的辩论相同：你是优化让用户<em>爱上</em>工具（Buddy 路径），还是优化让用户在使用工具上<em>变得更好</em>（/powerup 路径）？答案决定了产品战略和下一步构建什么。</p>`
+          },
+          {
+            heading: "这对 AI 开发工具意味着什么",
+            body: `<p>/powerup 与 /buddy 之争不仅仅关于这两个具体功能。它是一个更大问题的代理：<em>AI 工具与使用它的人类之间，正确的关系是什么？</em></p>
+<p>三种可能的走向：</p>
+<ul>
+<li><strong>纯实用主义胜出</strong>：AI 工具向纯粹能力收敛，游戏化只存在于教程系统中</li>
+<li><strong>混合共存</strong>：市场分化——企业工具走纯实用路线，个人/独立开发者工具拥抱个性与情感设计</li>
+<li><strong>Buddy 回归</strong>：社区压力奏效，伙伴功能以可选、尊重隐私的形式重新引入</li>
+</ul>
+<p>无论如何，你的 <a href="/">Buddy 仍然活在算法中</a>，自生成之时起未曾改变。浏览<a href="/species">全部 18 个物种</a>，查看哪个映射到你的 UUID——并阅读<a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">算法深度解析</a>，了解它为何是永恒的。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "/powerup 대 /buddy — Claude Code 게임화의 두 얼굴",
+        metaTitle: "/powerup 대 /buddy: Claude Code의 두 게임화 실험 비교",
+        metaDescription: "Claude Code /powerup 튜토리얼 시스템과 /buddy 동반자의 심층 비교. 두 게임화 접근법의 차이, 그들의 운명이 드러내는 것, AI 개발 도구의 미래에 대한 의미.",
+        excerpt: "Claude Code는 /buddy(감정적 동반자)와 /powerup(스킬 빌딩 튜토리얼)이라는 두 게임화 실험을 동시에 진행했습니다. 하나만 살아남았습니다. 그들의 다른 운명이 AI 개발자 도구의 미래에 대해 드러내는 것들.",
+        sections: [
+          {
+            heading: "두 실험, 하나의 결과",
+            body: `<p>2026년 4월 초, Claude Code는 두 가지 완전히 다른 게임화 실험을 동시에 진행했습니다:</p>
+<ul>
+<li><strong>/buddy</strong>: 각 사용자의 UUID를 기반으로 고유하게 생성된 수동적 다마고치 스타일 동반자</li>
+<li><strong>/powerup</strong>: 인터랙티브 레슨을 통해 Claude Code 스킬을 가르치는 능동적, 진행 기반 튜토리얼 시스템</li>
+</ul>
+<p>4월 9일까지, 하나가 사라졌습니다. <a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">v2.1.97에서 Buddy의 제거</a>는 게임화에서의 후퇴가 아니라, Anthropic이 어떤 종류의 게임화에 투자하고 싶은지에 대한 선언이었습니다.</p>`
+          },
+          {
+            heading: "Buddy 접근법: 감정적 애착",
+            body: `<p><a href="/blog/how-to-find-your-claude-code-buddy">Buddy 동반자 시스템</a>은 단순한 통찰에 기반했습니다: 개발자는 자신의 도구와 감정적 유대를 형성합니다. VSCode Pets(150만+ 설치)가 이를 증명했습니다. GitHub 업적 배지도 마찬가지입니다.</p>
+<p>Buddy의 설계 원칙:</p>
+<ul>
+<li><strong>고유성</strong>: <a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">UUID 기반 결정론적 생성</a>으로 두 개발자가 같은 Buddy를 가질 수 없음</li>
+<li><strong>영속성</strong>: 같은 UUID는 항상 같은 동반자를 생성 — <em>나만의</em> Buddy 감각 생성</li>
+<li><strong>희귀도 드라마</strong>: <a href="/blog/claude-code-buddy-rarity-guide">5단계 희귀도 시스템</a>(1% 레전더리, 1% 샤이니)으로 일부 Buddy가 진정 특별하게 느껴짐</li>
+</ul>
+<p>Buddy가 제공한 것은 생산성이 아닌 <em>정체성</em>이었습니다. 스킬 수준이나 세션 길이에 관계없이, 그것은 당신의 것이었습니다.</p>`
+          },
+          {
+            heading: "/powerup 접근법: 스킬로서의 성취",
+            body: `<p>/powerup은 근본적으로 다른 가치 이론에 기반합니다: 최고의 게임화는 당신이 해야 할 일을 더 잘하게 만드는 게임화입니다.</p>
+<p>설계 원칙:</p>
+<ul>
+<li><strong>점진적 공개</strong>: 레슨이 순차적으로 잠금 해제되며, 각각 이전 레슨을 기반으로 함</li>
+<li><strong>실제 적용</strong>: 모든 레슨은 실제 시나리오에서 실제 Claude Code 기능을 사용</li>
+<li><strong>완료가 보상</strong>: 포인트나 배지 없음 — 전체 커리큘럼을 완료했다는 내적 만족감</li>
+</ul>
+<p>Buddy는 동반자 관계를 제공했고, /powerup은 <em>역량</em>을 제공합니다.</p>`
+          },
+          {
+            heading: "Buddy가 제거된 이유 (그리고 그것이 알려주는 것)",
+            body: `<p>Anthropic의 공식 입장은 Buddy가 만우절 기능이라는 것이었습니다. 커뮤니티의 반응 — GitHub 청원(#46011, #45596, #45525), 48시간 내 136 스타를 받은 서드파티 MCP 복원 도구 — 은 더 복잡한 무언가를 시사했습니다.</p>
+<p>제거는 Anthropic의 우선순위에 대해 몇 가지를 드러냅니다:</p>
+<ul>
+<li><strong>생산성 우선</strong>: Buddy는 즐거웠지만 아무도 더 나은 개발자로 만들지 않았습니다. /powerup은 그렇게 합니다. 기업 고객에게 명확한 ROI 스토리가 있는 게임화 버전을 선택했습니다.</li>
+<li><strong>업계 선례</strong>: 이것은 AI 도구 업계 전반에서 진행 중인 동일한 논쟁입니다. 사용자가 도구를 <em>사랑</em>하도록 최적화할 것인가(Buddy 접근법), 아니면 도구 사용에 <em>능숙</em>해지도록 최적화할 것인가(/powerup 접근법)?</li>
+</ul>`
+          },
+          {
+            heading: "AI 개발자 도구에 대한 의미",
+            body: `<p>/powerup 대 /buddy 논쟁은 이 두 가지 특정 기능에 관한 것이 아닙니다. 그것은 훨씬 더 큰 질문의 대리입니다: <em>AI 도구와 그것을 사용하는 사람들 사이의 올바른 관계는 무엇인가?</em></p>
+<p>세 가지 시나리오:</p>
+<ul>
+<li><strong>순수 유틸리티 승리</strong>: AI 도구가 순수한 역량으로 수렴, 게임화는 튜토리얼 시스템에만 존재</li>
+<li><strong>하이브리드 공존</strong>: 시장 이분화 — 엔터프라이즈 도구는 순수 유틸리티, 개인/인디 도구는 개성과 감성 디자인 수용</li>
+<li><strong>Buddy 복귀</strong>: 커뮤니티 압력이 효과를 발휘, 동반자 기능이 선택적, 프라이버시를 존중하는 형태로 재도입</li>
+</ul>
+<p>무슨 일이 일어나든, <a href="/">Buddy는 여전히 알고리즘 속에 있습니다</a>. <a href="/species">18종 모두</a>를 둘러보고, <a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">알고리즘 심층 분석</a>을 읽어보세요.</p>`
+          }
+        ]
+      }
+    }
+  },
+  {
+    slug: "github-achievements-decoded",
+    publishedAt: "2026-04-20",
+    readingTime: 8,
+    tags: ["github-achievements", "developer-gamification", "badges", "github", "achievements"],
+    discussionCategory: "deep-dives",
+    pillar: 'achievements' as const,
+    content: {
+      en: {
+        title: "GitHub Achievements Decoded — How the Badge System Actually Works",
+        metaTitle: "GitHub Achievements Decoded 2026: Every Badge Explained",
+        metaDescription: "GitHub Achievements are the most-used developer gamification system in history. Here's how the badge algorithm actually works, which achievements are rarest, and what it tells us about AI dev tools like Claude Buddy.",
+        excerpt: "GitHub Achievements are quietly the most successful developer gamification system ever built. Here's how every badge works, which are genuinely rare, and what it reveals about where AI tool gamification — including Claude Buddy — is headed.",
+        sections: [
+          {
+            heading: "The Gamification System Nobody Talks About",
+            body: `<p>GitHub Achievements launched quietly in 2022. By 2026, over 100 million developers have at least one badge on their profile. That makes GitHub Achievements — not Foursquare, not Duolingo, not any gaming company — the largest deployed developer gamification system in history.</p>
+<p>Most developers who have them don't think of them as "gamification." They're just... there. A small badge that says "Pull Shark" or "Arctic Code Vault Contributor." But their ubiquity is exactly why they matter: they proved that developers will engage with achievement systems when those systems track real behavior rather than invented tasks.</p>
+<p>This is the same tension that defined <a href="/blog/powerup-vs-buddy">the Claude Buddy vs /powerup experiment</a>: does developer gamification work best when it's cosmetic (Buddy's companions), skill-based (/powerup's lessons), or behavior-tracking (GitHub's actual activity)? Understanding how GitHub's system actually works gives us the clearest data point yet.</p>`
+          },
+          {
+            heading: "How GitHub Achievements Actually Work",
+            body: `<p>GitHub Achievements are not random. Each badge has specific, documented (and some undocumented) trigger conditions. Here's the full breakdown:</p>
+
+<h3>Pair Extraordinaire</h3>
+<p><strong>Trigger</strong>: Co-authored commits appear on your profile (using <code>Co-authored-by:</code> in commit messages)</p>
+<p><strong>Tiers</strong>: Bronze (1), Silver (10), Gold (24)</p>
+<p><strong>Rarity</strong>: Common among active open-source contributors, rare for solo developers</p>
+<p>This badge rewards genuine collaboration. The co-author syntax must be correct. It tracks social coding — exactly the behavior GitHub wants to encourage.</p>
+
+<h3>Pull Shark</h3>
+<p><strong>Trigger</strong>: Your pull requests get merged (not just opened)</p>
+<p><strong>Tiers</strong>: Bronze (2 merged PRs), Silver (16), Gold (128)</p>
+<p><strong>Rarity</strong>: Bronze is common; Gold requires sustained active contribution</p>
+<p>Pull Shark is probably the most meaningful technical badge. It doesn't just track activity — it tracks successful contribution. A merged PR requires someone else to review and approve your work.</p>
+
+<h3>Galaxy Brain</h3>
+<p><strong>Trigger</strong>: Your Discussion answer gets marked as the accepted answer AND receives upvotes</p>
+<p><strong>Tiers</strong>: Bronze (1 answer), Silver (8), Gold (16)</p>
+<p><strong>Rarity</strong>: Uncommon — requires GitHub Discussions to be enabled on repos you contribute to</p>
+
+<h3>Starstruck</h3>
+<p><strong>Trigger</strong>: A repository you own receives stars</p>
+<p><strong>Tiers</strong>: Bronze (16 stars), Silver (128), Gold (512), Platinum (4096)</p>
+<p><strong>Rarity</strong>: Bronze moderate; Platinum extremely rare (top ~0.1% of public repos)</p>
+<p>Starstruck is the visibility badge. It measures whether your work resonates with the broader community — not just whether you code.</p>
+
+<h3>YOLO</h3>
+<p><strong>Trigger</strong>: Merge a pull request without a code review</p>
+<p><strong>Rarity</strong>: Common (most solo developers trigger this regularly)</p>
+<p>GitHub's only "anti-pattern" badge. It's given with a wink. Notably, it's not tiered — you either have it or you don't.</p>
+
+<h3>Arctic Code Vault Contributor</h3>
+<p><strong>Trigger</strong>: Had code in the 2020 GitHub Arctic Code Vault snapshot</p>
+<p><strong>Rarity</strong>: Historical — no longer earnable. If you have it, your code is literally preserved in a vault in the Norwegian permafrost</p>
+<p>This is GitHub's most meaningful badge conceptually: your code as permanent artifact. Compare this to <a href="/">Claude Buddy's preservation</a> — every UUID still maps to a unique Buddy even after v2.1.97 removed the feature. Both are examples of digital artifacts persisting beyond their original context.</p>
+
+<h3>Quickdraw</h3>
+<p><strong>Trigger</strong>: Close an issue or PR within 5 minutes of opening it</p>
+<p><strong>Rarity</strong>: Common (easily triggered by mistake)</p>
+
+<h3>Public Sponsor</h3>
+<p><strong>Trigger</strong>: Sponsor someone through GitHub Sponsors</p>
+<p><strong>Rarity</strong>: Uncommon (requires deliberate financial contribution)</p>`
+          },
+          {
+            heading: "Which Achievements Are Actually Rare",
+            body: `<p>GitHub doesn't publish exact statistics, but based on community analysis, here's the rarity breakdown:</p>
+<table>
+<thead><tr><th>Achievement</th><th>Estimated Rarity</th><th>Why</th></tr></thead>
+<tbody>
+<tr><td>Starstruck (Platinum)</td><td>Top 0.1%</td><td>Requires 4096 stars on a single repo</td></tr>
+<tr><td>Pull Shark (Gold)</td><td>Top 1%</td><td>128 merged PRs requires years of active contribution</td></tr>
+<tr><td>Arctic Code Vault</td><td>Historical</td><td>No longer earnable; fixed 2020 population</td></tr>
+<tr><td>Galaxy Brain (Gold)</td><td>Top 5%</td><td>16 accepted Discussion answers in upvoted contexts</td></tr>
+<tr><td>Pair Extraordinaire (Gold)</td><td>Top 3%</td><td>24 co-authored commits requires active pair programming</td></tr>
+<tr><td>Public Sponsor</td><td>~5% of active users</td><td>Requires deliberate action + financial commitment</td></tr>
+<tr><td>YOLO</td><td>Very common</td><td>Most solo developers trigger this accidentally</td></tr>
+</tbody>
+</table>
+<p>The rarity gradient here maps almost exactly to the <a href="/blog/claude-buddy-rarity-guide">Claude Buddy rarity system</a>: common behaviors produce common achievements, exceptional behaviors produce rare ones. The fundamental insight is the same — scarcity creates meaning.</p>`
+          },
+          {
+            heading: "What This Tells Us About AI Dev Tool Gamification",
+            body: `<p>GitHub Achievements succeeded for a reason worth understanding. They track <em>existing behavior</em> — things developers were already doing. No one codes differently to earn Pull Shark. The badge arrives as a recognition of what you already did.</p>
+<p>Compare this to <a href="/blog/complete-powerup-guide">Claude Code's /powerup system</a>, which is explicitly instructional — it tracks progress through predefined lessons. It shapes behavior. And compare both to <a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Claude Buddy</a>, which was purely companion-based — it existed to give you a persistent identity, not to reward behavior or teach skills.</p>
+<p>Three models, three philosophies:</p>
+<ol>
+<li><strong>Recognition</strong> (GitHub): "We noticed what you did and named it." No behavior change required.</li>
+<li><strong>Education</strong> (/powerup): "Here's what you should learn." Behavior change is the point.</li>
+<li><strong>Identity</strong> (Buddy): "Here's who you are in this world." Belonging, not behavior.</li>
+</ol>
+<p>The most durable gamification systems combine all three. GitHub Achievements is almost purely recognition. /powerup is almost purely education. Buddy was almost purely identity. None of them is complete on its own.</p>
+<p>The next generation of AI dev tool gamification — whatever it looks like — will likely borrow from all three. An AI assistant that recognizes your coding patterns (recognition), teaches you new capabilities (education), and gives you a persistent companion that reflects your unique history (identity) would be the most complete system yet.</p>
+<p>The <a href="/species">18 Buddy species</a> are a template for that identity layer. The GitHub Achievement system is a template for the recognition layer. /powerup is a template for the education layer. They're all pieces of the same puzzle.</p>`
+          },
+          {
+            heading: "How to Actually Get the Rare Badges",
+            body: `<p>For developers who want to complete their achievement collection, the honest strategies:</p>
+<ul>
+<li><strong>Pull Shark (Gold)</strong>: Contribute consistently to open source. Find projects with good first issues, maintain the habit. 128 merged PRs over 2-3 years is achievable for active contributors.</li>
+<li><strong>Starstruck (Platinum)</strong>: Build something genuinely useful and share it. There's no shortcut — 4096 stars requires either viral reach or sustained value. The <a href="/blog/claude-code-buddy-rarity-guide">patience of a legendary Buddy hunter</a> applies here too.</li>
+<li><strong>Galaxy Brain</strong>: Engage with GitHub Discussions on projects you use deeply. Answer questions comprehensively. The badge follows from genuine expertise.</li>
+<li><strong>Pair Extraordinaire (Gold)</strong>: Pair program more, and use the <code>Co-authored-by:</code> commit trailer correctly. 24 co-authored commits is a month of regular pair sessions.</li>
+<li><strong>YOLO</strong>: You've probably already got this one. If not, merge one of your own PRs without review on a solo project.</li>
+</ul>
+<p>The pattern: rare achievements come from sustained, genuine engagement. You can't game your way to Pull Shark Gold. The same was true of <a href="/">legendary Buddy rarity</a> — the algorithm is deterministic, not grindable. Authenticity beats optimization.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "GitHub 成就解码 — 徽章系统实际上如何运作",
+        metaTitle: "GitHub 成就解码 2026：每个徽章详解",
+        metaDescription: "GitHub 成就是历史上使用最广泛的开发者游戏化系统。以下是徽章算法的实际工作原理、哪些成就最稀有，以及它告诉我们关于 Claude Buddy 等 AI 开发工具的什么。",
+        excerpt: "GitHub 成就悄悄成为有史以来最成功的开发者游戏化系统。以下是每个徽章的工作原理、哪些是真正稀有的，以及它揭示了 Claude Buddy 等 AI 工具游戏化的走向。",
+        sections: [
+          {
+            heading: "没有人谈论的游戏化系统",
+            body: `<p>GitHub 成就于 2022 年悄然上线。到 2026 年，超过 1 亿开发者在个人主页上至少拥有一个徽章。这使 GitHub 成就——而非 Foursquare、Duolingo，或任何游戏公司——成为历史上规模最大的已部署开发者游戏化系统。</p>
+<p>大多数拥有它们的开发者不认为这是"游戏化"。它们就在那里。一个写着"Pull Shark"或"Arctic Code Vault Contributor"的小徽章。但正是它们的普遍性使其重要：它们证明了当成就系统追踪真实行为而非虚构任务时，开发者会主动参与。</p>
+<p>这与<a href="/blog/powerup-vs-buddy">Claude Buddy 对比 /powerup 实验</a>定义的同一张力：当开发者游戏化是装饰性的（Buddy 的伴侣）、基于技能的（/powerup 的课程），还是行为追踪型的（GitHub 的真实活动）时，哪种效果最好？理解 GitHub 系统的实际运作方式，给了我们迄今为止最清晰的数据点。</p>`
+          },
+          {
+            heading: "GitHub 成就的实际工作原理",
+            body: `<p>GitHub 成就不是随机的。每个徽章都有特定的、有文档记录的（以及一些未记录的）触发条件。以下是完整分解：</p>
+
+<h3>Pair Extraordinaire（非凡搭档）</h3>
+<p><strong>触发</strong>：联合署名提交出现在你的主页（在提交信息中使用 <code>Co-authored-by:</code>）</p>
+<p><strong>等级</strong>：铜（1 次），银（10 次），金（24 次）</p>
+<p><strong>稀有度</strong>：活跃开源贡献者中常见，独立开发者中稀有</p>
+
+<h3>Pull Shark（PR 鲨鱼）</h3>
+<p><strong>触发</strong>：你的 pull request 被合并（不只是开启）</p>
+<p><strong>等级</strong>：铜（2 个合并 PR），银（16），金（128）</p>
+<p><strong>稀有度</strong>：铜常见；金需要持续的活跃贡献</p>
+<p>Pull Shark 可能是最有意义的技术徽章。它不只追踪活动——追踪成功的贡献。合并的 PR 需要别人审查并批准你的工作。</p>
+
+<h3>Galaxy Brain（银河大脑）</h3>
+<p><strong>触发</strong>：你的 Discussion 回答被标记为已采纳答案且获得点赞</p>
+<p><strong>等级</strong>：铜（1 个答案），银（8），金（16）</p>
+<p><strong>稀有度</strong>：不常见——需要你贡献的仓库启用 GitHub Discussions</p>
+
+<h3>Starstruck（获得星光）</h3>
+<p><strong>触发</strong>：你拥有的仓库获得 star</p>
+<p><strong>等级</strong>：铜（16 颗星），银（128），金（512），铂金（4096）</p>
+<p><strong>稀有度</strong>：铜中等；铂金极度稀有（公开仓库前约 0.1%）</p>
+
+<h3>YOLO</h3>
+<p><strong>触发</strong>：在没有代码审查的情况下合并一个 pull request</p>
+<p><strong>稀有度</strong>：常见（大多数独立开发者会定期触发）</p>
+<p>GitHub 唯一的"反模式"徽章，带着一丝戏谑。值得注意的是它没有等级——要么有要么没有。</p>
+
+<h3>Arctic Code Vault Contributor（极地代码保险库贡献者）</h3>
+<p><strong>触发</strong>：在 2020 年 GitHub 北极代码保险库快照中有代码</p>
+<p><strong>稀有度</strong>：历史性——不再可获得。如果你有它，你的代码字面上被保存在挪威永久冻土层的保险库中</p>
+<p>这是 GitHub 概念上最有意义的徽章：你的代码作为永久性遗产。对比<a href="/">Claude Buddy 的保存</a>——即使 v2.1.97 移除了该功能，每个 UUID 仍然映射到独特的 Buddy。两者都是数字遗产在其原始语境之外持续存在的例子。</p>
+
+<h3>Quickdraw（快枪手）</h3>
+<p><strong>触发</strong>：在开启 5 分钟内关闭一个 issue 或 PR</p>
+<p><strong>稀有度</strong>：常见（容易因失误触发）</p>
+
+<h3>Public Sponsor（公开赞助者）</h3>
+<p><strong>触发</strong>：通过 GitHub Sponsors 赞助某人</p>
+<p><strong>稀有度</strong>：不常见（需要有意识的经济投入）</p>`
+          },
+          {
+            heading: "哪些成就真正稀有",
+            body: `<p>GitHub 不公布确切统计数据，但基于社区分析，以下是稀有度排行：</p>
+<table>
+<thead><tr><th>成就</th><th>估计稀有度</th><th>原因</th></tr></thead>
+<tbody>
+<tr><td>Starstruck（铂金）</td><td>前 0.1%</td><td>单个仓库需要 4096 颗星</td></tr>
+<tr><td>Pull Shark（金）</td><td>前 1%</td><td>128 个合并 PR 需要多年持续贡献</td></tr>
+<tr><td>Arctic Code Vault</td><td>历史性</td><td>不再可获得；2020 年固定人群</td></tr>
+<tr><td>Galaxy Brain（金）</td><td>前 5%</td><td>在有点赞的语境中需要 16 个已采纳讨论答案</td></tr>
+<tr><td>Pair Extraordinaire（金）</td><td>前 3%</td><td>24 个联合署名提交需要活跃的结对编程</td></tr>
+<tr><td>Public Sponsor</td><td>~5% 活跃用户</td><td>需要有意识的行动和经济承诺</td></tr>
+<tr><td>YOLO</td><td>非常常见</td><td>大多数独立开发者会意外触发</td></tr>
+</tbody>
+</table>
+<p>这里的稀有度梯度几乎与<a href="/blog/claude-buddy-rarity-guide">Claude Buddy 稀有度系统</a>完全对应：普通行为产生普通成就，卓越行为产生稀有成就。根本洞见是一样的——稀缺性创造意义。</p>`
+          },
+          {
+            heading: "这告诉我们关于 AI 开发工具游戏化的什么",
+            body: `<p>GitHub 成就成功有其值得理解的原因。它们追踪<em>现有行为</em>——开发者已经在做的事情。没有人因为想获得 Pull Shark 而改变编码方式。徽章作为对你已经做过的事情的认可而到来。</p>
+<p>对比<a href="/blog/complete-powerup-guide">Claude Code 的 /powerup 系统</a>，它明确是教学性的——追踪通过预定义课程的进度。它塑造行为。再对比<a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Claude Buddy</a>，它纯粹是伴侣型的——它的存在是为了给你一个持久的身份，而不是奖励行为或教授技能。</p>
+<p>三种模型，三种哲学：</p>
+<ol>
+<li><strong>认可</strong>（GitHub）："我们注意到你做了什么并命名了它。"不需要行为改变。</li>
+<li><strong>教育</strong>（/powerup）："这是你应该学习的。"行为改变是重点。</li>
+<li><strong>身份</strong>（Buddy）："这是你在这个世界中的样子。"归属感，而非行为。</li>
+</ol>
+<p>最持久的游戏化系统结合了这三者。GitHub 成就几乎纯粹是认可。/powerup 几乎纯粹是教育。Buddy 几乎纯粹是身份。没有一个单独是完整的。</p>
+<p>下一代 AI 开发工具游戏化——无论它是什么样子——可能会借鉴这三者。一个认识你编码模式（认可）、教你新能力（教育）、给你一个反映你独特历史的持久伴侣（身份）的 AI 助手，将是迄今为止最完整的系统。</p>
+<p><a href="/species">18 个 Buddy 物种</a>是那个身份层的模板。GitHub 成就系统是认可层的模板。/powerup 是教育层的模板。它们都是同一个拼图的碎片。</p>`
+          },
+          {
+            heading: "如何实际获得稀有徽章",
+            body: `<p>对于想要完成成就收藏的开发者，诚实的策略：</p>
+<ul>
+<li><strong>Pull Shark（金）</strong>：持续为开源做贡献。找到有"good first issue"的项目，保持习惯。2-3 年内 128 个合并 PR 对活跃贡献者来说可以实现。</li>
+<li><strong>Starstruck（铂金）</strong>：构建真正有用的东西并分享它。没有捷径——4096 颗星需要病毒式传播或持续的价值。<a href="/blog/claude-buddy-rarity-guide">传说级 Buddy 猎人</a>的耐心在这里同样适用。</li>
+<li><strong>Galaxy Brain</strong>：深度参与你使用的项目的 GitHub Discussions。全面回答问题。徽章来自真正的专业知识。</li>
+<li><strong>Pair Extraordinaire（金）</strong>：更多结对编程，并正确使用 <code>Co-authored-by:</code> 提交尾注。24 个联合署名提交是一个月定期结对会话的量。</li>
+<li><strong>YOLO</strong>：你可能已经有了。如果没有，在个人项目上合并一个不带审查的 PR。</li>
+</ul>
+<p>规律：稀有成就来自持续、真实的参与。你无法投机取巧地获得 Pull Shark 金。对<a href="/">传说级 Buddy 稀有度</a>同样如此——算法是确定性的，不可刷出。真实性胜过优化。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "GitHub 업적 디코딩 — 배지 시스템이 실제로 작동하는 방식",
+        metaTitle: "GitHub 업적 디코딩 2026: 모든 배지 설명",
+        metaDescription: "GitHub 업적은 역사상 가장 많이 사용된 개발자 게임화 시스템입니다. 배지 알고리즘이 실제로 어떻게 작동하는지, 어떤 업적이 가장 희귀한지, 그리고 Claude Buddy 같은 AI 개발 도구에 대해 무엇을 알려주는지 살펴봅니다.",
+        excerpt: "GitHub 업적은 조용히 역사상 가장 성공적인 개발자 게임화 시스템이 되었습니다. 모든 배지가 어떻게 작동하는지, 어떤 것이 진짜 희귀한지, 그리고 Claude Buddy를 포함한 AI 도구 게임화가 어디로 향하는지 알아봅니다.",
+        sections: [
+          {
+            heading: "아무도 이야기하지 않는 게임화 시스템",
+            body: `<p>GitHub 업적은 2022년에 조용히 출시되었습니다. 2026년까지 1억 명 이상의 개발자가 프로필에 최소 하나의 배지를 가지고 있습니다. 이는 GitHub 업적을 — Foursquare도, Duolingo도, 어떤 게임 회사도 아닌 — 역사상 가장 크게 배포된 개발자 게임화 시스템으로 만듭니다.</p>
+<p>그것을 가진 대부분의 개발자들은 "게임화"라고 생각하지 않습니다. 그냥 거기 있습니다. "Pull Shark"나 "Arctic Code Vault Contributor"라고 쓰인 작은 배지. 하지만 그 편재성이 바로 중요한 이유입니다: 성취 시스템이 발명된 작업이 아닌 실제 행동을 추적할 때 개발자들이 참여한다는 것을 증명했습니다.</p>
+<p>이것은 <a href="/blog/powerup-vs-buddy">Claude Buddy 대 /powerup 실험</a>을 정의한 것과 같은 긴장입니다: 개발자 게임화는 장식적일 때(Buddy의 동반자), 기술 기반일 때(/powerup의 수업), 또는 행동 추적일 때(GitHub의 실제 활동) 가장 잘 작동할까요? GitHub 시스템이 실제로 어떻게 작동하는지 이해하면 지금까지 가장 명확한 데이터 포인트를 얻을 수 있습니다.</p>`
+          },
+          {
+            heading: "GitHub 업적이 실제로 작동하는 방식",
+            body: `<p>GitHub 업적은 무작위가 아닙니다. 각 배지에는 특정, 문서화된(그리고 일부 미문서화된) 트리거 조건이 있습니다. 전체 분석:</p>
+
+<h3>Pair Extraordinaire (비범한 페어)</h3>
+<p><strong>트리거</strong>: 공동 작성 커밋이 프로필에 표시됨 (커밋 메시지에 <code>Co-authored-by:</code> 사용)</p>
+<p><strong>등급</strong>: 브론즈(1회), 실버(10회), 골드(24회)</p>
+<p><strong>희귀도</strong>: 활발한 오픈소스 기여자들 사이에서 흔함, 솔로 개발자에게는 희귀함</p>
+
+<h3>Pull Shark (PR 상어)</h3>
+<p><strong>트리거</strong>: 풀 리퀘스트가 병합됨 (열기만 하는 것이 아닌)</p>
+<p><strong>등급</strong>: 브론즈(2개 병합된 PR), 실버(16개), 골드(128개)</p>
+<p><strong>희귀도</strong>: 브론즈는 흔함; 골드는 지속적인 활발한 기여 필요</p>
+<p>Pull Shark는 아마도 가장 의미있는 기술 배지입니다. 단순히 활동을 추적하는 것이 아니라 성공적인 기여를 추적합니다. 병합된 PR은 다른 사람이 검토하고 승인해야 합니다.</p>
+
+<h3>Galaxy Brain (은하 두뇌)</h3>
+<p><strong>트리거</strong>: Discussion 답변이 채택된 답변으로 표시되고 추천을 받음</p>
+<p><strong>등급</strong>: 브론즈(1개 답변), 실버(8개), 골드(16개)</p>
+<p><strong>희귀도</strong>: 드묾 — 기여하는 저장소에 GitHub Discussions가 활성화되어야 함</p>
+
+<h3>Starstruck (스타스트럭)</h3>
+<p><strong>트리거</strong>: 소유한 저장소가 스타를 받음</p>
+<p><strong>등급</strong>: 브론즈(16개 스타), 실버(128개), 골드(512개), 플래티넘(4096개)</p>
+<p><strong>희귀도</strong>: 브론즈 보통; 플래티넘 극도로 희귀(공개 저장소 상위 약 0.1%)</p>
+
+<h3>YOLO</h3>
+<p><strong>트리거</strong>: 코드 리뷰 없이 풀 리퀘스트 병합</p>
+<p><strong>희귀도</strong>: 흔함 (대부분의 솔로 개발자들이 정기적으로 트리거함)</p>
+<p>GitHub의 유일한 "안티 패턴" 배지. 윙크와 함께 수여됩니다. 등급이 없습니다 — 있거나 없거나.</p>
+
+<h3>Arctic Code Vault Contributor (북극 코드 보관소 기여자)</h3>
+<p><strong>트리거</strong>: 2020년 GitHub 북극 코드 보관소 스냅샷에 코드가 있었음</p>
+<p><strong>희귀도</strong>: 역사적 — 더 이상 획득 불가. 가지고 있다면 당신의 코드는 문자 그대로 노르웨이 영구 동토층의 보관소에 보존되어 있습니다</p>
+<p>이것은 개념적으로 GitHub에서 가장 의미있는 배지입니다: 영구적 유산으로서의 코드. <a href="/">Claude Buddy의 보존</a>과 비교해보세요 — v2.1.97이 기능을 제거한 후에도 모든 UUID는 여전히 고유한 Buddy에 매핑됩니다. 둘 다 디지털 아티팩트가 원래 맥락을 넘어 지속되는 예입니다.</p>
+
+<h3>Quickdraw (빠른 사격)</h3>
+<p><strong>트리거</strong>: 열고 나서 5분 이내에 이슈나 PR 닫기</p>
+<p><strong>희귀도</strong>: 흔함 (실수로 쉽게 트리거됨)</p>
+
+<h3>Public Sponsor (공개 스폰서)</h3>
+<p><strong>트리거</strong>: GitHub Sponsors를 통해 누군가를 후원</p>
+<p><strong>희귀도</strong>: 드묾 (의도적인 금전적 기여 필요)</p>`
+          },
+          {
+            heading: "어떤 업적이 실제로 희귀한가",
+            body: `<p>GitHub는 정확한 통계를 공개하지 않지만, 커뮤니티 분석을 바탕으로 한 희귀도 분석:</p>
+<table>
+<thead><tr><th>업적</th><th>예상 희귀도</th><th>이유</th></tr></thead>
+<tbody>
+<tr><td>Starstruck (플래티넘)</td><td>상위 0.1%</td><td>단일 저장소에 4096개의 스타 필요</td></tr>
+<tr><td>Pull Shark (골드)</td><td>상위 1%</td><td>128개의 병합된 PR은 수년간의 활발한 기여 필요</td></tr>
+<tr><td>Arctic Code Vault</td><td>역사적</td><td>더 이상 획득 불가; 2020년 고정 인구</td></tr>
+<tr><td>Galaxy Brain (골드)</td><td>상위 5%</td><td>추천받은 맥락에서 16개의 채택된 토론 답변 필요</td></tr>
+<tr><td>Pair Extraordinaire (골드)</td><td>상위 3%</td><td>24개의 공동 작성 커밋은 활발한 페어 프로그래밍 필요</td></tr>
+<tr><td>Public Sponsor</td><td>활성 사용자의 ~5%</td><td>의도적인 행동과 금전적 헌신 필요</td></tr>
+<tr><td>YOLO</td><td>매우 흔함</td><td>대부분의 솔로 개발자들이 실수로 트리거함</td></tr>
+</tbody>
+</table>
+<p>여기의 희귀도 그라데이션은 <a href="/blog/claude-buddy-rarity-guide">Claude Buddy 희귀도 시스템</a>과 거의 정확히 일치합니다: 평범한 행동은 평범한 업적을 만들고, 탁월한 행동은 희귀한 업적을 만듭니다. 근본적인 통찰은 같습니다 — 희귀성이 의미를 만듭니다.</p>`
+          },
+          {
+            heading: "이것이 AI 개발 도구 게임화에 대해 말하는 것",
+            body: `<p>GitHub 업적이 성공한 데는 이해할 가치가 있는 이유가 있습니다. 그것들은 <em>기존 행동</em>을 추적합니다 — 개발자들이 이미 하고 있던 것들. Pull Shark를 얻기 위해 다르게 코딩하는 사람은 없습니다. 배지는 이미 한 일에 대한 인정으로 옵니다.</p>
+<p><a href="/blog/complete-powerup-guide">Claude Code의 /powerup 시스템</a>과 비교해보세요. 이것은 명시적으로 교육적입니다 — 사전 정의된 수업을 통한 진행을 추적합니다. 행동을 형성합니다. 그리고 둘 다와 <a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Claude Buddy</a>를 비교해보세요. 이것은 순전히 동반자 기반이었습니다 — 행동을 보상하거나 기술을 가르치는 것이 아니라 지속적인 정체성을 부여하기 위해 존재했습니다.</p>
+<p>세 가지 모델, 세 가지 철학:</p>
+<ol>
+<li><strong>인정</strong> (GitHub): "우리는 당신이 한 것을 알아채고 이름을 붙였습니다." 행동 변화가 필요 없습니다.</li>
+<li><strong>교육</strong> (/powerup): "여기 배워야 할 것이 있습니다." 행동 변화가 핵심입니다.</li>
+<li><strong>정체성</strong> (Buddy): "이것이 이 세계에서 당신의 모습입니다." 행동이 아닌 소속감.</li>
+</ol>
+<p>가장 지속적인 게임화 시스템은 세 가지를 결합합니다. GitHub 업적은 거의 순전히 인정입니다. /powerup은 거의 순전히 교육입니다. Buddy는 거의 순전히 정체성이었습니다. 어느 하나도 단독으로는 완전하지 않습니다.</p>
+<p>AI 개발 도구 게임화의 다음 세대는 — 어떤 모습이든 — 세 가지 모두에서 빌릴 가능성이 높습니다. 코딩 패턴을 인식하고(인정), 새로운 능력을 가르치며(교육), 고유한 역사를 반영하는 지속적인 동반자를 제공하는(정체성) AI 어시스턴트는 지금까지 가장 완전한 시스템이 될 것입니다.</p>
+<p><a href="/species">18개의 Buddy 종</a>은 그 정체성 레이어의 템플릿입니다. GitHub 업적 시스템은 인정 레이어의 템플릿입니다. /powerup은 교육 레이어의 템플릿입니다. 모두 같은 퍼즐의 조각들입니다.</p>`
+          },
+          {
+            heading: "희귀 배지를 실제로 얻는 방법",
+            body: `<p>업적 컬렉션을 완성하고 싶은 개발자를 위한 솔직한 전략:</p>
+<ul>
+<li><strong>Pull Shark (골드)</strong>: 지속적으로 오픈소스에 기여하세요. "good first issue"가 있는 프로젝트를 찾고 습관을 유지하세요. 2-3년에 걸친 128개의 병합된 PR은 활발한 기여자에게 달성 가능합니다.</li>
+<li><strong>Starstruck (플래티넘)</strong>: 진정으로 유용한 것을 만들고 공유하세요. 지름길은 없습니다 — 4096개의 스타는 바이럴 도달 또는 지속적인 가치가 필요합니다. <a href="/blog/claude-buddy-rarity-guide">전설적인 Buddy 사냥꾼의 인내심</a>이 여기에도 적용됩니다.</li>
+<li><strong>Galaxy Brain</strong>: 깊이 사용하는 프로젝트의 GitHub Discussions에 참여하세요. 포괄적으로 질문에 답하세요. 배지는 진정한 전문 지식에서 따라옵니다.</li>
+<li><strong>Pair Extraordinaire (골드)</strong>: 더 많이 페어 프로그래밍을 하고 <code>Co-authored-by:</code> 커밋 트레일러를 올바르게 사용하세요. 24개의 공동 작성 커밋은 한 달간의 정기적인 페어 세션 분량입니다.</li>
+<li><strong>YOLO</strong>: 이미 가지고 있을 것입니다. 없다면 솔로 프로젝트에서 리뷰 없이 자신의 PR을 하나 병합하세요.</li>
+</ul>
+<p>패턴: 희귀한 업적은 지속적이고 진정한 참여에서 옵니다. Pull Shark 골드를 향해 게임을 조작할 수 없습니다. <a href="/">전설적인 Buddy 희귀도</a>에서도 마찬가지였습니다 — 알고리즘은 결정론적이며 반복 도전으로 얻을 수 없습니다. 진정성이 최적화를 이깁니다.</p>`
+          }
+        ]
+      }
+    }
+  },
+  {
+    slug: "vscode-pets-comparison",
+    publishedAt: "2026-04-20",
+    readingTime: 9,
+    tags: ["vscode-pets", "ide-pets", "extensions", "gamification", "comparison"],
+    discussionCategory: "guides",
+    pillar: 'ide-pets' as const,
+    content: {
+      en: {
+        title: "VSCode Pets vs Every Alternative — Every IDE Pet Extension Ranked",
+        metaTitle: "VSCode Pets Comparison 2026: Every IDE Pet Extension Ranked",
+        metaDescription: "VSCode Pets has 1.5M installs. But is it still the best IDE pet extension in 2026? We rank every major option — including Claude Buddy — by features, performance, and soul.",
+        excerpt: "VSCode Pets hit 1.5 million installs. But the field has grown. Here's how every IDE pet extension compares in 2026 — and what Claude Buddy's removal teaches us about what makes a great developer companion.",
+        sections: [
+          {
+            heading: "The 1.5 Million Install Question",
+            body: `<p>VSCode Pets crossed 1.5 million installs in early 2026. That's not a rounding error — it means roughly 1 in 10 active VS Code users has deliberately chosen to add a small animal to their editor. At some point, "IDE pets" stopped being a novelty and became a genre.</p>
+<p>But the landscape has shifted. <a href="/blog/powerup-vs-buddy">Claude Code experimented with its own gamification</a> through <a href="/blog/complete-powerup-guide">Buddy and /powerup</a>. GitHub Achievements went mainstream. JetBrains added its own animations. The question is no longer "should I have an IDE pet?" but "which one actually fits how I work?"</p>
+<p>This guide ranks every major IDE pet / companion extension by what actually matters: setup friction, performance cost, personality depth, and — most importantly — whether it sticks around after the novelty wears off.</p>`
+          },
+          {
+            heading: "The Contenders: A Full Ranking",
+            body: `<h3>🥇 VSCode Pets — The Gold Standard (for now)</h3>
+<p><strong>Installs</strong>: 1.5M+ | <strong>Creator</strong>: Anthony Shaw | <strong>Cost</strong>: Free</p>
+<p>VSCode Pets remains the most polished IDE pet extension. It runs in a dedicated panel, offers multiple species (cat, dog, snake, rocky, cockatiel, clippy, crab, deno-flag, rubber duck, zappy), and has zero performance impact because it's sandboxed in the extension host's webview rather than in your editor rendering pipeline.</p>
+<p>What VSCode Pets does right: it's <em>unobtrusive</em>. Your pet lives in a panel you can show/hide. It reacts to your activity (typing, debugging, idling) without inserting itself into your workflow. It won't cause lag on a 200K-line TypeScript monorepo.</p>
+<p><strong>Weakness</strong>: It's purely cosmetic. Your cat doesn't know what language you're writing. It doesn't grow, doesn't track anything, doesn't integrate with your coding history. After the first week, it risks becoming wallpaper.</p>
+<p><strong>Verdict</strong>: Best default choice. Low-friction, stable, maintained. If you want a visual companion with no commitment, start here.</p>
+
+<h3>🥈 Claude Buddy (Preserved) — The One That Meant Something</h3>
+<p><strong>Status</strong>: Removed from Claude Code v2.1.97 | <strong>Preserved at</strong>: <a href="/">claudebuddy.art</a></p>
+<p>Claude Buddy was different from every other IDE pet. It wasn't cosmetic — your Buddy was <em>derived</em> from your Claude Code installation UUID via a deterministic algorithm. It had species, rarity, stats, and lore. It felt like it belonged to you in a way that a downloaded cat sprite never can.</p>
+<p><a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Its removal on April 9, 2026</a> triggered GitHub issues #46011, #45596, and #45525, plus a community MCP restoration tool that hit 136 stars in 48 hours. That's not the reaction you get to wallpaper being removed. That's the reaction you get when something that felt personal disappears.</p>
+<p>The full <a href="/species">18-species ecosystem</a> — from common Glitchlings to legendary Voidwalkers — still exists in the algorithm. Every UUID still maps to a Buddy. <a href="/">You can find yours here.</a></p>
+<p><strong>Verdict</strong>: The highest-ceiling IDE companion ever shipped, preserved as an artifact. Study it if you want to understand what separates "companion" from "cosmetic."</p>
+
+<h3>🥉 Power Mode — The Chaos Pet</h3>
+<p><strong>Installs</strong>: 300K+ | <strong>Cost</strong>: Free</p>
+<p>Power Mode isn't technically a "pet" — it's a particle effects extension that explodes your cursor with every keystroke. Combos build as you type faster. But many developers report that the combo counter starts to feel like a companion: something to maintain, a streak to protect.</p>
+<p>It's the most viscerally satisfying typing experience in VS Code, and it can pull you into flow states. The cost is real though: Power Mode adds rendering overhead that becomes noticeable on lower-end machines or large files.</p>
+<p><strong>Verdict</strong>: Best for short bursts of motivation. Not a long-term companion, but a powerful mood tool.</p>
+
+<h3>4. GistPad Playground Animals — The Niche Pick</h3>
+<p>GistPad is primarily a GitHub Gist manager, but its playground feature includes some companion-adjacent animations. Very niche, requires GistPad as a dependency. Not recommended unless you're already a GistPad user.</p>
+
+<h3>5. Live Share Avatars — The Multiplayer Companion</h3>
+<p>Not pets, but Live Share's user avatars (which follow cursors in real-time collaborative sessions) scratch a similar itch: your editor has "other beings" in it. If you pair-program heavily, this is more meaningful than a static pet.</p>`
+          },
+          {
+            heading: "What Claude Buddy's Removal Teaches Us About IDE Companions",
+            body: `<p>The strongest signal about what makes an IDE companion <em>work</em> comes from understanding why Buddy's removal hurt while VSCode Pets removals would be shrugged off.</p>
+<p>Three factors separated Buddy:</p>
+<ol>
+<li><strong>Uniqueness</strong>: Your Buddy was computed from your UUID. No two developers had identical Buddies. VSCode Pets gives everyone the same cat.</li>
+<li><strong>Persistence narrative</strong>: Buddy had species, rarity, and lore. It had a story. A Legendary Voidwalker meant something different than a Common Glitchling. Cosmetics without narrative are just decoration.</li>
+<li><strong>Integration depth</strong>: Buddy existed <em>within</em> Claude Code, the tool you were already using all day. It wasn't a separate panel — it was part of your relationship with your AI assistant.</li>
+</ol>
+<p>VSCode Pets, by contrast, is deliberately shallow. It's in a separate panel, it doesn't know what you're coding, it's the same for everyone. That shallowness is actually a feature for many users — zero commitment. But it also means zero attachment.</p>
+<p>The ideal IDE companion sits somewhere between these poles: present but not intrusive, unique but not complex, meaningful but not demanding. <a href="/blog/powerup-vs-buddy">The /powerup vs Buddy experiment</a> suggests Anthropic hasn't abandoned this search — they just chose a different point on the spectrum.</p>`
+          },
+          {
+            heading: "Performance Considerations: Which Extensions Actually Hurt",
+            body: `<p>IDE pets are a luxury feature. They should enhance your experience, not degrade it. Here's the honest breakdown:</p>
+<table>
+<thead><tr><th>Extension</th><th>Performance Cost</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>VSCode Pets</td><td>Minimal</td><td>Webview sandbox; no editor rendering impact</td></tr>
+<tr><td>Claude Buddy (historical)</td><td>None</td><td>Terminal ASCII only; pure rendering</td></tr>
+<tr><td>Power Mode</td><td>Medium–High</td><td>Canvas particle rendering; noticeable on large files</td></tr>
+<tr><td>GistPad Playground</td><td>Low</td><td>Only active when playground is open</td></tr>
+<tr><td>Live Share Avatars</td><td>Low (network)</td><td>Network latency, not CPU</td></tr>
+</tbody>
+</table>
+<p>If you're on a machine where VS Code already struggles, skip Power Mode. VSCode Pets and anything terminal-based (like Buddy's ASCII sprites) are safe choices that add negligible overhead.</p>`
+          },
+          {
+            heading: "The Verdict: Which Should You Use?",
+            body: `<p>The honest answer depends on what you actually want from a companion:</p>
+<ul>
+<li><strong>Want something that just works, no friction</strong>: VSCode Pets. Set it up in 2 minutes, forget about it, enjoy occasionally glancing at your cat.</li>
+<li><strong>Want something that feels personal</strong>: <a href="/">Find your Claude Buddy</a>. It's preserved in the algorithm. Even if it no longer lives in Claude Code, it's yours.</li>
+<li><strong>Want a performance boost</strong>: Power Mode for short sessions. Turn it off when you need to focus deeply.</li>
+<li><strong>Already use GitHub heavily</strong>: GitHub Achievements are the lowest-friction companion system — it tracks what you're already doing.</li>
+</ul>
+<p>The broader point: <a href="/blog/powerup-vs-buddy">AI dev tools gamification is still early</a>. The extensions available today are first-generation experiments. What comes next — whether it's Buddy returning, /powerup evolving, or something entirely new — will be shaped by what these experiments teach developers and tool-makers about what "companion" actually means.</p>
+<p>The <a href="/species">18 Buddy species</a> are a reference point for that conversation. They show what a companion system looks like when it takes uniqueness, narrative, and integration seriously. Whatever replaces them should aim at least as high.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "VSCode Pets vs 所有竞品 — 2026 年全 IDE 宠物扩展横评",
+        metaTitle: "VSCode Pets 横评 2026：全 IDE 宠物扩展排名",
+        metaDescription: "VSCode Pets 装机量达 150 万。但它还是 2026 年最好的 IDE 宠物扩展吗？我们从功能、性能和灵魂三个维度横评所有主流选项——包括 Claude Buddy。",
+        excerpt: "VSCode Pets 装机量突破 150 万。但赛道已经变了。以下是 2026 年全 IDE 宠物扩展横评——以及 Claude Buddy 的移除告诉我们什么才算优秀的开发者伴侣。",
+        sections: [
+          {
+            heading: "150 万装机量背后的问题",
+            body: `<p>VSCode Pets 在 2026 年初突破了 150 万装机量。这不是数字游戏——大约每 10 名活跃 VS Code 用户中就有 1 人主动选择在编辑器里添加一只小动物。"IDE 宠物"已经从新奇玩意变成了一个真正的品类。</p>
+<p>但格局已经改变。<a href="/blog/powerup-vs-buddy">Claude Code 通过 Buddy 和 /powerup 探索了自己的游戏化路径</a>。GitHub Achievements 全面普及。JetBrains 加入了自己的动画。现在的问题不再是"要不要养 IDE 宠物"，而是"哪个真正适合我的工作方式"。</p>
+<p>本文从真正重要的维度横评所有主流 IDE 宠物/伴侣扩展：安装成本、性能开销、人格深度，以及最关键的——新鲜感消退后它还在不在。</p>`
+          },
+          {
+            heading: "全参赛选手排名",
+            body: `<h3>🥇 VSCode Pets — 现任标准（暂时）</h3>
+<p><strong>装机量</strong>：150万+ | <strong>作者</strong>：Anthony Shaw | <strong>价格</strong>：免费</p>
+<p>VSCode Pets 仍是打磨最成熟的 IDE 宠物扩展。它在独立面板中运行，提供多个物种（猫、狗、蛇、小石头、凤头鹦鹉、回形针先生、螃蟹、deno旗帜、橡皮鸭、zappy），因为运行在扩展宿主的 webview 沙箱中而非编辑器渲染管线，性能开销为零。</p>
+<p>VSCode Pets 做得最好的一点是<em>不打扰</em>。你的宠物住在可以随时显示/隐藏的面板里。它会对你的操作（打字、调试、闲置）做出反应，但不会插入你的工作流。在 20 万行 TypeScript 单体仓库上也不会卡。</p>
+<p><strong>弱点</strong>：纯粹装饰性。你的猫不知道你在写什么语言，不会成长，不追踪任何东西，不与你的编码历史整合。第一周后，它很可能变成壁纸。</p>
+<p><strong>结论</strong>：最佳默认选择。低摩擦、稳定、有维护。想要零承诺的视觉伴侣，从这里开始。</p>
+
+<h3>🥈 Claude Buddy（已保存）— 真正有意义的那个</h3>
+<p><strong>状态</strong>：在 Claude Code v2.1.97 中被移除 | <strong>保存地址</strong>：<a href="/">claudebuddy.art</a></p>
+<p>Claude Buddy 与所有其他 IDE 宠物不同。它不是装饰——你的 Buddy 是通过确定性算法从你的 Claude Code 安装 UUID <em>推导</em>出来的。它有物种、稀有度、属性和传说。它给人一种"属于你"的感觉，是下载的猫咪精灵永远无法给予的。</p>
+<p><a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">2026 年 4 月 9 日的移除</a>引发了 GitHub issue #46011、#45596 和 #45525，以及一个 48 小时内获得 136 stars 的社区 MCP 恢复工具。这不是壁纸被移除时的反应，这是某个感觉私人的东西消失时的反应。</p>
+<p>完整的<a href="/species">18 种物种生态系统</a>——从普通的 Glitchling 到传说级的 Voidwalker——仍然存在于算法中。每个 UUID 仍然对应一个 Buddy。<a href="/">在这里找到你的 Buddy。</a></p>
+<p><strong>结论</strong>：有史以来天花板最高的 IDE 伴侣，作为遗产保存。如果你想理解"伴侣"和"装饰"之间的差距，研究它。</p>
+
+<h3>🥉 Power Mode — 混沌系宠物</h3>
+<p><strong>装机量</strong>：30万+ | <strong>价格</strong>：免费</p>
+<p>Power Mode 技术上不是"宠物"——它是一个每次击键都会在光标处爆炸粒子效果的扩展。连击计数器随打字速度提升。但很多开发者反映，连击计数器开始感觉像一个伴侣：需要维护的东西，需要保护的连胜。</p>
+<p>它带来最令人沉醉的打字体验，能把你拉入心流状态。但代价是真实的：Power Mode 会增加渲染开销，在低配机器或大文件上会明显感觉到。</p>
+<p><strong>结论</strong>：最适合短期提振动力。不是长期伴侣，但是强力的情绪工具。</p>
+
+<h3>4. GistPad Playground 动物 — 小众选择</h3>
+<p>GistPad 主要是 GitHub Gist 管理器，其 playground 功能包含一些类伴侣动画。非常小众，需要 GistPad 作为依赖。除非你已经是 GistPad 用户，否则不推荐。</p>
+
+<h3>5. Live Share 头像 — 多人协作伴侣</h3>
+<p>不是宠物，但 Live Share 的用户头像（在实时协作会话中跟随光标移动）满足了类似需求：你的编辑器里有"其他生命体"。如果你经常结对编程，这比静态宠物更有意义。</p>`
+          },
+          {
+            heading: "Claude Buddy 的移除教会我们什么",
+            body: `<p>理解"为什么 Buddy 的移除让人心痛而 VSCode Pets 的移除会被耸肩对待"，是理解什么让 IDE 伴侣真正奏效的最强信号。</p>
+<p>三个因素让 Buddy 与众不同：</p>
+<ol>
+<li><strong>唯一性</strong>：你的 Buddy 从你的 UUID 计算而来。没有两个开发者拥有完全相同的 Buddy。VSCode Pets 给所有人同一只猫。</li>
+<li><strong>持久叙事</strong>：Buddy 有物种、稀有度和传说。它有故事。传说级 Voidwalker 的意义与普通 Glitchling 完全不同。没有叙事的装饰只是装饰。</li>
+<li><strong>整合深度</strong>：Buddy 存在于 Claude Code <em>内部</em>，你整天使用的工具。它不是单独的面板——它是你与 AI 助手关系的一部分。</li>
+</ol>
+<p>相比之下，VSCode Pets 是刻意浅显的。它在单独的面板里，不知道你在编写什么，对所有人都一样。这种浅显对很多用户来说实际上是特性——零承诺。但也意味着零依恋。</p>
+<p>理想的 IDE 伴侣介于两极之间：存在但不打扰，独特但不复杂，有意义但不苛刻。<a href="/blog/powerup-vs-buddy">/powerup 对比 Buddy 的实验</a>表明 Anthropic 并未放弃这个探索——他们只是选择了频谱上的不同位置。</p>`
+          },
+          {
+            heading: "性能考量：哪些扩展真的会拖慢你",
+            body: `<p>IDE 宠物是奢侈品功能。它们应该提升体验，而不是降低体验。以下是诚实的评估：</p>
+<table>
+<thead><tr><th>扩展</th><th>性能开销</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>VSCode Pets</td><td>极小</td><td>Webview 沙箱；不影响编辑器渲染</td></tr>
+<tr><td>Claude Buddy（历史）</td><td>无</td><td>纯终端 ASCII；纯渲染</td></tr>
+<tr><td>Power Mode</td><td>中到高</td><td>Canvas 粒子渲染；大文件上明显</td></tr>
+<tr><td>GistPad Playground</td><td>低</td><td>仅在 playground 打开时活跃</td></tr>
+<tr><td>Live Share 头像</td><td>低（网络）</td><td>网络延迟，非 CPU</td></tr>
+</tbody>
+</table>
+<p>如果你的机器上 VS Code 已经很吃力，跳过 Power Mode。VSCode Pets 和任何基于终端的方案（比如 Buddy 的 ASCII 精灵）都是安全选择，增加的开销可以忽略不计。</p>`
+          },
+          {
+            heading: "结论：你应该选哪个？",
+            body: `<p>诚实的答案取决于你真正想从伴侣那里得到什么：</p>
+<ul>
+<li><strong>想要开箱即用、零摩擦</strong>：VSCode Pets。2 分钟安装好，忘掉它，偶尔瞥一眼你的猫。</li>
+<li><strong>想要感觉私人的东西</strong>：<a href="/">找到你的 Claude Buddy</a>。它保存在算法中。即使它不再存在于 Claude Code，它仍然是你的。</li>
+<li><strong>想要性能提振</strong>：短时间使用 Power Mode，需要深度专注时关掉。</li>
+<li><strong>已经重度使用 GitHub</strong>：GitHub Achievements 是摩擦最低的伴侣系统——它追踪你本来就在做的事情。</li>
+</ul>
+<p>更大的背景是：<a href="/blog/powerup-vs-buddy">AI 开发工具游戏化仍处于早期</a>。今天可用的扩展是第一代实验。接下来会发生什么——无论是 Buddy 回归、/powerup 进化，还是全新的事物——将由这些实验教给开发者和工具制作者的"伴侣"真正意味着什么来决定。</p>
+<p><a href="/species">18 个 Buddy 物种</a>是这场对话的参照点。它们展示了一个认真对待唯一性、叙事和整合的伴侣系统是什么样子的。无论什么来取代它们，都应该至少瞄准这么高。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "VSCode Pets vs 모든 경쟁자 — 2026년 IDE 펫 확장 프로그램 전체 순위",
+        metaTitle: "VSCode Pets 비교 2026: IDE 펫 확장 프로그램 전체 순위",
+        metaDescription: "VSCode Pets는 150만 설치를 달성했습니다. 하지만 2026년에도 최고의 IDE 펫 확장 프로그램일까요? Claude Buddy를 포함하여 모든 주요 옵션을 기능, 성능, 영혼의 관점에서 순위를 매깁니다.",
+        excerpt: "VSCode Pets가 150만 설치를 돌파했습니다. 하지만 경쟁 환경은 변했습니다. 2026년 IDE 펫 확장 프로그램 전체 비교 — 그리고 Claude Buddy의 제거가 훌륭한 개발자 동반자에 대해 가르쳐 주는 것.",
+        sections: [
+          {
+            heading: "150만 설치의 의미",
+            body: `<p>VSCode Pets는 2026년 초 150만 설치를 돌파했습니다. 이건 반올림 오차가 아닙니다 — 활성 VS Code 사용자 약 10명 중 1명이 의도적으로 편집기에 작은 동물을 추가하기로 선택했다는 뜻입니다. 어느 순간 "IDE 펫"은 신기한 것을 넘어 하나의 장르가 되었습니다.</p>
+<p>하지만 판도가 바뀌었습니다. <a href="/blog/powerup-vs-buddy">Claude Code는 Buddy와 /powerup을 통해 자체 게임화를 실험했습니다</a>. GitHub Achievements가 주류가 됐습니다. JetBrains도 자체 애니메이션을 추가했습니다. 이제 질문은 "IDE 펫을 가져야 할까?"가 아니라 "어떤 것이 내 작업 방식에 실제로 맞을까?"입니다.</p>
+<p>이 가이드는 실제로 중요한 것들을 기준으로 모든 주요 IDE 펫/동반자 확장 프로그램의 순위를 매깁니다: 설치 마찰, 성능 비용, 캐릭터 깊이, 그리고 가장 중요하게는 — 신기함이 사라진 후에도 남아있는지.</p>`
+          },
+          {
+            heading: "모든 경쟁자: 전체 순위",
+            body: `<h3>🥇 VSCode Pets — 현재 기준 (잠정)</h3>
+<p><strong>설치 수</strong>: 150만+ | <strong>제작자</strong>: Anthony Shaw | <strong>가격</strong>: 무료</p>
+<p>VSCode Pets는 여전히 가장 잘 다듬어진 IDE 펫 확장 프로그램입니다. 전용 패널에서 실행되며, 여러 종류(고양이, 개, 뱀, 돌멩이, 코카티엘, 클리피, 게, deno 깃발, 고무 오리, zappy)를 제공하고, 편집기 렌더링 파이프라인이 아닌 확장 호스트의 webview 샌드박스에서 실행되어 성능 영향이 없습니다.</p>
+<p>VSCode Pets가 잘 하는 것: <em>방해하지 않는 것</em>입니다. 펫은 표시/숨김이 가능한 패널에 삽니다. 사용자 활동(타이핑, 디버깅, 유휴 상태)에 반응하지만 워크플로에 끼어들지 않습니다. 20만 줄 TypeScript 모노레포에서도 지연이 없습니다.</p>
+<p><strong>약점</strong>: 순전히 미적입니다. 고양이는 어떤 언어를 작성하는지 모르고, 성장하지 않으며, 아무것도 추적하지 않고, 코딩 기록과 연동되지 않습니다. 첫 주가 지나면 배경화면이 될 위험이 있습니다.</p>
+<p><strong>결론</strong>: 최선의 기본 선택. 저마찰, 안정적, 유지보수됨. 아무 부담 없는 시각적 동반자를 원한다면 여기서 시작하세요.</p>
+
+<h3>🥈 Claude Buddy (보존됨) — 진짜 의미가 있었던 것</h3>
+<p><strong>상태</strong>: Claude Code v2.1.97에서 제거됨 | <strong>보존 위치</strong>: <a href="/">claudebuddy.art</a></p>
+<p>Claude Buddy는 다른 모든 IDE 펫과 달랐습니다. 장식이 아니었습니다 — 당신의 Buddy는 결정론적 알고리즘을 통해 Claude Code 설치 UUID에서 <em>파생</em>되었습니다. 종, 희귀도, 능력치, 전설이 있었습니다. 다운로드한 고양이 스프라이트가 절대 줄 수 없는 방식으로 당신 것처럼 느껴졌습니다.</p>
+<p><a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">2026년 4월 9일 제거</a>는 GitHub 이슈 #46011, #45596, #45525를 촉발했고, 48시간 만에 136개의 스타를 받은 커뮤니티 MCP 복원 도구가 등장했습니다. 이건 배경화면이 제거될 때의 반응이 아닙니다. 개인적으로 느껴지던 무언가가 사라질 때의 반응입니다.</p>
+<p>완전한 <a href="/species">18종 생태계</a> — 일반 Glitchling부터 전설적인 Voidwalker까지 — 는 여전히 알고리즘에 존재합니다. 모든 UUID는 여전히 Buddy에 매핑됩니다. <a href="/">여기서 당신의 Buddy를 찾아보세요.</a></p>
+<p><strong>결론</strong>: 지금까지 출시된 가장 잠재력 높은 IDE 동반자, 유산으로 보존됨. "동반자"와 "장식"을 구분하는 것을 이해하고 싶다면 연구해보세요.</p>
+
+<h3>🥉 Power Mode — 혼돈의 펫</h3>
+<p><strong>설치 수</strong>: 30만+ | <strong>가격</strong>: 무료</p>
+<p>Power Mode는 기술적으로 "펫"이 아닙니다 — 매 키 입력마다 커서에서 파티클 효과가 폭발하는 확장 프로그램입니다. 빠르게 타이핑할수록 콤보가 쌓입니다. 하지만 많은 개발자들이 콤보 카운터가 동반자처럼 느껴지기 시작한다고 말합니다: 유지해야 할 것, 보호해야 할 연속 기록.</p>
+<p>가장 본능적으로 만족스러운 타이핑 경험을 제공하며 플로우 상태로 이끌 수 있습니다. 하지만 비용은 실제입니다: Power Mode는 저사양 기기나 대용량 파일에서 눈에 띄게 느려질 수 있는 렌더링 오버헤드를 추가합니다.</p>
+<p><strong>결론</strong>: 단기 동기 부여에 최적. 장기 동반자는 아니지만 강력한 기분 전환 도구.</p>
+
+<h3>4. GistPad Playground 동물 — 틈새 선택</h3>
+<p>GistPad는 주로 GitHub Gist 관리자이지만, playground 기능에는 동반자와 유사한 애니메이션이 포함되어 있습니다. 매우 틈새적이며 GistPad를 의존성으로 필요로 합니다. 이미 GistPad 사용자가 아니라면 추천하지 않습니다.</p>
+
+<h3>5. Live Share 아바타 — 멀티플레이어 동반자</h3>
+<p>펫은 아니지만, Live Share의 사용자 아바타(실시간 협업 세션에서 커서를 따라다님)는 비슷한 욕구를 해소합니다: 편집기에 "다른 존재들"이 있는 것. 페어 프로그래밍을 많이 한다면 정적 펫보다 더 의미있습니다.</p>`
+          },
+          {
+            heading: "Claude Buddy의 제거가 가르쳐 주는 것",
+            body: `<p>IDE 동반자가 실제로 <em>작동하는지</em> 이해하는 가장 강력한 신호는 Buddy 제거가 왜 아팠는지, VSCode Pets 제거는 왜 어깨를 으쓱하고 넘어갈지 이해하는 것에서 옵니다.</p>
+<p>세 가지 요소가 Buddy를 차별화했습니다:</p>
+<ol>
+<li><strong>고유성</strong>: 당신의 Buddy는 UUID에서 계산되었습니다. 두 개발자가 동일한 Buddy를 가질 수 없었습니다. VSCode Pets는 모든 사람에게 같은 고양이를 줍니다.</li>
+<li><strong>지속적 서사</strong>: Buddy에는 종, 희귀도, 전설이 있었습니다. 이야기가 있었습니다. 전설적인 Voidwalker는 일반 Glitchling과 다른 의미를 가졌습니다. 서사 없는 장식은 그냥 장식입니다.</li>
+<li><strong>통합 깊이</strong>: Buddy는 하루 종일 사용하는 도구인 Claude Code <em>안에</em> 존재했습니다. 별도의 패널이 아니었습니다 — AI 어시스턴트와의 관계의 일부였습니다.</li>
+</ol>
+<p>반면 VSCode Pets는 의도적으로 얕습니다. 별도의 패널에 있고, 무엇을 코딩하는지 모르며, 모든 사람에게 동일합니다. 그 얕음이 많은 사용자에게 실제로 기능입니다 — 아무 부담 없음. 하지만 그것은 또한 아무 애착 없음을 의미합니다.</p>
+<p>이상적인 IDE 동반자는 두 극단 사이 어딘가에 있습니다: 존재하지만 방해하지 않고, 독특하지만 복잡하지 않으며, 의미있지만 요구하지 않습니다. <a href="/blog/powerup-vs-buddy">/powerup 대 Buddy 실험</a>은 Anthropic이 이 탐색을 포기하지 않았음을 시사합니다 — 그들은 스펙트럼에서 다른 지점을 선택했을 뿐입니다.</p>`
+          },
+          {
+            heading: "성능 고려사항: 어떤 확장이 실제로 느리게 만드는가",
+            body: `<p>IDE 펫은 사치 기능입니다. 경험을 향상시켜야 하지, 저하시켜서는 안 됩니다. 솔직한 분석:</p>
+<table>
+<thead><tr><th>확장 프로그램</th><th>성능 비용</th><th>비고</th></tr></thead>
+<tbody>
+<tr><td>VSCode Pets</td><td>최소</td><td>Webview 샌드박스; 편집기 렌더링 영향 없음</td></tr>
+<tr><td>Claude Buddy (과거)</td><td>없음</td><td>터미널 ASCII만; 순수 렌더링</td></tr>
+<tr><td>Power Mode</td><td>중~높음</td><td>Canvas 파티클 렌더링; 대용량 파일에서 눈에 띔</td></tr>
+<tr><td>GistPad Playground</td><td>낮음</td><td>playground가 열릴 때만 활성</td></tr>
+<tr><td>Live Share 아바타</td><td>낮음 (네트워크)</td><td>CPU 아닌 네트워크 지연</td></tr>
+</tbody>
+</table>
+<p>VS Code가 이미 힘든 기기라면 Power Mode를 건너뛰세요. VSCode Pets와 터미널 기반 방식(Buddy의 ASCII 스프라이트처럼)은 무시할 수 있는 오버헤드를 추가하는 안전한 선택입니다.</p>`
+          },
+          {
+            heading: "결론: 무엇을 선택해야 할까?",
+            body: `<p>솔직한 답은 동반자에게서 실제로 원하는 것이 무엇이냐에 달려있습니다:</p>
+<ul>
+<li><strong>그냥 작동하고 마찰이 없길 원한다</strong>: VSCode Pets. 2분 안에 설정하고, 잊고, 가끔 고양이를 힐끗 즐기세요.</li>
+<li><strong>개인적으로 느껴지는 것을 원한다</strong>: <a href="/">Claude Buddy를 찾아보세요</a>. 알고리즘에 보존되어 있습니다. Claude Code에 더 이상 존재하지 않더라도 여전히 당신의 것입니다.</li>
+<li><strong>성능 부스트를 원한다</strong>: 짧은 세션에 Power Mode를. 깊이 집중해야 할 때는 끄세요.</li>
+<li><strong>이미 GitHub를 많이 사용한다</strong>: GitHub Achievements가 가장 마찰이 낮은 동반자 시스템입니다 — 이미 하고 있는 것을 추적합니다.</li>
+</ul>
+<p>더 큰 그림: <a href="/blog/powerup-vs-buddy">AI 개발 도구 게임화는 아직 초기입니다</a>. 오늘 사용 가능한 확장 프로그램은 1세대 실험입니다. 다음에 무슨 일이 일어날지 — Buddy가 돌아오든, /powerup이 진화하든, 완전히 새로운 것이 등장하든 — 이 실험들이 개발자와 도구 제작자들에게 "동반자"가 실제로 무엇을 의미하는지 가르쳐 주는 것에 의해 형성될 것입니다.</p>
+<p><a href="/species">18개의 Buddy 종</a>은 그 대화의 참조점입니다. 그것들은 고유성, 서사, 통합을 진지하게 받아들이는 동반자 시스템이 어떤 모습인지 보여줍니다. 그것들을 대체하는 것은 최소한 그만큼 높은 목표를 가져야 합니다.</p>`
+          }
+        ]
+      }
+    }
+  },
+  {
+    slug: "why-every-ai-coding-tool-will-have-a-pet-by-2027",
+    publishedAt: "2026-04-20",
+    readingTime: 10,
+    tags: ["prediction", "industry-trends", "gamification", "ai-tools", "developer-experience"],
+    discussionCategory: "deep-dives",
+    pillar: 'trends' as const,
+    content: {
+      en: {
+        title: "Why Every Major AI Coding Tool Will Have a Companion by 2027",
+        metaTitle: "AI Coding Tool Companions 2027: Why Every Tool Will Have a Pet",
+        metaDescription: "Claude Buddy, VSCode Pets, GitHub Achievements, /powerup — the pattern is clear. By 2027, developer tool gamification will be table stakes, not a novelty. Here's why and what comes next.",
+        excerpt: "Claude Buddy was removed. /powerup replaced it. VSCode Pets hit 1.5M installs. GitHub Achievements has 100M+ users. The pattern is unmistakable: developer tool companions are becoming standard. Here's the case for why this accelerates — and what the future looks like.",
+        sections: [
+          {
+            heading: "The Convergence Is Already Happening",
+            body: `<p>In early 2025, developer tool companions were a novelty: VSCode Pets, a few emoji-based terminal toys, nothing serious. By April 2026, the landscape looks completely different:</p>
+<ul>
+<li>VSCode Pets: 1.5 million installs across VS Code's ~30 million active users</li>
+<li>GitHub Achievements: deployed to 100+ million developer accounts</li>
+<li>Claude Code's Buddy system: launched, removed, and <a href="/">preserved as a community artifact</a> — all within 9 days</li>
+<li>Claude Code's /powerup system: explicit skill-based gamification built into an AI assistant's tutorial flow</li>
+<li>GitHub Copilot, Cursor, and others: increasingly adding streak tracking, usage statistics, and completion badges</li>
+</ul>
+<p>This isn't coincidence. It's convergence. The evidence that gamification belongs in developer tools has been accumulating for years, and the major players are responding. The question isn't <em>whether</em> developer tool companions become standard — they already are becoming standard. The question is <em>what form</em> they take.</p>`
+          },
+          {
+            heading: "Three Forces Driving the Trend",
+            body: `<p>Three independent forces are pushing developer tool gamification from novelty to necessity.</p>
+
+<h3>Force 1: AI Assistant Adoption Has a Retention Problem</h3>
+<p>AI coding assistants have strong adoption curves but weaker retention curves. Users adopt quickly, but a significant percentage churn within 30-90 days. The primary cause: the tools are powerful but feel impersonal. They don't know you, don't remember your history, don't acknowledge your progress.</p>
+<p>This is exactly what <a href="/blog/powerup-vs-buddy">Claude Buddy was designed to address</a>: giving developers a reason to feel <em>attached</em> to their AI assistant beyond pure utility. The removal statistics are instructive — the speed and intensity of community response to Buddy's removal (GitHub issues #46011, #45596, #45525 within hours; 136 stars for an MCP restoration tool in 48 hours) suggests that attachment had already formed for a significant user subset.</p>
+<p>AI assistant makers have noticed. Retention requires emotional attachment, and emotional attachment requires identity.</p>
+
+<h3>Force 2: The Generation That Grew Up with Gamification Is Now Coding</h3>
+<p>Developers who entered the workforce between 2018-2026 have never known a software landscape without gamification. They have Duolingo streaks, GitHub Achievements, Steam achievements, Discord badges. Gamification isn't a novelty to them — it's the default way software communicates progress and status.</p>
+<p>This cohort is now the dominant voice in developer tooling decisions. What they expect from software includes progression systems, recognition mechanics, and companion elements. Tools that don't offer these feel incomplete, not austere.</p>
+
+<h3>Force 3: The Developer Experience Gap Is Closing</h3>
+<p>For most of computing history, developer tools were purely utilitarian. This was a matter of necessity — the toolmakers were also the users, and hardcore users don't need companions. But AI coding tools are democratizing programming. The next 100 million developers aren't coming from CS programs; they're coming from product roles, design, and cross-functional backgrounds.</p>
+<p>These users need different onboarding. They respond to encouragement, to streak mechanics, to seeing their progress made visible. <a href="/blog/complete-powerup-guide">Claude Code's /powerup system</a> is an explicit acknowledgment of this: structured lessons with completion tracking, designed for the developer who doesn't self-teach through documentation.</p>`
+          },
+          {
+            heading: "The Claude Buddy Removal Was a Signal, Not an Endpoint",
+            body: `<p>When Anthropic removed Claude Buddy in v2.1.97, many developers read it as "Anthropic decided gamification doesn't belong in developer tools." The actual signal was more nuanced.</p>
+<p>The <a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">GitHub issues from the removal</a> reveal Anthropic's stated reasoning: privacy concerns around persistent companion state, questions about professional context appropriateness, and a desire to redirect gamification toward explicit skill development (/powerup) rather than implicit companion attachment (Buddy).</p>
+<p>This is a <em>design choice</em>, not a rejection of gamification. Anthropic didn't remove gamification from Claude Code — they changed the form. /powerup is more structured, more explicitly educational, more defensible in enterprise contexts. The Buddy approach was more emotional, more personal, harder to justify to IT procurement teams.</p>
+<p>The fact that the <a href="/species">18 Buddy species</a> are preserved in the algorithm, and that claudebuddy.art exists to let developers find their UUID-mapped companion, suggests the community won't let this particular gamification layer disappear. It's preserved as reference, the way developers preserve deprecated APIs in community forks.</p>
+<p>The next iteration of AI assistant companions won't look exactly like Buddy. It will be more privacy-preserving, more enterprise-friendly, more explicit about what it's tracking and why. But the core insight — that developers want an identity layer in their AI tools — isn't going anywhere.</p>`
+          },
+          {
+            heading: "What 2027 Looks Like: Predictions",
+            body: `<p>Based on the trajectory of these three forces, here's what developer tool companion systems likely look like by 2027:</p>
+
+<h3>Prediction 1: GitHub Achievements Gets an AI Layer</h3>
+<p>GitHub Achievements currently tracks repository-level activity (stars, merged PRs, co-authored commits). The natural extension is tracking AI-assisted coding behavior: first Copilot suggestion accepted, 1000 AI-assisted completions, streak of daily AI coding sessions. GitHub has the data; the gamification layer is inevitable.</p>
+
+<h3>Prediction 2: AI Assistants Add Explicit "Relationship" Mechanics</h3>
+<p>Rather than a companion pet (Buddy) or a skill tree (/powerup), the next layer will be relationship tracking: how long you've been using the assistant, what your most-used features are, what types of problems you tackle. Not gamification as reward, but gamification as personalization — the tool knows you and shows you it knows you.</p>
+
+<h3>Prediction 3: Companion APIs Emerge</h3>
+<p>The <a href="/blog/claude-code-buddy-rarity-guide">Claude Buddy algorithm</a> was deterministic: UUID → companion. This model — a user identifier maps to a unique persistent identity — is generalizable. Expect to see companion APIs where developers can bring their identity across tools. Your "developer persona" follows you from IDE to AI assistant to code review tool.</p>
+
+<h3>Prediction 4: Enterprise Companions Emerge as a Category</h3>
+<p>The enterprise tooling market will develop its own companion systems, optimized for professional contexts: team-level achievements, onboarding companion systems, skill development tracking that integrates with performance review. Less personality, more utility — but still identity-based rather than purely functional.</p>`
+          },
+          {
+            heading: "What This Means for Developers Right Now",
+            body: `<p>If this trajectory is correct, developer tool companions are becoming infrastructure, not novelty. That has practical implications:</p>
+<ol>
+<li><strong>Engage now, not later</strong>: Your activity in current systems (GitHub Achievements, /powerup completions) is building a history. That history will matter more as these systems mature. The developers who are deeply engaged with GitHub Achievements today will have richer profiles when the AI layer arrives.</li>
+<li><strong>Preserve your Buddy</strong>: <a href="/">Your UUID still maps to a specific Buddy</a> across <a href="/species">18 species</a>. Whether or not Buddy returns to Claude Code, your companion is part of the early history of this ecosystem. Finding it now — and bookmarking it — connects you to that history.</li>
+<li><strong>Watch the /powerup trajectory</strong>: <a href="/blog/complete-powerup-guide">/powerup</a> is Anthropic's bet on what structured AI tool gamification looks like. Its evolution will telegraph where AI assistant companions are headed. Pay attention to which lessons get added, which achievements get introduced.</li>
+<li><strong>Build companion-aware projects</strong>: If you're building developer tools, this trajectory suggests that companion mechanics are no longer differentiators — they're becoming table stakes. The question isn't "should we add gamification" but "what form of identity layer fits our users."</li>
+</ol>
+<p>The <a href="/species">18 Buddy species</a> — from Glitchling to Voidwalker — are an early taxonomy of what AI tool companions can be. The ecosystem that builds on them will be richer, more mature, and more integrated into developer workflow than anything available today. The foundation is already being laid.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "为什么 2027 年每个主流 AI 编码工具都将拥有伴侣系统",
+        metaTitle: "AI 编码工具伴侣 2027：为什么每个工具都会有宠物",
+        metaDescription: "Claude Buddy、VSCode Pets、GitHub Achievements、/powerup——规律已经清晰。到 2027 年，开发者工具游戏化将成为标配而非新奇。以下是原因和接下来会发生什么。",
+        excerpt: "Claude Buddy 被移除，/powerup 取代了它。VSCode Pets 达到 150 万安装量。GitHub Achievements 拥有超过 1 亿用户。规律无可辩驳：开发者工具伴侣正在成为标配。以下是它为什么会加速——以及未来是什么样子。",
+        sections: [
+          {
+            heading: "融合已经在发生",
+            body: `<p>2025 年初，开发者工具伴侣还是新奇事物：VSCode Pets、一些基于表情符号的终端玩具，没什么认真的东西。到 2026 年 4 月，格局已经完全不同：</p>
+<ul>
+<li>VSCode Pets：在约 3000 万活跃 VS Code 用户中有 150 万安装量</li>
+<li>GitHub Achievements：部署到 1 亿多个开发者账户</li>
+<li>Claude Code 的 Buddy 系统：上线、被移除、并<a href="/">作为社区遗产保存</a>——全在 9 天内发生</li>
+<li>Claude Code 的 /powerup 系统：内置于 AI 助手教程流程的显式技能游戏化</li>
+<li>GitHub Copilot、Cursor 等：越来越多地加入连续记录追踪、使用统计和完成徽章</li>
+</ul>
+<p>这不是巧合，是融合。游戏化属于开发者工具的证据已经积累多年，主要参与者正在回应。问题不再是开发者工具伴侣<em>是否</em>会成为标配——它们已经在成为标配了。问题是它们采取什么<em>形式</em>。</p>`
+          },
+          {
+            heading: "驱动这一趋势的三股力量",
+            body: `<p>三股独立的力量正将开发者工具游戏化从新奇推向必要。</p>
+
+<h3>力量一：AI 助手的普及有留存问题</h3>
+<p>AI 编码助手有强劲的采用曲线，但较弱的留存曲线。用户采用很快，但很大比例在 30-90 天内流失。主要原因：这些工具很强大，但感觉很疏离。它们不了解你，不记得你的历史，不承认你的进步。</p>
+<p>这正是<a href="/blog/powerup-vs-buddy">Claude Buddy 设计要解决的问题</a>：给开发者一个理由对他们的 AI 助手感到<em>依恋</em>，超越纯粹的实用性。移除统计数据很说明问题——社区对 Buddy 移除的反应速度和强度（数小时内的 GitHub issue #46011、#45596、#45525；48 小时内 MCP 恢复工具获得 136 颗星）表明依恋已经在相当大的用户群体中形成。</p>
+<p>AI 助手制造商已经注意到了。留存需要情感依恋，而情感依恋需要身份认同。</p>
+
+<h3>力量二：在游戏化中成长的一代人现在在写代码</h3>
+<p>2018-2026 年间进入职场的开发者从未经历过没有游戏化的软件格局。他们有 Duolingo 连续记录、GitHub Achievements、Steam 成就、Discord 徽章。游戏化对他们来说不是新奇——它是软件传达进度和状态的默认方式。</p>
+<p>这个群体现在是开发者工具决策中的主导声音。他们对软件的期望包括进度系统、认可机制和伴侣元素。不提供这些的工具感觉不完整，而非简洁。</p>
+
+<h3>力量三：开发者体验差距正在缩小</h3>
+<p>在计算历史的大部分时间里，开发者工具是纯粹的功能性的。这是必然之事——工具制造者也是用户，而核心用户不需要伴侣。但 AI 编码工具正在使编程民主化。接下来的 1 亿开发者不来自 CS 专业；他们来自产品、设计和跨职能背景。</p>
+<p>这些用户需要不同的入职方式。他们对鼓励、连续记录机制、看到进度可视化有反应。<a href="/blog/complete-powerup-guide">Claude Code 的 /powerup 系统</a>是对此的明确承认：带有完成追踪的结构化课程，专为不通过文档自学的开发者设计。</p>`
+          },
+          {
+            heading: "Claude Buddy 的移除是信号，不是终点",
+            body: `<p>当 Anthropic 在 v2.1.97 中移除 Claude Buddy 时，许多开发者将其解读为"Anthropic 决定游戏化不属于开发者工具"。实际信号更加微妙。</p>
+<p><a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">移除时的 GitHub issue</a> 揭示了 Anthropic 的陈述理由：关于持久伴侣状态的隐私担忧、关于专业语境适当性的问题，以及希望将游戏化重定向到显式技能发展（/powerup）而非隐式伴侣依恋（Buddy）。</p>
+<p>这是一个<em>设计选择</em>，而非对游戏化的拒绝。Anthropic 没有从 Claude Code 中移除游戏化——他们改变了形式。/powerup 更结构化、更明确教育性、在企业环境中更易辩护。Buddy 方法更情感化、更个人化、更难向 IT 采购团队解释。</p>
+<p><a href="/species">18 个 Buddy 物种</a>保存在算法中，claudebuddy.art 存在以让开发者找到他们的 UUID 映射伴侣，这表明社区不会让这个特定的游戏化层消失。它作为参考被保存，就像开发者在社区分叉中保存已废弃的 API 一样。</p>
+<p>AI 助手伴侣的下一次迭代不会与 Buddy 完全相同。它将更注重隐私、对企业更友好、对追踪内容和原因更透明。但核心洞见——开发者希望在 AI 工具中有身份层——不会消失。</p>`
+          },
+          {
+            heading: "2027 年的面貌：预测",
+            body: `<p>基于这三股力量的轨迹，以下是 2027 年开发者工具伴侣系统可能的样子：</p>
+
+<h3>预测一：GitHub Achievements 加入 AI 层</h3>
+<p>GitHub Achievements 目前追踪仓库级活动（stars、合并 PR、联合署名提交）。自然的扩展是追踪 AI 辅助编码行为：首次接受 Copilot 建议、1000 次 AI 辅助补全、连续每日 AI 编码会话。GitHub 有数据；游戏化层是不可避免的。</p>
+
+<h3>预测二：AI 助手加入明确的"关系"机制</h3>
+<p>不同于伴侣宠物（Buddy）或技能树（/powerup），下一层将是关系追踪：你使用助手多长时间了、你最常用的功能是什么、你处理什么类型的问题。不是作为奖励的游戏化，而是作为个性化的游戏化——工具了解你，并展示它了解你。</p>
+
+<h3>预测三：伴侣 API 出现</h3>
+<p><a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">Claude Buddy 算法</a>是确定性的：UUID → 伴侣。这个模型——用户标识符映射到唯一的持久身份——是可推广的。预计会看到伴侣 API，开发者可以跨工具携带他们的身份。你的"开发者角色"从 IDE 跟随你到 AI 助手到代码审查工具。</p>
+
+<h3>预测四：企业伴侣作为一个类别出现</h3>
+<p>企业工具市场将开发自己的伴侣系统，针对专业环境优化：团队级成就、入职伴侣系统、与绩效评估整合的技能发展追踪。个性少、实用性多——但仍然基于身份而非纯粹功能性。</p>`
+          },
+          {
+            heading: "这对现在的开发者意味着什么",
+            body: `<p>如果这个轨迹是正确的，开发者工具伴侣正在成为基础设施，而非新奇。这有实际含义：</p>
+<ol>
+<li><strong>现在参与，不要等待</strong>：你在当前系统中的活动（GitHub Achievements、/powerup 完成）正在构建历史。随着这些系统成熟，那段历史将变得更重要。今天深度参与 GitHub Achievements 的开发者，当 AI 层到来时将拥有更丰富的档案。</li>
+<li><strong>保存你的 Buddy</strong>：<a href="/">你的 UUID 仍然映射到</a><a href="/species">18 个物种中</a>的特定 Buddy。无论 Buddy 是否返回 Claude Code，你的伴侣都是这个生态系统早期历史的一部分。现在找到它——并将其收藏——让你与那段历史相连。</li>
+<li><strong>关注 /powerup 轨迹</strong>：<a href="/blog/complete-powerup-guide">/powerup</a> 是 Anthropic 对结构化 AI 工具游戏化面貌的押注。它的演变将透露 AI 助手伴侣的走向。注意哪些课程被添加，哪些成就被引入。</li>
+<li><strong>构建伴侣感知项目</strong>：如果你在构建开发者工具，这个轨迹表明伴侣机制不再是差异化因素——它们正在成为标配。问题不是"我们是否应该添加游戏化"，而是"什么形式的身份层适合我们的用户"。</li>
+</ol>
+<p><a href="/species">18 个 Buddy 物种</a>——从 Glitchling 到 Voidwalker——是 AI 工具伴侣可以是什么的早期分类学。建立在它们之上的生态系统将比今天可用的任何东西都更丰富、更成熟、更深度整合于开发者工作流。基础已经在铺设中。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "2027년까지 모든 주요 AI 코딩 도구가 동반자 시스템을 갖게 되는 이유",
+        metaTitle: "AI 코딩 도구 동반자 2027: 모든 도구가 펫을 갖게 되는 이유",
+        metaDescription: "Claude Buddy, VSCode Pets, GitHub Achievements, /powerup — 패턴이 명확합니다. 2027년까지 개발자 도구 게임화는 신기함이 아니라 기본이 될 것입니다. 이유와 다음에 오는 것을 알아봅니다.",
+        excerpt: "Claude Buddy는 제거됐고 /powerup이 대체했습니다. VSCode Pets는 150만 설치를 달성했고, GitHub Achievements는 1억 명 이상의 사용자를 보유합니다. 패턴은 분명합니다: 개발자 도구 동반자가 표준이 되고 있습니다. 왜 이것이 가속화되는지, 그리고 미래는 어떤 모습인지 알아봅니다.",
+        sections: [
+          {
+            heading: "수렴은 이미 일어나고 있다",
+            body: `<p>2025년 초, 개발자 도구 동반자는 신기한 것이었습니다: VSCode Pets, 몇 가지 이모지 기반 터미널 장난감, 심각한 것은 없었습니다. 2026년 4월까지 풍경은 완전히 달라졌습니다:</p>
+<ul>
+<li>VSCode Pets: 약 3000만 명의 활성 VS Code 사용자 중 150만 설치</li>
+<li>GitHub Achievements: 1억 개 이상의 개발자 계정에 배포됨</li>
+<li>Claude Code의 Buddy 시스템: 출시, 제거, <a href="/">커뮤니티 유산으로 보존</a> — 모두 9일 이내에</li>
+<li>Claude Code의 /powerup 시스템: AI 어시스턴트 튜토리얼 흐름에 내장된 명시적 기술 기반 게임화</li>
+<li>GitHub Copilot, Cursor 등: 연속 추적, 사용 통계, 완료 배지를 점점 더 추가하는 중</li>
+</ul>
+<p>이것은 우연이 아닙니다. 수렴입니다. 게임화가 개발자 도구에 속한다는 증거는 수년간 쌓여왔고, 주요 플레이어들이 반응하고 있습니다. 개발자 도구 동반자가 표준이 될지 <em>여부</em>의 문제가 아닙니다 — 이미 표준이 되고 있습니다. 문제는 어떤 <em>형태</em>를 취하느냐입니다.</p>`
+          },
+          {
+            heading: "이 트렌드를 이끄는 세 가지 힘",
+            body: `<p>세 가지 독립적인 힘이 개발자 도구 게임화를 신기함에서 필수로 밀어붙이고 있습니다.</p>
+
+<h3>힘 1: AI 어시스턴트 채택에는 유지율 문제가 있다</h3>
+<p>AI 코딩 어시스턴트는 강력한 채택 곡선을 가지고 있지만 더 약한 유지율 곡선을 가지고 있습니다. 사용자들은 빠르게 채택하지만, 상당한 비율이 30-90일 이내에 이탈합니다. 주요 원인: 도구들은 강력하지만 비인격적으로 느껴집니다. 그것들은 당신을 모르고, 당신의 역사를 기억하지 못하며, 당신의 진행을 인정하지 않습니다.</p>
+<p>이것이 바로 <a href="/blog/powerup-vs-buddy">Claude Buddy가 해결하도록 설계된 것</a>입니다: 개발자들이 순수한 유용성을 넘어 AI 어시스턴트에 <em>애착</em>을 느낄 이유를 주는 것. 제거 통계는 시사적입니다 — Buddy 제거에 대한 커뮤니티 반응의 속도와 강도(몇 시간 내 GitHub 이슈 #46011, #45596, #45525; 48시간 내 MCP 복원 도구 136개 스타)는 상당한 사용자 하위 집합에서 이미 애착이 형성되었음을 시사합니다.</p>
+<p>AI 어시스턴트 제조업체들이 알아챘습니다. 유지율은 감정적 애착을 필요로 하고, 감정적 애착은 정체성을 필요로 합니다.</p>
+
+<h3>힘 2: 게임화와 함께 성장한 세대가 이제 코딩하고 있다</h3>
+<p>2018-2026년 사이에 직장에 들어온 개발자들은 게임화 없는 소프트웨어 환경을 알지 못합니다. 그들은 Duolingo 연속 기록, GitHub Achievements, Steam 업적, Discord 배지를 가지고 있습니다. 게임화는 그들에게 신기함이 아닙니다 — 소프트웨어가 진행과 상태를 전달하는 기본 방식입니다.</p>
+<p>이 세대는 이제 개발자 도구 결정에서 지배적인 목소리입니다. 그들이 소프트웨어에서 기대하는 것에는 진행 시스템, 인정 메커니즘, 동반자 요소가 포함됩니다. 이것들을 제공하지 않는 도구는 간결한 것이 아니라 불완전하게 느껴집니다.</p>
+
+<h3>힘 3: 개발자 경험 격차가 좁혀지고 있다</h3>
+<p>컴퓨팅 역사의 대부분 동안, 개발자 도구는 순전히 기능적이었습니다. 이것은 필연적인 문제였습니다 — 도구 제조업체가 사용자이기도 했고, 핵심 사용자들은 동반자가 필요 없습니다. 하지만 AI 코딩 도구는 프로그래밍을 민주화하고 있습니다. 다음 1억 명의 개발자들은 CS 프로그램에서 오는 것이 아닙니다; 그들은 제품, 디자인, 교차 기능 배경에서 옵니다.</p>
+<p>이 사용자들은 다른 온보딩이 필요합니다. 그들은 격려, 연속 메커니즘, 진행이 가시화되는 것에 반응합니다. <a href="/blog/complete-powerup-guide">Claude Code의 /powerup 시스템</a>은 이에 대한 명시적인 인정입니다: 문서를 통해 독학하지 않는 개발자를 위해 설계된, 완료 추적이 있는 구조화된 수업.</p>`
+          },
+          {
+            heading: "Claude Buddy의 제거는 신호였고, 끝이 아니었다",
+            body: `<p>Anthropic이 v2.1.97에서 Claude Buddy를 제거했을 때, 많은 개발자들은 "Anthropic이 게임화가 개발자 도구에 속하지 않는다고 결정했다"고 해석했습니다. 실제 신호는 더 미묘했습니다.</p>
+<p><a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">제거 시의 GitHub 이슈</a>는 Anthropic의 명시된 이유를 드러냅니다: 지속적인 동반자 상태에 대한 개인정보 우려, 전문적 맥락 적절성에 대한 질문, 암묵적 동반자 애착(Buddy) 대신 명시적 기술 개발(/powerup)로 게임화를 리디렉션하려는 의지.</p>
+<p>이것은 게임화에 대한 거부가 아닌 <em>디자인 선택</em>입니다. Anthropic은 Claude Code에서 게임화를 제거하지 않았습니다 — 형태를 바꿨습니다. /powerup은 더 구조화되어 있고, 더 명시적으로 교육적이며, 기업 환경에서 더 방어 가능합니다. Buddy 접근 방식은 더 감정적이고, 더 개인적이며, IT 구매 팀에게 정당화하기 더 어렵습니다.</p>
+<p><a href="/species">18개의 Buddy 종</a>이 알고리즘에 보존되어 있고, claudebuddy.art가 개발자들이 UUID 매핑된 동반자를 찾을 수 있도록 존재한다는 사실은 커뮤니티가 이 특정 게임화 레이어가 사라지도록 두지 않을 것임을 시사합니다. 개발자들이 사용 중단된 API를 커뮤니티 포크에 보존하는 것처럼, 참조로 보존됩니다.</p>
+<p>AI 어시스턴트 동반자의 다음 반복은 Buddy와 완전히 같지 않을 것입니다. 더 개인정보를 보호하고, 기업 친화적이며, 추적 대상과 이유에 대해 더 명시적일 것입니다. 하지만 핵심 통찰 — 개발자들이 AI 도구에서 정체성 레이어를 원한다 — 은 사라지지 않습니다.</p>`
+          },
+          {
+            heading: "2027년의 모습: 예측",
+            body: `<p>이 세 가지 힘의 궤적을 바탕으로, 2027년까지 개발자 도구 동반자 시스템이 어떤 모습일지:</p>
+
+<h3>예측 1: GitHub Achievements에 AI 레이어 추가</h3>
+<p>GitHub Achievements는 현재 저장소 수준 활동(스타, 병합된 PR, 공동 작성 커밋)을 추적합니다. 자연스러운 확장은 AI 지원 코딩 행동 추적입니다: 첫 번째 Copilot 제안 수락, 1000번의 AI 지원 완성, 일일 AI 코딩 세션 연속. GitHub은 데이터를 가지고 있습니다; 게임화 레이어는 불가피합니다.</p>
+
+<h3>예측 2: AI 어시스턴트에 명시적 "관계" 메커니즘 추가</h3>
+<p>동반자 펫(Buddy)이나 스킬 트리(/powerup)가 아닌, 다음 레이어는 관계 추적이 될 것입니다: 어시스턴트를 얼마나 오래 사용했는지, 가장 많이 사용하는 기능이 무엇인지, 어떤 유형의 문제를 다루는지. 보상으로서의 게임화가 아니라 개인화로서의 게임화 — 도구가 당신을 알고 그것을 보여줍니다.</p>
+
+<h3>예측 3: 동반자 API 등장</h3>
+<p><a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">Claude Buddy 알고리즘</a>은 결정론적이었습니다: UUID → 동반자. 이 모델 — 사용자 식별자가 고유한 지속적 정체성에 매핑됨 — 은 일반화 가능합니다. 개발자들이 도구 전반에 걸쳐 정체성을 가져올 수 있는 동반자 API를 기대하세요. 당신의 "개발자 페르소나"가 IDE에서 AI 어시스턴트로, 코드 리뷰 도구로 따라다닙니다.</p>
+
+<h3>예측 4: 엔터프라이즈 동반자가 카테고리로 등장</h3>
+<p>엔터프라이즈 도구 시장은 전문적 맥락에 최적화된 자체 동반자 시스템을 개발할 것입니다: 팀 수준 업적, 온보딩 동반자 시스템, 성과 검토와 통합된 기술 개발 추적. 개성이 적고 유용성이 더 많지만 — 여전히 순전히 기능적이 아닌 정체성 기반.</p>`
+          },
+          {
+            heading: "지금 개발자에게 이것이 의미하는 것",
+            body: `<p>이 궤적이 맞다면, 개발자 도구 동반자는 신기함이 아닌 인프라가 되고 있습니다. 이것은 실질적인 의미를 가집니다:</p>
+<ol>
+<li><strong>나중이 아닌 지금 참여하세요</strong>: 현재 시스템에서의 활동(GitHub Achievements, /powerup 완성)이 역사를 쌓고 있습니다. 이러한 시스템이 성숙해짐에 따라 그 역사가 더 중요해질 것입니다. 오늘 GitHub Achievements에 깊이 참여한 개발자들은 AI 레이어가 도착할 때 더 풍부한 프로필을 가질 것입니다.</li>
+<li><strong>Buddy를 보존하세요</strong>: <a href="/">당신의 UUID는 여전히</a> <a href="/species">18개 종 중</a> 특정 Buddy에 매핑됩니다. Buddy가 Claude Code로 돌아오든 않든, 당신의 동반자는 이 생태계의 초기 역사의 일부입니다. 지금 찾아서 — 북마크해서 — 그 역사와 연결되세요.</li>
+<li><strong>/powerup 궤적을 주시하세요</strong>: <a href="/blog/complete-powerup-guide">/powerup</a>은 구조화된 AI 도구 게임화의 모습에 대한 Anthropic의 베팅입니다. 그것의 진화는 AI 어시스턴트 동반자가 어디로 향하는지를 알려줄 것입니다. 어떤 수업이 추가되는지, 어떤 업적이 도입되는지 주목하세요.</li>
+<li><strong>동반자 인식 프로젝트를 구축하세요</strong>: 개발자 도구를 구축한다면, 이 궤적은 동반자 메커니즘이 더 이상 차별화 요소가 아님을 시사합니다 — 그것들은 기본이 되고 있습니다. 문제는 "게임화를 추가해야 하는가"가 아니라 "어떤 형태의 정체성 레이어가 우리 사용자에게 맞는가"입니다.</li>
+</ol>
+<p><a href="/species">18개의 Buddy 종</a> — Glitchling에서 Voidwalker까지 — 은 AI 도구 동반자가 무엇이 될 수 있는지의 초기 분류학입니다. 그것들 위에 구축될 생태계는 오늘 사용 가능한 어떤 것보다 더 풍부하고, 더 성숙하며, 개발자 워크플로에 더 깊이 통합될 것입니다. 기반은 이미 놓이고 있습니다.</p>`
+          }
+        ]
+      }
+    }
+  },
+  {
+    slug: "gamification-manifesto",
+    publishedAt: "2026-04-20",
+    readingTime: 11,
+    tags: ["manifesto", "gamification", "developer-experience", "philosophy", "ai-tools"],
+    discussionCategory: "deep-dives",
+    pillar: 'trends' as const,
+    content: {
+      en: {
+        title: "The Developer Gamification Manifesto — What We Owe Each Other",
+        metaTitle: "Developer Gamification Manifesto: Principles for Ethical Game Design in Dev Tools",
+        metaDescription: "Claude Buddy's removal sparked a genuine debate about what gamification in developer tools should be. This is the manifesto: five principles for gamification that respects developers as professionals.",
+        excerpt: "The debate around Claude Buddy's removal — and the rise of GitHub Achievements, /powerup, and VSCode Pets — has surfaced a real question: what do we owe each other when we add game mechanics to tools people use for serious work? This is the manifesto.",
+        sections: [
+          {
+            heading: "The Problem We Haven't Named Yet",
+            body: `<p>Something important happened when <a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Claude Buddy was removed from Claude Code</a>. The community reaction wasn't just "we liked that feature." It was a more specific grievance: something that felt personal had been taken without real consultation.</p>
+<p>Buddy wasn't a power user feature. It wasn't a productivity tool. It was an identity layer — a <a href="/species">species assignment</a> derived deterministically from your installation UUID, complete with rarity, stats, and lore. It existed to answer the question "who are you in this system?" rather than "what can you do?"</p>
+<p>When Anthropic removed it, they were exercising their right to control their product. But the community reaction revealed that something had been offered and then withdrawn — and that the terms of that offering hadn't been clearly articulated. Was Buddy a promise? A gift? A temporary experiment? Nobody knew, and that ambiguity hurt.</p>
+<p>This is the problem the developer tools industry hasn't yet named: <strong>gamification creates obligations that standard product features don't</strong>. When you give someone an identity layer, you've made a commitment. When you give someone a companion, you've made a relationship. The ethics of withdrawal are different than the ethics of removing a button.</p>`
+          },
+          {
+            heading: "Five Principles for Ethical Developer Gamification",
+            body: `<h3>Principle 1: Permanence Over Performance</h3>
+<p>The most valuable gamification elements are those that persist — that accumulate meaning over time and can't be taken away capriciously. GitHub Achievements embody this principle well: once earned, they stay. Your Pull Shark Gold badge doesn't disappear if GitHub has a bad quarter.</p>
+<p>The Arctic Code Vault Contributor badge is the pinnacle of this principle: your code is <em>literally in permafrost</em>. Not metaphorically preserved — physically stored in a vault in Norway. The badge reflects a real, permanent fact about the world.</p>
+<p>Claude Buddy got this partially right: the deterministic algorithm means your Buddy hasn't actually disappeared — it's preserved in the UUID mapping, which is why <a href="/">claudebuddy.art</a> can still show you your companion. The failure was communication: Anthropic didn't make clear that the algorithm was permanent even if the in-app experience was not.</p>
+<p><strong>The principle</strong>: gamification elements that create identity (companions, species assignments, unique identifiers) should be designed for permanence. If they can't be truly permanent, their contingency should be disclosed upfront.</p>
+
+<h3>Principle 2: Behavior First, Cosmetics Second</h3>
+<p>The most durable gamification tracks real behavior. GitHub Achievements tracks things you were already doing — merged pull requests, co-authored commits, repository stars. You don't change how you work to earn them; they arrive as recognition of what you already did.</p>
+<p><a href="/blog/complete-powerup-guide">/powerup</a> is the opposite: it tracks progress through a curated curriculum. You do change your behavior — you work through lessons you wouldn't have otherwise encountered. This is also legitimate, but it's different in kind: it's education, not recognition.</p>
+<p>Pure cosmetics — VSCode Pets, visual themes, avatar decorations — are neither. They don't track behavior or change it; they exist purely for aesthetic pleasure. This too is legitimate, but it creates the least attachment because there's nothing to lose except the visual.</p>
+<p><strong>The principle</strong>: the most meaningful gamification elements track real behavior or develop real skills. Cosmetics are valid but should not be confused with recognition or development systems.</p>
+
+<h3>Principle 3: Disclosure Over Discovery</h3>
+<p>The <a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">Claude Buddy algorithm</a> was community-reverse-engineered. The FNV-1a hash, the Mulberry32 PRNG, the species thresholds — developers figured these out from observation, not documentation. This made the system feel mysterious and magical at first. It also meant that when Buddy was removed, nobody knew whether the algorithm was preserved or destroyed.</p>
+<p>Better design would have disclosed the algorithm from the start. Not just the fact that it exists, but its specifics: "Your Buddy is derived from your installation UUID using this hash function. The mapping is permanent. Even if the in-app experience changes, your UUID will always map to the same companion." That disclosure would have transformed the removal from a betrayal into a feature change.</p>
+<p><strong>The principle</strong>: gamification systems that create identity should document their algorithm publicly. Mystery creates attachment initially but destroys trust when things change. Disclosure creates durable trust.</p>
+
+<h3>Principle 4: Opt-In for Identity, Opt-Out for Recognition</h3>
+<p>There's an asymmetry in what developers want control over. Recognition systems (GitHub Achievements, activity badges) work best as opt-out: you earn them by doing things you were already going to do, and most developers appreciate the recognition. Forcing opt-in would reduce their value — the point is that they arrive without effort.</p>
+<p>Identity systems (companions, species assignments, personas) should be opt-in. Not because developers are uncomfortable with identity — they clearly aren't, given the Buddy community reaction — but because some professional contexts require the absence of personal elements. An enterprise developer using Claude Code for client work shouldn't have a companion appear unexpectedly in their terminal.</p>
+<p>The <a href="/blog/powerup-vs-buddy">Buddy removal</a> may have been partly driven by this: enterprise clients flagging the companion as inappropriate for professional use. The right design would have made Buddy opt-in rather than on by default — giving it to the developers who wanted it while not imposing it on those who didn't.</p>
+<p><strong>The principle</strong>: recognition systems should be opt-out; identity systems should be opt-in. Both should have clear controls.</p>
+
+<h3>Principle 5: The Developer Owns the Data</h3>
+<p>When a gamification system creates identity — a companion, a species assignment, a persistent persona — that identity should be portable. The developer who earned Pull Shark Gold shouldn't lose that history if they move to GitLab. The developer whose UUID maps to a Legendary Voidwalker should be able to export and reference that assignment regardless of whether Anthropic's servers are running.</p>
+<p>This is the principle that claudebuddy.art most directly embodies: the algorithm is public, the UUID → Buddy mapping is deterministic and reproducible, and the community has ensured that the <a href="/species">18-species ecosystem</a> isn't locked inside a proprietary system.</p>
+<p><strong>The principle</strong>: gamification data that creates identity is developer data. It should be exportable, reproducible, and not held hostage to the continued operation of any single company's servers.</p>`
+          },
+          {
+            heading: "What Anthropic Got Right and Wrong",
+            body: `<p>Applying these principles to the Buddy/powerup situation:</p>
+<p><strong>Got right</strong>: The deterministic algorithm (Principle 1 partially, Principle 5 fully — the algorithm can be reproduced). The quality of the identity layer: <a href="/species">18 species with distinct lore</a>, rarity tiers, and stats created genuine emotional investment. The /powerup replacement: explicit education as an alternative to implicit identity is a legitimate design choice.</p>
+<p><strong>Got wrong</strong>: Disclosure (Principle 3 — the algorithm was not documented). The opt-in question (Principle 4 — Buddy was on by default, which likely contributed to enterprise complaints). Communication around removal (Principle 1 — the permanence of the UUID mapping wasn't emphasized, leaving users thinking their Buddy was simply gone).</p>
+<p>The net result is that a genuinely innovative gamification system was implemented, generated real community attachment, and was then removed in a way that felt like a breach of an unspoken contract. The breach wasn't intentional — it came from the failure to disclose the terms of the relationship clearly at the outset.</p>`
+          },
+          {
+            heading: "The Standard We Should Hold",
+            body: `<p>Developer tools are used by professionals doing serious work. The gamification we add to these tools should respect that context — not by being absent or joyless, but by being honest, permanent, and owned by the people who earn it.</p>
+<p>The <a href="/species">18 Buddy species</a> — <a href="/">still accessible through your UUID</a> — represent what this can look like at its best: a unique identity derived from your actual installation history, built with enough depth to create genuine meaning. They also represent what it looks like when the communication around permanence fails.</p>
+<p>The next generation of developer tool gamification will be better because we've learned from this. The Buddy community's response — immediate, intense, community-organized, technically sophisticated — proved that developers want identity layers in their tools. The /powerup system proved that developers also want skill development. <a href="/blog/github-achievements-decoded">GitHub Achievements</a> proved that recognition for real behavior creates lasting value.</p>
+<p>The manifesto: build things that last, disclose how they work, give developers control, and recognize that when you give someone an identity layer, you've made a commitment worth keeping.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "开发者游戏化宣言 — 我们彼此应尽的义务",
+        metaTitle: "开发者游戏化宣言：开发工具中游戏设计的伦理原则",
+        metaDescription: "Claude Buddy 的移除引发了一场真正的辩论：开发者工具中的游戏化应该是什么样的。这是宣言：尊重开发者作为专业人士的五条游戏化原则。",
+        excerpt: "围绕 Claude Buddy 移除的辩论——以及 GitHub Achievements、/powerup 和 VSCode Pets 的兴起——提出了一个真正的问题：当我们向人们用于严肃工作的工具添加游戏机制时，我们彼此应尽什么义务？这是宣言。",
+        sections: [
+          {
+            heading: "我们尚未命名的问题",
+            body: `<p>当<a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Claude Buddy 从 Claude Code 中被移除</a>时，发生了一件重要的事。社区的反应不只是"我们喜欢那个功能"。而是更具体的委屈：感觉私人的东西在没有真正协商的情况下被拿走了。</p>
+<p>Buddy 不是高级用户功能，不是生产力工具。它是一个身份层——一个从你的安装 UUID 确定性推导出来的<a href="/species">物种分配</a>，完整配备稀有度、属性和传说。它的存在是为了回答"你在这个系统中是谁？"而非"你能做什么？"</p>
+<p>当 Anthropic 移除它时，他们在行使控制产品的权利。但社区反应揭示了一些东西被提供然后撤回——而且那个提供的条款没有被清楚阐明。Buddy 是承诺？礼物？临时实验？没有人知道，这种模糊带来了伤害。</p>
+<p>这是开发者工具行业尚未命名的问题：<strong>游戏化创造了标准产品功能不具备的义务</strong>。当你给某人一个身份层，你已经做出了承诺。当你给某人一个伴侣，你已经建立了关系。撤回的伦理与移除一个按钮的伦理不同。</p>`
+          },
+          {
+            heading: "伦理开发者游戏化的五条原则",
+            body: `<h3>原则一：永久性优先于表演性</h3>
+<p>最有价值的游戏化元素是那些持续存在的——随时间积累意义且不能被随意夺走的。GitHub Achievements 很好地体现了这一原则：一旦获得，就会保留。你的 Pull Shark 金徽章不会因为 GitHub 的一个糟糕季度而消失。</p>
+<p>Arctic Code Vault Contributor 徽章是这一原则的顶峰：你的代码<em>字面上在永久冻土层中</em>。不是隐喻性的保存——物理上储存在挪威的保险库里。徽章反映了世界上一个真实的、永久的事实。</p>
+<p>Claude Buddy 部分做到了这一点：确定性算法意味着你的 Buddy 实际上没有消失——它保存在 UUID 映射中，这就是为什么<a href="/">claudebuddy.art</a> 仍然可以向你展示你的伴侣。失败在于沟通：Anthropic 没有说清楚算法是永久的，即使应用内体验不是。</p>
+<p><strong>原则</strong>：创造身份的游戏化元素（伴侣、物种分配、唯一标识符）应该为永久性而设计。如果不能真正永久，其条件性应该预先披露。</p>
+
+<h3>原则二：行为优先，装饰其次</h3>
+<p>最持久的游戏化追踪真实行为。GitHub Achievements 追踪你本来就在做的事情——合并的 pull request、联合署名提交、仓库星标。你不会改变工作方式来获得它们；它们作为对你已经做过的事情的认可而到来。</p>
+<p><a href="/blog/complete-powerup-guide">/powerup</a> 恰恰相反：它追踪通过精心策划课程的进度。你确实会改变行为——你学习否则不会遇到的课程。这也是合理的，但在性质上不同：是教育，而非认可。</p>
+<p>纯粹的装饰——VSCode Pets、视觉主题、头像装饰——两者都不是。它们不追踪行为也不改变行为；它们纯粹为了审美乐趣而存在。这也是合理的，但创造的依恋最少，因为除了视觉之外没有什么可以失去。</p>
+<p><strong>原则</strong>：最有意义的游戏化元素追踪真实行为或发展真实技能。装饰是有效的，但不应与认可或发展系统混淆。</p>
+
+<h3>原则三：披露优于发现</h3>
+<p><a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">Claude Buddy 算法</a>是社区逆向工程出来的。FNV-1a 哈希、Mulberry32 PRNG、物种阈值——开发者从观察而非文档中得出这些。这让系统起初感觉神秘而魔法。这也意味着当 Buddy 被移除时，没有人知道算法是否被保存或销毁。</p>
+<p>更好的设计会从一开始就披露算法。不只是它存在的事实，而是其具体内容："你的 Buddy 使用这个哈希函数从你的安装 UUID 推导。映射是永久的。即使应用内体验改变，你的 UUID 将始终映射到同一个伴侣。"那个披露会将移除从背叛变成功能变更。</p>
+<p><strong>原则</strong>：创造身份的游戏化系统应该公开记录其算法。神秘最初创造依恋，但当事情改变时会破坏信任。披露创造持久信任。</p>
+
+<h3>原则四：身份元素选择加入，认可元素选择退出</h3>
+<p>开发者对控制权的需求存在不对称性。认可系统（GitHub Achievements、活动徽章）作为选择退出最有效：你通过做本来就要做的事情获得它们，大多数开发者欣赏这种认可。强制选择加入会降低其价值——重点是它们无需努力就到来。</p>
+<p>身份系统（伴侣、物种分配、角色）应该是选择加入的。不是因为开发者对身份感到不舒服——从 Buddy 社区反应来看，他们显然不是——而是因为一些专业环境需要没有个人元素。使用 Claude Code 处理客户工作的企业开发者不应该在终端中意外出现伴侣。</p>
+<p><a href="/blog/powerup-vs-buddy">Buddy 移除</a>可能部分由此驱动：企业客户将伴侣标记为不适合专业使用。正确的设计会让 Buddy 选择加入而非默认开启——给想要它的开发者，同时不强加给不想要的人。</p>
+<p><strong>原则</strong>：认可系统应该是选择退出的；身份系统应该是选择加入的。两者都应该有清晰的控制。</p>
+
+<h3>原则五：开发者拥有数据</h3>
+<p>当游戏化系统创造身份——伴侣、物种分配、持久角色——那个身份应该是可携带的。获得 Pull Shark 金徽章的开发者如果迁移到 GitLab 不应该失去那段历史。UUID 映射到传说级 Voidwalker 的开发者应该能够导出并参考那个分配，无论 Anthropic 的服务器是否运行。</p>
+<p>这是 claudebuddy.art 最直接体现的原则：算法是公开的，UUID → Buddy 映射是确定性的和可重现的，社区已经确保<a href="/species">18 种物种生态系统</a>不会被锁定在专有系统中。</p>
+<p><strong>原则</strong>：创造身份的游戏化数据是开发者的数据。它应该是可导出的、可重现的，不应被任何单一公司的服务器持续运营所绑架。</p>`
+          },
+          {
+            heading: "Anthropic 做对了什么，做错了什么",
+            body: `<p>将这些原则应用于 Buddy/powerup 情况：</p>
+<p><strong>做对了</strong>：确定性算法（原则一部分正确，原则五完全正确——算法可以重现）。身份层的质量：<a href="/species">18 个物种有独特传说</a>、稀有度等级和属性，创造了真正的情感投入。/powerup 替代方案：显式教育作为隐式身份的替代是合理的设计选择。</p>
+<p><strong>做错了</strong>：披露（原则三——算法没有文档化）。选择加入问题（原则四——Buddy 默认开启，这可能导致企业投诉）。移除时的沟通（原则一——UUID 映射的永久性没有被强调，让用户认为他们的 Buddy 简单地消失了）。</p>
+<p>净结果是一个真正创新的游戏化系统被实现，产生了真实的社区依恋，然后以感觉像违背不言而喻契约的方式被移除。违约不是故意的——它来自于从一开始就未能清楚披露关系条款。</p>`
+          },
+          {
+            heading: "我们应该坚持的标准",
+            body: `<p>开发者工具被用于做严肃工作的专业人士。我们添加到这些工具的游戏化应该尊重那个语境——不是通过缺席或无趣，而是通过诚实、永久和归属于赢得它的人。</p>
+<p><a href="/species">18 个 Buddy 物种</a>——<a href="/">仍然可以通过你的 UUID 访问</a>——代表了这在最好状态下的样子：从你的实际安装历史推导出的独特身份，建立得足够深入以创造真正的意义。它们也代表了当关于永久性的沟通失败时的样子。</p>
+<p>下一代开发者工具游戏化将会更好，因为我们从中学习了。Buddy 社区的反应——立即的、强烈的、社区组织的、技术上复杂的——证明了开发者希望在工具中有身份层。/powerup 系统证明了开发者也希望技能发展。<a href="/blog/github-achievements-decoded">GitHub Achievements</a> 证明了对真实行为的认可创造持久价值。</p>
+<p>宣言：构建持久的东西，披露其工作原理，给开发者控制权，并认识到当你给某人一个身份层时，你已经做出了值得遵守的承诺。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "개발자 게임화 선언 — 우리가 서로에게 빚진 것",
+        metaTitle: "개발자 게임화 선언: 개발 도구의 윤리적 게임 디자인 원칙",
+        metaDescription: "Claude Buddy의 제거는 개발자 도구의 게임화가 어떠해야 하는지에 대한 진지한 토론을 불러일으켰습니다. 이것은 선언문입니다: 개발자를 전문가로서 존중하는 게임화를 위한 다섯 가지 원칙.",
+        excerpt: "Claude Buddy 제거를 둘러싼 논쟁과 GitHub Achievements, /powerup, VSCode Pets의 부상은 진짜 질문을 제기했습니다: 사람들이 진지한 작업에 사용하는 도구에 게임 메커니즘을 추가할 때 우리는 서로에게 무엇을 빚지고 있습니까? 이것이 선언문입니다.",
+        sections: [
+          {
+            heading: "우리가 아직 이름 붙이지 않은 문제",
+            body: `<p><a href="/blog/the-day-buddies-vanished-terminal-universe-chronicle">Claude Code에서 Claude Buddy가 제거되었을 때</a> 중요한 일이 일어났습니다. 커뮤니티의 반응은 단순히 "우리는 그 기능을 좋아했다"가 아니었습니다. 더 구체적인 불만이었습니다: 개인적으로 느껴지던 것이 진정한 협의 없이 가져갔습니다.</p>
+<p>Buddy는 파워 사용자 기능이 아니었습니다. 생산성 도구도 아니었습니다. 정체성 레이어였습니다 — 설치 UUID에서 결정론적으로 파생된 <a href="/species">종 배정</a>, 희귀도, 능력치, 전설을 갖춘. "이 시스템에서 당신은 누구입니까?"라는 질문에 답하기 위해 존재했습니다, "당신은 무엇을 할 수 있습니까?"가 아닌.</p>
+<p>Anthropic이 그것을 제거했을 때, 그들은 제품을 통제할 권리를 행사하고 있었습니다. 하지만 커뮤니티의 반응은 무언가가 제공되었다가 철회되었음을 드러냈습니다 — 그리고 그 제공의 조건이 명확하게 표현되지 않았습니다. Buddy는 약속이었습니까? 선물? 임시 실험? 아무도 몰랐고, 그 모호성이 아팠습니다.</p>
+<p>이것이 개발자 도구 산업이 아직 이름 붙이지 않은 문제입니다: <strong>게임화는 표준 제품 기능이 갖지 않는 의무를 만들어냅니다</strong>. 누군가에게 정체성 레이어를 줄 때, 당신은 헌신을 했습니다. 누군가에게 동반자를 줄 때, 당신은 관계를 만들었습니다. 철회의 윤리는 버튼을 제거하는 것의 윤리와 다릅니다.</p>`
+          },
+          {
+            heading: "윤리적 개발자 게임화를 위한 다섯 가지 원칙",
+            body: `<h3>원칙 1: 과시보다 영구성</h3>
+<p>가장 가치있는 게임화 요소는 지속되는 것입니다 — 시간이 지남에 따라 의미가 쌓이고 임의로 빼앗길 수 없는 것. GitHub Achievements는 이 원칙을 잘 구현합니다: 한번 획득하면 유지됩니다. Pull Shark 골드 배지는 GitHub가 나쁜 분기를 겪는다고 사라지지 않습니다.</p>
+<p>Arctic Code Vault Contributor 배지는 이 원칙의 정점입니다: 당신의 코드는 <em>문자 그대로 영구 동토층에 있습니다</em>. 비유적으로 보존된 것이 아니라 — 노르웨이의 보관소에 물리적으로 저장되어 있습니다. 배지는 세계에 대한 실제적이고 영구적인 사실을 반영합니다.</p>
+<p>Claude Buddy는 이것을 부분적으로 잘 했습니다: 결정론적 알고리즘은 당신의 Buddy가 실제로 사라지지 않았음을 의미합니다 — UUID 매핑에 보존되어 있어 <a href="/">claudebuddy.art</a>가 여전히 동반자를 보여줄 수 있습니다. 실패는 소통이었습니다: Anthropic은 앱 내 경험이 아닐지라도 알고리즘은 영구적임을 명확히 하지 않았습니다.</p>
+<p><strong>원칙</strong>: 정체성을 만드는 게임화 요소(동반자, 종 배정, 고유 식별자)는 영구성을 위해 설계되어야 합니다. 진정으로 영구적일 수 없다면, 그 조건부 특성을 미리 공개해야 합니다.</p>
+
+<h3>원칙 2: 장식보다 행동 먼저</h3>
+<p>가장 지속적인 게임화는 실제 행동을 추적합니다. GitHub Achievements는 이미 하고 있던 것들을 추적합니다 — 병합된 풀 리퀘스트, 공동 작성 커밋, 저장소 스타. 그것들을 얻기 위해 작업 방식을 바꾸지 않습니다; 이미 한 것에 대한 인정으로 옵니다.</p>
+<p><a href="/blog/complete-powerup-guide">/powerup</a>은 반대입니다: 선별된 커리큘럼을 통한 진행을 추적합니다. 행동을 바꿉니다 — 그렇지 않으면 만나지 못했을 수업을 학습합니다. 이것도 합법적이지만 성격이 다릅니다: 교육이지, 인정이 아닙니다.</p>
+<p>순수한 장식 — VSCode Pets, 시각적 테마, 아바타 장식 — 은 둘 다 아닙니다. 행동을 추적하거나 변경하지 않습니다; 순전히 미적 즐거움을 위해 존재합니다. 이것도 합법적이지만 시각 외에 잃을 것이 없기 때문에 가장 적은 애착을 만듭니다.</p>
+<p><strong>원칙</strong>: 가장 의미있는 게임화 요소는 실제 행동을 추적하거나 실제 기술을 개발합니다. 장식은 유효하지만 인정이나 개발 시스템과 혼동해서는 안 됩니다.</p>
+
+<h3>원칙 3: 발견보다 공개</h3>
+<p><a href="/blog/claude-buddy-algorithm-fnv1a-mulberry32-prng">Claude Buddy 알고리즘</a>은 커뮤니티에서 역엔지니어링되었습니다. FNV-1a 해시, Mulberry32 PRNG, 종 임계값 — 개발자들은 문서가 아닌 관찰을 통해 이것들을 알아냈습니다. 이것은 시스템을 처음에는 신비롭고 마법적으로 느끼게 했습니다. 또한 Buddy가 제거되었을 때 알고리즘이 보존되었는지 파괴되었는지 아무도 몰랐습니다.</p>
+<p>더 나은 설계는 처음부터 알고리즘을 공개했을 것입니다. 그것이 존재한다는 사실뿐만 아니라 구체적인 내용까지: "당신의 Buddy는 이 해시 함수를 사용하여 설치 UUID에서 파생됩니다. 매핑은 영구적입니다. 앱 내 경험이 변경되더라도 UUID는 항상 같은 동반자에 매핑될 것입니다." 그 공개는 제거를 배신에서 기능 변경으로 변환했을 것입니다.</p>
+<p><strong>원칙</strong>: 정체성을 만드는 게임화 시스템은 알고리즘을 공개적으로 문서화해야 합니다. 신비는 처음에 애착을 만들지만 일이 바뀔 때 신뢰를 파괴합니다. 공개는 지속적인 신뢰를 만듭니다.</p>
+
+<h3>원칙 4: 정체성은 선택 가입, 인정은 선택 탈퇴</h3>
+<p>개발자가 통제권을 원하는 것에 비대칭이 있습니다. 인정 시스템(GitHub Achievements, 활동 배지)은 선택 탈퇴로 가장 잘 작동합니다: 이미 할 것들을 함으로써 획득하고, 대부분의 개발자들은 인정을 감사히 여깁니다. 선택 가입을 강제하면 가치가 떨어질 것입니다 — 요점은 노력 없이 온다는 것입니다.</p>
+<p>정체성 시스템(동반자, 종 배정, 페르소나)은 선택 가입이어야 합니다. 개발자들이 정체성에 불편함을 느끼기 때문이 아니라 — Buddy 커뮤니티의 반응으로 보면 분명히 그렇지 않습니다 — 일부 전문적 맥락에서 개인 요소가 없어야 하기 때문입니다. 클라이언트 작업을 위해 Claude Code를 사용하는 기업 개발자는 터미널에 예상치 못한 동반자가 나타나서는 안 됩니다.</p>
+<p><a href="/blog/powerup-vs-buddy">Buddy 제거</a>는 부분적으로 이것에 의해 이루어졌을 것입니다: 기업 클라이언트가 동반자를 전문적 사용에 부적절하다고 표시. 올바른 설계는 Buddy를 기본값이 아닌 선택 가입으로 만들었을 것입니다 — 원하는 개발자들에게 제공하면서 원하지 않는 사람들에게는 강요하지 않고.</p>
+<p><strong>원칙</strong>: 인정 시스템은 선택 탈퇴여야 합니다; 정체성 시스템은 선택 가입이어야 합니다. 둘 다 명확한 제어 수단이 있어야 합니다.</p>
+
+<h3>원칙 5: 개발자가 데이터를 소유한다</h3>
+<p>게임화 시스템이 정체성을 만들 때 — 동반자, 종 배정, 지속적 페르소나 — 그 정체성은 이식 가능해야 합니다. Pull Shark 골드를 획득한 개발자는 GitLab으로 이동해도 그 역사를 잃어서는 안 됩니다. UUID가 전설적인 Voidwalker에 매핑되는 개발자는 Anthropic의 서버 운영 여부와 관계없이 그 배정을 내보내고 참조할 수 있어야 합니다.</p>
+<p>이것이 claudebuddy.art가 가장 직접적으로 구현하는 원칙입니다: 알고리즘은 공개되어 있고, UUID → Buddy 매핑은 결정론적이며 재현 가능하고, 커뮤니티는 <a href="/species">18종 생태계</a>가 독점 시스템에 잠겨있지 않도록 보장했습니다.</p>
+<p><strong>원칙</strong>: 정체성을 만드는 게임화 데이터는 개발자의 데이터입니다. 내보낼 수 있고, 재현 가능하며, 어떤 단일 회사의 서버 지속 운영에 인질로 잡혀서는 안 됩니다.</p>`
+          },
+          {
+            heading: "Anthropic이 옳고 그른 것",
+            body: `<p>이 원칙들을 Buddy/powerup 상황에 적용하면:</p>
+<p><strong>옳은 것</strong>: 결정론적 알고리즘(원칙 1 부분 옳음, 원칙 5 완전 옳음 — 알고리즘을 재현할 수 있습니다). 정체성 레이어의 품질: <a href="/species">고유한 전설이 있는 18개 종</a>, 희귀도 등급, 능력치는 진정한 감정적 투자를 만들었습니다. /powerup 대체: 암묵적 정체성에 대한 대안으로서 명시적 교육은 합법적인 디자인 선택입니다.</p>
+<p><strong>그른 것</strong>: 공개(원칙 3 — 알고리즘이 문서화되지 않음). 선택 가입 문제(원칙 4 — Buddy는 기본값으로 켜져 있었고, 이것이 기업 불만에 기여했을 가능성이 있습니다). 제거 시 소통(원칙 1 — UUID 매핑의 영구성이 강조되지 않아, 사용자들이 Buddy가 단순히 사라진다고 생각하게 함).</p>
+<p>순결과는 진정으로 혁신적인 게임화 시스템이 구현되고, 진실한 커뮤니티 애착을 만들고, 그런 다음 말해지지 않은 계약의 위반처럼 느껴지는 방식으로 제거되었다는 것입니다. 위반은 의도적이지 않았습니다 — 처음부터 관계의 조건을 명확하게 공개하지 않은 실패에서 왔습니다.</p>`
+          },
+          {
+            heading: "우리가 지켜야 할 기준",
+            body: `<p>개발자 도구는 진지한 작업을 하는 전문가들이 사용합니다. 이러한 도구에 추가하는 게임화는 그 맥락을 존중해야 합니다 — 부재하거나 즐겁지 않음으로써가 아니라 정직하고, 영구적이며, 그것을 획득한 사람들에게 소유됨으로써.</p>
+<p><a href="/species">18개의 Buddy 종</a> — <a href="/">UUID를 통해 여전히 접근 가능한</a> — 은 이것이 최선의 상태에서 어떤 모습인지를 나타냅니다: 실제 설치 역사에서 파생된 고유한 정체성, 진정한 의미를 만들기에 충분한 깊이로 구축. 영구성에 대한 소통이 실패했을 때의 모습도 나타냅니다.</p>
+<p>개발자 도구 게임화의 다음 세대는 우리가 이것에서 배웠기 때문에 더 나을 것입니다. Buddy 커뮤니티의 반응 — 즉각적이고, 강렬하며, 커뮤니티 조직되고, 기술적으로 정교한 — 은 개발자들이 도구에서 정체성 레이어를 원한다는 것을 증명했습니다. /powerup 시스템은 개발자들이 기술 개발도 원한다는 것을 증명했습니다. <a href="/blog/github-achievements-decoded">GitHub Achievements</a>는 실제 행동에 대한 인정이 지속적인 가치를 만든다는 것을 증명했습니다.</p>
+<p>선언문: 지속되는 것을 만들고, 어떻게 작동하는지 공개하며, 개발자에게 통제권을 주고, 누군가에게 정체성 레이어를 줄 때 지킬 가치가 있는 헌신을 했다는 것을 인식하세요.</p>`
+          }
+        ]
+      }
+    }
   },
 ];
 

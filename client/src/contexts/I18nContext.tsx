@@ -1,6 +1,6 @@
 /**
  * I18n Context - Lightweight internationalization for Claude Buddy Checker
- * Supports: en (English), zh (简体中文), ko (한국어)
+ * Supports: en (English), zh (简体中文), ko (한국어), ja (日本語)
  * Uses React Context + localStorage persistence
  */
 
@@ -8,25 +8,28 @@ import { createContext, useContext, useState, useCallback, useEffect, type React
 import { en } from "@/i18n/en";
 import { zh } from "@/i18n/zh";
 import { ko } from "@/i18n/ko";
+import { ja } from "@/i18n/ja";
 
-export type Locale = "en" | "zh" | "ko";
+export type Locale = "en" | "zh" | "ko" | "ja";
 
 export const LOCALE_LABELS: Record<Locale, string> = {
   en: "English",
   zh: "简体中文",
   ko: "한국어",
+  ja: "日本語",
 };
 
 export const LOCALE_FLAGS: Record<Locale, string> = {
   en: "EN",
   zh: "中",
   ko: "한",
+  ja: "日",
 };
 
 // Flat translation dictionary type
 export type TranslationDict = typeof en;
 
-const dictionaries: Record<Locale, TranslationDict> = { en, zh, ko };
+const dictionaries: Record<Locale, TranslationDict> = { en, zh, ko, ja };
 
 interface I18nContextType {
   locale: Locale;
@@ -52,13 +55,14 @@ function getNestedValue(obj: Record<string, unknown>, path: string): string {
 function detectLocale(): Locale {
   // Check localStorage
   const stored = localStorage.getItem("buddy-locale");
-  if (stored && (stored === "en" || stored === "zh" || stored === "ko")) {
+  if (stored && (stored === "en" || stored === "zh" || stored === "ko" || stored === "ja")) {
     return stored as Locale;
   }
   // Check browser language
   const lang = navigator.language.toLowerCase();
   if (lang.startsWith("zh")) return "zh";
   if (lang.startsWith("ko")) return "ko";
+  if (lang.startsWith("ja")) return "ja";
   return "en";
 }
 
