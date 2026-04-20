@@ -27,6 +27,7 @@ export default function ShareCardModal({ data, onClose }: ShareCardModalProps) {
   const [isRendering, setIsRendering] = useState(false);
   const [copied, setCopied] = useState(false);
   const [canShare, setCanShare] = useState(false);
+  const [showBadge, setShowBadge] = useState(true);
 
   const render = useCallback(async () => {
     if (!data) return;
@@ -34,7 +35,7 @@ export default function ShareCardModal({ data, onClose }: ShareCardModalProps) {
     try {
       let canvas: HTMLCanvasElement;
       if (data.type === "buddy") {
-        canvas = await renderBuddyShareCard(data);
+        canvas = await renderBuddyShareCard({ ...data, showPetitionBadge: showBadge });
       } else {
         canvas = await renderSpeciesShareCard(data);
       }
@@ -67,7 +68,7 @@ export default function ShareCardModal({ data, onClose }: ShareCardModalProps) {
       canvasRef.current = null;
       setCopied(false);
     };
-  }, [data, render]);
+  }, [data, render, showBadge]);
 
   // Close on Escape
   useEffect(() => {
@@ -150,6 +151,30 @@ export default function ShareCardModal({ data, onClose }: ShareCardModalProps) {
             )}
           </div>
         </div>
+
+        {/* Petition Badge Toggle — only shown for buddy cards */}
+        {data.type === "buddy" && (
+          <div className="mx-4 mb-3 px-3 py-2 border border-crt-amber/30 bg-crt-amber/5 flex items-center justify-between gap-3">
+            <div className="flex flex-col">
+              <span className="text-xs font-bold text-crt-amber tracking-wider">
+                ★ {t("share.badgeToggleLabel")}
+              </span>
+              <span className="text-[10px] text-muted-foreground/70 mt-0.5">
+                {t("share.badgeToggleHint")}
+              </span>
+            </div>
+            <button
+              onClick={() => setShowBadge((v) => !v)}
+              className={`shrink-0 px-3 py-1 text-xs font-bold border transition-all font-mono tracking-wider ${
+                showBadge
+                  ? "border-crt-amber bg-crt-amber/20 text-crt-amber"
+                  : "border-border/40 text-muted-foreground/50 hover:border-crt-amber/40 hover:text-crt-amber/60"
+              }`}
+            >
+              {showBadge ? t("share.badgeOn") : t("share.badgeOff")}
+            </button>
+          </div>
+        )}
 
         {/* Action Buttons */}
         <div className="flex flex-wrap gap-3 px-4 pb-4">

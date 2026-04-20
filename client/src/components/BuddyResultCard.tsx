@@ -53,6 +53,8 @@ export default function BuddyResultCard({ buddy }: BuddyResultCardProps) {
         eyes: t("share.labelEyes"),
         watermark: t("share.watermark"),
         checkYours: t("share.checkYours"),
+        petitionLine1: t("share.petitionLine1"),
+        petitionLine2: t("share.petitionLine2"),
       },
     };
     setShareData(data);

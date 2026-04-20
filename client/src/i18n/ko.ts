@@ -151,6 +151,12 @@ export const ko: typeof en = {
     labelPeakStat: "피크 스탯",
     watermark: "claudebuddy.art",
     checkYours: "당신의 Buddy 확인:",
+    petitionLine1: "나는 v2.1.97 이전에 Buddy가 있었다",
+    petitionLine2: "#BringBackBuddy · claudebuddy.art",
+    badgeToggleLabel: "「Buddy가 있었다」 배지",
+    badgeToggleHint: "공유 카드에 청원 배지를 추가합니다",
+    badgeOn: "[켜기]",
+    badgeOff: "[끄기]",
   },
   blog: {
     indexTitle: "블로그 - Claude Buddy 체커",

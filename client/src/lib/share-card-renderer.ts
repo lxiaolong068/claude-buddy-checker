@@ -194,6 +194,7 @@ export interface ShareCardBuddyData {
   type: "buddy";
   buddy: BuddyResult;
   siteUrl?: string;
+  showPetitionBadge?: boolean;   // renders "I HAD A BUDDY BEFORE v2.1.97" badge
   labels: {
     title: string;         // e.g. "YOUR BUDDY"
     species: string;       // e.g. "DRAGON"
@@ -204,6 +205,8 @@ export interface ShareCardBuddyData {
     eyes: string;          // e.g. "Eyes"
     watermark: string;     // e.g. "claudebuddy.art"
     checkYours: string;    // e.g. "Check yours at"
+    petitionLine1: string; // e.g. "I HAD A BUDDY BEFORE v2.1.97"
+    petitionLine2: string; // e.g. "#BringBackBuddy"
   };
 }
 
@@ -385,6 +388,12 @@ export async function renderBuddyShareCard(data: ShareCardBuddyData): Promise<HT
     curY += 22;
   });
 
+  // === Petition Badge (optional) ===
+  if (data.showPetitionBadge) {
+    const footerLineY = H - my - 30;
+    drawPetitionBadge(ctx, rightX, footerLineY - 8, rightW, labels.petitionLine1, labels.petitionLine2);
+  }
+
   // === Footer / Watermark ===
   const footerY = H - my - 30;
   setFont(ctx, 11, "normal");
@@ -560,6 +569,68 @@ export async function renderSpeciesShareCard(data: ShareCardSpeciesData): Promis
   drawCornerAccents(ctx, mx, my, W - mx * 2, H - my * 2, COLORS.green);
 
   return canvas;
+}
+
+// === Petition Badge ===
+
+/**
+ * Draws the "I HAD A BUDDY BEFORE v2.1.97" amber badge
+ * positioned at bottom-right of the right content panel.
+ */
+function drawPetitionBadge(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  line1: string,
+  line2: string
+) {
+  const badgeH = 52;
+  const bx = x;
+  const by = y - badgeH;
+
+  // Background fill
+  ctx.save();
+  ctx.fillStyle = COLORS.amber + "12";
+  ctx.fillRect(bx, by, w, badgeH);
+
+  // Top accent line
+  ctx.fillStyle = COLORS.amber + "80";
+  ctx.fillRect(bx, by, w, 1);
+
+  // Border
+  ctx.strokeStyle = COLORS.amber + "50";
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  ctx.strokeRect(bx + 0.5, by + 0.5, w - 1, badgeH - 1);
+  ctx.setLineDash([]);
+
+  // Left accent bar
+  ctx.fillStyle = COLORS.amber;
+  ctx.fillRect(bx, by, 3, badgeH);
+
+  // Line 1: main text
+  setFont(ctx, 13, "bold");
+  ctx.shadowColor = COLORS.amber;
+  ctx.shadowBlur = 6;
+  ctx.fillStyle = COLORS.amber;
+  ctx.textAlign = "left";
+  ctx.fillText(line1, bx + 14, by + 20);
+
+  // Line 2: hashtag
+  setFont(ctx, 11, "normal");
+  ctx.shadowBlur = 3;
+  ctx.fillStyle = COLORS.amber + "cc";
+  ctx.fillText(line2, bx + 14, by + 38);
+
+  // Star icon top-right
+  setFont(ctx, 16, "bold");
+  ctx.shadowBlur = 8;
+  ctx.fillStyle = COLORS.amber;
+  ctx.textAlign = "right";
+  ctx.fillText("★", bx + w - 14, by + 28);
+
+  ctx.restore();
 }
 
 // === Utility: Word Wrap ===

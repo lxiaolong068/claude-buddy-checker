@@ -151,6 +151,12 @@ export const ja: typeof en = {
     labelPeakStat: "ピークステータス",
     watermark: "claudebuddy.art",
     checkYours: "あなたのも確認しよう：",
+    petitionLine1: "v2.1.97以前、Buddyがいた",
+    petitionLine2: "#BringBackBuddy · claudebuddy.art",
+    badgeToggleLabel: "「Buddyがいた」バッジ",
+    badgeToggleHint: "シェアカードに請願バッジを追加します",
+    badgeOn: "[オン]",
+    badgeOff: "[オフ]",
   },
   blog: {
     indexTitle: "ブログ - Claude Buddy チェッカー",

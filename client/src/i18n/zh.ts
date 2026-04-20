@@ -151,6 +151,12 @@ export const zh: typeof en = {
     labelPeakStat: "峰值属性",
     watermark: "claudebuddy.art",
     checkYours: "查询你的 Buddy：",
+    petitionLine1: "我曾拥有一只 Buddy — v2.1.97 之前",
+    petitionLine2: "#BringBackBuddy · claudebuddy.art",
+    badgeToggleLabel: "「曾拥有 Buddy」徽章",
+    badgeToggleHint: "在分享卡片上添加请愿徽章",
+    badgeOn: "[开启]",
+    badgeOff: "[关闭]",
   },
   blog: {
     indexTitle: "博客 - Claude Buddy 查询器",

@@ -149,6 +149,12 @@ export const en = {
     labelPeakStat: "Peak Stat",
     watermark: "claudebuddy.art",
     checkYours: "Check yours at",
+    petitionLine1: "I HAD A BUDDY BEFORE v2.1.97",
+    petitionLine2: "#BringBackBuddy · claudebuddy.art",
+    badgeToggleLabel: "I HAD A BUDDY badge",
+    badgeToggleHint: "Adds a petition badge to your share card",
+    badgeOn: "[ON]",
+    badgeOff: "[OFF]",
   },
   blog: {
     indexTitle: "Blog - Claude Buddy Checker",
