@@ -16,6 +16,7 @@ import BuddyProfilePage from "./pages/BuddyProfilePage";
 import ComparePage from "./pages/ComparePage";
 import PowerupTrackerPage from "./pages/PowerupTrackerPage";
 import RevivePage from "./pages/RevivePage";
+import HiddenFeaturesPage from "./pages/HiddenFeaturesPage";
 
 function Router() {
   return (
@@ -31,6 +32,7 @@ function Router() {
         <Route path={"/compare"} component={ComparePage} />
         <Route path={"/powerup-tracker"} component={PowerupTrackerPage} />
         <Route path={"/revive"} component={RevivePage} />
+        <Route path={"/hidden-features"} component={HiddenFeaturesPage} />
         <Route path={"/404"} component={NotFound} />
         <Route component={NotFound} />
       </Switch>

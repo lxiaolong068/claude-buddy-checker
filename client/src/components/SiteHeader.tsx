@@ -83,6 +83,18 @@ export default function SiteHeader() {
             REVIVE
           </Link>
 
+          {/* Hidden Features / Leak — purple */}
+          <Link
+            href="/hidden-features"
+            className={`text-[10px] uppercase tracking-widest transition-colors px-1.5 py-0.5 rounded-sm whitespace-nowrap hidden sm:inline-block ${
+              location === "/hidden-features"
+                ? "text-crt-purple"
+                : "text-crt-purple/40 hover:text-crt-purple/70"
+            }`}
+          >
+            LEAK
+          </Link>
+
           <Divider />
 
           {/* Discovery group */}
