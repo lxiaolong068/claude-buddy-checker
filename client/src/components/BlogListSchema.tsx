@@ -5,7 +5,7 @@
  */
 
 import { useMemo } from "react";
-import type { BlogArticle } from "@/lib/blog-data";
+import { getArticleContent, type BlogArticle } from "@/lib/blog-data";
 import { SITE_URL } from "@/lib/constants";
 
 interface BlogListSchemaProps {
@@ -18,18 +18,21 @@ const LOCALE_MAP: Record<string, string> = {
   en: "en-US",
   zh: "zh-CN",
   ko: "ko-KR",
+  ja: "ja-JP",
 };
 
 const SITE_NAME_MAP: Record<string, string> = {
   en: "Claude Buddy Checker",
   zh: "Claude Buddy 查询器",
   ko: "Claude Buddy 체커",
+  ja: "Claude Buddy チェッカー",
 };
 
 const BLOG_DESC_MAP: Record<string, string> = {
   en: "Articles about Claude Code Buddy — species, algorithms, cosmetics, and tips.",
   zh: "关于 Claude Code Buddy 的文章——物种、算法、外观与技巧。",
   ko: "Claude Code Buddy에 관한 글 — 종족, 알고리즘, 외형, 팁.",
+  ja: "Claude Code Buddyに関する記事 — 種族、アルゴリズム、外観、ヒント。",
 };
 
 export default function BlogListSchema({
@@ -59,7 +62,7 @@ export default function BlogListSchema({
         url: baseUrl,
       },
       blogPost: articles.map((article) => {
-        const c = article.content[locale as keyof typeof article.content];
+        const c = getArticleContent(article, locale);
         const imageUrl = article.coverImage || `${baseUrl}/og-image.png`;
         return {
           "@type": "BlogPosting",

@@ -9,7 +9,7 @@ import { SITE_URL } from "@/lib/constants";
 import TableOfContents, { type TocItem } from "@/components/TableOfContents";
 import { Link, useParams } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
-import { getArticleBySlug, getAllArticles, getAdjacentArticles, getRelatedArticles, type RelatedArticleMatch } from "@/lib/blog-data";
+import { getArticleBySlug, getAllArticles, getAdjacentArticles, getRelatedArticles, getArticleContent, type RelatedArticleMatch } from "@/lib/blog-data";
 import ArticleSchema from "@/components/ArticleSchema";
 import SiteHeader from "@/components/SiteHeader";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -24,7 +24,7 @@ export default function BlogPost() {
 
   const content = useMemo(() => {
     if (!article) return null;
-    return article.content[locale as keyof typeof article.content];
+    return getArticleContent(article, locale);
   }, [article, locale]);
 
   // Generate TOC items from article sections for sidebar navigation
@@ -107,7 +107,7 @@ export default function BlogPost() {
       if (canonical) canonical.setAttribute("href", url);
 
       document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
-      for (const loc of ["en", "zh", "ko", "x-default"]) {
+      for (const loc of ["en", "zh", "ko", "ja", "x-default"]) {
         const link = document.createElement("link");
         link.rel = "alternate";
         link.setAttribute("hreflang", loc);
@@ -255,7 +255,7 @@ export default function BlogPost() {
                       {t("blog.prevArticle")}
                     </span>
                     <span className="text-sm font-semibold text-foreground group-hover:text-crt-green transition-colors line-clamp-2 leading-snug">
-                      {prevArticle.content[locale as keyof typeof prevArticle.content].title}
+                      {getArticleContent(prevArticle, locale).title}
                     </span>
                     <span className="text-[11px] text-muted-foreground/60 mt-auto pt-1">
                       {prevArticle.publishedAt}
@@ -281,7 +281,7 @@ export default function BlogPost() {
                       {t("blog.nextArticle")}
                     </span>
                     <span className="text-sm font-semibold text-foreground group-hover:text-crt-green transition-colors line-clamp-2 leading-snug">
-                      {nextArticle.content[locale as keyof typeof nextArticle.content].title}
+                      {getArticleContent(nextArticle, locale).title}
                     </span>
                     <span className="text-[11px] text-muted-foreground/60 mt-auto pt-1">
                       {nextArticle.publishedAt}
@@ -324,7 +324,7 @@ export default function BlogPost() {
             <div className="space-y-3">
               {relatedArticles.map((match) => {
                 const raContent =
-                  match.article.content[locale as keyof typeof match.article.content];
+                  getArticleContent(match.article, locale);
                 // Build match reason badges
                 const badges: { label: string; color: string }[] = [];
                 if (match.sameCategory) {

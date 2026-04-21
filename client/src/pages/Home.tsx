@@ -10,7 +10,7 @@ import { useHreflangLinks } from "@/hooks/useHreflangLinks";
 import { SITE_URL } from "@/lib/constants";
 import { Link } from "wouter";
 import { rollBuddy, type BuddyResult, SPECIES } from "@/lib/buddy-engine";
-import { getAllArticles } from "@/lib/blog-data";
+import { getAllArticles, getArticleContent } from "@/lib/blog-data";
 import BuddyResultCard from "@/components/BuddyResultCard";
 import TypewriterText from "@/components/TypewriterText";
 import { useI18n } from "@/contexts/I18nContext";
@@ -500,7 +500,7 @@ export default function Home() {
 
           <div className="space-y-4">
             {getAllArticles().slice(0, 3).map((article, idx) => {
-              const ac = article.content[locale as keyof typeof article.content];
+              const ac = getArticleContent(article, locale);
               const pubDate = new Date(article.publishedAt);
               const dateStr = pubDate.toLocaleDateString(
                 locale === "zh" ? "zh-CN" : locale === "ko" ? "ko-KR" : "en-US",

@@ -10,7 +10,7 @@ import { useHreflangLinks } from "@/hooks/useHreflangLinks";
 import { SITE_URL } from "@/lib/constants";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
-import { getAllArticles, type BlogArticle, type DiscussionCategory, type Pillar } from "@/lib/blog-data";
+import { getAllArticles, getArticleContent, type BlogArticle, type DiscussionCategory, type Pillar } from "@/lib/blog-data";
 import BlogListSchema from "@/components/BlogListSchema";
 import SiteHeader from "@/components/SiteHeader";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
@@ -169,7 +169,7 @@ const CATEGORY_BADGE: Record<DiscussionCategory, { classes: string; icon: string
 
 function ArticleCard({ article, searchQuery }: { article: BlogArticle; searchQuery: string }) {
   const { t, locale } = useI18n();
-  const content = article.content[locale as keyof typeof article.content];
+  const content = getArticleContent(article, locale);
   const badge = CATEGORY_BADGE[article.discussionCategory];
 
   // Highlight matching text in title and excerpt
@@ -300,7 +300,7 @@ export default function BlogIndex() {
     if (debouncedQuery.trim()) {
       const q = debouncedQuery.toLowerCase().trim();
       result = result.filter((a) => {
-        const content = a.content[locale as keyof typeof a.content];
+        const content = getArticleContent(a, locale);
         const titleMatch = content.title.toLowerCase().includes(q);
         const excerptMatch = content.excerpt.toLowerCase().includes(q);
         const tagMatch = a.tags.some((tag) => tag.toLowerCase().includes(q));
@@ -350,18 +350,18 @@ export default function BlogIndex() {
       case "titleAZ": {
         return arr.sort((a, b) => {
           const titleA =
-            a.content[locale as keyof typeof a.content].title.toLowerCase();
+            getArticleContent(a, locale).title.toLowerCase();
           const titleB =
-            b.content[locale as keyof typeof b.content].title.toLowerCase();
+            getArticleContent(b, locale).title.toLowerCase();
           return titleA.localeCompare(titleB);
         });
       }
       case "titleZA": {
         return arr.sort((a, b) => {
           const titleA =
-            a.content[locale as keyof typeof a.content].title.toLowerCase();
+            getArticleContent(a, locale).title.toLowerCase();
           const titleB =
-            b.content[locale as keyof typeof b.content].title.toLowerCase();
+            getArticleContent(b, locale).title.toLowerCase();
           return titleB.localeCompare(titleA);
         });
       }
