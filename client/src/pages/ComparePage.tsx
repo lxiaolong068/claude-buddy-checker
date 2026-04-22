@@ -29,6 +29,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { useHreflangLinks } from "@/hooks/useHreflangLinks";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
+import PageSchema from "@/components/PageSchema";
 
 // ── Rarity colors ─────────────────────────────────────────────────────────────
 
@@ -141,6 +142,15 @@ export default function ComparePage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <PageSchema
+        pageUrl={`${SITE_URL}/compare`}
+        name={t("compare.title")}
+        description={t("compare.subtitle")}
+        breadcrumbs={[
+          { name: "Home", path: "" },
+          { name: "Compare Buddies", path: "/compare" },
+        ]}
+      />
       <SiteHeader />
       <div className="max-w-3xl mx-auto px-4 py-8 font-mono">
 

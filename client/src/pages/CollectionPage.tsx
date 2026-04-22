@@ -12,6 +12,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { useHreflangLinks } from "@/hooks/useHreflangLinks";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
+import PageSchema from "@/components/PageSchema";
 
 // ── Rarity styles ────────────────────────────────────────────────────────────
 
@@ -95,6 +96,15 @@ export default function CollectionPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <PageSchema
+        pageUrl={`${SITE_URL}/collection`}
+        name={t("collection.title")}
+        description={t("collection.subtitle")}
+        breadcrumbs={[
+          { name: "Home", path: "" },
+          { name: "Collection", path: "/collection" },
+        ]}
+      />
       <SiteHeader />
       <div className="max-w-3xl mx-auto px-4 py-8 font-mono">
 

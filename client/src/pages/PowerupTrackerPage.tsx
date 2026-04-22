@@ -16,6 +16,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { useHreflangLinks } from "@/hooks/useHreflangLinks";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
+import PageSchema from "@/components/PageSchema";
 
 // ── Lesson data ───────────────────────────────────────────────────────────────
 
@@ -209,6 +210,15 @@ export default function PowerupTrackerPage() {
 
   return (
     <div className="min-h-screen bg-background">
+      <PageSchema
+        pageUrl={`${SITE_URL}/powerup-tracker`}
+        name={t("powerupTracker.title")}
+        description={t("powerupTracker.subtitle")}
+        breadcrumbs={[
+          { name: "Home", path: "" },
+          { name: "/powerup Tracker", path: "/powerup-tracker" },
+        ]}
+      />
       <SiteHeader />
       <div className="max-w-2xl mx-auto px-4 py-8 font-mono">
 

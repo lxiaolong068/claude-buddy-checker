@@ -10,6 +10,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { useHreflangLinks } from "@/hooks/useHreflangLinks";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
+import PageSchema from "@/components/PageSchema";
 
 // ── Constants ─────────────────────────────────────────────────────────────────
 
@@ -153,6 +154,15 @@ export default function RevivePage() {
 
   return (
     <div className="min-h-screen bg-background font-mono">
+      <PageSchema
+        pageUrl={`${SITE_URL}/revive`}
+        name={t("revive.pageTitle")}
+        description={t("revive.metaDesc")}
+        breadcrumbs={[
+          { name: "Home", path: "" },
+          { name: "Revive MCP", path: "/revive" },
+        ]}
+      />
       <SiteHeader />
 
       <div className="max-w-[760px] mx-auto px-4 py-8 sm:py-12">

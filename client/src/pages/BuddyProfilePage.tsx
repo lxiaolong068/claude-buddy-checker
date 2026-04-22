@@ -64,6 +64,16 @@ export default function BuddyProfilePage() {
 
   useHreflangLinks(pageUrl);
 
+  // UUID space is infinite — prevent Google from indexing per-UUID pages.
+  // Follow is kept so crawlers can still traverse outbound links.
+  useEffect(() => {
+    const meta = document.createElement("meta");
+    meta.setAttribute("name", "robots");
+    meta.setAttribute("content", "noindex, follow");
+    document.head.appendChild(meta);
+    return () => meta.remove();
+  }, []);
+
   // Dynamic meta tags per UUID
   useEffect(() => {
     const shortId = uuid.slice(0, 8);

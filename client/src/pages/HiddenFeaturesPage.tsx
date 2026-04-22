@@ -10,6 +10,7 @@ import { useI18n } from "@/contexts/I18nContext";
 import { useHreflangLinks } from "@/hooks/useHreflangLinks";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
+import PageSchema from "@/components/PageSchema";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -218,6 +219,15 @@ export default function HiddenFeaturesPage() {
 
   return (
     <div className="min-h-screen bg-background font-mono">
+      <PageSchema
+        pageUrl={`${SITE_URL}/hidden-features`}
+        name={PAGE_TITLE}
+        description={PAGE_DESC}
+        breadcrumbs={[
+          { name: "Home", path: "" },
+          { name: "Hidden Features", path: "/hidden-features" },
+        ]}
+      />
       <SiteHeader />
 
       <div className="max-w-[820px] mx-auto px-4 py-8 sm:py-12">

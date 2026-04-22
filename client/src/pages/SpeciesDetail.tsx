@@ -31,6 +31,7 @@ import { SPECIES_FAQS } from "@/lib/species-faq";
 import FAQSection from "@/components/FAQSection";
 import ScrollToTop from "@/components/ScrollToTop";
 import FAQSchema from "@/components/FAQSchema";
+import PageSchema from "@/components/PageSchema";
 import SpeciesTooltip from "@/components/SpeciesTooltip";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 import TableOfContents from "@/components/TableOfContents";
@@ -191,6 +192,16 @@ export default function SpeciesDetail() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-[#33ff33] font-mono relative overflow-hidden">
+      <PageSchema
+        pageUrl={`${SITE_URL}/species/${slug}`}
+        name={`${speciesName} - Claude Code Buddy Species Guide`}
+        description={speciesDesc}
+        breadcrumbs={[
+          { name: "Home", path: "" },
+          { name: "All Species", path: "/species" },
+          { name: speciesName, path: `/species/${slug}` },
+        ]}
+      />
       {/* Scanline overlay */}
       <div className="pointer-events-none fixed inset-0 z-50 bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.15)_0px,rgba(0,0,0,0.15)_1px,transparent_1px,transparent_2px)]" />
       <KeyboardShortcutsHelp shortcuts={detailShortcuts} />
