@@ -16271,6 +16271,610 @@ esac</code></pre>
       }
     }
   },
+  {
+    slug: "claude-code-custom-slash-commands-guide",
+    publishedAt: "2026-04-23",
+    readingTime: 10,
+    tags: ["slash-commands", "claude-code", "customization", "tutorial", "guide"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code',
+    content: {
+      en: {
+        title: "Custom Slash Commands in Claude Code: A Complete Guide",
+        metaTitle: "Claude Code Custom Slash Commands — Complete Guide 2026",
+        metaDescription: "Write your own Claude Code slash commands with frontmatter, arguments, allowed-tools, and embedded bash. Six copy-paste templates plus the scoping rules that make them shareable.",
+        excerpt: "Slash commands are shortcuts, but they are also templates, gates, and mini-agents. Learn the frontmatter fields that matter, how to pass arguments cleanly, and six command templates that replace the prompts you keep retyping.",
+        sections: [
+          {
+            heading: "Why Write Custom Slash Commands",
+            body: `<p>If you keep pasting the same prompt — "review this diff," "write a commit message," "explain this module" — you are already describing a slash command. Write it once in <code>.claude/commands/</code> and you get three wins: tab-completion, team-shareable via git, and consistent output because the prompt is fixed.</p>
+<p>Custom commands also serve as lightweight guardrails. A command with <code>allowed-tools</code> set to Read-only can enforce "review, do not modify" at the harness level, not the model level. That is a stronger guarantee than "please don't change anything" in the prompt.</p>
+<p>This guide covers the file anatomy, every frontmatter field that matters, the three argument passing styles, six copy-paste templates, and the scope rules that decide who runs your command.</p>`
+          },
+          {
+            heading: "Anatomy of a Command File",
+            body: `<p>A slash command is a Markdown file under <code>.claude/commands/</code> (project) or <code>~/.claude/commands/</code> (user). Filename becomes the command name — <code>review.md</code> → <code>/review</code>. Subdirectories use <code>:</code> as separator — <code>git/commit.md</code> → <code>/git:commit</code>.</p>
+<p>Structure:</p>
+<pre><code>---
+description: One-line summary shown in /help and autocomplete
+allowed-tools: Read, Grep, Glob, Bash(git diff:*)
+argument-hint: &lt;file-path or branch&gt;
+model: sonnet
+---
+
+Your prompt template goes here. It becomes the user message sent to
+Claude when the command runs.
+
+Use $ARGUMENTS to interpolate whatever the user typed after the command.</code></pre>
+<p>Everything above the second <code>---</code> is YAML frontmatter. Everything below is the prompt body sent verbatim to Claude, with <code>$ARGUMENTS</code> substituted for whatever the user typed after the command name.</p>`
+          },
+          {
+            heading: "Frontmatter Fields Reference",
+            body: `<table>
+<tr><th>Field</th><th>Required</th><th>What it does</th></tr>
+<tr><td><code>description</code></td><td>Yes</td><td>Shows in <code>/help</code>, autocomplete tooltip, and team docs</td></tr>
+<tr><td><code>allowed-tools</code></td><td>No</td><td>Restrict which tools Claude can use. Tighter than session-wide permissions</td></tr>
+<tr><td><code>argument-hint</code></td><td>No</td><td>Autocomplete hint shown after the command name (e.g. <code>&lt;file&gt;</code>)</td></tr>
+<tr><td><code>model</code></td><td>No</td><td>Force a specific model for this command (<code>opus</code>, <code>sonnet</code>, <code>haiku</code>)</td></tr>
+<tr><td><code>disable-model-invocation</code></td><td>No</td><td>Prevent the AI from auto-calling this command — user must type it explicitly</td></tr>
+</table>
+<h4>allowed-tools Syntax</h4>
+<p>Takes a comma-separated list of tool names, with optional patterns in parentheses for Bash:</p>
+<pre><code>allowed-tools: Read, Grep, Glob, Bash(git diff:*), Bash(git log:*)</code></pre>
+<p>Anything outside this list triggers a permission prompt even if the session-wide config would auto-approve. Use this to lock down destructive commands inside high-trust command templates.</p>`
+          },
+          {
+            heading: "Passing Arguments",
+            body: `<p>Three styles, from simplest to most powerful:</p>
+<h4>Style 1: Plain $ARGUMENTS</h4>
+<p>Everything after the command name goes into <code>$ARGUMENTS</code> verbatim.</p>
+<pre><code>// .claude/commands/explain.md
+---
+description: Explain a file in plain English
+argument-hint: &lt;file-path&gt;
+---
+
+Read the file at $ARGUMENTS and produce a 5-sentence plain-English
+explanation aimed at a new team member.</code></pre>
+<p>Usage: <code>/explain src/auth/session.ts</code></p>
+<h4>Style 2: Positional $1 $2</h4>
+<p>Reference individual space-separated tokens. Skipped if your version does not support them — fall back to parsing $ARGUMENTS.</p>
+<pre><code>---
+description: Compare two git branches on a specific path
+argument-hint: &lt;branch-a&gt; &lt;branch-b&gt; [path]
+---
+
+Compare git branch $1 against $2, focusing on the path $3 if provided.
+Summarize the diff in three bullet points.</code></pre>
+<p>Usage: <code>/compare-branches feature/auth main client/src/auth/</code></p>
+<h4>Style 3: Embedded Bash with !</h4>
+<p>Prefix a line with <code>!</code> to run bash at expansion time and splice the output into the prompt. Useful for grounding the prompt in real repo state.</p>
+<pre><code>---
+description: Draft commit message from current staged changes
+allowed-tools: Bash(git diff:*), Bash(git status)
+---
+
+Current git status:
+!\`git status --short\`
+
+Staged diff:
+!\`git diff --cached\`
+
+Draft a conventional commit message under 72 chars.</code></pre>
+<p>This runs the bash commands first, then hands Claude a prompt pre-populated with real state. No ambiguity about "what's staged."</p>`
+          },
+          {
+            heading: "Six Copy-Paste Templates",
+            body: `<h4>1. /review — PR review against main</h4>
+<pre><code>---
+description: Review current branch vs main
+allowed-tools: Read, Grep, Glob, Bash(git diff:*), Bash(git log:*)
+argument-hint: &lt;focus-area optional&gt;
+---
+
+Compare the current branch to main.
+!\`git diff main...HEAD --stat\`
+
+Focus: $ARGUMENTS (default: security, performance, test coverage)
+
+Report findings as a numbered list with file:line references.
+End with a PASS/FAIL verdict.</code></pre>
+<h4>2. /commit — draft conventional commit</h4>
+<pre><code>---
+description: Draft a conventional commit message from staged changes
+allowed-tools: Bash(git diff:*), Bash(git status)
+---
+
+Current staged changes:
+!\`git diff --cached\`
+
+Draft a single-line conventional commit (&lt; 72 chars) plus an optional
+two-line body. Do not run git commit.</code></pre>
+<h4>3. /explain — plain-English walkthrough</h4>
+<pre><code>---
+description: Explain a file or symbol in plain English
+allowed-tools: Read, Grep
+argument-hint: &lt;file-path&gt;
+---
+
+Read $ARGUMENTS and produce a 5-sentence explanation for a developer
+new to this codebase. Avoid jargon. Name the three most important
+functions and what calls them.</code></pre>
+<h4>4. /doc — generate JSDoc / TSDoc</h4>
+<pre><code>---
+description: Add JSDoc to an undocumented function
+allowed-tools: Read, Edit
+argument-hint: &lt;file:line&gt;
+---
+
+Open the file in $ARGUMENTS and add TSDoc comments to every exported
+function. Keep comments under 3 lines. Follow the existing style in the
+file.</code></pre>
+<h4>5. /fix-types — resolve TypeScript errors</h4>
+<pre><code>---
+description: Run typecheck and fix errors
+allowed-tools: Read, Edit, Write, Bash(npm run check), Grep
+---
+
+!\`npm run check 2&gt;&amp;1 | head -60\`
+
+Fix every TypeScript error above with the minimal possible change.
+Do not add \`any\`. Do not widen types. If a fix is non-obvious, leave
+it and report what is stuck.</code></pre>
+<h4>6. /deploy — preview deploy (read-only metadata)</h4>
+<pre><code>---
+description: Show deploy metadata for the current branch
+allowed-tools: Bash(git branch:*), Bash(git rev-parse:*), Read
+argument-hint: &lt;env: preview|production&gt;
+---
+
+Branch: !\`git branch --show-current\`
+Commit: !\`git rev-parse HEAD\`
+Environment requested: $ARGUMENTS
+
+Summarize what would deploy and list any pending migrations. Do NOT
+run the deploy — only describe what would happen.</code></pre>`
+          },
+          {
+            heading: "Project vs User Scope",
+            body: `<p>Slash commands resolve from two locations:</p>
+<table>
+<tr><th>Scope</th><th>Location</th><th>Use for</th></tr>
+<tr><td>Project</td><td><code>.claude/commands/</code></td><td>Team-shared, committed to git</td></tr>
+<tr><td>User</td><td><code>~/.claude/commands/</code></td><td>Your personal shortcuts across all projects</td></tr>
+</table>
+<p>When names collide, <strong>project wins</strong> — that way a team can lock down <code>/deploy</code> with the approved template regardless of what an individual has globally. If you want your personal preferences alongside team commands, use different names (<code>/my-review</code> vs <code>/review</code>).</p>
+<h4>Namespacing with Subdirectories</h4>
+<p>Place related commands in a subdirectory and invoke them with <code>:</code> notation:</p>
+<pre><code>.claude/commands/
+  git/
+    commit.md        → /git:commit
+    review.md        → /git:review
+  test/
+    unit.md          → /test:unit
+    e2e.md           → /test:e2e</code></pre>
+<p>Keeps <code>/help</code> readable once you pass ten custom commands.</p>`
+          },
+          {
+            heading: "Next Steps",
+            body: `<p>You have commands running. What compounds them:</p>
+<ul>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ folder complete guide</a> — settings.json, hooks, agents alongside commands.</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Hooks cookbook</a> — pair <code>/review</code> with a PreToolUse hook that enforces type-check before it runs.</li>
+<li><a href="/blog/claude-code-cheat-sheet-2026-printable">Claude Code cheat sheet</a> — quick lookup table for every built-in slash command.</li>
+<li><a href="/blog/top-10-mcp-servers-2026-developer-benchmark">Top 10 MCP servers</a> — commands that call MCP tools (e.g., <code>/github-search</code>) need the right servers wired up.</li>
+</ul>
+<p>Write a command worth sharing? <a href="/">Start from the checker</a> and drop it in a blog comment.</p>`
+          },
+          {
+            heading: "Frequently Asked Questions",
+            body: `<h4>Can I use custom commands to call other custom commands?</h4>
+<p>Not directly — slash commands are expanded into a single prompt, they do not recursively invoke each other. If you need composition, create a sub-agent (see <code>.claude/agents/</code>) and delegate. The agent can in turn use any command it has access to.</p>
+<h4>What happens if my command body has $ in it (not as a variable)?</h4>
+<p>Escape it by writing <code>$$</code> or, in bash embedded sections, use <code>\\$</code>. The expansion engine treats <code>$ARGUMENTS</code> and <code>$1..$9</code> as special; everything else should pass through, but prefer to escape when mixing shell commands with prompt text.</p>
+<h4>Do commands respect session-wide permissions or override them?</h4>
+<p><code>allowed-tools</code> in a command is a restriction, not an expansion. If your session already denies <code>Bash(rm *)</code>, no command can grant it. If your command declares <code>allowed-tools: Read</code>, that is the ceiling — even if the session allows more.</p>
+<h4>Can I ship commands as a package for others to install?</h4>
+<p>There is no official package format as of 2026 Q1. Teams share commands by committing them to the project <code>.claude/commands/</code> or by publishing a GitHub repo others clone into <code>~/.claude/commands/</code>. Some community tooling proposes npm-style distribution — watch the Claude Code GitHub for a canonical spec.</p>
+<h4>Why does my <code>!\`command\`</code> bash execution not run?</h4>
+<p>Two common causes: (1) the command you invoked is not in <code>allowed-tools</code> — explicit Bash allowlist required. (2) You wrote <code>!\`cmd\`</code> on a line that has content before the <code>!</code>; the expansion only triggers when <code>!</code> is the first non-whitespace character. Fix: put the bash line on its own line, no prefix.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "Claude Code 自定义 Slash 命令完全指南",
+        metaTitle: "Claude Code 自定义 Slash 命令 — 完整指南 2026",
+        metaDescription: "用 frontmatter、参数、allowed-tools 和嵌入 bash 写自己的 Claude Code slash 命令。6 个即抄即用模板 + 决定团队共享的作用域规则。",
+        excerpt: "Slash 命令是快捷方式,也是模板、闸门、迷你 agent。搞懂 frontmatter 关键字段、3 种干净的参数传递风格、6 个替代你反复粘贴 prompt 的命令模板。",
+        sections: [
+          {
+            heading: "为什么写自定义 Slash 命令",
+            body: `<p>如果你一直在粘贴同一个 prompt —— "review 这个 diff"、"写一条 commit message"、"解释这个模块"—— 你其实已经在描述一个 slash 命令。在 <code>.claude/commands/</code> 写一次,你就拿到三个好处:Tab 补全、通过 git 团队共享、prompt 固定所以输出一致。</p>
+<p>自定义命令也是轻量闸门。一个 <code>allowed-tools</code> 仅限只读工具的命令在 harness 层面就能强制"review 不改代码",不是 prompt 层面。这比"请不要改东西"强得多。</p>
+<p>本文讲清文件结构、每个重要 frontmatter 字段、3 种参数传递风格、6 个即抄即用模板,以及决定谁能跑你命令的作用域规则。</p>`
+          },
+          {
+            heading: "命令文件结构",
+            body: `<p>Slash 命令是 <code>.claude/commands/</code>(项目)或 <code>~/.claude/commands/</code>(用户)下的 Markdown 文件。文件名就是命令名 —— <code>review.md</code> → <code>/review</code>。子目录用 <code>:</code> 做分隔符 —— <code>git/commit.md</code> → <code>/git:commit</code>。</p>
+<p>结构:</p>
+<pre><code>---
+description: /help 和自动补全里显示的一行摘要
+allowed-tools: Read, Grep, Glob, Bash(git diff:*)
+argument-hint: &lt;file-path 或 branch&gt;
+model: sonnet
+---
+
+你的 prompt 模板写在这里。命令跑起来时,它会作为 user message 发给
+Claude。
+
+用 $ARGUMENTS 插入用户在命令名后输入的任何内容。</code></pre>
+<p>第二个 <code>---</code> 之前是 YAML frontmatter。之后是 prompt body,原样发给 Claude,只把 <code>$ARGUMENTS</code> 替换成用户在命令名后键入的内容。</p>`
+          },
+          {
+            heading: "Frontmatter 字段参考",
+            body: `<table>
+<tr><th>字段</th><th>必填</th><th>作用</th></tr>
+<tr><td><code>description</code></td><td>是</td><td>出现在 <code>/help</code>、自动补全提示、团队文档</td></tr>
+<tr><td><code>allowed-tools</code></td><td>否</td><td>限制 Claude 可用的工具。比会话级权限更紧</td></tr>
+<tr><td><code>argument-hint</code></td><td>否</td><td>命令名后显示的自动补全提示(如 <code>&lt;file&gt;</code>)</td></tr>
+<tr><td><code>model</code></td><td>否</td><td>为此命令强制特定模型(<code>opus</code>、<code>sonnet</code>、<code>haiku</code>)</td></tr>
+<tr><td><code>disable-model-invocation</code></td><td>否</td><td>阻止 AI 自动调用此命令 —— 用户必须显式键入</td></tr>
+</table>
+<h4>allowed-tools 语法</h4>
+<p>逗号分隔的工具名列表,Bash 可在括号里带模式:</p>
+<pre><code>allowed-tools: Read, Grep, Glob, Bash(git diff:*), Bash(git log:*)</code></pre>
+<p>不在列表里的工具即使会话级配置自动批准也会弹权限提示。用这个锁住高信任命令模板里的破坏性命令。</p>`
+          },
+          {
+            heading: "传递参数",
+            body: `<p>3 种风格,从最简单到最强大:</p>
+<h4>风格 1:普通 $ARGUMENTS</h4>
+<p>命令名后的所有内容原样进入 <code>$ARGUMENTS</code>。</p>
+<pre><code>// .claude/commands/explain.md
+---
+description: 用大白话解释一个文件
+argument-hint: &lt;file-path&gt;
+---
+
+读 $ARGUMENTS 处的文件,为新团队成员产出一段 5 句话的大白话解释。</code></pre>
+<p>用法:<code>/explain src/auth/session.ts</code></p>
+<h4>风格 2:位置参数 $1 $2</h4>
+<p>引用单独的空格分隔 token。版本不支持时退回解析 $ARGUMENTS。</p>
+<pre><code>---
+description: 在特定路径对比两个 git 分支
+argument-hint: &lt;branch-a&gt; &lt;branch-b&gt; [path]
+---
+
+对比 git 分支 $1 和 $2,如提供则聚焦路径 $3。
+用 3 个要点总结 diff。</code></pre>
+<p>用法:<code>/compare-branches feature/auth main client/src/auth/</code></p>
+<h4>风格 3:用 ! 嵌入 Bash</h4>
+<p>行首加 <code>!</code> 会在展开时跑 bash,把输出拼进 prompt。用来让 prompt 基于真实仓库状态。</p>
+<pre><code>---
+description: 根据暂存变更起草 commit message
+allowed-tools: Bash(git diff:*), Bash(git status)
+---
+
+当前 git 状态:
+!\`git status --short\`
+
+暂存 diff:
+!\`git diff --cached\`
+
+起草一条 72 字符以内的 conventional commit message。</code></pre>
+<p>先跑 bash 命令,再把预填真实状态的 prompt 交给 Claude。"什么是暂存"不再有歧义。</p>`
+          },
+          {
+            heading: "6 个即抄即用模板",
+            body: `<h4>1. /review —— 对 main 做 PR review</h4>
+<pre><code>---
+description: 对比当前分支和 main 做 review
+allowed-tools: Read, Grep, Glob, Bash(git diff:*), Bash(git log:*)
+argument-hint: &lt;可选聚焦&gt;
+---
+
+对比当前分支和 main。
+!\`git diff main...HEAD --stat\`
+
+聚焦:$ARGUMENTS(默认:安全、性能、测试覆盖)
+
+按编号列表报告 file:line 参考,最后给 PASS/FAIL 判定。</code></pre>
+<h4>2. /commit —— 起草 conventional commit</h4>
+<pre><code>---
+description: 从暂存变更起草 conventional commit message
+allowed-tools: Bash(git diff:*), Bash(git status)
+---
+
+当前暂存变更:
+!\`git diff --cached\`
+
+起草一条单行 conventional commit(&lt; 72 字符)加可选两行 body。不要跑 git commit。</code></pre>
+<h4>3. /explain —— 大白话讲解</h4>
+<pre><code>---
+description: 用大白话解释文件或符号
+allowed-tools: Read, Grep
+argument-hint: &lt;file-path&gt;
+---
+
+读 $ARGUMENTS,为对代码库不熟的开发者产出 5 句解释。避免行话。点名
+3 个最重要的函数以及谁在调用它们。</code></pre>
+<h4>4. /doc —— 生成 JSDoc / TSDoc</h4>
+<pre><code>---
+description: 给未文档化的函数加 JSDoc
+allowed-tools: Read, Edit
+argument-hint: &lt;file:line&gt;
+---
+
+打开 $ARGUMENTS 的文件,给每个 exported 函数加 TSDoc 注释。每条注释 3 行以内。
+沿用文件已有风格。</code></pre>
+<h4>5. /fix-types —— 解决 TypeScript 错误</h4>
+<pre><code>---
+description: 跑类型检查并修错误
+allowed-tools: Read, Edit, Write, Bash(npm run check), Grep
+---
+
+!\`npm run check 2&gt;&amp;1 | head -60\`
+
+用最小改动修上面每个 TypeScript 错误。不许加 \`any\`。不许拓宽类型。
+修复不明显的就留着,报告卡在哪。</code></pre>
+<h4>6. /deploy —— 预览部署(只读元数据)</h4>
+<pre><code>---
+description: 显示当前分支的部署元数据
+allowed-tools: Bash(git branch:*), Bash(git rev-parse:*), Read
+argument-hint: &lt;env: preview|production&gt;
+---
+
+分支:!\`git branch --show-current\`
+Commit:!\`git rev-parse HEAD\`
+请求环境:$ARGUMENTS
+
+总结会部署什么 + 列出未跑 migration。不要跑部署 —— 只描述会发生什么。</code></pre>`
+          },
+          {
+            heading: "项目 vs 用户作用域",
+            body: `<p>Slash 命令从两处解析:</p>
+<table>
+<tr><th>作用域</th><th>位置</th><th>用于</th></tr>
+<tr><td>项目</td><td><code>.claude/commands/</code></td><td>团队共享,提交到 git</td></tr>
+<tr><td>用户</td><td><code>~/.claude/commands/</code></td><td>跨所有项目的个人快捷</td></tr>
+</table>
+<p>同名冲突时,<strong>项目胜</strong> —— 这样不管个人全局装了什么,团队都能用批准模板锁定 <code>/deploy</code>。想让个人偏好与团队命令并存,用不同名字(<code>/my-review</code> 对 <code>/review</code>)。</p>
+<h4>用子目录做命名空间</h4>
+<p>相关命令放子目录,用 <code>:</code> 记法调用:</p>
+<pre><code>.claude/commands/
+  git/
+    commit.md        → /git:commit
+    review.md        → /git:review
+  test/
+    unit.md          → /test:unit
+    e2e.md           → /test:e2e</code></pre>
+<p>自定义命令超过 10 个后,<code>/help</code> 才能保持可读。</p>`
+          },
+          {
+            heading: "接下来",
+            body: `<p>命令跑起来了,能放大它们的是:</p>
+<ul>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 目录完整指南</a> —— settings.json、hooks、agents 与 commands 并列。</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Hooks 手册</a> —— 把 <code>/review</code> 和 PreToolUse hook 配对,跑之前强制类型检查。</li>
+<li><a href="/blog/claude-code-cheat-sheet-2026-printable">Claude Code 速查表</a> —— 所有内置 slash 命令的快查表。</li>
+<li><a href="/blog/top-10-mcp-servers-2026-developer-benchmark">Top 10 MCP 服务器</a> —— 调用 MCP 工具的命令(如 <code>/github-search</code>)需要对应服务器接上。</li>
+</ul>
+<p>写了值得分享的命令?<a href="/">从 checker 开始</a>,在博客评论里贴。</p>`
+          },
+          {
+            heading: "常见问题",
+            body: `<h4>自定义命令能调用其他自定义命令吗?</h4>
+<p>不能直接 —— slash 命令展开成单个 prompt,不会递归调用。需要组合就做子 agent(见 <code>.claude/agents/</code>)委派。agent 里反而能用它能访问的任何命令。</p>
+<h4>命令 body 里有 $ 但不是变量怎么办?</h4>
+<p>写 <code>$$</code> 转义,bash 嵌入段落里用 <code>\\$</code>。展开引擎把 <code>$ARGUMENTS</code> 和 <code>$1..$9</code> 当特殊,其他应该能透传 —— 但 shell 和 prompt 混合时建议显式转义。</p>
+<h4>命令尊重会话级权限还是覆盖?</h4>
+<p>命令里的 <code>allowed-tools</code> 是**限制**,不是扩张。会话已经拒绝 <code>Bash(rm *)</code>,任何命令都不能放行。命令声明 <code>allowed-tools: Read</code> 就是天花板 —— 即使会话允许更多。</p>
+<h4>命令能打成包给别人安装吗?</h4>
+<p>2026 Q1 没有官方包格式。团队通过把命令提交到项目 <code>.claude/commands/</code> 或者让别人 clone 到 <code>~/.claude/commands/</code> 来分享。社区工具在提 npm 风格分发 —— 关注 Claude Code GitHub 看规范确定。</p>
+<h4>为什么我的 <code>!\`command\`</code> bash 不跑?</h4>
+<p>两个常见原因:(1)调用的命令不在 <code>allowed-tools</code> 里 —— Bash 白名单必须显式。(2)<code>!</code> 前面还有内容,展开只在 <code>!</code> 是第一个非空字符时触发。修复:bash 单独一行,前面不带字。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "Claude Code 커스텀 슬래시 명령 완벽 가이드",
+        metaTitle: "Claude Code 커스텀 슬래시 명령 — 완벽 가이드 2026",
+        metaDescription: "frontmatter, 인자, allowed-tools, 내장 bash로 나만의 Claude Code 슬래시 명령 작성. 복붙 템플릿 6개 + 팀 공유를 결정하는 스코프 규칙.",
+        excerpt: "슬래시 명령은 단축키이자 템플릿, 게이트, 미니 에이전트입니다. 중요한 frontmatter 필드, 깔끔한 인자 전달 3가지 스타일, 반복해서 붙여넣는 prompt를 대체하는 명령 템플릿 6가지를 익히세요.",
+        sections: [
+          {
+            heading: "커스텀 슬래시 명령을 쓰는 이유",
+            body: `<p>같은 prompt — "이 diff 리뷰", "커밋 메시지 작성", "이 모듈 설명" — 를 반복해서 붙여넣고 있다면 이미 슬래시 명령을 설명하고 있는 것입니다. <code>.claude/commands/</code>에 한 번 쓰면 세 가지 이득: 탭 자동완성, git으로 팀 공유, prompt가 고정되어 일관된 출력.</p>
+<p>커스텀 명령은 가벼운 가드레일이기도 합니다. <code>allowed-tools</code>가 읽기 전용으로 설정된 명령은 harness 레벨에서 "리뷰, 수정 금지"를 강제합니다 — 모델 레벨이 아닙니다. "아무것도 바꾸지 마세요"보다 훨씬 강한 보장이죠.</p>
+<p>이 가이드는 파일 구조, 중요한 frontmatter 필드, 3가지 인자 전달 스타일, 복붙 템플릿 6개, 그리고 누가 명령을 실행하는지 결정하는 스코프 규칙을 다룹니다.</p>`
+          },
+          {
+            heading: "명령 파일 해부",
+            body: `<p>슬래시 명령은 <code>.claude/commands/</code>(프로젝트) 또는 <code>~/.claude/commands/</code>(사용자) 아래의 Markdown 파일입니다. 파일명이 명령 이름이 됩니다 — <code>review.md</code> → <code>/review</code>. 하위 디렉터리는 <code>:</code>를 구분자로 사용 — <code>git/commit.md</code> → <code>/git:commit</code>.</p>
+<p>구조:</p>
+<pre><code>---
+description: /help와 자동완성에 표시되는 한 줄 요약
+allowed-tools: Read, Grep, Glob, Bash(git diff:*)
+argument-hint: &lt;file-path 또는 branch&gt;
+model: sonnet
+---
+
+여기에 prompt 템플릿. 명령이 실행되면 user message로 Claude에 전송됩니다.
+
+사용자가 명령 뒤에 입력한 내용을 삽입하려면 $ARGUMENTS.</code></pre>
+<p>두 번째 <code>---</code> 위는 YAML frontmatter. 아래는 prompt body로, 명령 이름 뒤에 사용자가 입력한 내용이 <code>$ARGUMENTS</code>로 치환되어 Claude에 그대로 전달.</p>`
+          },
+          {
+            heading: "Frontmatter 필드 레퍼런스",
+            body: `<table>
+<tr><th>필드</th><th>필수</th><th>역할</th></tr>
+<tr><td><code>description</code></td><td>예</td><td><code>/help</code>, 자동완성 툴팁, 팀 문서에 표시</td></tr>
+<tr><td><code>allowed-tools</code></td><td>아니오</td><td>Claude가 쓸 수 있는 도구 제한. 세션 전역 권한보다 엄격</td></tr>
+<tr><td><code>argument-hint</code></td><td>아니오</td><td>명령 이름 뒤에 표시되는 자동완성 힌트(예: <code>&lt;file&gt;</code>)</td></tr>
+<tr><td><code>model</code></td><td>아니오</td><td>이 명령에 특정 모델 강제(<code>opus</code>, <code>sonnet</code>, <code>haiku</code>)</td></tr>
+<tr><td><code>disable-model-invocation</code></td><td>아니오</td><td>AI가 이 명령을 자동 호출하지 못하게 — 사용자가 명시적으로 입력 필요</td></tr>
+</table>
+<h4>allowed-tools 문법</h4>
+<p>쉼표 구분 도구 이름 리스트, Bash는 괄호로 패턴 선택:</p>
+<pre><code>allowed-tools: Read, Grep, Glob, Bash(git diff:*), Bash(git log:*)</code></pre>
+<p>이 리스트에 없는 건 세션 전역 설정이 자동 승인이어도 권한 프롬프트가 뜹니다. 고신뢰 명령 템플릿 내부에서 파괴적 명령을 잠그는 데 사용.</p>`
+          },
+          {
+            heading: "인자 전달",
+            body: `<p>가장 단순한 것부터 가장 강력한 것까지 3가지 스타일:</p>
+<h4>스타일 1: 평범한 $ARGUMENTS</h4>
+<p>명령 이름 뒤의 모든 것이 <code>$ARGUMENTS</code>로 그대로 들어갑니다.</p>
+<pre><code>// .claude/commands/explain.md
+---
+description: 파일을 평이한 영어로 설명
+argument-hint: &lt;file-path&gt;
+---
+
+$ARGUMENTS의 파일을 읽고 새 팀원을 위한 5문장 평이한 설명 생성.</code></pre>
+<p>사용법: <code>/explain src/auth/session.ts</code></p>
+<h4>스타일 2: 위치 인자 $1 $2</h4>
+<p>공백으로 분리된 개별 토큰 참조. 지원하지 않는 버전이면 $ARGUMENTS 파싱으로 폴백.</p>
+<pre><code>---
+description: 특정 경로에서 두 git 브랜치 비교
+argument-hint: &lt;branch-a&gt; &lt;branch-b&gt; [path]
+---
+
+git 브랜치 $1과 $2를 비교, 제공된다면 $3 경로에 집중.
+diff를 3개 불릿으로 요약.</code></pre>
+<p>사용법: <code>/compare-branches feature/auth main client/src/auth/</code></p>
+<h4>스타일 3: !로 Bash 내장</h4>
+<p>줄 앞에 <code>!</code>를 붙이면 전개 시점에 bash가 실행되고 출력이 prompt에 합쳐집니다. 실제 레포 상태에 prompt를 기반 두는 데 유용.</p>
+<pre><code>---
+description: 현재 스테이징된 변경에서 commit 메시지 초안
+allowed-tools: Bash(git diff:*), Bash(git status)
+---
+
+현재 git 상태:
+!\`git status --short\`
+
+스테이징된 diff:
+!\`git diff --cached\`
+
+72자 이하 conventional commit 메시지 초안 작성.</code></pre>
+<p>bash 명령을 먼저 실행한 뒤 실제 상태로 미리 채워진 prompt를 Claude에게 전달. "무엇이 스테이징되었나"에 모호함이 없습니다.</p>`
+          },
+          {
+            heading: "복붙 템플릿 6가지",
+            body: `<h4>1. /review — main과의 PR 리뷰</h4>
+<pre><code>---
+description: 현재 브랜치를 main과 비교 리뷰
+allowed-tools: Read, Grep, Glob, Bash(git diff:*), Bash(git log:*)
+argument-hint: &lt;선택적 포커스&gt;
+---
+
+현재 브랜치를 main과 비교.
+!\`git diff main...HEAD --stat\`
+
+포커스: $ARGUMENTS (기본: 보안, 성능, 테스트 커버리지)
+
+file:line 참조와 함께 번호 매긴 리스트로 보고.
+PASS/FAIL 판정으로 마무리.</code></pre>
+<h4>2. /commit — conventional commit 초안</h4>
+<pre><code>---
+description: 스테이징된 변경에서 conventional commit 메시지 초안
+allowed-tools: Bash(git diff:*), Bash(git status)
+---
+
+현재 스테이징된 변경:
+!\`git diff --cached\`
+
+72자 이하 한 줄 conventional commit와 선택적 두 줄 body 초안.
+git commit은 실행하지 말 것.</code></pre>
+<h4>3. /explain — 평이한 설명</h4>
+<pre><code>---
+description: 파일이나 심볼을 평이한 영어로 설명
+allowed-tools: Read, Grep
+argument-hint: &lt;file-path&gt;
+---
+
+$ARGUMENTS를 읽고 이 코드베이스에 새로 온 개발자를 위한 5문장 설명.
+전문용어 지양. 가장 중요한 3개 함수와 그것을 호출하는 것 지목.</code></pre>
+<h4>4. /doc — JSDoc/TSDoc 생성</h4>
+<pre><code>---
+description: 문서화되지 않은 함수에 JSDoc 추가
+allowed-tools: Read, Edit
+argument-hint: &lt;file:line&gt;
+---
+
+$ARGUMENTS의 파일을 열고 모든 exported 함수에 TSDoc 주석 추가.
+주석은 3줄 이하. 파일 기존 스타일 준수.</code></pre>
+<h4>5. /fix-types — TypeScript 오류 해결</h4>
+<pre><code>---
+description: 타입체크 실행 및 오류 수정
+allowed-tools: Read, Edit, Write, Bash(npm run check), Grep
+---
+
+!\`npm run check 2&gt;&amp;1 | head -60\`
+
+위의 모든 TypeScript 오류를 최소 변경으로 수정.
+\`any\` 추가 금지. 타입 확장 금지. 수정이 불분명하면 그대로 두고 무엇이 막혔는지 보고.</code></pre>
+<h4>6. /deploy — 프리뷰 배포(읽기 전용 메타데이터)</h4>
+<pre><code>---
+description: 현재 브랜치의 배포 메타데이터 표시
+allowed-tools: Bash(git branch:*), Bash(git rev-parse:*), Read
+argument-hint: &lt;env: preview|production&gt;
+---
+
+브랜치: !\`git branch --show-current\`
+Commit: !\`git rev-parse HEAD\`
+요청 환경: $ARGUMENTS
+
+무엇이 배포될지 요약하고 대기 중인 마이그레이션 나열.
+배포는 실행하지 말 것 — 무엇이 일어날지만 설명.</code></pre>`
+          },
+          {
+            heading: "프로젝트 vs 사용자 스코프",
+            body: `<p>슬래시 명령은 두 곳에서 해석됩니다:</p>
+<table>
+<tr><th>스코프</th><th>위치</th><th>용도</th></tr>
+<tr><td>프로젝트</td><td><code>.claude/commands/</code></td><td>팀 공유, git 커밋</td></tr>
+<tr><td>사용자</td><td><code>~/.claude/commands/</code></td><td>모든 프로젝트에 걸친 개인 단축</td></tr>
+</table>
+<p>이름 충돌 시 <strong>프로젝트가 이깁니다</strong> — 그 덕에 개인이 전역에 뭘 갖고 있든 팀이 승인된 템플릿으로 <code>/deploy</code>를 잠글 수 있습니다. 팀 명령과 개인 선호를 같이 쓰려면 다른 이름을 쓰세요(<code>/my-review</code> vs <code>/review</code>).</p>
+<h4>하위 디렉터리로 네임스페이스</h4>
+<p>관련 명령을 하위 디렉터리에 두고 <code>:</code> 표기로 호출:</p>
+<pre><code>.claude/commands/
+  git/
+    commit.md        → /git:commit
+    review.md        → /git:review
+  test/
+    unit.md          → /test:unit
+    e2e.md           → /test:e2e</code></pre>
+<p>커스텀 명령 10개 넘어가면 <code>/help</code>를 읽을 만하게 유지해 줍니다.</p>`
+          },
+          {
+            heading: "다음 단계",
+            body: `<p>명령이 돌아가고 있습니다. 이를 증폭시키는 것들:</p>
+<ul>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 폴더 완벽 가이드</a> — commands 옆의 settings.json, hooks, agents.</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Hooks 쿡북</a> — <code>/review</code>와 실행 전 타입체크 강제 PreToolUse hook 짝지음.</li>
+<li><a href="/blog/claude-code-cheat-sheet-2026-printable">Claude Code 치트시트</a> — 모든 내장 슬래시 명령 빠른 조회표.</li>
+<li><a href="/blog/top-10-mcp-servers-2026-developer-benchmark">Top 10 MCP 서버</a> — MCP 도구를 호출하는 명령(예: <code>/github-search</code>)은 올바른 서버가 연결되어 있어야 합니다.</li>
+</ul>
+<p>공유할 만한 명령을 작성했나요? <a href="/">체커에서 시작</a>하고 블로그 댓글에 남기세요.</p>`
+          },
+          {
+            heading: "자주 묻는 질문",
+            body: `<h4>커스텀 명령으로 다른 커스텀 명령을 호출할 수 있나요?</h4>
+<p>직접적으로는 불가능 — 슬래시 명령은 단일 prompt로 전개되고 재귀 호출하지 않습니다. 조합이 필요하면 서브 에이전트(<code>.claude/agents/</code> 참조)를 만들어 위임하세요. 에이전트는 접근할 수 있는 모든 명령을 쓸 수 있습니다.</p>
+<h4>명령 body에 $가 있는데 변수가 아니라면?</h4>
+<p><code>$$</code>로 이스케이프하거나 bash 내장 섹션에서는 <code>\\$</code> 사용. 전개 엔진은 <code>$ARGUMENTS</code>와 <code>$1..$9</code>를 특수 처리; 나머지는 통과해야 하지만 셸 명령과 prompt 텍스트를 섞을 때는 명시적 이스케이프를 선호.</p>
+<h4>명령이 세션 전역 권한을 존중하나요 오버라이드하나요?</h4>
+<p>명령의 <code>allowed-tools</code>는 제한이지 확장이 아닙니다. 세션이 이미 <code>Bash(rm *)</code>를 거부하면 어떤 명령도 이를 부여할 수 없습니다. 명령이 <code>allowed-tools: Read</code>를 선언하면 그것이 천장입니다 — 세션이 더 많이 허용하더라도.</p>
+<h4>다른 사람이 설치할 수 있도록 명령을 패키지로 배포할 수 있나요?</h4>
+<p>2026 Q1 기준 공식 패키지 포맷은 없습니다. 팀은 프로젝트 <code>.claude/commands/</code>에 커밋하거나 다른 사람이 <code>~/.claude/commands/</code>로 clone하는 GitHub 레포를 발행해 명령을 공유합니다. 일부 커뮤니티 도구가 npm 스타일 배포를 제안 — 공식 스펙은 Claude Code GitHub 주시.</p>
+<h4>내 <code>!\`command\`</code> bash 실행이 왜 안 돌아가나요?</h4>
+<p>두 가지 흔한 원인: (1) 호출한 명령이 <code>allowed-tools</code>에 없음 — Bash 명시적 허용 목록 필수. (2) <code>!</code> 앞에 내용이 있는 줄에 작성 — 전개는 <code>!</code>가 첫 번째 공백 아닌 문자일 때만 발동. 수정: bash 줄을 단독으로, 접두 없이.</p>`
+          }
+        ]
+      }
+    }
+  },
 ];
 
 
