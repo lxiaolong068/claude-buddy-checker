@@ -14305,6 +14305,526 @@ Hatched 2026-04-01. Lost 2026-04-08. Remembered always.</code></pre>
 },
     }
   },
+  {
+    slug: "claude-code-dotclaude-folder-complete-guide",
+    publishedAt: "2026-04-23",
+    readingTime: 10,
+    tags: ["setup", "claude-code", "configuration", "tutorial", "guide"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code',
+    content: {
+      en: {
+        title: "The .claude/ Folder: Complete Setup Guide for Claude Code",
+        metaTitle: "Claude Code .claude/ Folder — Complete Setup Guide 2026",
+        metaDescription: "Configure Claude Code's .claude/ folder with settings.json, hooks, custom slash commands, and MCP servers. Battle-tested patterns from real team workflows.",
+        excerpt: "Claude Code's .claude/ folder is where individual devs become teams. Learn how settings.json, hooks, slash commands, and sub-agents combine into a configuration that scales — plus 6 copy-paste templates and 4 mistakes that bite every team at least once.",
+        sections: [
+          {
+            heading: "Why the .claude/ Folder Matters",
+            body: `<p>You have been using Claude Code for a while. You have typed <code>claude</code>, watched it edit files, maybe even wired up an MCP server or two. But there is a quiet folder in your project root that does more than you think: <code>.claude/</code>.</p>
+<p>This is where individual developers become teams. It is where "Claude works for me" becomes "Claude works for us." Without it, every teammate reinvents the wheel — the same permission prompts, the same manual commands, the same style drift across reviews.</p>
+<p>This guide walks through every surface the <code>.claude/</code> folder exposes — settings, hooks, slash commands, sub-agents, memory — plus six battle-tested templates you can copy today and four mistakes that bite every team at least once.</p>`
+          },
+          {
+            heading: "Anatomy of .claude/",
+            body: `<p>Here is the full file tree, with every file Claude Code will recognize:</p>
+<pre><code>.claude/
+├── settings.json             # Committed team config (permissions, hooks, env)
+├── settings.local.json       # Per-dev overrides — gitignore this
+├── CLAUDE.md                 # Project-specific instructions for Claude
+├── commands/
+│   ├── review.md             # Custom /review slash command
+│   └── deploy.md             # Custom /deploy slash command
+├── agents/
+│   ├── security-reviewer.md  # Specialized sub-agent definition
+│   └── doc-writer.md         # Another specialized agent
+├── hooks/
+│   └── pre-commit.sh         # Shell script triggered before tool use
+└── memory/                   # Auto-managed; skills read/write here
+    └── MEMORY.md             # Index of per-topic memory files</code></pre>
+<h4>What to Commit vs Ignore</h4>
+<p>Commit to git: <code>settings.json</code>, <code>CLAUDE.md</code>, <code>commands/</code>, <code>agents/</code>, and <code>hooks/</code>. These define team behavior and belong in your repo.</p>
+<p>Add to <code>.gitignore</code>: <code>settings.local.json</code> (contains API keys, personal paths) and <code>memory/</code> (per-user state).</p>`
+          },
+          {
+            heading: "Three Scopes and Merge Order",
+            body: `<p>Claude Code resolves configuration from three scopes, applied in order of increasing priority:</p>
+<table>
+<tr><th>Scope</th><th>Location</th><th>Committed</th><th>Purpose</th></tr>
+<tr><td>User</td><td><code>~/.claude/settings.json</code></td><td>No</td><td>Your personal defaults across all projects</td></tr>
+<tr><td>Project</td><td><code>.claude/settings.json</code></td><td>Yes</td><td>Team-wide agreement</td></tr>
+<tr><td>Local</td><td><code>.claude/settings.local.json</code></td><td>No</td><td>Per-dev project override</td></tr>
+</table>
+<p>When keys collide, <strong>Local wins</strong>, then <strong>Project</strong>, then <strong>User</strong>. This means a teammate can temporarily grant themselves a permission their laptop needs without affecting the shared config.</p>
+<h4>Debugging Effective Config</h4>
+<p>If Claude behaves differently than you expect, inspect the merged state in-session by asking:</p>
+<pre><code>Show me what permissions are currently active</code></pre>
+<p>Claude will display the resolved permission set, telling you which scope contributed each entry.</p>`
+          },
+          {
+            heading: "Six Copy-Paste Templates",
+            body: `<h4>1. Minimal settings.json (solo use)</h4>
+<pre><code>{
+  "permissions": {
+    "allow": ["Bash(npm run *)", "Edit", "Write", "Read"]
+  }
+}</code></pre>
+<p>Enough to unblock most workflows without full wildcard exposure.</p>
+<h4>2. Team-Wide Permission Allowlist</h4>
+<pre><code>{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)", "Bash(git status)", "Bash(git diff)",
+      "Bash(git log *)", "Bash(pnpm install)",
+      "Edit", "Write", "Read", "Grep", "Glob"
+    ],
+    "deny": [
+      "Bash(git push *)", "Bash(rm -rf *)", "Bash(sudo *)"
+    ]
+  }
+}</code></pre>
+<p>Denies write-to-remote and destructive commands but allows everyday dev loops without prompting.</p>
+<h4>3. Pre-Commit Hook for Type Safety</h4>
+<p>In <code>.claude/settings.json</code>:</p>
+<pre><code>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "sh .claude/hooks/typecheck.sh" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<p>And <code>.claude/hooks/typecheck.sh</code>:</p>
+<pre><code>#!/bin/sh
+npm run check || exit 1</code></pre>
+<p>Any Edit/Write tool call is gated by a passing type check. Non-zero exit forces Claude to fix before proceeding.</p>
+<h4>4. Custom /review Slash Command</h4>
+<p>Create <code>.claude/commands/review.md</code>:</p>
+<pre><code>---
+name: review
+description: Run a disciplined PR review on the current branch
+---
+
+Review the current branch compared to main. Focus on:
+1. Security issues (input validation, auth, secrets)
+2. Performance regressions
+3. Test coverage gaps
+4. Anti-patterns relative to our existing code style
+
+Report findings as a numbered list with file:line references.
+End with a PASS/FAIL verdict.</code></pre>
+<p>Now typing <code>/review</code> in the CLI runs this prompt against the current repo state.</p>
+<h4>5. Specialized Sub-Agent</h4>
+<p>In <code>.claude/agents/security-reviewer.md</code>:</p>
+<pre><code>---
+name: security-reviewer
+description: Reviews code for security vulnerabilities. Use for auth flows, input handling, and secret management.
+tools: Read, Grep, Glob
+model: sonnet
+---
+
+You are a security-focused code reviewer. Read the target files and look for OWASP Top 10 categories: injection, broken auth, sensitive data exposure, XXE, broken access control, security misconfiguration, XSS, insecure deserialization, vulnerable dependencies, and logging gaps.
+
+Report each finding with CWE reference and proposed fix.</code></pre>
+<p>Delegate via: <code>@agent-security-reviewer review client/src/auth/</code>.</p>
+<h4>6. Multi-Stack env Setup</h4>
+<pre><code>{
+  "env": {
+    "PYTHONPATH": "./src",
+    "NODE_ENV": "development",
+    "RUST_LOG": "debug"
+  }
+}</code></pre>
+<p>Every tool invocation starts with these env vars. Useful for projects that mix stacks.</p>`
+          },
+          {
+            heading: "Four Common Mistakes",
+            body: `<h4>1. Committing API keys in settings.json</h4>
+<p>The classic. If you need a secret, reference an environment variable, never inline it:</p>
+<pre><code>{
+  "env": {
+    "OPENAI_API_KEY": "$OPENAI_API_KEY"
+  }
+}</code></pre>
+<p>Your shell resolves the variable at invocation time — the key never sits in your repo.</p>
+<h4>2. Using wildcard permissions</h4>
+<p><code>"Bash(*)"</code> feels convenient until a hallucinated <code>sudo rm -rf</code> wipes your <code>node_modules</code> (and your weekend). Allowlist specific patterns.</p>
+<h4>3. Forgetting to gitignore settings.local.json</h4>
+<p>Always add it to <code>.gitignore</code>. It is designed to hold local-only overrides — your personal API keys and paths specific to your laptop have no business in a team repo.</p>
+<h4>4. Blocking hooks that break the session</h4>
+<p>If a <code>PreToolUse</code> hook takes 30 seconds to run, the entire session stalls. Keep hooks under 2s. For heavier checks, use <code>PostToolUse</code> (async) or defer to CI.</p>`
+          },
+          {
+            heading: "Next Steps",
+            body: `<p>You now have a working <code>.claude/</code>. The next two pieces that compound this setup:</p>
+<ul>
+<li><a href="/revive">Install the MCP Buddy server</a> — if you are missing the terminal pet ecosystem, our MCP guide walks you through the 5-minute install.</li>
+<li><a href="/hidden-features">Explore Claude Code's hidden features</a> — KAIROS, ULTRAPLAN, and the Undercover Mode that surfaced in the March 2026 source leak.</li>
+<li><a href="/blog/find-your-uuid-complete-platform-guide">Find your account UUID</a> — some of the settings above reference your user ID for personalization.</li>
+</ul>
+<p>Questions or battle-tested snippets of your own? <a href="/">Check your own buddy on claudebuddy.art</a> and join the discussion under any article.</p>`
+          },
+          {
+            heading: "Frequently Asked Questions",
+            body: `<h4>Can I share my .claude/ folder across multiple projects?</h4>
+<p>Put shared settings in <code>~/.claude/settings.json</code> (user scope). Anything project-specific should stay in <code>.claude/settings.json</code>. For slash commands you want everywhere, put them in <code>~/.claude/commands/</code>.</p>
+<h4>Does .claude/ work with IDE extensions like Cursor or VS Code?</h4>
+<p>The <code>.claude/</code> folder is specific to Claude Code. Cursor has its own <code>.cursorrules</code> system. Claude Code's VS Code extension respects the same folder as the CLI, so settings are shared automatically.</p>
+<h4>What happens if settings.json has a syntax error?</h4>
+<p>Claude Code prints a validation error on startup and falls back to defaults for the invalid section. A quick way to verify before committing: open the file and check JSON parses (<code>cat .claude/settings.json | jq .</code>).</p>
+<h4>How do I debug which permissions are actually applied?</h4>
+<p>Start a session and ask Claude <em>"Show me your current permissions"</em> — it will list the merged effective set across all three scopes. You can also toggle <code>--verbose</code> on launch to see the resolution chain.</p>
+<h4>Can I override Claude Code's built-in slash commands?</h4>
+<p>Yes. If you create <code>.claude/commands/help.md</code>, it takes priority over the built-in <code>/help</code>. Use this carefully — you lose the default behavior until you remove your override.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "Claude Code 的 .claude/ 目录 — 完整配置指南",
+        metaTitle: "Claude Code .claude/ 目录完整配置指南 2026",
+        metaDescription: "配置 Claude Code 的 .claude/ 目录:settings.json、hooks、自定义 slash 命令与 MCP 服务器。来自真实团队工作流的六个实战模板。",
+        excerpt: "Claude Code 的 .claude/ 目录是个人开发者走向团队协作的关键。本文讲清 settings.json、hooks、slash 命令与子 agent 如何组合成可规模化的配置,附 6 个即拷即用模板和 4 个每个团队都会踩的坑。",
+        sections: [
+          {
+            heading: ".claude/ 目录为什么重要",
+            body: `<p>你已经用 Claude Code 一段时间。键入 <code>claude</code>、看它改文件、也许还接了一两个 MCP 服务器。但你项目根目录下有个安静的文件夹,能做的事比你以为的多得多:<code>.claude/</code>。</p>
+<p>这里是个人开发者变成团队的地方。是"Claude 对我有用"变成"Claude 对我们团队都有用"的地方。没有它,每个同事都在重复造轮子 —— 一样的权限提示、一样的手动命令、一样的风格漂移。</p>
+<p>本文讲清 <code>.claude/</code> 暴露的每个接口 —— 配置、hooks、slash 命令、子 agent、记忆 —— 再附上 6 个实战模板让你立刻开抄,还有 4 个每个团队都会中招至少一次的坑。</p>`
+          },
+          {
+            heading: ".claude/ 文件结构",
+            body: `<p>下面是完整的文件树,列出 Claude Code 识别的所有文件:</p>
+<pre><code>.claude/
+├── settings.json             # 提交到仓库的团队配置(权限、hooks、环境变量)
+├── settings.local.json       # 本地覆盖 — 加进 .gitignore
+├── CLAUDE.md                 # 项目级 Claude 指令
+├── commands/
+│   ├── review.md             # 自定义 /review slash 命令
+│   └── deploy.md             # 自定义 /deploy slash 命令
+├── agents/
+│   ├── security-reviewer.md  # 专项子 agent 定义
+│   └── doc-writer.md         # 另一个专项 agent
+├── hooks/
+│   └── pre-commit.sh         # 工具调用前触发的 shell 脚本
+└── memory/                   # 自动管理;skills 读写
+    └── MEMORY.md             # 分主题记忆文件索引</code></pre>
+<h4>哪些提交到 git,哪些忽略</h4>
+<p>提交:<code>settings.json</code>、<code>CLAUDE.md</code>、<code>commands/</code>、<code>agents/</code>、<code>hooks/</code>。这些是团队行为定义,属于仓库内容。</p>
+<p>加入 <code>.gitignore</code>:<code>settings.local.json</code>(含 API key、个人路径)和 <code>memory/</code>(每用户状态)。</p>`
+          },
+          {
+            heading: "三层作用域与合并顺序",
+            body: `<p>Claude Code 从三个作用域解析配置,优先级递增:</p>
+<table>
+<tr><th>作用域</th><th>位置</th><th>提交</th><th>用途</th></tr>
+<tr><td>用户</td><td><code>~/.claude/settings.json</code></td><td>否</td><td>跨所有项目的个人默认值</td></tr>
+<tr><td>项目</td><td><code>.claude/settings.json</code></td><td>是</td><td>团队统一约定</td></tr>
+<tr><td>本地</td><td><code>.claude/settings.local.json</code></td><td>否</td><td>单开发者在本项目的覆盖</td></tr>
+</table>
+<p>键冲突时,<strong>本地 > 项目 > 用户</strong>。这意味着同事可以临时在自己机器上放宽某个权限,而不影响共享配置。</p>
+<h4>调试生效配置</h4>
+<p>如果 Claude 行为与预期不符,可以在会话中直接问:</p>
+<pre><code>告诉我当前生效的权限集合</code></pre>
+<p>Claude 会列出合并后的权限集合,并标明每条来自哪个作用域。</p>`
+          },
+          {
+            heading: "六个即抄即用模板",
+            body: `<h4>1. 最小 settings.json(单人使用)</h4>
+<pre><code>{
+  "permissions": {
+    "allow": ["Bash(npm run *)", "Edit", "Write", "Read"]
+  }
+}</code></pre>
+<p>足以解锁大多数工作流,无需放开完全通配。</p>
+<h4>2. 团队权限白名单</h4>
+<pre><code>{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)", "Bash(git status)", "Bash(git diff)",
+      "Bash(git log *)", "Bash(pnpm install)",
+      "Edit", "Write", "Read", "Grep", "Glob"
+    ],
+    "deny": [
+      "Bash(git push *)", "Bash(rm -rf *)", "Bash(sudo *)"
+    ]
+  }
+}</code></pre>
+<p>拒绝远端推送和破坏性命令,但常规开发循环无需反复授权。</p>
+<h4>3. 类型检查 Pre-Commit Hook</h4>
+<p><code>.claude/settings.json</code>:</p>
+<pre><code>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "sh .claude/hooks/typecheck.sh" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<p><code>.claude/hooks/typecheck.sh</code>:</p>
+<pre><code>#!/bin/sh
+npm run check || exit 1</code></pre>
+<p>任何 Edit/Write 工具调用都要先过类型检查。非零退出会强制 Claude 先修再继续。</p>
+<h4>4. 自定义 /review Slash 命令</h4>
+<p>新建 <code>.claude/commands/review.md</code>:</p>
+<pre><code>---
+name: review
+description: 在当前分支执行严谨的 PR review
+---
+
+对比 main 分支审查当前分支,关注:
+1. 安全问题(输入校验、认证、secrets)
+2. 性能回归
+3. 测试覆盖缺口
+4. 与既有代码风格的反模式
+
+以编号列表形式报告,每项带 file:line。
+最后给出 PASS/FAIL 结论。</code></pre>
+<p>之后在 CLI 输入 <code>/review</code> 就会针对当前仓库状态运行这个提示。</p>
+<h4>5. 专项子 Agent</h4>
+<p><code>.claude/agents/security-reviewer.md</code>:</p>
+<pre><code>---
+name: security-reviewer
+description: 审查代码中的安全漏洞。用于认证流程、输入处理、secrets 管理。
+tools: Read, Grep, Glob
+model: sonnet
+---
+
+你是一个安全专项代码审查员。读取目标文件,扫描 OWASP Top 10:注入、认证失陷、敏感信息泄露、XXE、访问控制失陷、安全配置错误、XSS、不安全反序列化、依赖漏洞、日志缺失。
+
+每项发现要给出 CWE 引用和建议修复。</code></pre>
+<p>调用方式:<code>@agent-security-reviewer 审查 client/src/auth/</code>。</p>
+<h4>6. 多栈 env 配置</h4>
+<pre><code>{
+  "env": {
+    "PYTHONPATH": "./src",
+    "NODE_ENV": "development",
+    "RUST_LOG": "debug"
+  }
+}</code></pre>
+<p>每次工具调用都带上这些环境变量。适合多栈混合的项目。</p>`
+          },
+          {
+            heading: "四个常见错误",
+            body: `<h4>1. 把 API key 提交到 settings.json</h4>
+<p>经典错误。需要 secret 就引用环境变量,绝不内联写死:</p>
+<pre><code>{
+  "env": {
+    "OPENAI_API_KEY": "$OPENAI_API_KEY"
+  }
+}</code></pre>
+<p>shell 在调用时解析变量 — key 永远不进入仓库。</p>
+<h4>2. 使用通配权限</h4>
+<p><code>"Bash(*)"</code> 看起来方便,直到某次幻觉出的 <code>sudo rm -rf</code> 干掉你的 <code>node_modules</code>(顺带干掉周末)。用特定模式白名单。</p>
+<h4>3. 忘记 gitignore settings.local.json</h4>
+<p>永远加进 <code>.gitignore</code>。它就是为本地覆盖设计的 — 你的个人 API key 和机器特定路径没理由进团队仓库。</p>
+<h4>4. 阻塞会话的 hooks</h4>
+<p>如果 <code>PreToolUse</code> hook 跑 30 秒,整个会话都会卡住。保持 hooks 在 2s 以内。重活交给 <code>PostToolUse</code>(异步)或者 CI。</p>`
+          },
+          {
+            heading: "接下来",
+            body: `<p>你已经有了可用的 <code>.claude/</code>。下两块能把这套配置再往前推:</p>
+<ul>
+<li><a href="/revive">安装 MCP Buddy 服务器</a> — 如果你丢了终端宠物生态,5 分钟安装指南在这里。</li>
+<li><a href="/hidden-features">探索 Claude Code 隐藏特性</a> — KAIROS、ULTRAPLAN 和 2026 年 3 月源码泄露曝光的 Undercover Mode。</li>
+<li><a href="/blog/find-your-uuid-complete-platform-guide">找到你的账号 UUID</a> — 上面的一些设置会用到你的 userID 做个性化。</li>
+</ul>
+<p>有问题,或想分享你自己的实战片段?<a href="/">在 claudebuddy.art 查你的 buddy</a>,在任何文章下留言讨论。</p>`
+          },
+          {
+            heading: "常见问题",
+            body: `<h4>我能跨多个项目共享我的 .claude/ 吗?</h4>
+<p>把共享配置放 <code>~/.claude/settings.json</code>(用户作用域)。项目特定的留在 <code>.claude/settings.json</code>。要在所有项目生效的 slash 命令放 <code>~/.claude/commands/</code>。</p>
+<h4>.claude/ 对 Cursor、VS Code 等 IDE 插件生效吗?</h4>
+<p><code>.claude/</code> 目录是 Claude Code 专用。Cursor 有自己的 <code>.cursorrules</code> 机制。Claude Code 的 VS Code 扩展读取同一个文件夹,所以配置自动共享。</p>
+<h4>settings.json 有语法错误会怎样?</h4>
+<p>Claude Code 启动时会打印校验错误,该节退回默认值。提交前快速核对:<code>cat .claude/settings.json | jq .</code>。</p>
+<h4>怎么调试实际生效的权限?</h4>
+<p>启动一个会话,问 Claude <em>"告诉我当前的权限集合"</em> — 它会列出合并后的有效集,覆盖三个作用域。启动加 <code>--verbose</code> 也能看解析过程。</p>
+<h4>我能覆盖 Claude Code 内置 slash 命令吗?</h4>
+<p>能。建 <code>.claude/commands/help.md</code> 就会优先于内置 <code>/help</code>。谨慎使用 —— 移除前默认行为都回不来。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "Claude Code의 .claude/ 폴더 — 완벽 설정 가이드",
+        metaTitle: "Claude Code .claude/ 폴더 완벽 설정 가이드 2026",
+        metaDescription: "Claude Code의 .claude/ 폴더 설정 방법: settings.json, hooks, 커스텀 슬래시 명령, MCP 서버. 실제 팀 워크플로에서 검증된 6가지 템플릿.",
+        excerpt: "Claude Code의 .claude/ 폴더는 개인 개발자가 팀으로 진화하는 지점입니다. settings.json, hooks, 슬래시 명령, 서브 에이전트가 어떻게 조합되어 확장 가능한 설정이 되는지 — 복사해 쓸 수 있는 6가지 템플릿과 모든 팀이 한 번은 겪는 4가지 실수.",
+        sections: [
+          {
+            heading: ".claude/ 폴더가 중요한 이유",
+            body: `<p>이미 Claude Code를 한동안 사용해 왔을 것입니다. <code>claude</code>를 입력하고 파일을 편집하는 모습을 지켜보고, MCP 서버 한두 개를 연결해 봤을지도 모릅니다. 하지만 프로젝트 루트에는 여러분이 생각하는 것 이상으로 중요한 조용한 폴더가 있습니다: <code>.claude/</code>.</p>
+<p>개인 개발자가 팀으로 변하는 지점이 바로 여기입니다. "Claude는 내게 잘 작동해"가 "Claude는 우리 팀에 잘 작동해"가 되는 곳이죠. 이 폴더 없이는 팀원들이 매번 바퀴를 재발명합니다 — 같은 권한 프롬프트, 같은 수동 명령, 리뷰마다 엇갈리는 스타일.</p>
+<p>이 가이드는 <code>.claude/</code>가 노출하는 모든 표면을 다룹니다 — 설정, hooks, 슬래시 명령, 서브 에이전트, 메모리 — 그리고 지금 바로 복사할 수 있는 6가지 실전 템플릿과 모든 팀이 최소 한 번은 겪는 4가지 실수까지.</p>`
+          },
+          {
+            heading: ".claude/ 해부",
+            body: `<p>Claude Code가 인식하는 모든 파일의 전체 파일 트리:</p>
+<pre><code>.claude/
+├── settings.json             # 커밋되는 팀 설정 (권한, hooks, env)
+├── settings.local.json       # 개발자별 오버라이드 — gitignore에 추가
+├── CLAUDE.md                 # 프로젝트 전용 Claude 지시문
+├── commands/
+│   ├── review.md             # 커스텀 /review 슬래시 명령
+│   └── deploy.md             # 커스텀 /deploy 슬래시 명령
+├── agents/
+│   ├── security-reviewer.md  # 특화 서브 에이전트 정의
+│   └── doc-writer.md         # 또 다른 특화 에이전트
+├── hooks/
+│   └── pre-commit.sh         # 도구 사용 전 트리거되는 셸 스크립트
+└── memory/                   # 자동 관리; skills가 읽기/쓰기
+    └── MEMORY.md             # 주제별 메모리 파일 인덱스</code></pre>
+<h4>커밋할 것 vs 무시할 것</h4>
+<p>git에 커밋: <code>settings.json</code>, <code>CLAUDE.md</code>, <code>commands/</code>, <code>agents/</code>, <code>hooks/</code>. 팀 동작을 정의하므로 저장소에 포함됩니다.</p>
+<p><code>.gitignore</code>에 추가: <code>settings.local.json</code>(API 키, 개인 경로 포함)와 <code>memory/</code>(사용자별 상태).</p>`
+          },
+          {
+            heading: "세 가지 스코프와 병합 순서",
+            body: `<p>Claude Code는 우선순위 오름차순으로 세 스코프에서 설정을 해석합니다:</p>
+<table>
+<tr><th>스코프</th><th>위치</th><th>커밋</th><th>용도</th></tr>
+<tr><td>사용자</td><td><code>~/.claude/settings.json</code></td><td>아니오</td><td>모든 프로젝트에 걸친 개인 기본값</td></tr>
+<tr><td>프로젝트</td><td><code>.claude/settings.json</code></td><td>예</td><td>팀 전체 합의</td></tr>
+<tr><td>로컬</td><td><code>.claude/settings.local.json</code></td><td>아니오</td><td>프로젝트별 개인 오버라이드</td></tr>
+</table>
+<p>키가 충돌하면 <strong>로컬이 우선</strong>, 다음이 <strong>프로젝트</strong>, 그다음이 <strong>사용자</strong>. 팀원이 자신의 노트북에만 필요한 권한을 공유 설정에 영향 없이 임시로 허용할 수 있다는 뜻입니다.</p>
+<h4>실제 설정 디버깅</h4>
+<p>Claude의 동작이 예상과 다르면 세션에서 직접 물어보세요:</p>
+<pre><code>현재 활성화된 권한을 보여줘</code></pre>
+<p>Claude가 병합된 권한 집합과 각 항목이 어느 스코프에서 왔는지 알려줍니다.</p>`
+          },
+          {
+            heading: "복사해 쓰는 6가지 템플릿",
+            body: `<h4>1. 최소 settings.json (단독 사용)</h4>
+<pre><code>{
+  "permissions": {
+    "allow": ["Bash(npm run *)", "Edit", "Write", "Read"]
+  }
+}</code></pre>
+<p>완전 와일드카드 없이 대부분 워크플로 차단을 풀 수 있습니다.</p>
+<h4>2. 팀 전체 권한 허용 목록</h4>
+<pre><code>{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)", "Bash(git status)", "Bash(git diff)",
+      "Bash(git log *)", "Bash(pnpm install)",
+      "Edit", "Write", "Read", "Grep", "Glob"
+    ],
+    "deny": [
+      "Bash(git push *)", "Bash(rm -rf *)", "Bash(sudo *)"
+    ]
+  }
+}</code></pre>
+<p>원격 푸시와 파괴적 명령은 거부하되 일상 개발 루프는 프롬프트 없이 허용합니다.</p>
+<h4>3. 타입 안전을 위한 Pre-Commit Hook</h4>
+<p><code>.claude/settings.json</code>:</p>
+<pre><code>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "sh .claude/hooks/typecheck.sh" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<p><code>.claude/hooks/typecheck.sh</code>:</p>
+<pre><code>#!/bin/sh
+npm run check || exit 1</code></pre>
+<p>모든 Edit/Write 도구 호출이 타입 체크 통과를 조건으로 합니다. 0이 아닌 종료 코드는 Claude가 진행 전에 수정하도록 강제합니다.</p>
+<h4>4. 커스텀 /review 슬래시 명령</h4>
+<p><code>.claude/commands/review.md</code> 생성:</p>
+<pre><code>---
+name: review
+description: 현재 브랜치에서 엄격한 PR 리뷰 실행
+---
+
+main 브랜치와 비교해 현재 브랜치를 리뷰하세요. 중점:
+1. 보안 이슈 (입력 검증, 인증, secrets)
+2. 성능 퇴행
+3. 테스트 커버리지 공백
+4. 기존 코드 스타일 대비 안티 패턴
+
+번호 매긴 리스트로 file:line 참조와 함께 보고.
+PASS/FAIL 판정으로 마무리.</code></pre>
+<p>이제 CLI에서 <code>/review</code>를 입력하면 현재 저장소 상태에 대해 이 프롬프트가 실행됩니다.</p>
+<h4>5. 특화 서브 에이전트</h4>
+<p><code>.claude/agents/security-reviewer.md</code>:</p>
+<pre><code>---
+name: security-reviewer
+description: 코드의 보안 취약점을 리뷰합니다. 인증 흐름, 입력 처리, secret 관리에 사용.
+tools: Read, Grep, Glob
+model: sonnet
+---
+
+당신은 보안 전문 코드 리뷰어입니다. 대상 파일을 읽고 OWASP Top 10 카테고리를 찾으세요: 인젝션, 인증 결함, 민감 데이터 노출, XXE, 접근 제어 결함, 보안 설정 오류, XSS, 안전하지 않은 역직렬화, 취약한 의존성, 로깅 공백.
+
+각 발견은 CWE 참조와 수정 제안을 함께 보고.</code></pre>
+<p>위임 방법: <code>@agent-security-reviewer client/src/auth/ 리뷰</code>.</p>
+<h4>6. 다중 스택 env 설정</h4>
+<pre><code>{
+  "env": {
+    "PYTHONPATH": "./src",
+    "NODE_ENV": "development",
+    "RUST_LOG": "debug"
+  }
+}</code></pre>
+<p>모든 도구 호출이 이 env 변수로 시작합니다. 스택을 혼합하는 프로젝트에 유용합니다.</p>`
+          },
+          {
+            heading: "네 가지 흔한 실수",
+            body: `<h4>1. API 키를 settings.json에 커밋</h4>
+<p>고전적 실수. secret이 필요하면 환경 변수를 참조하고, 절대 인라인으로 작성하지 마세요:</p>
+<pre><code>{
+  "env": {
+    "OPENAI_API_KEY": "$OPENAI_API_KEY"
+  }
+}</code></pre>
+<p>셸이 호출 시점에 변수를 해석하므로 키가 저장소에 남지 않습니다.</p>
+<h4>2. 와일드카드 권한 사용</h4>
+<p><code>"Bash(*)"</code>는 편리해 보이지만 환각된 <code>sudo rm -rf</code>가 <code>node_modules</code>(와 주말)을 날릴 때까지만 그렇습니다. 구체적 패턴으로 허용 목록을 작성하세요.</p>
+<h4>3. settings.local.json을 gitignore에 추가 잊음</h4>
+<p>항상 <code>.gitignore</code>에 추가하세요. 로컬 전용 오버라이드를 담도록 설계된 파일이며, 개인 API 키와 노트북별 경로는 팀 저장소에 있을 이유가 없습니다.</p>
+<h4>4. 세션을 막는 hooks</h4>
+<p><code>PreToolUse</code> hook이 30초 걸리면 전체 세션이 멈춥니다. hooks는 2초 이내로 유지하세요. 무거운 검사는 <code>PostToolUse</code>(비동기)나 CI로 미루세요.</p>`
+          },
+          {
+            heading: "다음 단계",
+            body: `<p>이제 작동하는 <code>.claude/</code>를 갖췄습니다. 이 설정을 증폭시키는 다음 두 조각:</p>
+<ul>
+<li><a href="/revive">MCP Buddy 서버 설치</a> — 터미널 펫 생태계가 사라졌다면, 5분 설치 가이드가 있습니다.</li>
+<li><a href="/hidden-features">Claude Code 숨은 기능 탐험</a> — KAIROS, ULTRAPLAN, 2026년 3월 소스 유출에서 드러난 Undercover Mode.</li>
+<li><a href="/blog/find-your-uuid-complete-platform-guide">계정 UUID 찾기</a> — 위 설정 중 일부가 개인화에 userID를 참조합니다.</li>
+</ul>
+<p>질문이나 자신만의 검증된 스니펫이 있다면? <a href="/">claudebuddy.art에서 여러분의 buddy를 확인하고</a> 어떤 글 밑에서든 토론에 참여하세요.</p>`
+          },
+          {
+            heading: "자주 묻는 질문",
+            body: `<h4>여러 프로젝트에서 .claude/ 폴더를 공유할 수 있나요?</h4>
+<p>공유 설정은 <code>~/.claude/settings.json</code>(사용자 스코프)에 두세요. 프로젝트 특화는 <code>.claude/settings.json</code>에 남깁니다. 모든 곳에서 사용할 슬래시 명령은 <code>~/.claude/commands/</code>에.</p>
+<h4>.claude/는 Cursor나 VS Code 같은 IDE 확장에서 작동하나요?</h4>
+<p><code>.claude/</code> 폴더는 Claude Code 전용입니다. Cursor는 자체 <code>.cursorrules</code> 시스템이 있습니다. Claude Code의 VS Code 확장은 CLI와 같은 폴더를 읽으므로 설정이 자동 공유됩니다.</p>
+<h4>settings.json에 구문 오류가 있으면 어떻게 되나요?</h4>
+<p>Claude Code가 시작 시 검증 오류를 출력하고 해당 섹션은 기본값으로 폴백합니다. 커밋 전 빠른 확인: <code>cat .claude/settings.json | jq .</code>.</p>
+<h4>실제 적용된 권한을 어떻게 디버깅하나요?</h4>
+<p>세션을 시작하고 Claude에게 <em>"현재 권한을 보여줘"</em>라고 물으세요 — 세 스코프에 걸친 병합된 실효 집합을 나열해 줍니다. 시작 시 <code>--verbose</code>도 해석 과정을 볼 수 있습니다.</p>
+<h4>Claude Code의 내장 슬래시 명령을 오버라이드할 수 있나요?</h4>
+<p>네. <code>.claude/commands/help.md</code>를 만들면 내장 <code>/help</code>보다 우선합니다. 신중하게 사용하세요 — 오버라이드를 제거하기 전까지 기본 동작을 잃습니다.</p>`
+          }
+        ]
+      }
+    }
+  },
 ];
 
 
