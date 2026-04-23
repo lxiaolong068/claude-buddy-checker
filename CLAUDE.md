@@ -84,3 +84,17 @@ dist/
 - **ASCII sprite frames** in species-data are 12-frame arrays used by `BuddySprite.tsx` for animation
 - **Rarity tiers**: common → uncommon → rare → epic → legendary (probability weights in `buddy-engine.ts`)
 - The `.manus-logs/` directory (created by the Vite debug plugin) should not be committed
+
+## Vercel Operations
+
+This project deploys on Vercel. For any Vercel-related task (deploy, env vars, project config, log tailing, domain/alias management, etc.), invoke the Vercel CLI directly — do **not** ask the user to run it manually.
+
+**Token**: `VERCEL_TOKEN` lives in `.env.local` (gitignored). Never echo it, never commit it, never include it in PR descriptions, commit messages, or any file tracked by git.
+
+**Invocation pattern** (inline, per-command):
+
+```bash
+VERCEL_TOKEN=$(grep '^VERCEL_TOKEN=' .env.local | cut -d= -f2-) npx vercel <command>
+```
+
+Prefer `npx vercel` to avoid relying on a global install. Pass `--yes` to skip prompts in non-interactive contexts. For destructive operations (`vercel remove`, domain changes, production env mutations), still confirm with the user first per the Safety Rules.
