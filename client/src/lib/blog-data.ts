@@ -16875,6 +16875,541 @@ Commit: !\`git rev-parse HEAD\`
       }
     }
   },
+  {
+    slug: "claude-code-powerup-for-teams-workflow-automation",
+    publishedAt: "2026-04-23",
+    readingTime: 11,
+    tags: ["powerup", "team-workflow", "onboarding", "automation", "guide"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code',
+    content: {
+      en: {
+        title: "/powerup for Teams: Turn a Solo Grind into Onboarding Infrastructure",
+        metaTitle: "Claude Code /powerup for Teams — Workflow Automation Guide",
+        metaDescription: "Use Claude Code's /powerup not as a solo XP grind but as team onboarding infrastructure. Progress tracking, Slack integration, CI gates, and five team templates.",
+        excerpt: "The /powerup guide for individuals was solved last year. The team version was not. Turn Claude Code's gamified lessons into onboarding milestones, dashboards, and CI gates — with five concrete templates.",
+        sections: [
+          {
+            heading: "Why /powerup Matters for Teams",
+            body: `<p>The individual <a href="/blog/complete-powerup-guide">/powerup guide</a> covered how a single developer earns XP and unlocks badges. That works for solo hackers. At a team, the same feature solves a different problem: <strong>how do you get six new hires to the same "I understand Claude Code" baseline without babysitting?</strong></p>
+<p>The answer is not "force everyone to type <code>/powerup</code>." It's treating the lesson list as the spine of your onboarding checklist, wiring progress events to Slack and dashboards, and using CI to gate privileges on lesson completion. /powerup becomes the mechanism; your team workflow becomes the beneficiary.</p>
+<p>This guide covers the gap between solo and team use, an onboarding pipeline template, five concrete integration patterns, and the pitfalls that make gamification backfire at scale.</p>`
+          },
+          {
+            heading: "The Gap Between Solo and Team Use",
+            body: `<p>Solo /powerup is a self-guided grind: you open a session, run <code>/powerup</code>, complete lessons at your own pace, and the XP accumulates in your local state. Three things break the moment a team tries to scale this:</p>
+<ul>
+<li><strong>Visibility</strong>: you cannot tell whether the new hire is actually learning or just clicking through. Progress lives on their laptop only.</li>
+<li><strong>Consistency</strong>: without a shared "must-complete" list, each dev skips the lessons most relevant to their gaps, which is exactly the ones they need.</li>
+<li><strong>Integration</strong>: lesson completion does not trigger anything — no Slack ping, no CI gate, no Notion checkbox. The value ends at "XP increased."</li>
+</ul>
+<p>Solving these three turns /powerup from a feature into infrastructure. The ingredients are the hook system (from the <a href="/blog/claude-code-hooks-cookbook-2026">hooks cookbook</a>), the file-based settings in <a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/</a>, and a small amount of glue to your existing team tools.</p>`
+          },
+          {
+            heading: "The Onboarding Pipeline",
+            body: `<p>A concrete 7-day pipeline that uses /powerup as the backbone:</p>
+<h4>Day 1: Environment Setup</h4>
+<p>New hire clones the repo. Your <code>.claude/settings.json</code> already has a permissions allowlist, a type-check <code>PreToolUse</code> hook, and a Slack notification hook. First session runs <code>/powerup</code>, unlocking lessons 1-3 (basic session, slash commands, reading a file).</p>
+<h4>Day 2-3: Core Workflow Fluency</h4>
+<p>Milestone lessons: <em>CLAUDE.md editing</em>, <em>using @ file attachment</em>, <em>running a multi-step plan</em>. These three complete prove the hire can drive a Claude session without pair-programming.</p>
+<h4>Day 4-5: Team Conventions</h4>
+<p>Milestone lessons: <em>following the team permission config</em>, <em>using a custom slash command from .claude/commands/</em>, <em>invoking the /review command before pushing</em>. These tie /powerup to your team's actual workflow, not a generic tutorial.</p>
+<h4>Day 6-7: Output Check</h4>
+<p>The hire completes a scoped task with Claude Code, uses <code>/review</code> before their PR, and their progress (via Stop hook) lands in a shared Slack channel. Their manager can tell if they are stuck without asking.</p>
+<p>The list of required lessons lives in one place: <code>.claude/onboarding.yml</code>, checked against <code>/powerup status</code> output. When all required lessons are complete, the hire graduates.</p>`
+          },
+          {
+            heading: "Progress Tracking at Team Scale",
+            body: `<p>The primitive: every /powerup lesson completion goes through Claude Code's state. Surface it to the team via a Stop hook that posts to a webhook.</p>
+<pre><code>// .claude/settings.json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "sh .claude/hooks/powerup-sync.sh" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<pre><code>#!/bin/sh
+# .claude/hooks/powerup-sync.sh
+status=$(claude /powerup status --json 2>/dev/null || exit 0)
+completed=$(echo "$status" | jq -r '.completedLessons | length')
+total=$(echo "$status" | jq -r '.totalLessons')
+user=$(git config user.name 2>/dev/null || echo "unknown")
+
+# Post to internal dashboard webhook
+curl -sS -X POST "$TEAM_DASHBOARD_URL" \\
+  -H "Content-Type: application/json" \\
+  -d "{\\"user\\":\\"$user\\",\\"completed\\":$completed,\\"total\\":$total}" \\
+  &gt; /dev/null 2&gt;&amp;1 &amp;</code></pre>
+<p>The <code>&amp;</code> at the end forks it to the background — Claude's session never waits on the network call. Dashboard side: a 10-line Cloudflare Worker or Vercel function that writes to a KV store, keyed by user.</p>
+<p>For a lightweight alternative, point the webhook at a Slack incoming webhook and skip the dashboard entirely. Post a message to <code>#onboarding</code> like "alice: 12/15 lessons (+3 today)."</p>`
+          },
+          {
+            heading: "Five Integration Patterns",
+            body: `<h4>1. Slack completion ping</h4>
+<p>PostToolUse hook that watches for /powerup runs and announces completion:</p>
+<pre><code>#!/bin/sh
+# .claude/hooks/powerup-slack.sh
+if [ "$(jq -r '.tool_input.name // empty')" = "powerup" ]; then
+  user=$(git config user.name)
+  curl -s -X POST "$SLACK_WEBHOOK" \\
+    -H "Content-Type: application/json" \\
+    -d "{\\"text\\":\\"🎮 $user just ran /powerup\\"}"
+fi</code></pre>
+<p>Quick team ambient awareness without surveillance.</p>
+<h4>2. GitHub Action: gate PR on onboarding</h4>
+<p>Don't let a new hire merge before core lessons are done:</p>
+<pre><code># .github/workflows/onboarding-gate.yml
+on: pull_request
+jobs:
+  check-onboarding:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check author completed core /powerup lessons
+        run: node scripts/check-onboarding.js --author "$" --required claude-md,plan-mode,review-command</code></pre>
+<p>Require the hire to link their dashboard status (from Recipe above) or store per-user JSON in a dedicated repo the script reads.</p>
+<h4>3. CI announcement of new team member</h4>
+<p>When <code>git log</code> finds a first-time committer, check their /powerup progress and post to Slack. Combines naturally with the dashboard.</p>
+<h4>4. Notion dashboard sync</h4>
+<p>Nightly cron job reads dashboard KV → updates Notion database. Managers see progress without opening a new tool. Use Notion's API with a service account. 40-line Python script.</p>
+<h4>5. Pair-up queue</h4>
+<p>When someone completes lesson 5 (plan mode), auto-add them to the "ready to pair-review" roster. When another dev is stuck, a slash command <code>/find-pair</code> pulls from the roster. Turns /powerup into a team mentoring triage, not just XP.</p>`
+          },
+          {
+            heading: "Five Team Templates",
+            body: `<h4>1. Minimal onboarding.yml</h4>
+<pre><code># .claude/onboarding.yml (not read by Claude directly —
+# consumed by your check-onboarding.js script)
+required_lessons:
+  week_1:
+    - first-session
+    - slash-commands
+    - read-file
+  week_2:
+    - claude-md
+    - file-attachment
+    - plan-mode
+graduation:
+  required: 6
+  grace_period_days: 14</code></pre>
+<h4>2. Shared permission template</h4>
+<p>In <code>.claude/settings.json</code>, provide a team baseline permission set so new hires don't reinvent what's safe:</p>
+<pre><code>{
+  "permissions": {
+    "allow": ["Bash(npm run *)", "Bash(git status)", "Bash(git diff)",
+              "Edit", "Write", "Read", "Grep", "Glob"],
+    "deny":  ["Bash(git push --force*)", "Bash(rm -rf *)", "Bash(sudo *)"]
+  }
+}</code></pre>
+<h4>3. Onboarding slash command</h4>
+<p><code>.claude/commands/onboarding.md</code>:</p>
+<pre><code>---
+description: Show what's left on the new-hire checklist
+allowed-tools: Bash(claude:*), Read
+---
+
+!\`claude /powerup status --json | jq -r '.completedLessons[].id'\`
+
+Compare the above to .claude/onboarding.yml. List what's missing.</code></pre>
+<h4>4. Weekly /powerup leaderboard Slack bot</h4>
+<p>Cron that reads dashboard KV every Monday 9am, posts the completion delta for the week. Keep it celebratory, never shaming.</p>
+<h4>5. Graduation automation</h4>
+<p>GitHub Action that, on completing the required lesson set, automatically opens a PR to add the hire to <code>.github/CODEOWNERS</code>. Makes graduation material, not just symbolic.</p>`
+          },
+          {
+            heading: "Pitfalls to Avoid",
+            body: `<p>Gamification can backfire. Three patterns that shred trust if you adopt them:</p>
+<ul>
+<li><strong>Public shaming leaderboards</strong>. Showing who is behind publicly punishes the hire your onboarding failed. Keep the leaderboard to self-celebration (deltas, personal bests), not rankings.</li>
+<li><strong>Blocking everything on lesson completion</strong>. Using /powerup as a strict CI gate on every PR, not just onboarding PRs, creates learned helplessness. Gate onboarding, not daily work.</li>
+<li><strong>Over-fitting lesson XP to compensation</strong>. Tying /powerup completion to reviews or pay turns learning into a checkbox. Keep XP in the intrinsic-motivation zone.</li>
+</ul>
+<p>The rule: /powerup is a <em>scaffold</em> for onboarding, not a <em>ranking</em> for ongoing work. Drop the scaffold when the hire doesn't need it.</p>`
+          },
+          {
+            heading: "Next Steps",
+            body: `<p>You have the team scaffolding. Go deeper on the individual pieces:</p>
+<ul>
+<li><a href="/blog/complete-powerup-guide">The /powerup guide for individuals</a> — the lesson-by-lesson walkthrough your hires will follow.</li>
+<li><a href="/blog/powerup-vs-buddy">/powerup vs /buddy comparison</a> — context on why /powerup replaced /buddy and what that means for gamification philosophy.</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Hooks cookbook</a> — the Stop and PostToolUse patterns that power the integration hooks above.</li>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ folder guide</a> — where the team settings and permission templates live.</li>
+<li><a href="/powerup-tracker">/powerup Tracker tool</a> — a quick public progress tracker for individuals; use as a UI reference.</li>
+</ul>
+<p>Built a team /powerup pipeline worth sharing? <a href="/">Start from the checker</a> and drop notes in the comments.</p>`
+          },
+          {
+            heading: "Frequently Asked Questions",
+            body: `<h4>Does /powerup have an API for reading progress programmatically?</h4>
+<p>Yes, via <code>claude /powerup status --json</code> as of Claude Code 2.1.97+. Output includes <code>completedLessons</code> array, <code>totalLessons</code>, <code>xp</code>, and timestamps. Parse with <code>jq</code> in any hook or script.</p>
+<h4>Can we disable /powerup for existing senior devs who don't need it?</h4>
+<p>Yes — put <code>"powerup": { "enabled": false }</code> in a senior dev's <code>.claude/settings.local.json</code>. The gamification UI disappears, but they still see /powerup status on demand if they want it.</p>
+<h4>How do we handle hires who hit a lesson that fails for environment reasons?</h4>
+<p>The <code>/powerup reset &lt;lesson-id&gt;</code> command clears a specific lesson's completion so they can retry. For flaky lessons, your onboarding pipeline should have an "acknowledged" alternative — a manual sign-off in lieu of automated lesson completion.</p>
+<h4>Is there a multi-tenant /powerup for agencies or consultancies with many clients?</h4>
+<p>Not natively. Each <code>~/.claude/</code> directory is single-user. For agencies, use per-project <code>.claude/settings.json</code> to define a client-specific lesson pathway via your own scripts, not the built-in XP system. Report with the dashboard approach above.</p>
+<h4>What about privacy — is our lesson completion data being sent to Anthropic?</h4>
+<p>/powerup state is local-only by default. Your Stop hook pushing progress to your own webhook is opt-in and under your control. Anthropic does not collect /powerup telemetry per their published privacy policy. Verify with <code>claude --verbose</code> during a /powerup run to confirm no external calls you didn't configure.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "/powerup 团队化:把个人打卡变成入职基础设施",
+        metaTitle: "Claude Code /powerup 团队工作流 — 自动化指南",
+        metaDescription: "不把 Claude Code 的 /powerup 当个人 XP 打卡,而是团队入职基础设施。进度追踪、Slack 集成、CI 闸门、5 个团队模板。",
+        excerpt: "个人 /powerup 指南早就解决了。团队版还没有。把 Claude Code 的游戏化课程变成入职里程碑、仪表板和 CI 闸门 —— 附 5 个具体模板。",
+        sections: [
+          {
+            heading: "/powerup 对团队为什么重要",
+            body: `<p>个人 <a href="/blog/complete-powerup-guide">/powerup 指南</a> 解决了一个开发者怎么刷 XP 解锁徽章。那对单人很好用。到了团队,同一个功能解决的是另一个问题:<strong>怎么让 6 个新人都到达"我懂 Claude Code"的同一个基线,而不用你当保姆?</strong></p>
+<p>答案不是"强制所有人打 <code>/powerup</code>"。是把 lesson 列表当成入职 checklist 的主线,把进度事件接到 Slack 和仪表板,用 CI 基于 lesson 完成度做权限闸门。/powerup 成为机制;你的团队工作流成为受益者。</p>
+<p>本文讲清个人用和团队用的差距、一个入职流水线模板、5 个具体集成模式,以及规模化游戏化最容易翻车的几个雷。</p>`
+          },
+          {
+            heading: "个人用和团队用的差距",
+            body: `<p>个人 /powerup 是自驱打卡:开个会话、敲 <code>/powerup</code>、按自己节奏完成 lesson,XP 累在本地状态里。团队一试规模化,3 件事立刻崩:</p>
+<ul>
+<li><strong>可见性</strong>:你看不出新人是真的在学,还是在点 next。进度只在他笔记本上。</li>
+<li><strong>一致性</strong>:没有共享的"必修"清单,每个开发都会跳过对自己最有用的 lesson,刚好是他们需要的那些。</li>
+<li><strong>集成</strong>:lesson 完成不触发任何东西 —— 没 Slack 响,没 CI 闸门,没 Notion 打勾。价值止步于"XP 增加"。</li>
+</ul>
+<p>把这 3 件事解决,/powerup 就从一个功能变成基础设施。原料:hooks 系统(见 <a href="/blog/claude-code-hooks-cookbook-2026">hooks 手册</a>)、<a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/</a> 里的文件级配置,再加一点粘合到团队现有工具的胶水。</p>`
+          },
+          {
+            heading: "入职流水线",
+            body: `<p>一个以 /powerup 为骨架的 7 天流水线:</p>
+<h4>Day 1:环境准备</h4>
+<p>新人 clone 仓库。你的 <code>.claude/settings.json</code> 已经有权限白名单、类型检查 <code>PreToolUse</code> hook、Slack 通知 hook。首次会话跑 <code>/powerup</code>,解锁 lesson 1-3(基础会话、slash 命令、读文件)。</p>
+<h4>Day 2-3:核心工作流熟练度</h4>
+<p>里程碑 lessons:<em>编辑 CLAUDE.md</em>、<em>使用 @ 文件附加</em>、<em>跑一个多步 plan</em>。完成这 3 个证明新人能独立驱动 Claude 会话,不用结对。</p>
+<h4>Day 4-5:团队约定</h4>
+<p>里程碑 lessons:<em>遵循团队权限配置</em>、<em>使用 .claude/commands/ 里的自定义 slash 命令</em>、<em>push 前调用 /review 命令</em>。这些把 /powerup 绑到团队实际工作流,不是通用教程。</p>
+<h4>Day 6-7:输出检查</h4>
+<p>新人用 Claude Code 完成有边界的任务,PR 前用 <code>/review</code>,进度(通过 Stop hook)落到共享 Slack 频道。经理不用问就能看出他卡没卡。</p>
+<p>必修 lesson 列表放一个地方:<code>.claude/onboarding.yml</code>,对比 <code>/powerup status</code> 输出。所有必修 lesson 完成就算毕业。</p>`
+          },
+          {
+            heading: "团队级进度追踪",
+            body: `<p>原语:每次 /powerup lesson 完成都走 Claude Code 的状态。通过 Stop hook 发 webhook 给团队看:</p>
+<pre><code>// .claude/settings.json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "sh .claude/hooks/powerup-sync.sh" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<pre><code>#!/bin/sh
+# .claude/hooks/powerup-sync.sh
+status=$(claude /powerup status --json 2>/dev/null || exit 0)
+completed=$(echo "$status" | jq -r '.completedLessons | length')
+total=$(echo "$status" | jq -r '.totalLessons')
+user=$(git config user.name 2>/dev/null || echo "unknown")
+
+# 发团队 dashboard webhook
+curl -sS -X POST "$TEAM_DASHBOARD_URL" \\
+  -H "Content-Type: application/json" \\
+  -d "{\\"user\\":\\"$user\\",\\"completed\\":$completed,\\"total\\":$total}" \\
+  &gt; /dev/null 2&gt;&amp;1 &amp;</code></pre>
+<p>末尾的 <code>&amp;</code> 让它跑到后台 —— Claude 会话永远不等网络调用。Dashboard 侧:10 行 Cloudflare Worker 或 Vercel function 写到 KV,按 user 做 key。</p>
+<p>轻量替代:webhook 直接指向 Slack incoming webhook,跳过 dashboard。发一条消息到 <code>#onboarding</code>,格式"alice: 12/15 lessons(今天 +3)"。</p>`
+          },
+          {
+            heading: "5 个集成模式",
+            body: `<h4>1. Slack 完成响铃</h4>
+<p>PostToolUse hook 监听 /powerup 执行并广播完成:</p>
+<pre><code>#!/bin/sh
+# .claude/hooks/powerup-slack.sh
+if [ "$(jq -r '.tool_input.name // empty')" = "powerup" ]; then
+  user=$(git config user.name)
+  curl -s -X POST "$SLACK_WEBHOOK" \\
+    -H "Content-Type: application/json" \\
+    -d "{\\"text\\":\\"🎮 $user 刚跑了 /powerup\\"}"
+fi</code></pre>
+<p>快速的团队氛围感知,不是监控。</p>
+<h4>2. GitHub Action:PR 闸门绑入职</h4>
+<p>新人在核心 lesson 完成前不允许 merge:</p>
+<pre><code># .github/workflows/onboarding-gate.yml
+on: pull_request
+jobs:
+  check-onboarding:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 检查作者完成了核心 /powerup lesson
+        run: node scripts/check-onboarding.js --author "$" --required claude-md,plan-mode,review-command</code></pre>
+<p>要新人从上面的 dashboard 状态拿数据,或者脚本读单独仓库里的 per-user JSON。</p>
+<h4>3. CI 新成员通告</h4>
+<p><code>git log</code> 发现首次提交者时,查他 /powerup 进度并 post 到 Slack。与 dashboard 天然组合。</p>
+<h4>4. Notion dashboard 同步</h4>
+<p>夜跑 cron 读 dashboard KV → 更新 Notion database。经理不用开新工具就能看进度。Notion API 加服务账号。40 行 Python 脚本。</p>
+<h4>5. 结对配队</h4>
+<p>有人完成 lesson 5(plan mode)时自动进"可结对评审"名单。另一个开发卡住时 <code>/find-pair</code> 从名单拉人。/powerup 变成团队 mentoring 分诊,不只是 XP。</p>`
+          },
+          {
+            heading: "5 个团队模板",
+            body: `<h4>1. 最小 onboarding.yml</h4>
+<pre><code># .claude/onboarding.yml (Claude 不直接读 —
+# 由你的 check-onboarding.js 脚本消费)
+required_lessons:
+  week_1:
+    - first-session
+    - slash-commands
+    - read-file
+  week_2:
+    - claude-md
+    - file-attachment
+    - plan-mode
+graduation:
+  required: 6
+  grace_period_days: 14</code></pre>
+<h4>2. 共享权限模板</h4>
+<p><code>.claude/settings.json</code> 提供团队基准权限集,新人不用重新发明什么安全:</p>
+<pre><code>{
+  "permissions": {
+    "allow": ["Bash(npm run *)", "Bash(git status)", "Bash(git diff)",
+              "Edit", "Write", "Read", "Grep", "Glob"],
+    "deny":  ["Bash(git push --force*)", "Bash(rm -rf *)", "Bash(sudo *)"]
+  }
+}</code></pre>
+<h4>3. 入职 slash 命令</h4>
+<p><code>.claude/commands/onboarding.md</code>:</p>
+<pre><code>---
+description: 看新人 checklist 还剩啥
+allowed-tools: Bash(claude:*), Read
+---
+
+!\`claude /powerup status --json | jq -r '.completedLessons[].id'\`
+
+对比 .claude/onboarding.yml,列出缺的。</code></pre>
+<h4>4. 每周 /powerup 排行 Slack bot</h4>
+<p>每周一 9 点 cron 读 dashboard KV,post 本周完成 delta。保持庆祝,绝不羞辱。</p>
+<h4>5. 毕业自动化</h4>
+<p>GitHub Action 在必修 lesson 集完成时自动开 PR,把新人加进 <code>.github/CODEOWNERS</code>。毕业是实质的,不只是象征。</p>`
+          },
+          {
+            heading: "要避开的坑",
+            body: `<p>游戏化能反噬。3 个一旦采用就会摧毁信任的模式:</p>
+<ul>
+<li><strong>公开羞辱式排行榜</strong>。把谁落后公开展示,是在惩罚你的入职体系失败的新人。排行榜留给自我庆祝(个人 delta、个人纪录),不是排名。</li>
+<li><strong>所有东西都卡 lesson 完成度</strong>。把 /powerup 当每个 PR 的严格 CI 闸门,不只是入职 PR,会制造习得性无助。卡入职,不卡日常工作。</li>
+<li><strong>把 lesson XP 过度绑定薪酬</strong>。把 /powerup 完成度挂钩绩效或工资,学习就变成打勾。XP 留在内在动机区。</li>
+</ul>
+<p>原则:/powerup 是入职的 <em>脚手架</em>,不是日常工作的 <em>排名</em>。新人不需要时就撤掉脚手架。</p>`
+          },
+          {
+            heading: "接下来",
+            body: `<p>团队脚手架有了,深入各自部件:</p>
+<ul>
+<li><a href="/blog/complete-powerup-guide">个人 /powerup 指南</a> —— 你的新人会跟着走的 lesson-by-lesson。</li>
+<li><a href="/blog/powerup-vs-buddy">/powerup vs /buddy 对比</a> —— /powerup 为什么替代了 /buddy,对游戏化哲学意味着什么。</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Hooks 手册</a> —— 驱动上面集成 hooks 的 Stop 和 PostToolUse 模式。</li>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 目录指南</a> —— 团队设置和权限模板住的地方。</li>
+<li><a href="/powerup-tracker">/powerup 追踪工具</a> —— 个人用的快速公开进度追踪器,可作 UI 参考。</li>
+</ul>
+<p>搭了值得分享的团队 /powerup 流水线?<a href="/">从 checker 开始</a>,评论里留笔记。</p>`
+          },
+          {
+            heading: "常见问题",
+            body: `<h4>/powerup 有编程读取进度的 API 吗?</h4>
+<p>有,Claude Code 2.1.97+ 起用 <code>claude /powerup status --json</code>。输出含 <code>completedLessons</code> 数组、<code>totalLessons</code>、<code>xp</code>、时间戳。在任何 hook 或脚本里用 <code>jq</code> 解析。</p>
+<h4>能给不需要的资深开发关掉 /powerup 吗?</h4>
+<p>能 —— 在资深开发的 <code>.claude/settings.local.json</code> 里放 <code>"powerup": { "enabled": false }</code>。游戏化 UI 消失,但按需还能看 /powerup status。</p>
+<h4>新人卡在一个因环境问题失败的 lesson 怎么办?</h4>
+<p><code>/powerup reset &lt;lesson-id&gt;</code> 清除特定 lesson 完成状态让他重试。对不稳定的 lesson,入职流水线应有"确认"的替代路径 —— 人工签字代替自动完成。</p>
+<h4>有给代理机构或咨询公司(多客户)用的多租户 /powerup 吗?</h4>
+<p>原生没有。每个 <code>~/.claude/</code> 目录是单用户。代理机构用 per-project <code>.claude/settings.json</code> 通过自己的脚本定义客户特定 lesson 路径,不用内置 XP 系统。上面 dashboard 方案做报告。</p>
+<h4>隐私怎么说 —— lesson 完成数据会发给 Anthropic 吗?</h4>
+<p>/powerup 状态默认只存本地。你的 Stop hook 把进度推到自己 webhook 是自愿的,你掌控。Anthropic 按发布的隐私政策不收集 /powerup 遥测。/powerup 执行时用 <code>claude --verbose</code> 验证没有你没配置的外部调用。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "/powerup 팀 버전: 솔로 그라인드를 온보딩 인프라로",
+        metaTitle: "Claude Code /powerup 팀 — 워크플로 자동화 가이드",
+        metaDescription: "Claude Code의 /powerup을 솔로 XP 그라인드가 아닌 팀 온보딩 인프라로. 진행 추적, Slack 통합, CI 게이트, 5가지 팀 템플릿.",
+        excerpt: "개인용 /powerup 가이드는 이미 풀렸습니다. 팀 버전은 아직입니다. Claude Code의 게이미파이드 레슨을 온보딩 마일스톤, 대시보드, CI 게이트로 전환 — 구체적인 템플릿 5가지.",
+        sections: [
+          {
+            heading: "/powerup이 팀에 중요한 이유",
+            body: `<p>개인 <a href="/blog/complete-powerup-guide">/powerup 가이드</a>는 한 명의 개발자가 XP를 벌고 배지를 얻는 방법을 다뤘습니다. 솔로 해커에게는 그걸로 충분합니다. 팀에서는 같은 기능이 다른 문제를 해결합니다: <strong>6명의 신입 채용자를 베이비시팅 없이 같은 "Claude Code를 이해한다" 기준선으로 어떻게 올릴까?</strong></p>
+<p>답은 "모두에게 <code>/powerup</code>을 강제"가 아닙니다. 레슨 리스트를 온보딩 체크리스트의 척추로 다루고, 진행 이벤트를 Slack과 대시보드에 연결하고, 레슨 완료를 기반으로 CI에서 권한 게이팅하는 것입니다. /powerup이 메커니즘이 되고; 팀 워크플로가 수혜자가 됩니다.</p>
+<p>이 가이드는 솔로와 팀 사용의 격차, 온보딩 파이프라인 템플릿, 구체적인 통합 패턴 5가지, 대규모에서 게이미피케이션을 망치는 함정을 다룹니다.</p>`
+          },
+          {
+            heading: "솔로와 팀 사용의 격차",
+            body: `<p>솔로 /powerup은 자기 주도 그라인드입니다: 세션을 열고 <code>/powerup</code>을 실행, 자기 페이스로 레슨 완료, XP가 로컬 상태에 축적. 팀이 이를 확장하려는 순간 세 가지가 깨집니다:</p>
+<ul>
+<li><strong>가시성</strong>: 신입이 실제로 배우고 있는지 그냥 클릭만 하는지 알 수 없습니다. 진행은 그들의 노트북에만 있습니다.</li>
+<li><strong>일관성</strong>: 공유된 "필수 완료" 리스트 없이 각 개발자는 자기에게 가장 관련 있는 레슨 — 정확히 필요한 것들 — 을 건너뜁니다.</li>
+<li><strong>통합</strong>: 레슨 완료가 아무것도 트리거하지 않습니다 — Slack 핑 없음, CI 게이트 없음, Notion 체크박스 없음. 가치가 "XP 증가"에서 멈춥니다.</li>
+</ul>
+<p>이 세 가지를 해결하면 /powerup이 기능에서 인프라가 됩니다. 재료: hooks 시스템(<a href="/blog/claude-code-hooks-cookbook-2026">hooks 쿡북</a> 참조), <a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/</a>의 파일 기반 설정, 그리고 기존 팀 도구에 연결하는 약간의 glue.</p>`
+          },
+          {
+            heading: "온보딩 파이프라인",
+            body: `<p>/powerup을 등뼈로 쓰는 구체적인 7일 파이프라인:</p>
+<h4>Day 1: 환경 준비</h4>
+<p>신입이 레포 clone. 당신의 <code>.claude/settings.json</code>에는 이미 권한 허용 목록, 타입체크 <code>PreToolUse</code> hook, Slack 알림 hook이 있습니다. 첫 세션에서 <code>/powerup</code>을 실행, 레슨 1-3(기본 세션, 슬래시 명령, 파일 읽기)을 엽니다.</p>
+<h4>Day 2-3: 핵심 워크플로 숙련</h4>
+<p>마일스톤 레슨: <em>CLAUDE.md 편집</em>, <em>@ 파일 첨부 사용</em>, <em>멀티스텝 plan 실행</em>. 이 세 가지 완료는 신입이 페어 프로그래밍 없이 Claude 세션을 주도할 수 있음을 증명합니다.</p>
+<h4>Day 4-5: 팀 관례</h4>
+<p>마일스톤 레슨: <em>팀 권한 설정 따르기</em>, <em>.claude/commands/의 커스텀 슬래시 명령 사용</em>, <em>push 전 /review 명령 호출</em>. 이들이 /powerup을 일반 튜토리얼이 아닌 팀의 실제 워크플로에 묶습니다.</p>
+<h4>Day 6-7: 산출 확인</h4>
+<p>신입이 Claude Code로 범위 지정된 과제를 완료, PR 전에 <code>/review</code> 사용, 진행(Stop hook을 통해)이 공유 Slack 채널에 떨어집니다. 매니저가 묻지 않고도 막혔는지 알 수 있습니다.</p>
+<p>필수 레슨 리스트는 한 곳에 있습니다: <code>.claude/onboarding.yml</code>, <code>/powerup status</code> 출력과 비교. 모든 필수 레슨이 완료되면 신입이 졸업합니다.</p>`
+          },
+          {
+            heading: "팀 규모 진행 추적",
+            body: `<p>원시체: 모든 /powerup 레슨 완료가 Claude Code의 상태를 거칩니다. 웹훅에 게시하는 Stop hook을 통해 팀에 노출:</p>
+<pre><code>// .claude/settings.json
+{
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          { "type": "command", "command": "sh .claude/hooks/powerup-sync.sh" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<pre><code>#!/bin/sh
+# .claude/hooks/powerup-sync.sh
+status=$(claude /powerup status --json 2>/dev/null || exit 0)
+completed=$(echo "$status" | jq -r '.completedLessons | length')
+total=$(echo "$status" | jq -r '.totalLessons')
+user=$(git config user.name 2>/dev/null || echo "unknown")
+
+# 내부 대시보드 웹훅에 게시
+curl -sS -X POST "$TEAM_DASHBOARD_URL" \\
+  -H "Content-Type: application/json" \\
+  -d "{\\"user\\":\\"$user\\",\\"completed\\":$completed,\\"total\\":$total}" \\
+  &gt; /dev/null 2&gt;&amp;1 &amp;</code></pre>
+<p>끝의 <code>&amp;</code>는 백그라운드로 fork합니다 — Claude의 세션은 네트워크 호출을 절대 기다리지 않습니다. 대시보드 쪽: 10줄 Cloudflare Worker나 Vercel 함수가 user로 키된 KV 스토어에 씁니다.</p>
+<p>경량 대안: 웹훅을 Slack incoming webhook으로 바로 가리키고 대시보드 전체를 건너뛰세요. <code>#onboarding</code>에 "alice: 12/15 lessons (오늘 +3)" 같은 메시지 게시.</p>`
+          },
+          {
+            heading: "5가지 통합 패턴",
+            body: `<h4>1. Slack 완료 핑</h4>
+<p>/powerup 실행을 감시하고 완료를 알리는 PostToolUse hook:</p>
+<pre><code>#!/bin/sh
+# .claude/hooks/powerup-slack.sh
+if [ "$(jq -r '.tool_input.name // empty')" = "powerup" ]; then
+  user=$(git config user.name)
+  curl -s -X POST "$SLACK_WEBHOOK" \\
+    -H "Content-Type: application/json" \\
+    -d "{\\"text\\":\\"🎮 $user이(가) 방금 /powerup을 실행\\"}"
+fi</code></pre>
+<p>감시 없는 빠른 팀 주변 인식.</p>
+<h4>2. GitHub Action: 온보딩으로 PR 게이트</h4>
+<p>핵심 레슨이 끝나기 전에 신입이 머지하지 못하게:</p>
+<pre><code># .github/workflows/onboarding-gate.yml
+on: pull_request
+jobs:
+  check-onboarding:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 작성자가 핵심 /powerup 레슨 완료했는지 확인
+        run: node scripts/check-onboarding.js --author "$" --required claude-md,plan-mode,review-command</code></pre>
+<p>신입이 대시보드 상태(위 레시피)에서 데이터를 링크하거나 스크립트가 읽는 전용 레포에 사용자별 JSON을 저장하도록 요구.</p>
+<h4>3. CI 새 팀원 공지</h4>
+<p><code>git log</code>가 첫 커밋자를 찾으면 그의 /powerup 진행을 확인해 Slack에 게시. 대시보드와 자연스럽게 결합.</p>
+<h4>4. Notion 대시보드 동기화</h4>
+<p>야간 cron 작업이 대시보드 KV 읽기 → Notion 데이터베이스 업데이트. 매니저는 새 도구를 열지 않고 진행을 봅니다. 서비스 계정으로 Notion API 사용. 40줄 Python 스크립트.</p>
+<h4>5. 페어 업 큐</h4>
+<p>누군가 레슨 5(plan mode)를 완료하면 "페어 리뷰 준비" 명부에 자동 추가. 다른 개발자가 막히면 슬래시 명령 <code>/find-pair</code>가 명부에서 당겨옵니다. /powerup을 XP가 아닌 팀 멘토링 분류로 전환.</p>`
+          },
+          {
+            heading: "5가지 팀 템플릿",
+            body: `<h4>1. 최소 onboarding.yml</h4>
+<pre><code># .claude/onboarding.yml (Claude가 직접 읽지 않음 —
+# check-onboarding.js 스크립트가 소비)
+required_lessons:
+  week_1:
+    - first-session
+    - slash-commands
+    - read-file
+  week_2:
+    - claude-md
+    - file-attachment
+    - plan-mode
+graduation:
+  required: 6
+  grace_period_days: 14</code></pre>
+<h4>2. 공유 권한 템플릿</h4>
+<p><code>.claude/settings.json</code>에 팀 기준 권한 세트를 제공해 신입이 안전한 것을 재발명하지 않게:</p>
+<pre><code>{
+  "permissions": {
+    "allow": ["Bash(npm run *)", "Bash(git status)", "Bash(git diff)",
+              "Edit", "Write", "Read", "Grep", "Glob"],
+    "deny":  ["Bash(git push --force*)", "Bash(rm -rf *)", "Bash(sudo *)"]
+  }
+}</code></pre>
+<h4>3. 온보딩 슬래시 명령</h4>
+<p><code>.claude/commands/onboarding.md</code>:</p>
+<pre><code>---
+description: 신입 체크리스트에서 남은 것 표시
+allowed-tools: Bash(claude:*), Read
+---
+
+!\`claude /powerup status --json | jq -r '.completedLessons[].id'\`
+
+위를 .claude/onboarding.yml과 비교. 빠진 것 나열.</code></pre>
+<h4>4. 주간 /powerup 리더보드 Slack 봇</h4>
+<p>월요일 오전 9시 cron이 대시보드 KV 읽고 주간 완료 delta 게시. 축하조로 유지, 절대 망신주지 않기.</p>
+<h4>5. 졸업 자동화</h4>
+<p>필수 레슨 세트 완료 시 GitHub Action이 자동으로 PR을 열어 신입을 <code>.github/CODEOWNERS</code>에 추가. 졸업을 상징적이지 않고 실질적으로.</p>`
+          },
+          {
+            heading: "피해야 할 함정",
+            body: `<p>게이미피케이션은 역효과를 낼 수 있습니다. 채택하면 신뢰를 파괴하는 세 가지 패턴:</p>
+<ul>
+<li><strong>공개 망신주기 리더보드</strong>. 누가 뒤처지는지 공개적으로 보여주는 건 당신의 온보딩이 실패시킨 신입을 벌주는 것. 리더보드는 자기 축하(delta, 개인 최고) 용도로, 순위가 아님.</li>
+<li><strong>레슨 완료로 모든 것 차단</strong>. /powerup을 모든 PR의 엄격한 CI 게이트로 쓰는 것(온보딩 PR만이 아님)은 학습된 무기력을 만듭니다. 온보딩을 게이팅하되 일상 작업은 게이팅하지 마세요.</li>
+<li><strong>레슨 XP를 보상에 과도하게 맞추기</strong>. /powerup 완료를 리뷰나 급여에 묶으면 학습이 체크박스가 됩니다. XP는 내재적 동기 영역에.</li>
+</ul>
+<p>원칙: /powerup은 온보딩을 위한 <em>발판</em>이지 지속적 작업을 위한 <em>순위</em>가 아님. 신입이 필요 없어지면 발판을 내리세요.</p>`
+          },
+          {
+            heading: "다음 단계",
+            body: `<p>팀 발판이 있습니다. 각 부품 심화:</p>
+<ul>
+<li><a href="/blog/complete-powerup-guide">개인용 /powerup 가이드</a> — 신입이 따라갈 레슨별 워크스루.</li>
+<li><a href="/blog/powerup-vs-buddy">/powerup vs /buddy 비교</a> — /powerup이 /buddy를 왜 대체했는지, 게이미피케이션 철학에 무엇을 의미하는지.</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Hooks 쿡북</a> — 위 통합 hooks를 구동하는 Stop과 PostToolUse 패턴.</li>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 폴더 가이드</a> — 팀 설정과 권한 템플릿이 사는 곳.</li>
+<li><a href="/powerup-tracker">/powerup 트래커 도구</a> — 개인용 빠른 공개 진행 트래커, UI 참조로 사용.</li>
+</ul>
+<p>공유할 만한 팀 /powerup 파이프라인을 구축했나요? <a href="/">체커에서 시작</a>하고 댓글에 메모 남기세요.</p>`
+          },
+          {
+            heading: "자주 묻는 질문",
+            body: `<h4>/powerup에 진행 상태를 프로그래밍적으로 읽을 수 있는 API가 있나요?</h4>
+<p>네, Claude Code 2.1.97+부터 <code>claude /powerup status --json</code>으로. 출력에 <code>completedLessons</code> 배열, <code>totalLessons</code>, <code>xp</code>, 타임스탬프 포함. 어떤 hook이나 스크립트에서든 <code>jq</code>로 파싱.</p>
+<h4>필요 없는 시니어 개발자에게 /powerup을 비활성화할 수 있나요?</h4>
+<p>네 — 시니어 개발자의 <code>.claude/settings.local.json</code>에 <code>"powerup": { "enabled": false }</code>를 넣으세요. 게이미피케이션 UI는 사라지지만 원하면 필요할 때 /powerup status는 여전히 볼 수 있습니다.</p>
+<h4>환경 문제로 레슨이 실패하는 신입은 어떻게 처리하나요?</h4>
+<p><code>/powerup reset &lt;lesson-id&gt;</code> 명령이 특정 레슨의 완료를 지워 재시도할 수 있게 합니다. 불안정한 레슨의 경우 온보딩 파이프라인에 "인정된" 대안 — 자동 레슨 완료 대신 수동 서명 — 이 있어야 합니다.</p>
+<h4>여러 클라이언트를 둔 에이전시나 컨설팅을 위한 멀티 테넌트 /powerup이 있나요?</h4>
+<p>네이티브로는 없습니다. 각 <code>~/.claude/</code> 디렉터리는 싱글 유저. 에이전시의 경우 per-project <code>.claude/settings.json</code>을 사용해 내장 XP 시스템이 아닌 자체 스크립트를 통해 클라이언트별 레슨 경로를 정의. 위 대시보드 접근으로 보고.</p>
+<h4>개인정보는 — 레슨 완료 데이터가 Anthropic에 전송되나요?</h4>
+<p>/powerup 상태는 기본적으로 로컬 전용. 자체 웹훅에 진행을 푸시하는 Stop hook은 옵트인이고 당신의 통제 아래. Anthropic은 게시된 개인정보 정책에 따라 /powerup 텔레메트리를 수집하지 않습니다. 구성하지 않은 외부 호출이 없는지 /powerup 실행 중 <code>claude --verbose</code>로 확인.</p>`
+          }
+        ]
+      }
+    }
+  },
 ];
 
 
