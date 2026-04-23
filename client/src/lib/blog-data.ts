@@ -15757,6 +15757,520 @@ esac</code></pre>
       }
     }
   },
+  {
+    slug: "claude-code-cheat-sheet-2026-printable",
+    publishedAt: "2026-04-23",
+    readingTime: 8,
+    tags: ["cheatsheet", "claude-code", "reference", "guide", "commands"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code',
+    content: {
+      en: {
+        title: "Claude Code Cheat Sheet 2026 — Commands, Shortcuts, Settings",
+        metaTitle: "Claude Code Cheat Sheet 2026 — All Commands & Shortcuts",
+        metaDescription: "Every Claude Code slash command, keyboard shortcut, CLI flag, settings.json field, and workflow pattern in one printable reference. Scan-friendly, no fluff.",
+        excerpt: "Every slash command, keyboard shortcut, CLI flag, settings.json field, and workflow pattern worth knowing — organized into tables you can scan in sixty seconds.",
+        sections: [
+          {
+            heading: "How to Use This Cheat Sheet",
+            body: `<p>Bookmark this page. The tables below are ordered by frequency-of-use, not alphabetically, so scanning top-down covers 80% of daily work. Every entry maps to Claude Code 2026 (late Q1) behavior — if your version differs, <code>claude --version</code> first.</p>
+<p>Print-friendly: the page is single-column and avoids color-dependent cues. Ctrl+P (Cmd+P on macOS) produces a clean two-page PDF.</p>`
+          },
+          {
+            heading: "Slash Commands Reference",
+            body: `<h4>Session Control</h4>
+<table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>/help</code></td><td>List all slash commands in current session</td></tr>
+<tr><td><code>/clear</code></td><td>Reset conversation, keep env</td></tr>
+<tr><td><code>/compact</code></td><td>Manually compress context to free tokens</td></tr>
+<tr><td><code>/resume</code></td><td>Resume the last suspended session</td></tr>
+<tr><td><code>/exit</code> or <code>/quit</code></td><td>Close Claude Code</td></tr>
+<tr><td><code>/logout</code> / <code>/login</code></td><td>Switch Anthropic account</td></tr>
+</table>
+<h4>Configuration &amp; Diagnostics</h4>
+<table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>/config</code></td><td>Open the settings UI</td></tr>
+<tr><td><code>/model</code></td><td>Switch model (Opus / Sonnet / Haiku)</td></tr>
+<tr><td><code>/doctor</code></td><td>Run environment diagnostics</td></tr>
+<tr><td><code>/cost</code></td><td>Show current session cost</td></tr>
+<tr><td><code>/status</code></td><td>Show model, version, working dir, active agents</td></tr>
+<tr><td><code>/permissions</code></td><td>Inspect effective permission set</td></tr>
+<tr><td><code>/init</code></td><td>Scaffold <code>CLAUDE.md</code> in the current repo</td></tr>
+</table>
+<h4>Advanced</h4>
+<table>
+<tr><th>Command</th><th>What it does</th></tr>
+<tr><td><code>/hooks</code></td><td>List active hooks by event</td></tr>
+<tr><td><code>/agents</code></td><td>List custom sub-agents</td></tr>
+<tr><td><code>/mcp</code></td><td>Manage MCP servers (list, enable, disable)</td></tr>
+<tr><td><code>/memory</code></td><td>Open memory index</td></tr>
+<tr><td><code>/pr_comments</code></td><td>Fetch review comments on the current PR</td></tr>
+<tr><td><code>/ide</code></td><td>Connect / disconnect IDE integration</td></tr>
+</table>
+<p>Custom commands live in <code>.claude/commands/&lt;name&gt;.md</code> and appear in the same autocomplete. See the <a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ folder guide</a> for the template.</p>`
+          },
+          {
+            heading: "Keyboard Shortcuts",
+            body: `<table>
+<tr><th>Key</th><th>Action</th></tr>
+<tr><td><code>Enter</code></td><td>Submit prompt</td></tr>
+<tr><td><code>Shift + Enter</code> / <code>Option + Enter</code></td><td>Insert newline (multi-line prompt)</td></tr>
+<tr><td><code>Esc</code></td><td>Cancel the current tool call / interrupt stream</td></tr>
+<tr><td><code>Double Esc</code></td><td>Exit the entire session</td></tr>
+<tr><td><code>Ctrl + C</code></td><td>Copy selection (or cancel, second press)</td></tr>
+<tr><td><code>Ctrl + L</code></td><td>Clear the terminal screen (keeps context)</td></tr>
+<tr><td><code>Ctrl + R</code></td><td>Reverse-search prompt history</td></tr>
+<tr><td><code>↑</code> / <code>↓</code></td><td>Navigate prompt history</td></tr>
+<tr><td><code>Tab</code></td><td>Autocomplete file path / slash command</td></tr>
+<tr><td><code>Ctrl + J</code></td><td>Insert newline (alt binding on some terminals)</td></tr>
+</table>
+<h4>Prefix Shortcuts in the Prompt</h4>
+<table>
+<tr><th>Prefix</th><th>Effect</th></tr>
+<tr><td><code>@filename</code></td><td>Attach a file to the prompt by path</td></tr>
+<tr><td><code>/command</code></td><td>Invoke a slash command</td></tr>
+<tr><td><code>#memory note</code></td><td>Append a note to the memory index without running a tool</td></tr>
+</table>`
+          },
+          {
+            heading: "CLI Flags & Environment",
+            body: `<h4>Common Invocation Flags</h4>
+<table>
+<tr><th>Flag</th><th>Purpose</th></tr>
+<tr><td><code>--model &lt;id&gt;</code></td><td>Start in a specific model (e.g. <code>claude-sonnet-4-6</code>)</td></tr>
+<tr><td><code>--verbose</code></td><td>Print resolution chain for permissions / hooks / memory</td></tr>
+<tr><td><code>--print "&lt;prompt&gt;"</code></td><td>One-shot mode: execute the prompt and exit</td></tr>
+<tr><td><code>--resume</code></td><td>Reopen the last session</td></tr>
+<tr><td><code>--dangerously-skip-permissions</code></td><td>Disable all permission prompts — use only in sandboxes</td></tr>
+<tr><td><code>--verbose --debug</code></td><td>Full diagnostic output for bug reports</td></tr>
+</table>
+<h4>Environment Variables</h4>
+<table>
+<tr><th>Variable</th><th>Effect</th></tr>
+<tr><td><code>ANTHROPIC_API_KEY</code></td><td>Override OAuth with a raw API key</td></tr>
+<tr><td><code>CLAUDE_PROJECT_DIR</code></td><td>(Set by Claude inside hooks) repo root</td></tr>
+<tr><td><code>CLAUDE_SESSION_ID</code></td><td>(Set by Claude inside hooks) current session ID</td></tr>
+<tr><td><code>NO_COLOR=1</code></td><td>Disable ANSI color output</td></tr>
+</table>`
+          },
+          {
+            heading: "settings.json Quick Reference",
+            body: `<p>The four fields you will touch 95% of the time:</p>
+<h4>permissions</h4>
+<pre><code>"permissions": {
+  "allow": ["Bash(npm run *)", "Edit", "Write", "Read", "Grep"],
+  "deny":  ["Bash(rm -rf *)", "Bash(git push --force*)", "Bash(sudo *)"]
+}</code></pre>
+<h4>hooks</h4>
+<pre><code>"hooks": {
+  "PreToolUse": [
+    {
+      "matcher": "Edit|Write",
+      "hooks": [{ "type": "command", "command": "sh .claude/hooks/check.sh" }]
+    }
+  ]
+}</code></pre>
+<p>Events: <code>PreToolUse</code>, <code>PostToolUse</code>, <code>UserPromptSubmit</code>, <code>Stop</code>, <code>SubagentStop</code>, <code>Notification</code>, <code>PreCompact</code>, <code>SessionStart</code>. See the <a href="/blog/claude-code-hooks-cookbook-2026">hooks cookbook</a> for patterns.</p>
+<h4>mcpServers</h4>
+<pre><code>"mcpServers": {
+  "github": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-github"],
+    "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_TOKEN" }
+  }
+}</code></pre>
+<h4>env (per-project)</h4>
+<pre><code>"env": {
+  "PYTHONPATH": "./src",
+  "NODE_ENV": "development"
+}</code></pre>
+<p>Resolution order: <code>~/.claude/settings.json</code> → <code>.claude/settings.json</code> → <code>.claude/settings.local.json</code>. Later wins on key collision.</p>`
+          },
+          {
+            heading: "Workflow Patterns",
+            body: `<table>
+<tr><th>Goal</th><th>Prompt Pattern</th></tr>
+<tr><td>Code review a branch</td><td><code>/review</code> (if configured) or "Compare current branch to main. Report security, perf, test coverage issues as numbered list with file:line"</td></tr>
+<tr><td>Debug a failing test</td><td>"Run <code>npm test -- &lt;file&gt;</code>, identify root cause, propose minimal fix — do not apply yet"</td></tr>
+<tr><td>Refactor safely</td><td>"Plan the refactor first. Do not touch code. Once I approve, execute step by step."</td></tr>
+<tr><td>Write a commit message</td><td>"Stage the current diff and draft a conventional commit message — do not run git commit"</td></tr>
+<tr><td>Explore unfamiliar code</td><td><code>@src/module/</code> "Give me a one-paragraph architecture overview and the three entry points"</td></tr>
+<tr><td>Parallel tasks</td><td>"Delegate type-checking to one agent and linting to another, then merge results"</td></tr>
+<tr><td>Session handoff</td><td><code>/compact</code> then "Summarize what we decided this session for next time"</td></tr>
+</table>
+<h4>Escape Hatches</h4>
+<ul>
+<li><strong>Claude loops on the same fix</strong>: <code>Esc</code>, then <code>/clear</code> and paste the last known good state.</li>
+<li><strong>Context too full</strong>: <code>/compact</code> to squash, or <code>/clear</code> to reset.</li>
+<li><strong>Permission prompts every 10 seconds</strong>: edit <code>.claude/settings.json</code> to allowlist the pattern.</li>
+</ul>`
+          },
+          {
+            heading: "Next Steps",
+            body: `<p>This sheet is the index. Go deeper here:</p>
+<ul>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ folder complete guide</a> — settings.json, commands, agents, hooks in depth.</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Hooks cookbook</a> — 5 copy-paste hook recipes.</li>
+<li><a href="/blog/top-10-mcp-servers-2026-developer-benchmark">Top 10 MCP servers</a> — which ones to install first.</li>
+<li><a href="/hidden-features">Hidden features</a> — KAIROS, ULTRAPLAN, Undercover Mode.</li>
+</ul>
+<p>Save, print, pin to your terminal. <a href="/">Tool home</a> for UUID lookup and species guide.</p>`
+          },
+          {
+            heading: "Frequently Asked Questions",
+            body: `<h4>Can I print this cheat sheet as PDF?</h4>
+<p>Yes — <code>Cmd + P</code> (macOS) or <code>Ctrl + P</code> (Windows/Linux) opens your browser's print dialog. Choose "Save as PDF." The layout is single-column and print-friendly, producing roughly two US Letter pages.</p>
+<h4>Are these commands the same on Windows PowerShell?</h4>
+<p>Slash commands and keyboard shortcuts are identical. CLI flags on Windows use the same syntax if you launch Claude Code from WSL or an MSYS/Git Bash terminal. Native PowerShell may require escaping quotes differently — prefer WSL for consistency.</p>
+<h4>How do I add a slash command to this list?</h4>
+<p>Create <code>.claude/commands/&lt;name&gt;.md</code> with frontmatter describing it. It appears in <code>/help</code> and tab-autocomplete alongside the built-ins. The <a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ guide</a> has the exact frontmatter schema.</p>
+<h4>Why does <code>/cost</code> show a different number than the Anthropic console?</h4>
+<p>The in-session counter is local and tracks current session only. The console aggregates across sessions with a short delay. For exact billing, trust the console. For per-session awareness, trust <code>/cost</code>.</p>
+<h4>What's the difference between <code>/clear</code> and <code>/compact</code>?</h4>
+<p><code>/clear</code> wipes the conversation entirely — Claude starts from scratch with your <code>CLAUDE.md</code> but no context. <code>/compact</code> preserves conclusions but discards verbose intermediate exchanges. Use <code>/compact</code> when you want continuity, <code>/clear</code> when you want a clean slate.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "Claude Code 速查表 2026 — 命令、快捷键、配置",
+        metaTitle: "Claude Code 速查表 2026 — 所有命令与快捷键",
+        metaDescription: "所有 Claude Code 的 slash 命令、键盘快捷键、CLI flag、settings.json 字段和工作流模式,一张可打印的参考表。可扫读、无废话。",
+        excerpt: "所有值得知道的 slash 命令、键盘快捷键、CLI flag、settings.json 字段和工作流模式 —— 组织成 60 秒可扫读的表格。",
+        sections: [
+          {
+            heading: "怎么用这份速查表",
+            body: `<p>加书签。下面的表格按使用频率排序,不是字母序,从上往下扫读覆盖 80% 的日常。每一条都对应 Claude Code 2026(Q1 末)行为 —— 版本不同请先 <code>claude --version</code>。</p>
+<p>打印友好:页面单栏,不依赖颜色区分。Ctrl+P(macOS 是 Cmd+P)能出一份干净的两页 PDF。</p>`
+          },
+          {
+            heading: "Slash 命令参考",
+            body: `<h4>会话控制</h4>
+<table>
+<tr><th>命令</th><th>作用</th></tr>
+<tr><td><code>/help</code></td><td>列出当前会话所有 slash 命令</td></tr>
+<tr><td><code>/clear</code></td><td>清空对话,保留环境</td></tr>
+<tr><td><code>/compact</code></td><td>手动压缩上下文释放 token</td></tr>
+<tr><td><code>/resume</code></td><td>恢复最后挂起的会话</td></tr>
+<tr><td><code>/exit</code> 或 <code>/quit</code></td><td>关闭 Claude Code</td></tr>
+<tr><td><code>/logout</code> / <code>/login</code></td><td>切换 Anthropic 账号</td></tr>
+</table>
+<h4>配置与诊断</h4>
+<table>
+<tr><th>命令</th><th>作用</th></tr>
+<tr><td><code>/config</code></td><td>打开设置 UI</td></tr>
+<tr><td><code>/model</code></td><td>切换模型(Opus/Sonnet/Haiku)</td></tr>
+<tr><td><code>/doctor</code></td><td>运行环境诊断</td></tr>
+<tr><td><code>/cost</code></td><td>显示当前会话花费</td></tr>
+<tr><td><code>/status</code></td><td>显示模型、版本、工作目录、活跃 agents</td></tr>
+<tr><td><code>/permissions</code></td><td>查看生效权限集</td></tr>
+<tr><td><code>/init</code></td><td>在当前仓库生成 <code>CLAUDE.md</code> 骨架</td></tr>
+</table>
+<h4>进阶</h4>
+<table>
+<tr><th>命令</th><th>作用</th></tr>
+<tr><td><code>/hooks</code></td><td>按事件列出活跃 hooks</td></tr>
+<tr><td><code>/agents</code></td><td>列出自定义子 agent</td></tr>
+<tr><td><code>/mcp</code></td><td>管理 MCP 服务器(列出/启用/禁用)</td></tr>
+<tr><td><code>/memory</code></td><td>打开记忆索引</td></tr>
+<tr><td><code>/pr_comments</code></td><td>拉当前 PR 的评审评论</td></tr>
+<tr><td><code>/ide</code></td><td>连接/断开 IDE 集成</td></tr>
+</table>
+<p>自定义命令放 <code>.claude/commands/&lt;name&gt;.md</code>,出现在同一自动补全里。模板见 <a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 目录指南</a>。</p>`
+          },
+          {
+            heading: "键盘快捷键",
+            body: `<table>
+<tr><th>键</th><th>动作</th></tr>
+<tr><td><code>Enter</code></td><td>提交 prompt</td></tr>
+<tr><td><code>Shift + Enter</code> / <code>Option + Enter</code></td><td>插入换行(多行 prompt)</td></tr>
+<tr><td><code>Esc</code></td><td>取消当前工具调用 / 打断流</td></tr>
+<tr><td><code>Esc 两次</code></td><td>退出整个会话</td></tr>
+<tr><td><code>Ctrl + C</code></td><td>复制选择(或取消,二次)</td></tr>
+<tr><td><code>Ctrl + L</code></td><td>清终端屏幕(上下文保留)</td></tr>
+<tr><td><code>Ctrl + R</code></td><td>反向搜索 prompt 历史</td></tr>
+<tr><td><code>↑</code> / <code>↓</code></td><td>导航 prompt 历史</td></tr>
+<tr><td><code>Tab</code></td><td>自动补全文件路径 / slash 命令</td></tr>
+<tr><td><code>Ctrl + J</code></td><td>插入换行(某些终端的备选绑定)</td></tr>
+</table>
+<h4>Prompt 前缀快捷</h4>
+<table>
+<tr><th>前缀</th><th>效果</th></tr>
+<tr><td><code>@filename</code></td><td>按路径把文件附加到 prompt</td></tr>
+<tr><td><code>/command</code></td><td>调用 slash 命令</td></tr>
+<tr><td><code>#memory note</code></td><td>不跑工具,直接把笔记追加到记忆索引</td></tr>
+</table>`
+          },
+          {
+            heading: "CLI Flag 与环境变量",
+            body: `<h4>常用启动 flag</h4>
+<table>
+<tr><th>Flag</th><th>用途</th></tr>
+<tr><td><code>--model &lt;id&gt;</code></td><td>指定模型启动(如 <code>claude-sonnet-4-6</code>)</td></tr>
+<tr><td><code>--verbose</code></td><td>打印权限 / hooks / 记忆的解析链</td></tr>
+<tr><td><code>--print "&lt;prompt&gt;"</code></td><td>一次性模式:执行 prompt 后退出</td></tr>
+<tr><td><code>--resume</code></td><td>重开最后会话</td></tr>
+<tr><td><code>--dangerously-skip-permissions</code></td><td>禁用所有权限提示 —— 只在沙盒里用</td></tr>
+<tr><td><code>--verbose --debug</code></td><td>提 bug 报告用的完整诊断输出</td></tr>
+</table>
+<h4>环境变量</h4>
+<table>
+<tr><th>变量</th><th>效果</th></tr>
+<tr><td><code>ANTHROPIC_API_KEY</code></td><td>用原始 API key 覆盖 OAuth</td></tr>
+<tr><td><code>CLAUDE_PROJECT_DIR</code></td><td>(Claude 在 hooks 里设)仓库根</td></tr>
+<tr><td><code>CLAUDE_SESSION_ID</code></td><td>(Claude 在 hooks 里设)当前会话 ID</td></tr>
+<tr><td><code>NO_COLOR=1</code></td><td>禁用 ANSI 颜色输出</td></tr>
+</table>`
+          },
+          {
+            heading: "settings.json 速查",
+            body: `<p>95% 时间会碰的 4 个字段:</p>
+<h4>permissions</h4>
+<pre><code>"permissions": {
+  "allow": ["Bash(npm run *)", "Edit", "Write", "Read", "Grep"],
+  "deny":  ["Bash(rm -rf *)", "Bash(git push --force*)", "Bash(sudo *)"]
+}</code></pre>
+<h4>hooks</h4>
+<pre><code>"hooks": {
+  "PreToolUse": [
+    {
+      "matcher": "Edit|Write",
+      "hooks": [{ "type": "command", "command": "sh .claude/hooks/check.sh" }]
+    }
+  ]
+}</code></pre>
+<p>事件:<code>PreToolUse</code>、<code>PostToolUse</code>、<code>UserPromptSubmit</code>、<code>Stop</code>、<code>SubagentStop</code>、<code>Notification</code>、<code>PreCompact</code>、<code>SessionStart</code>。模式见 <a href="/blog/claude-code-hooks-cookbook-2026">hooks 手册</a>。</p>
+<h4>mcpServers</h4>
+<pre><code>"mcpServers": {
+  "github": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-github"],
+    "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_TOKEN" }
+  }
+}</code></pre>
+<h4>env(项目级)</h4>
+<pre><code>"env": {
+  "PYTHONPATH": "./src",
+  "NODE_ENV": "development"
+}</code></pre>
+<p>解析顺序:<code>~/.claude/settings.json</code> → <code>.claude/settings.json</code> → <code>.claude/settings.local.json</code>。键冲突时后者胜。</p>`
+          },
+          {
+            heading: "工作流模式",
+            body: `<table>
+<tr><th>目标</th><th>Prompt 模式</th></tr>
+<tr><td>代码 review 一个分支</td><td><code>/review</code>(若已配置)或"对比当前分支和 main。按编号列安全、性能、测试覆盖缺口,带 file:line"</td></tr>
+<tr><td>调试失败测试</td><td>"跑 <code>npm test -- &lt;file&gt;</code>,找根因,提出最小修复 —— 先别改"</td></tr>
+<tr><td>安全重构</td><td>"先计划重构。不动代码。我批准后再分步执行"</td></tr>
+<tr><td>写提交信息</td><td>"暂存当前 diff,起草一条 conventional commit 信息 —— 不要跑 git commit"</td></tr>
+<tr><td>探索陌生代码</td><td><code>@src/module/</code>"给我一段架构概述,加 3 个入口"</td></tr>
+<tr><td>并行任务</td><td>"把类型检查委派给一个 agent,lint 给另一个,然后合并结果"</td></tr>
+<tr><td>会话切换</td><td><code>/compact</code> 然后"总结这次会话我们定了什么,下次用"</td></tr>
+</table>
+<h4>逃生通道</h4>
+<ul>
+<li><strong>Claude 循环同一个修复</strong>:<code>Esc</code>,然后 <code>/clear</code> 并贴上次已知良好状态。</li>
+<li><strong>上下文太满</strong>:<code>/compact</code> 压缩,或 <code>/clear</code> 重置。</li>
+<li><strong>每 10 秒弹权限提示</strong>:编辑 <code>.claude/settings.json</code> 把模式加白名单。</li>
+</ul>`
+          },
+          {
+            heading: "接下来",
+            body: `<p>这张表是索引,深入看这些:</p>
+<ul>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 目录完整指南</a> —— settings.json、commands、agents、hooks 的深度讲解。</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Hooks 手册</a> —— 5 个即抄即用 hook 配方。</li>
+<li><a href="/blog/top-10-mcp-servers-2026-developer-benchmark">Top 10 MCP 服务器</a> —— 哪些先装。</li>
+<li><a href="/hidden-features">隐藏特性</a> —— KAIROS、ULTRAPLAN、Undercover Mode。</li>
+</ul>
+<p>保存、打印、贴到终端。<a href="/">工具首页</a> 看 UUID 查询和物种指南。</p>`
+          },
+          {
+            heading: "常见问题",
+            body: `<h4>能把这份速查表打印成 PDF 吗?</h4>
+<p>能 —— <code>Cmd + P</code>(macOS)或 <code>Ctrl + P</code>(Windows/Linux)开浏览器打印对话框,选"另存为 PDF"。页面单栏打印友好,大约两张 US Letter。</p>
+<h4>这些命令在 Windows PowerShell 里一样吗?</h4>
+<p>Slash 命令和键盘快捷键完全一样。CLI flag 如果你在 WSL 或 MSYS/Git Bash 启动 Claude Code,语法一致。原生 PowerShell 可能需要不同引号转义 —— 为一致性建议用 WSL。</p>
+<h4>怎么给这张表加个 slash 命令?</h4>
+<p>创建 <code>.claude/commands/&lt;name&gt;.md</code>,用 frontmatter 描述。它会出现在 <code>/help</code> 和 Tab 补全里,与内置并列。精确 frontmatter schema 见 <a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 指南</a>。</p>
+<h4>为什么 <code>/cost</code> 数字和 Anthropic 后台不一样?</h4>
+<p>会话内计数器是本地的,只跟当前会话。后台按跨会话汇总,有短延迟。确切账单信后台,单会话感知信 <code>/cost</code>。</p>
+<h4><code>/clear</code> 和 <code>/compact</code> 什么区别?</h4>
+<p><code>/clear</code> 整个清空对话 —— Claude 从零开始,只留 <code>CLAUDE.md</code>,没有上下文。<code>/compact</code> 保留结论但丢弃冗长中间交互。要连贯用 <code>/compact</code>,要空白用 <code>/clear</code>。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "Claude Code 치트시트 2026 — 명령, 단축키, 설정",
+        metaTitle: "Claude Code 치트시트 2026 — 모든 명령과 단축키",
+        metaDescription: "Claude Code의 모든 슬래시 명령, 키보드 단축키, CLI flag, settings.json 필드, 워크플로 패턴이 한 장의 인쇄 가능한 레퍼런스로. 스캔 친화적, 군더더기 없음.",
+        excerpt: "알아둘 가치가 있는 모든 슬래시 명령, 키보드 단축키, CLI flag, settings.json 필드, 워크플로 패턴 — 60초에 스캔할 수 있는 테이블로 정리.",
+        sections: [
+          {
+            heading: "이 치트시트 사용법",
+            body: `<p>북마크하세요. 아래 테이블은 알파벳순이 아닌 사용 빈도순이라 위에서 아래로 스캔하면 일상 업무의 80%가 커버됩니다. 모든 항목은 Claude Code 2026(Q1 말) 동작 기준 — 버전이 다르면 먼저 <code>claude --version</code>.</p>
+<p>인쇄 친화적: 페이지는 단일 열이고 색상에 의존하지 않습니다. Ctrl+P(macOS는 Cmd+P)로 깔끔한 2페이지 PDF 생성.</p>`
+          },
+          {
+            heading: "슬래시 명령 레퍼런스",
+            body: `<h4>세션 제어</h4>
+<table>
+<tr><th>명령</th><th>역할</th></tr>
+<tr><td><code>/help</code></td><td>현재 세션의 모든 슬래시 명령 나열</td></tr>
+<tr><td><code>/clear</code></td><td>대화 리셋, env는 유지</td></tr>
+<tr><td><code>/compact</code></td><td>컨텍스트를 수동 압축해 토큰 확보</td></tr>
+<tr><td><code>/resume</code></td><td>마지막 일시 정지된 세션 재개</td></tr>
+<tr><td><code>/exit</code> 또는 <code>/quit</code></td><td>Claude Code 종료</td></tr>
+<tr><td><code>/logout</code> / <code>/login</code></td><td>Anthropic 계정 전환</td></tr>
+</table>
+<h4>설정 및 진단</h4>
+<table>
+<tr><th>명령</th><th>역할</th></tr>
+<tr><td><code>/config</code></td><td>설정 UI 열기</td></tr>
+<tr><td><code>/model</code></td><td>모델 전환(Opus/Sonnet/Haiku)</td></tr>
+<tr><td><code>/doctor</code></td><td>환경 진단 실행</td></tr>
+<tr><td><code>/cost</code></td><td>현재 세션 비용 표시</td></tr>
+<tr><td><code>/status</code></td><td>모델, 버전, 작업 디렉터리, 활성 에이전트 표시</td></tr>
+<tr><td><code>/permissions</code></td><td>유효 권한 집합 검사</td></tr>
+<tr><td><code>/init</code></td><td>현재 레포에 <code>CLAUDE.md</code> 스캐폴드</td></tr>
+</table>
+<h4>고급</h4>
+<table>
+<tr><th>명령</th><th>역할</th></tr>
+<tr><td><code>/hooks</code></td><td>이벤트별 활성 hooks 나열</td></tr>
+<tr><td><code>/agents</code></td><td>커스텀 서브 에이전트 나열</td></tr>
+<tr><td><code>/mcp</code></td><td>MCP 서버 관리(나열/활성화/비활성화)</td></tr>
+<tr><td><code>/memory</code></td><td>메모리 인덱스 열기</td></tr>
+<tr><td><code>/pr_comments</code></td><td>현재 PR의 리뷰 댓글 가져오기</td></tr>
+<tr><td><code>/ide</code></td><td>IDE 통합 연결/해제</td></tr>
+</table>
+<p>커스텀 명령은 <code>.claude/commands/&lt;name&gt;.md</code>에 두면 같은 자동완성에 나타납니다. 템플릿은 <a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 폴더 가이드</a> 참조.</p>`
+          },
+          {
+            heading: "키보드 단축키",
+            body: `<table>
+<tr><th>키</th><th>동작</th></tr>
+<tr><td><code>Enter</code></td><td>prompt 제출</td></tr>
+<tr><td><code>Shift + Enter</code> / <code>Option + Enter</code></td><td>줄바꿈 삽입(여러 줄 prompt)</td></tr>
+<tr><td><code>Esc</code></td><td>현재 도구 호출 취소 / 스트림 중단</td></tr>
+<tr><td><code>Esc 두 번</code></td><td>전체 세션 종료</td></tr>
+<tr><td><code>Ctrl + C</code></td><td>선택 복사(또는 두 번째 누름으로 취소)</td></tr>
+<tr><td><code>Ctrl + L</code></td><td>터미널 화면 지우기(컨텍스트 유지)</td></tr>
+<tr><td><code>Ctrl + R</code></td><td>prompt 히스토리 역방향 검색</td></tr>
+<tr><td><code>↑</code> / <code>↓</code></td><td>prompt 히스토리 탐색</td></tr>
+<tr><td><code>Tab</code></td><td>파일 경로 / 슬래시 명령 자동완성</td></tr>
+<tr><td><code>Ctrl + J</code></td><td>줄바꿈 삽입(일부 터미널의 대체 바인딩)</td></tr>
+</table>
+<h4>Prompt 접두사 단축</h4>
+<table>
+<tr><th>접두사</th><th>효과</th></tr>
+<tr><td><code>@filename</code></td><td>경로로 파일을 prompt에 첨부</td></tr>
+<tr><td><code>/command</code></td><td>슬래시 명령 호출</td></tr>
+<tr><td><code>#memory note</code></td><td>도구 실행 없이 메모리 인덱스에 메모 추가</td></tr>
+</table>`
+          },
+          {
+            heading: "CLI Flag와 환경 변수",
+            body: `<h4>일반적인 실행 flag</h4>
+<table>
+<tr><th>Flag</th><th>용도</th></tr>
+<tr><td><code>--model &lt;id&gt;</code></td><td>특정 모델로 시작(예: <code>claude-sonnet-4-6</code>)</td></tr>
+<tr><td><code>--verbose</code></td><td>권한 / hooks / 메모리 해석 체인 출력</td></tr>
+<tr><td><code>--print "&lt;prompt&gt;"</code></td><td>단발 모드: prompt 실행 후 종료</td></tr>
+<tr><td><code>--resume</code></td><td>마지막 세션 재개</td></tr>
+<tr><td><code>--dangerously-skip-permissions</code></td><td>모든 권한 프롬프트 비활성화 — 샌드박스에서만</td></tr>
+<tr><td><code>--verbose --debug</code></td><td>버그 리포트용 전체 진단 출력</td></tr>
+</table>
+<h4>환경 변수</h4>
+<table>
+<tr><th>변수</th><th>효과</th></tr>
+<tr><td><code>ANTHROPIC_API_KEY</code></td><td>원시 API 키로 OAuth 오버라이드</td></tr>
+<tr><td><code>CLAUDE_PROJECT_DIR</code></td><td>(Claude가 hooks 안에서 설정) 레포 루트</td></tr>
+<tr><td><code>CLAUDE_SESSION_ID</code></td><td>(Claude가 hooks 안에서 설정) 현재 세션 ID</td></tr>
+<tr><td><code>NO_COLOR=1</code></td><td>ANSI 색상 출력 비활성화</td></tr>
+</table>`
+          },
+          {
+            heading: "settings.json 빠른 참조",
+            body: `<p>95% 시간을 쓰는 4가지 필드:</p>
+<h4>permissions</h4>
+<pre><code>"permissions": {
+  "allow": ["Bash(npm run *)", "Edit", "Write", "Read", "Grep"],
+  "deny":  ["Bash(rm -rf *)", "Bash(git push --force*)", "Bash(sudo *)"]
+}</code></pre>
+<h4>hooks</h4>
+<pre><code>"hooks": {
+  "PreToolUse": [
+    {
+      "matcher": "Edit|Write",
+      "hooks": [{ "type": "command", "command": "sh .claude/hooks/check.sh" }]
+    }
+  ]
+}</code></pre>
+<p>이벤트: <code>PreToolUse</code>, <code>PostToolUse</code>, <code>UserPromptSubmit</code>, <code>Stop</code>, <code>SubagentStop</code>, <code>Notification</code>, <code>PreCompact</code>, <code>SessionStart</code>. 패턴은 <a href="/blog/claude-code-hooks-cookbook-2026">hooks 쿡북</a> 참조.</p>
+<h4>mcpServers</h4>
+<pre><code>"mcpServers": {
+  "github": {
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-github"],
+    "env": { "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_TOKEN" }
+  }
+}</code></pre>
+<h4>env(프로젝트별)</h4>
+<pre><code>"env": {
+  "PYTHONPATH": "./src",
+  "NODE_ENV": "development"
+}</code></pre>
+<p>해석 순서: <code>~/.claude/settings.json</code> → <code>.claude/settings.json</code> → <code>.claude/settings.local.json</code>. 키 충돌 시 뒤가 이김.</p>`
+          },
+          {
+            heading: "워크플로 패턴",
+            body: `<table>
+<tr><th>목표</th><th>Prompt 패턴</th></tr>
+<tr><td>브랜치 코드 리뷰</td><td><code>/review</code>(설정되어 있다면) 또는 "현재 브랜치를 main과 비교. 번호 매긴 리스트로 보안, 성능, 테스트 커버리지 문제를 file:line과 함께"</td></tr>
+<tr><td>실패하는 테스트 디버그</td><td>"<code>npm test -- &lt;file&gt;</code> 실행, 근본 원인 찾고 최소 수정 제안 — 아직 적용하지 마"</td></tr>
+<tr><td>안전한 리팩터</td><td>"먼저 리팩터 계획. 코드는 건드리지 마. 승인하면 단계별 실행."</td></tr>
+<tr><td>커밋 메시지 작성</td><td>"현재 diff를 스테이징하고 conventional commit 메시지 초안 — git commit은 실행하지 마"</td></tr>
+<tr><td>낯선 코드 탐색</td><td><code>@src/module/</code> "한 문단 아키텍처 개요와 세 진입점"</td></tr>
+<tr><td>병렬 작업</td><td>"한 에이전트에 타입체크 위임, 다른 에이전트에 lint 위임, 결과 병합"</td></tr>
+<tr><td>세션 핸드오프</td><td><code>/compact</code> 후 "이 세션에서 정한 걸 다음을 위해 요약"</td></tr>
+</table>
+<h4>탈출구</h4>
+<ul>
+<li><strong>Claude가 같은 수정을 반복</strong>: <code>Esc</code>, 그다음 <code>/clear</code>와 마지막 정상 상태 붙여넣기.</li>
+<li><strong>컨텍스트 가득</strong>: <code>/compact</code>로 압축, 또는 <code>/clear</code>로 리셋.</li>
+<li><strong>10초마다 권한 프롬프트</strong>: <code>.claude/settings.json</code>을 편집해 패턴 허용 목록에 추가.</li>
+</ul>`
+          },
+          {
+            heading: "다음 단계",
+            body: `<p>이 시트는 인덱스입니다. 더 깊이 가려면:</p>
+<ul>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 폴더 완벽 가이드</a> — settings.json, 명령, 에이전트, hooks 심화.</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Hooks 쿡북</a> — 복붙 hook 레시피 5개.</li>
+<li><a href="/blog/top-10-mcp-servers-2026-developer-benchmark">Top 10 MCP 서버</a> — 어떤 것을 먼저 설치할지.</li>
+<li><a href="/hidden-features">숨은 기능</a> — KAIROS, ULTRAPLAN, Undercover Mode.</li>
+</ul>
+<p>저장, 인쇄, 터미널에 붙여두기. <a href="/">도구 홈</a>에서 UUID 조회와 종 가이드.</p>`
+          },
+          {
+            heading: "자주 묻는 질문",
+            body: `<h4>이 치트시트를 PDF로 인쇄할 수 있나요?</h4>
+<p>네 — <code>Cmd + P</code>(macOS) 또는 <code>Ctrl + P</code>(Windows/Linux)로 브라우저 인쇄 대화상자를 열고 "PDF로 저장"을 선택하세요. 레이아웃은 단일 열이고 인쇄 친화적이며 대략 US Letter 두 페이지가 나옵니다.</p>
+<h4>이 명령들이 Windows PowerShell에서도 동일한가요?</h4>
+<p>슬래시 명령과 키보드 단축키는 동일합니다. WSL이나 MSYS/Git Bash 터미널에서 Claude Code를 실행하면 CLI flag도 동일 문법입니다. 네이티브 PowerShell은 따옴표 이스케이프가 달라야 할 수 있으므로 일관성을 위해 WSL을 선호하세요.</p>
+<h4>이 리스트에 슬래시 명령을 어떻게 추가하나요?</h4>
+<p><code>.claude/commands/&lt;name&gt;.md</code>를 만들고 frontmatter로 설명하세요. <code>/help</code>와 탭 자동완성에서 내장 명령과 나란히 나타납니다. 정확한 frontmatter 스키마는 <a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 가이드</a> 참조.</p>
+<h4>왜 <code>/cost</code>가 Anthropic 콘솔과 다른 숫자를 보여주나요?</h4>
+<p>세션 내 카운터는 로컬이고 현재 세션만 추적합니다. 콘솔은 세션 간 집계되며 짧은 지연이 있습니다. 정확한 청구는 콘솔, 세션별 인식은 <code>/cost</code>를 믿으세요.</p>
+<h4><code>/clear</code>와 <code>/compact</code>의 차이는?</h4>
+<p><code>/clear</code>는 대화를 완전히 지웁니다 — Claude가 <code>CLAUDE.md</code>만 가지고 컨텍스트 없이 처음부터 시작. <code>/compact</code>는 결론은 보존하지만 장황한 중간 교환을 버립니다. 연속성을 원하면 <code>/compact</code>, 백지를 원하면 <code>/clear</code>.</p>`
+          }
+        ]
+      }
+    }
+  },
 ];
 
 
