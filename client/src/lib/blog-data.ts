@@ -15423,6 +15423,340 @@ esac</code></pre>
       }
     }
   },
+  {
+    slug: "top-10-mcp-servers-2026-developer-benchmark",
+    publishedAt: "2026-04-23",
+    readingTime: 13,
+    tags: ["mcp", "trends", "tools", "benchmark", "guide"],
+    discussionCategory: 'deep-dives',
+    pillar: 'trends',
+    content: {
+      en: {
+        title: "Top 10 MCP Servers in 2026: A Developer's Benchmark",
+        metaTitle: "Top 10 MCP Servers 2026 — Developer Benchmark & Guide",
+        metaDescription: "Ranked guide to the 10 MCP servers that matter in 2026. What each does, when to install, when to skip — plus a decision matrix for building your own stack.",
+        excerpt: "The MCP ecosystem exploded in 2026. Out of hundreds of servers, ten are doing the actual work. Benchmark by real usage, install cost, and coverage — plus a decision matrix for your own stack.",
+        sections: [
+          {
+            heading: "Why the MCP Ecosystem Exploded in 2026",
+            body: `<p>Model Context Protocol (MCP) shipped as a spec in late 2024. Eighteen months later, the registry holds hundreds of servers, and any Claude Code user has at least three installed. The question is no longer "should I use MCP" but "which ones are worth the setup tax?"</p>
+<p>This benchmark ranks the ten servers that actually earn their RAM in production. We evaluated each across four axes: unique value (does it do something Claude cannot), install friction (minutes to productive), stability (does it crash), and ecosystem momentum (is it still maintained).</p>
+<p>Rankings are ordinal, not scored — each spot reflects relative importance for a generalist developer in 2026, not a strict metric. Your mileage varies by stack.</p>`
+          },
+          {
+            heading: "How We Ranked Them",
+            body: `<p>Four criteria, weighted roughly equally:</p>
+<ul>
+<li><strong>Coverage</strong>: how many daily dev tasks does it touch? A search MCP that you hit fifty times a day outranks a deploy MCP you run twice a week.</li>
+<li><strong>Marginal value</strong>: does it enable something Claude literally cannot do alone? MCPs that just wrap existing CLI calls score lower.</li>
+<li><strong>Install cost</strong>: minutes from <code>npx</code> to working. MCPs that demand OAuth, Docker, or custom binaries lose points.</li>
+<li><strong>Stability</strong>: how often it blocks your session when something goes wrong. Mature MCPs fail gracefully; immature ones take your entire prompt with them.</li>
+</ul>
+<p>No paid promotions. No vendor pitches. Every server here we use ourselves.</p>`
+          },
+          {
+            heading: "#1–5: The Foundation Stack",
+            body: `<h4>#1. GitHub MCP</h4>
+<p>The most-installed server for a reason. Read repos, open PRs, comment on issues, search code — all from Claude without context-switching to GitHub.com. Install via <code>npx @modelcontextprotocol/server-github</code>, drop your PAT into env, done. If you ship code to GitHub, this is not optional.</p>
+<p><em>Skip if:</em> your work lives in GitLab or Bitbucket (use their equivalents instead).</p>
+<h4>#2. Filesystem MCP</h4>
+<p>Sandboxed file operations scoped to directories you allowlist. Claude can read, write, and search without relying on Bash tool calls. The safety model — explicit path allowlisting — makes it the server you want on your company laptop. <code>npx @modelcontextprotocol/server-filesystem /path/to/allowed/dir</code>.</p>
+<p><em>Skip if:</em> your IDE already exposes filesystem via native integration.</p>
+<h4>#3. Context7 MCP</h4>
+<p>Library documentation lookup. Ask "how does Next.js 15 handle server actions" and Context7 pulls the official Next docs straight into the prompt. For framework-heavy workflows this is the single biggest quality unlock of 2026 — Claude stops hallucinating outdated APIs. Install: <code>npx @upstash/context7-mcp</code>.</p>
+<p><em>Skip if:</em> you work exclusively in stable languages where docs rarely change (Go stdlib, vanilla C).</p>
+<h4>#4. Postgres MCP</h4>
+<p>Query your database from the prompt. Claude can introspect schema, draft migrations, and run read-only SELECTs. The read-only default is a safety feature — never give it write access in production. <code>npx @modelcontextprotocol/server-postgres postgresql://...</code>.</p>
+<p><em>Skip if:</em> you use a managed DB with strict SSH-only access (setup becomes painful).</p>
+<h4>#5. Brave Search MCP</h4>
+<p>Fresh web search. Beats the stale training data for anything current — package versions, breaking news, recent GitHub issues. Brave's API is cheap, generous, and does not inject ads. <code>npx @modelcontextprotocol/server-brave-search</code> + free API key.</p>
+<p><em>Skip if:</em> you already use Tavily MCP (see FAQ) — they overlap.</p>`
+          },
+          {
+            heading: "#6–10: The Power Stack",
+            body: `<h4>#6. Playwright MCP</h4>
+<p>Browser automation. Claude can load pages, click elements, screenshot, scrape, test. For frontend work this is a cheat code — Claude sees your actual rendered UI, not just the source. Comes bundled with Chromium, so install is heavy (~200MB) but one-time.</p>
+<p><em>Skip if:</em> you never touch browser-rendered state (backend-only teams).</p>
+<h4>#7. Serena MCP</h4>
+<p>Semantic code understanding via LSP. Unlike filesystem reads, Serena knows symbols, references, and type relationships. For large codebases (&gt;50k LOC) where "find all callers of this function" matters, it outperforms naive grep by an order of magnitude. Python-native, but supports multi-language LSPs.</p>
+<p><em>Skip if:</em> your repo fits in 10k LOC — grep is fine.</p>
+<h4>#8. Memory MCP</h4>
+<p>Cross-session knowledge graph. Useful for long-running projects where you want Claude to remember decisions between sessions ("we use React 19, not 18"). The official version is minimal; consider <code>mem0</code> for richer semantic memory.</p>
+<p><em>Skip if:</em> you already use Claude's built-in <code>.claude/memory/</code> + auto-memory skill (overlap).</p>
+<h4>#9. Slack MCP</h4>
+<p>Read channels, post messages, search history. For team leads this turns Claude into a lightweight bot — triage messages, summarize threads, push daily standups. Requires a Slack app install but the OAuth flow is ten minutes.</p>
+<p><em>Skip if:</em> your team uses Discord or Teams (different MCPs available).</p>
+<h4>#10. Chrome DevTools MCP</h4>
+<p>Performance audits, network inspection, console logs — all from Claude. For frontend debugging this is Playwright's more surgical sibling. Niche but irreplaceable when you need it. Less polished than top five, but maintained.</p>
+<p><em>Skip if:</em> you only write pure Node or backend code.</p>`
+          },
+          {
+            heading: "Choosing Your Stack",
+            body: `<p>Installing all ten is overkill for most solo developers. A practical starter stack by persona:</p>
+<table>
+<tr><th>Persona</th><th>Minimum Stack</th></tr>
+<tr><td>Full-stack TypeScript dev</td><td>GitHub + Filesystem + Context7 + Brave Search</td></tr>
+<tr><td>Backend-only (APIs, microservices)</td><td>GitHub + Filesystem + Postgres + Context7</td></tr>
+<tr><td>Frontend-heavy</td><td>GitHub + Filesystem + Context7 + Playwright + Chrome DevTools</td></tr>
+<tr><td>Solo indie hacker</td><td>GitHub + Context7 + Brave Search</td></tr>
+<tr><td>Platform / infra engineer</td><td>GitHub + Filesystem + Postgres + Slack</td></tr>
+</table>
+<p>Two rules of thumb: (1) start with three and add one per week until value plateaus. (2) if an MCP has not fired in two weeks, uninstall — each running server consumes context budget even when idle.</p>`
+          },
+          {
+            heading: "What Did Not Make the Cut",
+            body: `<p>A few servers that showed up in other "top 10" lists but we left off deliberately:</p>
+<ul>
+<li><strong>Puppeteer MCP</strong> — Playwright superset covers every use case; no reason to run both.</li>
+<li><strong>Google Drive MCP</strong> — OAuth setup is painful, and most devs do not keep code in Drive.</li>
+<li><strong>Figma MCP</strong> — Useful for designers, overkill for implementation-focused devs. On the edge.</li>
+<li><strong>Notion MCP</strong> — Excellent if you live in Notion; irrelevant if you do not.</li>
+</ul>
+<p>These are not bad MCPs — they are role-specific. Our list prioritizes coverage for generalists.</p>`
+          },
+          {
+            heading: "Next Steps",
+            body: `<p>Ready to install? Start here:</p>
+<ul>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">The .claude/ folder guide</a> — where MCPs get wired into <code>.claude/settings.json</code> or <code>~/.claude.json</code>.</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Claude Code hooks cookbook</a> — pair your MCP install with hooks that gate tool use (Recipe 5 blocks destructive MCP calls).</li>
+<li><a href="/revive">Install the MCP Buddy server</a> — the one MCP you install for fun, not productivity.</li>
+</ul>
+<p>Got an MCP we missed? <a href="/">Hit the checker</a> and drop a comment.</p>`
+          },
+          {
+            heading: "Frequently Asked Questions",
+            body: `<h4>What is the difference between Brave Search MCP and Tavily MCP?</h4>
+<p>Brave is general web search with a generous free tier. Tavily is optimized for AI — cleaner snippets, built-in extract endpoint, pricing based on search quality rather than quantity. Pick Brave for free tier and volume; pick Tavily if you are doing structured research workflows.</p>
+<h4>Do MCP servers slow down Claude?</h4>
+<p>Each installed server eats a small context budget for its tool descriptions (roughly 200-500 tokens per server). Ten servers cost ~3k tokens upfront. Not catastrophic, but enough that "install every MCP" is bad strategy. Aim for three to five active servers.</p>
+<h4>How do I install an MCP server?</h4>
+<p>For Claude Code: edit <code>.claude/settings.json</code> (project) or <code>~/.claude.json</code> (user) and add the server under <code>mcpServers</code>. Claude auto-discovers on next start. Each server's GitHub README shows the exact JSON block to paste.</p>
+<h4>Is it safe to give an MCP my production database credentials?</h4>
+<p>No. Use read-only credentials, scope to a single non-production database, and never commit the connection string. Postgres MCP defaults to read-only for a reason — keep it that way.</p>
+<h4>What happens when an MCP server crashes?</h4>
+<p>Claude silently removes it from the available tools and continues. You will see the failure in <code>~/.claude/logs/</code> or via <code>claude --verbose</code>. Most mature MCPs auto-restart; immature ones require manual relaunch.</p>`
+          }
+        ]
+      },
+      zh: {
+        title: "2026 年 MCP 服务器 Top 10:开发者实用基准",
+        metaTitle: "2026 年 Top 10 MCP 服务器 — 开发者基准与指南",
+        metaDescription: "2026 年值得安装的 10 个 MCP 服务器榜单。每个的定位、适用场景、不要装的情况 —— 附一个按角色选栈的决策矩阵。",
+        excerpt: "2026 年 MCP 生态爆发。成百上千个服务器里,真正干活的只有十来个。按实际使用、安装代价、覆盖面排名,附决策矩阵让你按角色选栈。",
+        sections: [
+          {
+            heading: "为什么 2026 年 MCP 生态爆发",
+            body: `<p>Model Context Protocol(MCP)在 2024 年底以规范形式发布。18 个月后,注册表已有数百个服务器,任何 Claude Code 用户至少装了 3 个。现在的问题不是"要不要用 MCP",而是"哪些值得花配置成本"。</p>
+<p>本基准排出在生产环境里真正挣回内存的 10 个服务器。评估 4 个维度:独特价值(Claude 单独做不了的)、安装摩擦(从命令到可用的分钟数)、稳定性(会不会崩)、生态势能(还在维护吗)。</p>
+<p>排名是序数,不是分数 —— 每个位次反映 2026 年对一个综合型开发者的相对重要性,不是严格度量。你的结果随技术栈而异。</p>`
+          },
+          {
+            heading: "评选方法",
+            body: `<p>4 个维度,权重大致相等:</p>
+<ul>
+<li><strong>覆盖面</strong>:触碰多少日常开发任务。一天用 50 次的搜索 MCP 优于一周用两次的部署 MCP。</li>
+<li><strong>边际价值</strong>:它是不是让 Claude 能做它原本做不了的事?只是包装现有 CLI 的 MCP 分低。</li>
+<li><strong>安装代价</strong>:从 <code>npx</code> 到可用的分钟数。要 OAuth、Docker、自定义二进制的扣分。</li>
+<li><strong>稳定性</strong>:出问题时多频繁卡住你的会话。成熟 MCP 优雅降级,不成熟的把整个 prompt 一起带走。</li>
+</ul>
+<p>没有付费推广。没有厂商话术。这里每个我们都自用。</p>`
+          },
+          {
+            heading: "#1–5:地基栈",
+            body: `<h4>#1. GitHub MCP</h4>
+<p>装机量最高,有其原因。读仓库、开 PR、评论 issue、搜代码 —— 全部在 Claude 里完成,不用切到 GitHub.com。<code>npx @modelcontextprotocol/server-github</code> 安装,PAT 丢进环境,完事。如果你把代码推 GitHub,这个不是选项。</p>
+<p><em>不装:</em> 你用 GitLab 或 Bitbucket(换对应的)。</p>
+<h4>#2. Filesystem MCP</h4>
+<p>按你白名单范围的沙盒文件操作。Claude 能读写搜,不依赖 Bash 工具调用。安全模型 —— 明确路径白名单 —— 让它成为公司电脑上你想要的那个服务器。<code>npx @modelcontextprotocol/server-filesystem /path/to/allowed/dir</code>。</p>
+<p><em>不装:</em> 你的 IDE 已有原生文件系统集成。</p>
+<h4>#3. Context7 MCP</h4>
+<p>库文档查询。问"Next.js 15 怎么处理 server actions",Context7 把官方 Next 文档直接灌进 prompt。对框架密集型工作流,这是 2026 年最大的质量解锁 —— Claude 不再编造过期 API。安装:<code>npx @upstash/context7-mcp</code>。</p>
+<p><em>不装:</em> 你只写文档极少变化的稳定语言(Go stdlib、原生 C)。</p>
+<h4>#4. Postgres MCP</h4>
+<p>从 prompt 查你的数据库。Claude 能自省 schema、起草迁移、跑只读 SELECT。只读默认是安全特性 —— 生产环境永远别给它写权限。<code>npx @modelcontextprotocol/server-postgres postgresql://...</code>。</p>
+<p><em>不装:</em> 你用只允许 SSH 访问的托管 DB(配置会很痛)。</p>
+<h4>#5. Brave Search MCP</h4>
+<p>实时 Web 搜索。对任何"当前"的内容 —— 包版本、突发新闻、近期 GitHub issue —— 胜过训练数据。Brave 的 API 便宜、慷慨、不推广告。<code>npx @modelcontextprotocol/server-brave-search</code> 加免费 API key。</p>
+<p><em>不装:</em> 你已经用了 Tavily MCP(见 FAQ)—— 两者重叠。</p>`
+          },
+          {
+            heading: "#6–10:进阶栈",
+            body: `<h4>#6. Playwright MCP</h4>
+<p>浏览器自动化。Claude 能加载页面、点元素、截图、爬取、测试。对前端工作是作弊码 —— Claude 看到你实际渲染的 UI,不只是源码。自带 Chromium,所以安装重(~200MB)但一次性。</p>
+<p><em>不装:</em> 你从不碰浏览器渲染状态(纯后端团队)。</p>
+<h4>#7. Serena MCP</h4>
+<p>通过 LSP 做语义代码理解。不像文件读取,Serena 知道符号、引用、类型关系。对大代码库(&gt; 5 万行)中"找出这个函数所有调用者"的场景,比朴素 grep 快一个数量级。Python 原生,支持多语言 LSP。</p>
+<p><em>不装:</em> 你的仓库 1 万行内 —— grep 够用。</p>
+<h4>#8. Memory MCP</h4>
+<p>跨会话知识图谱。长跑项目里让 Claude 记住会话间决策("我们用 React 19,不是 18")。官方版极简;要更丰富的语义记忆考虑 <code>mem0</code>。</p>
+<p><em>不装:</em> 你已经用了 Claude 内置的 <code>.claude/memory/</code> + auto-memory skill(重叠)。</p>
+<h4>#9. Slack MCP</h4>
+<p>读频道、发消息、搜历史。对技术经理,这把 Claude 变成轻量 bot —— 分诊消息、总结线程、推每日站会。需要 Slack app 安装但 OAuth 流程 10 分钟搞定。</p>
+<p><em>不装:</em> 你团队用 Discord 或 Teams(有各自 MCP)。</p>
+<h4>#10. Chrome DevTools MCP</h4>
+<p>性能审计、网络监控、console 日志 —— 全在 Claude 里。对前端调试是 Playwright 的外科手术刀姐妹。小众但需要时不可替代。比 Top 5 粗糙但仍在维护。</p>
+<p><em>不装:</em> 你只写纯 Node 或后端。</p>`
+          },
+          {
+            heading: "选你的栈",
+            body: `<p>全装 10 个对多数单人开发者过剩。按角色的起步栈:</p>
+<table>
+<tr><th>角色</th><th>最小栈</th></tr>
+<tr><td>全栈 TypeScript 开发者</td><td>GitHub + Filesystem + Context7 + Brave Search</td></tr>
+<tr><td>纯后端(API、微服务)</td><td>GitHub + Filesystem + Postgres + Context7</td></tr>
+<tr><td>前端密集</td><td>GitHub + Filesystem + Context7 + Playwright + Chrome DevTools</td></tr>
+<tr><td>独立开发者</td><td>GitHub + Context7 + Brave Search</td></tr>
+<tr><td>平台/基础设施工程师</td><td>GitHub + Filesystem + Postgres + Slack</td></tr>
+</table>
+<p>两个经验法则:(1)先装 3 个,每周加 1 个直到收益放缓。(2)两周没用过的 MCP 就卸 —— 每个运行的服务器即使闲着也吃上下文预算。</p>`
+          },
+          {
+            heading: "没上榜的",
+            body: `<p>有几个在别的"Top 10"里出现、我们故意没选的:</p>
+<ul>
+<li><strong>Puppeteer MCP</strong> —— Playwright 超集覆盖所有用例;没必要都跑。</li>
+<li><strong>Google Drive MCP</strong> —— OAuth 配置痛苦,多数开发者不把代码放 Drive。</li>
+<li><strong>Figma MCP</strong> —— 设计师好用,实现导向的开发者过剩。边缘。</li>
+<li><strong>Notion MCP</strong> —— 住在 Notion 里就优秀,不在就无关。</li>
+</ul>
+<p>这些不是坏 MCP —— 是角色特定的。我们的榜单优先覆盖综合开发者。</p>`
+          },
+          {
+            heading: "接下来",
+            body: `<p>准备安装?从这里开始:</p>
+<ul>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 目录指南</a> —— MCP 在 <code>.claude/settings.json</code> 或 <code>~/.claude.json</code> 里怎么接。</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Claude Code hooks 手册</a> —— 让 MCP 安装配合 hooks 做工具调用门(配方 5 拦截破坏性 MCP 调用)。</li>
+<li><a href="/revive">安装 MCP Buddy 服务器</a> —— 这个 MCP 你装着是为了好玩,不是生产力。</li>
+</ul>
+<p>有我们漏的 MCP?<a href="/">去 checker</a> 评论区告诉我们。</p>`
+          },
+          {
+            heading: "常见问题",
+            body: `<h4>Brave Search MCP 和 Tavily MCP 有什么区别?</h4>
+<p>Brave 是通用 Web 搜索,免费额度慷慨。Tavily 为 AI 优化 —— 更干净的 snippet、内置 extract 端点、按质量而非数量计价。看重免费额度和量用 Brave;做结构化研究工作流用 Tavily。</p>
+<h4>MCP 服务器会拖慢 Claude 吗?</h4>
+<p>每个安装的服务器吃一小段上下文预算(每个大约 200-500 token 工具描述)。10 个服务器预付 ~3k token。不致命,但足以让"装所有 MCP"变成坏策略。目标 3-5 个活跃服务器。</p>
+<h4>怎么安装一个 MCP 服务器?</h4>
+<p>Claude Code:编辑 <code>.claude/settings.json</code>(项目)或 <code>~/.claude.json</code>(用户),在 <code>mcpServers</code> 下加服务器。Claude 下次启动自动发现。每个服务器的 GitHub README 有确切的 JSON 块可粘贴。</p>
+<h4>给 MCP 生产数据库凭据安全吗?</h4>
+<p>不。用只读凭据,范围限一个非生产库,绝不提交连接字符串。Postgres MCP 默认只读不是没道理 —— 保持只读。</p>
+<h4>MCP 服务器崩了会怎样?</h4>
+<p>Claude 默默从可用工具里移除并继续。你在 <code>~/.claude/logs/</code> 或 <code>claude --verbose</code> 能看到失败。多数成熟 MCP 自动重启;不成熟的要手动重启。</p>`
+          }
+        ]
+      },
+      ko: {
+        title: "2026년 MCP 서버 Top 10: 개발자 벤치마크",
+        metaTitle: "2026년 Top 10 MCP 서버 — 개발자 벤치마크 가이드",
+        metaDescription: "2026년에 설치할 만한 10가지 MCP 서버 순위. 각 서버의 역할, 설치 시점, 건너뛸 경우 — 그리고 역할별 스택 선택을 위한 결정 매트릭스.",
+        excerpt: "2026년 MCP 생태계가 폭발했습니다. 수백 개의 서버 중 실제로 일하는 건 열 개 남짓. 실사용, 설치 비용, 커버리지로 순위 매김 — 역할에 따라 스택을 선택하는 매트릭스 포함.",
+        sections: [
+          {
+            heading: "2026년 MCP 생태계가 폭발한 이유",
+            body: `<p>Model Context Protocol(MCP)은 2024년 말에 스펙으로 출시되었습니다. 18개월 후 레지스트리에는 수백 개의 서버가 있고, 어떤 Claude Code 사용자든 최소 3개는 설치되어 있습니다. 이제 질문은 "MCP를 써야 하나"가 아니라 "어떤 것이 설정 비용의 값어치를 하는가"입니다.</p>
+<p>이 벤치마크는 실제로 RAM 값을 하는 10개 서버를 순위 매겼습니다. 네 가지 축에서 평가:고유 가치(Claude가 혼자 못 하는 것), 설치 마찰(생산적이 되기까지의 분), 안정성(크래시), 생태계 모멘텀(아직 유지보수 중인가).</p>
+<p>순위는 서수이지 점수가 아닙니다 — 각 자리는 2026년 종합형 개발자에게의 상대적 중요도를 반영하며, 엄격한 지표는 아닙니다. 스택에 따라 결과는 달라집니다.</p>`
+          },
+          {
+            heading: "순위 매긴 방법",
+            body: `<p>네 가지 기준, 가중치 대략 균등:</p>
+<ul>
+<li><strong>커버리지</strong>: 얼마나 많은 일상 개발 작업에 닿는가. 하루 50번 치는 검색 MCP가 주에 두 번 치는 배포 MCP보다 높습니다.</li>
+<li><strong>한계 가치</strong>: Claude가 혼자 할 수 없는 것을 가능하게 하는가? 기존 CLI를 감싸기만 하는 MCP는 낮은 점수.</li>
+<li><strong>설치 비용</strong>: <code>npx</code>에서 작동까지의 분. OAuth, Docker, 커스텀 바이너리를 요구하면 감점.</li>
+<li><strong>안정성</strong>: 문제가 생길 때 세션을 얼마나 자주 막는가. 성숙한 MCP는 우아하게 실패하고, 미숙한 것은 prompt 전체를 가져갑니다.</li>
+</ul>
+<p>유료 홍보 없음. 벤더 피치 없음. 여기 있는 모든 서버는 우리가 직접 사용합니다.</p>`
+          },
+          {
+            heading: "#1–5: 기반 스택",
+            body: `<h4>#1. GitHub MCP</h4>
+<p>설치량 1위, 이유 있음. 레포 읽기, PR 열기, 이슈 댓글, 코드 검색 — 전부 Claude 내에서, GitHub.com으로 컨텍스트 전환 없이. <code>npx @modelcontextprotocol/server-github</code>로 설치, PAT를 env에 넣으면 끝. GitHub에 코드를 올린다면 선택 사항이 아닙니다.</p>
+<p><em>건너뛰기:</em> GitLab이나 Bitbucket을 쓴다(해당 대체 사용).</p>
+<h4>#2. Filesystem MCP</h4>
+<p>허용 목록에 올린 디렉터리로 범위가 지정된 샌드박스 파일 연산. Claude가 Bash 도구 호출 없이 읽기, 쓰기, 검색. 안전 모델 — 명시적 경로 허용 목록 — 덕분에 회사 노트북에 원하는 서버가 됩니다. <code>npx @modelcontextprotocol/server-filesystem /path/to/allowed/dir</code>.</p>
+<p><em>건너뛰기:</em> IDE가 이미 네이티브 통합으로 파일 시스템을 노출한다.</p>
+<h4>#3. Context7 MCP</h4>
+<p>라이브러리 문서 조회. "Next.js 15는 server action을 어떻게 처리하나"를 물으면 Context7이 공식 Next 문서를 prompt에 바로 끌어옵니다. 프레임워크 중심 워크플로에 2026년 최대의 품질 해제 — Claude가 오래된 API를 더 이상 환각하지 않습니다. 설치: <code>npx @upstash/context7-mcp</code>.</p>
+<p><em>건너뛰기:</em> 문서가 거의 바뀌지 않는 안정 언어만 쓴다(Go stdlib, 바닐라 C).</p>
+<h4>#4. Postgres MCP</h4>
+<p>prompt에서 DB 쿼리. Claude가 스키마 내성, 마이그레이션 초안 작성, 읽기 전용 SELECT 실행. 읽기 전용 기본은 안전 기능 — 프로덕션에서 쓰기 권한을 절대 주지 마세요. <code>npx @modelcontextprotocol/server-postgres postgresql://...</code>.</p>
+<p><em>건너뛰기:</em> 엄격한 SSH 전용 접근의 관리형 DB를 쓴다(설정이 고통).</p>
+<h4>#5. Brave Search MCP</h4>
+<p>최신 웹 검색. 최근 것들 — 패키지 버전, 속보, 최근 GitHub 이슈 — 에 대해 오래된 훈련 데이터보다 낫습니다. Brave의 API는 저렴하고 관대하며 광고를 삽입하지 않습니다. <code>npx @modelcontextprotocol/server-brave-search</code> + 무료 API 키.</p>
+<p><em>건너뛰기:</em> 이미 Tavily MCP를 쓴다(FAQ 참조) — 겹칩니다.</p>`
+          },
+          {
+            heading: "#6–10: 파워 스택",
+            body: `<h4>#6. Playwright MCP</h4>
+<p>브라우저 자동화. Claude가 페이지 로드, 요소 클릭, 스크린샷, 스크래핑, 테스트. 프런트엔드 작업엔 치트 코드 — Claude가 소스뿐 아니라 실제 렌더된 UI를 봅니다. Chromium이 번들되어 설치가 무거움(~200MB)이지만 일회성.</p>
+<p><em>건너뛰기:</em> 브라우저 렌더 상태를 건드릴 일이 없다(백엔드 전용 팀).</p>
+<h4>#7. Serena MCP</h4>
+<p>LSP 기반 의미적 코드 이해. 파일 읽기와 달리 Serena는 심볼, 참조, 타입 관계를 압니다. 큰 코드베이스(5만 LOC 이상)에서 "이 함수의 모든 호출자 찾기"가 중요한 경우, 단순 grep보다 한 차수 더 빠릅니다. Python 네이티브, 다언어 LSP 지원.</p>
+<p><em>건너뛰기:</em> 레포가 1만 LOC 이하 — grep으로 충분.</p>
+<h4>#8. Memory MCP</h4>
+<p>세션 간 지식 그래프. 장기 프로젝트에서 Claude가 세션 간 결정을 기억하게 하는 데 유용("React 19 사용, 18 아님"). 공식 버전은 미니멀; 더 풍부한 의미 메모리는 <code>mem0</code> 고려.</p>
+<p><em>건너뛰기:</em> Claude 내장 <code>.claude/memory/</code> + auto-memory 스킬을 이미 쓴다(중복).</p>
+<h4>#9. Slack MCP</h4>
+<p>채널 읽기, 메시지 게시, 이력 검색. 팀 리드에게 Claude를 가벼운 봇으로 전환 — 메시지 분류, 스레드 요약, 일일 스탠드업 푸시. Slack 앱 설치 필요하지만 OAuth 흐름은 10분.</p>
+<p><em>건너뛰기:</em> 팀이 Discord나 Teams를 쓴다(다른 MCP 있음).</p>
+<h4>#10. Chrome DevTools MCP</h4>
+<p>성능 감사, 네트워크 검사, 콘솔 로그 — 전부 Claude에서. 프런트엔드 디버깅에서 Playwright의 더 외과적인 형제. 틈새지만 필요할 때 대체 불가. 톱 5보다 덜 다듬어졌지만 유지보수 중.</p>
+<p><em>건너뛰기:</em> 순수 Node나 백엔드 코드만 쓴다.</p>`
+          },
+          {
+            heading: "스택 선택",
+            body: `<p>솔로 개발자 대부분에게 10개 전체 설치는 과합니다. 페르소나별 실용적 시작 스택:</p>
+<table>
+<tr><th>페르소나</th><th>최소 스택</th></tr>
+<tr><td>풀스택 TypeScript 개발자</td><td>GitHub + Filesystem + Context7 + Brave Search</td></tr>
+<tr><td>백엔드 전용 (API, 마이크로서비스)</td><td>GitHub + Filesystem + Postgres + Context7</td></tr>
+<tr><td>프런트엔드 집중</td><td>GitHub + Filesystem + Context7 + Playwright + Chrome DevTools</td></tr>
+<tr><td>솔로 인디 해커</td><td>GitHub + Context7 + Brave Search</td></tr>
+<tr><td>플랫폼/인프라 엔지니어</td><td>GitHub + Filesystem + Postgres + Slack</td></tr>
+</table>
+<p>두 가지 경험칙: (1) 3개로 시작하고 가치가 정체될 때까지 주마다 하나 추가. (2) 2주 동안 안 켜진 MCP는 제거 — 실행 중인 서버는 유휴여도 컨텍스트 예산을 먹습니다.</p>`
+          },
+          {
+            heading: "선정되지 않은 것들",
+            body: `<p>다른 "Top 10" 리스트에 나오지만 의도적으로 뺀 것들:</p>
+<ul>
+<li><strong>Puppeteer MCP</strong> — Playwright 상위 집합이 모든 사용 사례를 커버; 둘 다 돌릴 이유 없음.</li>
+<li><strong>Google Drive MCP</strong> — OAuth 설정이 고통스럽고, 대부분의 개발자는 코드를 Drive에 두지 않음.</li>
+<li><strong>Figma MCP</strong> — 디자이너에게 유용, 구현 지향 개발자에게 과함. 경계선.</li>
+<li><strong>Notion MCP</strong> — Notion에 살고 있다면 훌륭, 아니라면 무관.</li>
+</ul>
+<p>이들은 나쁜 MCP가 아닙니다 — 역할 특화입니다. 우리 리스트는 종합 개발자 커버리지를 우선합니다.</p>`
+          },
+          {
+            heading: "다음 단계",
+            body: `<p>설치 준비? 여기서 시작:</p>
+<ul>
+<li><a href="/blog/claude-code-dotclaude-folder-complete-guide">.claude/ 폴더 가이드</a> — MCP가 <code>.claude/settings.json</code>이나 <code>~/.claude.json</code>에서 어떻게 연결되는지.</li>
+<li><a href="/blog/claude-code-hooks-cookbook-2026">Claude Code hooks 쿡북</a> — MCP 설치를 도구 사용 게이트 hooks와 짝짓기(레시피 5는 파괴적 MCP 호출 차단).</li>
+<li><a href="/revive">MCP Buddy 서버 설치</a> — 생산성이 아니라 재미로 설치하는 그 MCP.</li>
+</ul>
+<p>빠뜨린 MCP가 있나요? <a href="/">체커로</a> 댓글 남기기.</p>`
+          },
+          {
+            heading: "자주 묻는 질문",
+            body: `<h4>Brave Search MCP와 Tavily MCP의 차이는?</h4>
+<p>Brave는 관대한 무료 티어의 일반 웹 검색. Tavily는 AI에 최적화 — 더 깔끔한 스니펫, 내장 extract 엔드포인트, 양이 아닌 검색 품질 기반 가격 책정. 무료 티어와 볼륨을 원하면 Brave; 구조화된 리서치 워크플로라면 Tavily.</p>
+<h4>MCP 서버가 Claude를 느리게 하나요?</h4>
+<p>각 설치된 서버는 도구 설명으로 약간의 컨텍스트 예산을 먹습니다(서버당 대략 200-500 토큰). 10개 서버는 선불 ~3k 토큰. 파국은 아니지만 "모든 MCP 설치"는 나쁜 전략이 될 만큼은 됩니다. 활성 서버 3-5개를 목표로.</p>
+<h4>MCP 서버는 어떻게 설치하나요?</h4>
+<p>Claude Code: <code>.claude/settings.json</code>(프로젝트) 또는 <code>~/.claude.json</code>(사용자)을 편집하고 <code>mcpServers</code> 아래에 서버를 추가. Claude가 다음 시작 시 자동 발견. 각 서버의 GitHub README에 붙여넣을 정확한 JSON 블록이 있습니다.</p>
+<h4>MCP에 프로덕션 DB 자격증명을 주는 게 안전한가요?</h4>
+<p>아니요. 읽기 전용 자격 증명, 비프로덕션 DB 하나로 범위 한정, 연결 문자열 절대 커밋 금지. Postgres MCP가 읽기 전용 기본인 데는 이유가 있습니다 — 그대로 두세요.</p>
+<h4>MCP 서버가 크래시하면?</h4>
+<p>Claude가 사용 가능 도구에서 조용히 제거하고 계속합니다. <code>~/.claude/logs/</code>나 <code>claude --verbose</code>에서 실패를 확인. 성숙한 MCP 대부분은 자동 재시작, 미숙한 것은 수동 재시작 필요.</p>`
+          }
+        ]
+      }
+    }
+  },
 ];
 
 
