@@ -28,6 +28,28 @@ const SITE_NAME_MAP: Record<string, string> = {
   ko: "Claude Buddy 체커",
 };
 
+// Matches headings that indicate a FAQ section in any supported locale.
+const FAQ_HEADING_RE =
+  /(frequently\s+asked\s+questions|^faq$|常见问题|자주\s*묻는\s*질문|よくある質問)/i;
+
+// Extracts Q/A pairs from a FAQ section body where each question is an <h4>
+// followed by answer content (one or more <p>/<ul>/<pre> blocks) up to the
+// next <h4>. Answers are stripped to plain text for Google FAQ compliance.
+function extractFaqs(body: string): Array<{ q: string; a: string }> {
+  const pattern = /<h4[^>]*>([^<]+?)<\/h4>\s*([\s\S]*?)(?=<h4[^>]*>|$)/g;
+  const faqs: Array<{ q: string; a: string }> = [];
+  let match;
+  while ((match = pattern.exec(body)) !== null) {
+    const q = match[1].replace(/\s+/g, " ").trim();
+    const a = match[2]
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (q && a) faqs.push({ q, a });
+  }
+  return faqs;
+}
+
 export default function ArticleSchema({
   article,
   content,
@@ -165,7 +187,33 @@ export default function ArticleSchema({
       },
     };
 
-    return [articleSchema, breadcrumbSchema, webPageSchema];
+    // 4. FAQPage Schema — only if article has a FAQ section with Q/A pairs
+    const faqSection = content.sections.find((s) =>
+      FAQ_HEADING_RE.test(s.heading)
+    );
+    const faqs = faqSection ? extractFaqs(faqSection.body) : [];
+    const faqSchema =
+      faqs.length > 0
+        ? {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "@id": `${articleUrl}#faq`,
+            url: articleUrl,
+            inLanguage,
+            mainEntity: faqs.map(({ q, a }) => ({
+              "@type": "Question",
+              name: q,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: a,
+              },
+            })),
+          }
+        : null;
+
+    const out: unknown[] = [articleSchema, breadcrumbSchema, webPageSchema];
+    if (faqSchema) out.push(faqSchema);
+    return out;
   }, [article, content, locale, baseUrl]);
 
   return (
