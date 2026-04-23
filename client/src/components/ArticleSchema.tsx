@@ -36,11 +36,17 @@ const FAQ_HEADING_RE =
 // followed by answer content (one or more <p>/<ul>/<pre> blocks) up to the
 // next <h4>. Answers are stripped to plain text for Google FAQ compliance.
 function extractFaqs(body: string): Array<{ q: string; a: string }> {
-  const pattern = /<h4[^>]*>([^<]+?)<\/h4>\s*([\s\S]*?)(?=<h4[^>]*>|$)/g;
+  // Heading and answer may both contain inline tags (e.g. <code>/clear</code>).
+  // Match lazily so the first </h4> closes the question, then strip inline
+  // HTML from both sides for a clean plain-text pair.
+  const pattern = /<h4[^>]*>([\s\S]+?)<\/h4>\s*([\s\S]*?)(?=<h4[^>]*>|$)/g;
   const faqs: Array<{ q: string; a: string }> = [];
   let match;
   while ((match = pattern.exec(body)) !== null) {
-    const q = match[1].replace(/\s+/g, " ").trim();
+    const q = match[1]
+      .replace(/<[^>]+>/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
     const a = match[2]
       .replace(/<[^>]+>/g, " ")
       .replace(/\s+/g, " ")
