@@ -1,12 +1,16 @@
 #!/usr/bin/env node
 /**
- * Static prerender via Playwright snapshot.
- * Reads route list from dist/public/sitemap.xml, snapshots each route
- * (React hydration complete), strips debug attributes, writes hydrated
- * HTML back to dist/public/<route>/index.html.
+ * Static prerender via headless Chromium snapshot.
+ * Reads route list from dist/public/sitemap.xml, snapshots each route after
+ * React hydration, strips debug attributes, writes hydrated HTML back to
+ * dist/public/<route>/index.html.
+ *
+ * Backend selection (Vercel build env lacks libnspr4 for Playwright's bundled
+ * Chromium, so we swap to @sparticuz/chromium + puppeteer-core there):
+ *   - process.env.VERCEL is set on Vercel build → puppeteer-core + sparticuz
+ *   - Otherwise (local dev / CI on Linux/macOS with libs) → playwright
  */
 
-import { chromium } from "playwright";
 import express from "express";
 import { createServer } from "node:http";
 import { promises as fs } from "node:fs";
@@ -23,9 +27,12 @@ const CONCURRENCY = 5;
 const MAX_RETRIES = 2;
 const NAV_TIMEOUT = 30000;
 const HYDRATION_SETTLE_MS = 300;
+const USER_AGENT =
+  "Mozilla/5.0 (compatible; ClaudeBuddyPrerender/1.0; +https://claudebuddy.art)";
+const VIEWPORT = { width: 1280, height: 800 };
 
-// Hard-fail rules: detail pages MUST carry Schema. Listing/utility pages
-// may currently carry 0 (tracked as warnings for Phase 1C follow-up).
+const IS_VERCEL = !!process.env.VERCEL;
+
 const STRICT_RULES = [
   { name: "home", test: (r) => r === "/", min: 4 },
   { name: "blog-detail", test: (r) => /^\/blog\/[^/]+$/.test(r), min: 3 },
@@ -36,6 +43,61 @@ function strictMinFor(route) {
   const rule = STRICT_RULES.find((r) => r.test(route));
   return rule ? rule.min : 0;
 }
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// ── Browser adapter ─────────────────────────────────────────────────────────
+
+async function makePuppeteerAdapter() {
+  const puppeteer = (await import("puppeteer-core")).default;
+  const chromium = (await import("@sparticuz/chromium")).default;
+
+  const browser = await puppeteer.launch({
+    args: chromium.args,
+    executablePath: await chromium.executablePath(),
+    headless: true,
+    defaultViewport: VIEWPORT,
+  });
+
+  return {
+    backend: "puppeteer+sparticuz",
+    waitUntil: "networkidle0",
+    async newPage() {
+      const page = await browser.newPage();
+      await page.setUserAgent(USER_AGENT);
+      return page;
+    },
+    async close() {
+      await browser.close();
+    },
+  };
+}
+
+async function makePlaywrightAdapter() {
+  const { chromium } = await import("playwright");
+  const browser = await chromium.launch();
+  const context = await browser.newContext({
+    userAgent: USER_AGENT,
+    viewport: VIEWPORT,
+  });
+  return {
+    backend: "playwright",
+    waitUntil: "networkidle",
+    async newPage() {
+      return context.newPage();
+    },
+    async close() {
+      await context.close();
+      await browser.close();
+    },
+  };
+}
+
+async function makeAdapter() {
+  return IS_VERCEL ? makePuppeteerAdapter() : makePlaywrightAdapter();
+}
+
+// ── Routes / IO ─────────────────────────────────────────────────────────────
 
 async function readRoutes() {
   const xml = await fs.readFile(SITEMAP, "utf8");
@@ -70,12 +132,16 @@ function postProcessHtml(html) {
     .replace(/\s+data-manus-debug-loc="[^"]*"/g, "");
 }
 
-async function snapshotRoute(context, baseUrl, route) {
-  const page = await context.newPage();
+// ── Snapshot pipeline ───────────────────────────────────────────────────────
+
+async function snapshotRoute(adapter, baseUrl, route) {
+  const page = await adapter.newPage();
   try {
-    const url = baseUrl + route;
-    await page.goto(url, { waitUntil: "networkidle", timeout: NAV_TIMEOUT });
-    await page.waitForTimeout(HYDRATION_SETTLE_MS);
+    await page.goto(baseUrl + route, {
+      waitUntil: adapter.waitUntil,
+      timeout: NAV_TIMEOUT,
+    });
+    await sleep(HYDRATION_SETTLE_MS);
 
     const stats = await page.evaluate(() => {
       const scripts = document.querySelectorAll(
@@ -122,13 +188,13 @@ async function withRetry(label, fn) {
   throw lastErr;
 }
 
-async function processBatch(context, baseUrl, batch) {
+async function processBatch(adapter, baseUrl, batch) {
   return Promise.all(
     batch.map(async (route) => {
       const started = Date.now();
       try {
         const { html, stats } = await withRetry(route, () =>
-          snapshotRoute(context, baseUrl, route)
+          snapshotRoute(adapter, baseUrl, route)
         );
         const out = routeToOutputPath(route);
         await fs.mkdir(path.dirname(out), { recursive: true });
@@ -162,25 +228,20 @@ async function main() {
   const { server, port } = await startStaticServer();
   const baseUrl = `http://127.0.0.1:${port}`;
 
-  const browser = await chromium.launch();
-  const context = await browser.newContext({
-    userAgent:
-      "Mozilla/5.0 (compatible; ClaudeBuddyPrerender/1.0; +https://claudebuddy.art)",
-    viewport: { width: 1280, height: 800 },
-  });
+  const adapter = await makeAdapter();
+  console.log(`  backend: ${adapter.backend}`);
 
   const results = [];
   try {
     for (let i = 0; i < routes.length; i += CONCURRENCY) {
       const batch = routes.slice(i, i + CONCURRENCY);
-      const batchResults = await processBatch(context, baseUrl, batch);
+      const batchResults = await processBatch(adapter, baseUrl, batch);
       results.push(...batchResults);
       const done = Math.min(i + CONCURRENCY, routes.length);
       console.log(`  ${done}/${routes.length}`);
     }
   } finally {
-    await context.close();
-    await browser.close();
+    await adapter.close();
     server.close();
   }
 
@@ -206,6 +267,7 @@ async function main() {
       )} KB`
     );
   }
+
   const warnings = ok.filter((r) => r.schemaWarning);
   if (warnings.length > 0) {
     console.log("");
