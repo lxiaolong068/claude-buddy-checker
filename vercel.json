@@ -52,7 +52,7 @@
       ]
     },
     {
-      "source": "/(.*)",
+      "source": "/((?!assets/|sitemap\\.xml|feed\\.xml|robots\\.txt).*)",
       "headers": [
         {
           "key": "Cache-Control",
