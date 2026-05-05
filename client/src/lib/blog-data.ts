@@ -6763,7 +6763,615 @@ const MCP_TOP10_KO: ArticleContent = {
   ]
 };
 
+// === Claude Code Cheat Sheet ===
+const CHEATSHEET_EN: ArticleContent = {
+  title: "Claude Code Cheat Sheet — Every Command, Shortcut, and Hidden Trick (2026)",
+  metaTitle: "Claude Code Cheat Sheet: Commands, Shortcuts, Hacks (2026)",
+  metaDescription: "The complete Claude Code cheat sheet: every slash command, keyboard shortcut, special prefix (!, #, @), CLI flag, and hidden trick. Bookmark this page.",
+  excerpt: "One page that fits next to your editor and answers \"how do I do that thing in Claude Code again?\" Every slash command, every keyboard shortcut, the !/#/@ prefix tricks, the CLI flags worth knowing. Bookmark and forget the docs.",
+  sections: [
+    {
+      heading: "The Most-Used Commands at a Glance",
+      body: `<p>If you bookmark only one block on this page, make it this one:</p>
+<table>
+<tr><th>Action</th><th>How</th></tr>
+<tr><td>Initialize project (create CLAUDE.md)</td><td><code>/init</code></td></tr>
+<tr><td>Compact conversation context</td><td><code>/compact</code></td></tr>
+<tr><td>Clear current session</td><td><code>/clear</code></td></tr>
+<tr><td>List custom slash commands</td><td><code>/help</code></td></tr>
+<tr><td>Switch model</td><td><code>/model</code></td></tr>
+<tr><td>List active MCP servers</td><td><code>/mcp</code></td></tr>
+<tr><td>Edit CLAUDE.md from inside session</td><td><code>/memory</code></td></tr>
+<tr><td>Run a shell command without leaving Claude</td><td><code>!ls -la</code></td></tr>
+<tr><td>Reference a file in the prompt</td><td><code>@src/auth.ts</code></td></tr>
+<tr><td>Add a fact to project memory</td><td><code># API rate limit is 60/min</code></td></tr>
+<tr><td>Switch to plan mode</td><td><code>Shift+Tab</code> twice</td></tr>
+<tr><td>Cancel current operation</td><td><code>Esc</code></td></tr>
+<tr><td>Edit a previous message</td><td><code>Esc</code> once</td></tr>
+<tr><td>Jump to any earlier message</td><td><code>Esc</code> twice</td></tr>
+<tr><td>Exit Claude Code</td><td><code>/exit</code> or <code>Ctrl+D</code></td></tr>
+</table>
+<p>The rest of this guide covers the long tail. For deep dives on specific subsystems see our <a href="/blog/claude-code-folder-complete-guide">.claude/ folder guide</a>, <a href="/blog/claude-code-hooks-complete-guide">hooks guide</a>, and <a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP servers ranking</a>.</p>`
+    },
+    {
+      heading: "Built-in Slash Commands (Complete List)",
+      body: `<p>Type <code>/</code> in any session to get autocomplete for all of these. Versions ship updates frequently; if a command is missing in yours, run <code>/help</code> to see your version's exact list.</p>
+<h4>Core Workflow</h4>
+<table>
+<tr><th>Command</th><th>Effect</th></tr>
+<tr><td><code>/help</code></td><td>List all available commands (built-in + custom)</td></tr>
+<tr><td><code>/clear</code></td><td>Clear current session, start fresh</td></tr>
+<tr><td><code>/compact [instruction]</code></td><td>Summarize old context to free token budget. Optional instruction guides what to keep.</td></tr>
+<tr><td><code>/init</code></td><td>Generate a starter CLAUDE.md by scanning the project</td></tr>
+<tr><td><code>/memory</code></td><td>Open CLAUDE.md (or .claude/CLAUDE.md) in your editor</td></tr>
+<tr><td><code>/exit</code></td><td>Quit the session</td></tr>
+</table>
+<h4>Configuration</h4>
+<table>
+<tr><th>Command</th><th>Effect</th></tr>
+<tr><td><code>/config</code></td><td>Open the settings UI (theme, model, keybindings)</td></tr>
+<tr><td><code>/model</code></td><td>Switch model mid-session (Opus / Sonnet / Haiku)</td></tr>
+<tr><td><code>/permissions</code></td><td>Edit allow/deny lists for tools</td></tr>
+<tr><td><code>/agents</code></td><td>List, edit, or create custom subagents</td></tr>
+<tr><td><code>/mcp</code></td><td>List active MCP server connections + their tools</td></tr>
+<tr><td><code>/hooks</code></td><td>Inspect configured hooks for the current session</td></tr>
+<tr><td><code>/login</code> / <code>/logout</code></td><td>Switch Anthropic accounts or re-auth</td></tr>
+</table>
+<h4>Session Management</h4>
+<table>
+<tr><th>Command</th><th>Effect</th></tr>
+<tr><td><code>/resume</code></td><td>Pick a previous session to continue</td></tr>
+<tr><td><code>/cost</code></td><td>Show token usage and estimated cost for current session</td></tr>
+<tr><td><code>/status</code></td><td>Show current model, mode, working directory</td></tr>
+<tr><td><code>/doctor</code></td><td>Diagnostics for installation issues</td></tr>
+</table>`
+    },
+    {
+      heading: "Keyboard Shortcuts",
+      body: `<p>Most are universal across CLI and IDE extensions. Mac uses <code>Cmd</code> where <code>Ctrl</code> is shown; system shortcuts may override on Windows/Linux.</p>
+<table>
+<tr><th>Shortcut</th><th>Effect</th></tr>
+<tr><td><code>Esc</code></td><td>Cancel current operation; if input is empty, jump to previous message to edit</td></tr>
+<tr><td><code>Esc Esc</code> (double-tap)</td><td>Open message picker — jump to any earlier message in the conversation</td></tr>
+<tr><td><code>Tab</code></td><td>Autocomplete file path, command name, or option</td></tr>
+<tr><td><code>Shift+Tab</code></td><td>Cycle through modes: default → plan → auto-accept → default</td></tr>
+<tr><td><code>↑ / ↓</code></td><td>Cycle through prompt history</td></tr>
+<tr><td><code>Ctrl+R</code></td><td>Toggle verbose output (show full tool input/output)</td></tr>
+<tr><td><code>Ctrl+C</code></td><td>Cancel currently-running tool; press twice to exit session</td></tr>
+<tr><td><code>Ctrl+D</code></td><td>Exit session (when input is empty)</td></tr>
+<tr><td><code>Ctrl+L</code></td><td>Clear screen (terminal only; doesn't clear conversation)</td></tr>
+<tr><td><code>Ctrl+J</code></td><td>Insert literal newline (vs <code>Enter</code> which submits)</td></tr>
+<tr><td><code>Alt+Enter</code> / <code>Opt+Enter</code></td><td>Same as <code>Ctrl+J</code> — newline without submit</td></tr>
+</table>
+<p><strong>Modes explained</strong>:</p>
+<ul>
+<li><strong>Default</strong>: Claude asks before each tool call that isn't already allowed</li>
+<li><strong>Plan</strong>: Claude only reads, never edits. Useful for "let's discuss the approach first"</li>
+<li><strong>Auto-accept</strong>: Claude executes everything in <code>permissions.allow</code> without prompting. Use carefully on production code</li>
+</ul>`
+    },
+    {
+      heading: "Special Input Prefixes — !, #, @",
+      body: `<p>Three single-character prefixes change how Claude treats your input. Mostly missed by new users; deeply useful once you know them.</p>
+<h4>! — Run a shell command</h4>
+<p>Anything after <code>!</code> at the start of a prompt runs as a shell command, with the output included in the conversation:</p>
+<pre><code>!git log --oneline -5
+!find . -name "*.test.ts" | head</code></pre>
+<p>The output gets summarized into the conversation context, which Claude can then reason over. Saves the "let me run a command, paste the output, then ask Claude" dance.</p>
+<h4># — Add to project memory</h4>
+<p>Anything after <code>#</code> gets appended to <code>CLAUDE.md</code> as a remembered fact:</p>
+<pre><code># API rate limit is 60 requests per minute
+# Production database is read-replica only, writes go to primary at db-writer.internal</code></pre>
+<p>Useful for capturing facts in the moment instead of remembering to update CLAUDE.md later.</p>
+<h4>@ — Reference a file or symbol</h4>
+<p><code>@</code> with autocomplete points Claude at a specific file or symbol:</p>
+<pre><code>Refactor @src/auth/login.ts to use the new session API.
+What does @validateUser do, and where is it called?</code></pre>
+<p>Claude reads the referenced file before responding. Faster than asking "look at src/auth/login.ts" because the path is verified at autocomplete time.</p>`
+    },
+    {
+      heading: "CLI Flags & Launch Options",
+      body: `<p>Run <code>claude --help</code> for the canonical list. The flags worth memorizing:</p>
+<table>
+<tr><th>Flag</th><th>Effect</th></tr>
+<tr><td><code>claude</code></td><td>Start interactive session in current directory</td></tr>
+<tr><td><code>claude -p "&lt;prompt&gt;"</code></td><td>Print mode: run prompt non-interactively, output to stdout, exit. Pipe-friendly.</td></tr>
+<tr><td><code>claude --resume</code></td><td>Pick a previous session from a list</td></tr>
+<tr><td><code>claude --continue</code></td><td>Continue the most recent session in this directory</td></tr>
+<tr><td><code>claude --add-dir &lt;path&gt;</code></td><td>Add another directory to Claude's working set (without changing cwd)</td></tr>
+<tr><td><code>claude --model &lt;name&gt;</code></td><td>Override default model (e.g. <code>claude-opus-4-5</code>)</td></tr>
+<tr><td><code>claude --permission-mode &lt;mode&gt;</code></td><td>Set permission mode at startup: <code>default</code>, <code>plan</code>, <code>acceptEdits</code>, <code>bypassPermissions</code></td></tr>
+<tr><td><code>claude --output-format json</code></td><td>(Print mode) emit JSON instead of plain text. Good for scripting.</td></tr>
+<tr><td><code>claude --include-partial-messages</code></td><td>(Print mode) include intermediate tool calls in output</td></tr>
+<tr><td><code>claude mcp add &lt;name&gt; -- &lt;cmd&gt;</code></td><td>Register a new MCP server</td></tr>
+<tr><td><code>claude mcp list</code> / <code>get</code> / <code>remove</code></td><td>Manage MCP servers without an editor</td></tr>
+<tr><td><code>claude doctor</code></td><td>Diagnose installation, IDE integration, and connectivity</td></tr>
+<tr><td><code>claude config get/set/list</code></td><td>Manage settings.json from CLI</td></tr>
+</table>
+<h4>Print mode pipeline trick</h4>
+<pre><code>cat error.log | claude -p "summarize the most common error patterns" --output-format json | jq</code></pre>
+<p>Pipe-friendly print mode turns Claude into a proper Unix tool. Combine with <code>find</code>, <code>grep</code>, <code>jq</code>, <code>awk</code> for serious power.</p>`
+    },
+    {
+      heading: "Configuration File Locations",
+      body: `<p>Where everything lives. Hierarchy goes from most-global to most-specific; later files override earlier:</p>
+<table>
+<tr><th>Path</th><th>Purpose</th></tr>
+<tr><td><code>~/.claude/settings.json</code></td><td>Global user settings (apply to all projects)</td></tr>
+<tr><td><code>~/.claude/CLAUDE.md</code></td><td>Global standing instructions</td></tr>
+<tr><td><code>~/.claude.json</code></td><td>Account state, MCP server registrations, oauth tokens</td></tr>
+<tr><td><code>~/.claude/agents/</code></td><td>Global subagents (available to all projects)</td></tr>
+<tr><td><code>~/.claude/commands/</code></td><td>Global slash commands</td></tr>
+<tr><td><code>./CLAUDE.md</code></td><td>Project standing instructions (committed to Git)</td></tr>
+<tr><td><code>./.claude/settings.json</code></td><td>Project settings (committed)</td></tr>
+<tr><td><code>./.claude/settings.local.json</code></td><td>Personal overrides (gitignored)</td></tr>
+<tr><td><code>./.claude/agents/</code></td><td>Project subagents (committed)</td></tr>
+<tr><td><code>./.claude/commands/</code></td><td>Project slash commands (committed)</td></tr>
+<tr><td><code>./.mcp.json</code></td><td>Project-scoped MCP servers (committed via <code>--scope project</code>)</td></tr>
+</table>`
+    },
+    {
+      heading: "Power User Tips",
+      body: `<p>Eight tricks that separate confident users from beginners.</p>
+<h4>1. Compact with intent</h4>
+<p><code>/compact</code> alone summarizes generically. <code>/compact keep the file paths and the failed test names</code> tells the summarizer what matters. Massive context recovery for long sessions.</p>
+<h4>2. Use Esc-Esc to fork the conversation</h4>
+<p>Realized 20 messages ago you should have asked differently? <code>Esc Esc</code> opens a message picker; pick the message, edit it, and Claude continues from that branch. The original branch is preserved.</p>
+<h4>3. Symlink CLAUDE.md to share across siblings</h4>
+<p>If you have multiple repos that should share standing instructions:</p>
+<pre><code>ln -s /shared/CLAUDE.md ~/work/repo-a/CLAUDE.md
+ln -s /shared/CLAUDE.md ~/work/repo-b/CLAUDE.md</code></pre>
+<p>Edit once, applies everywhere.</p>
+<h4>4. Pipe Claude's output to another command</h4>
+<p>Print mode + <code>--output-format json</code> + <code>jq</code> = serious automation:</p>
+<pre><code>claude -p "list all TODO comments in src/" --output-format json | jq -r '.text'</code></pre>
+<h4>5. Background long tasks with <code>run_in_background</code></h4>
+<p>Inside a session, ask Claude to run a long-running task with <code>run_in_background</code>. Useful for builds and tests that would otherwise block the conversation.</p>
+<h4>6. Use <code>--add-dir</code> for monorepo workflows</h4>
+<p>If you need Claude to also see <code>~/code/shared-lib</code> while working in <code>~/code/main-app</code>, launch with <code>claude --add-dir ~/code/shared-lib</code>. Or run <code>/add-dir</code> mid-session.</p>
+<h4>7. Status line for git branch</h4>
+<p>Add to <code>settings.json</code>:</p>
+<pre><code>{
+  "statusLine": {
+    "type": "command",
+    "command": "echo $(git branch --show-current 2>/dev/null) | tr -d '\\n'"
+  }
+}</code></pre>
+<p>Now the bottom of Claude Code always shows your branch. Catches "I'm committing on main" before it happens.</p>
+<h4>8. Keep a global ~/.claude/CLAUDE.md for personal preferences</h4>
+<p>Things like "be concise", "don't add comments unless I ask", "use TypeScript strict mode" belong in your global CLAUDE.md. Project CLAUDE.md adds project-specific stuff on top.</p>`
+    },
+    {
+      heading: "Frequently Asked Questions",
+      body: `<h4>How do I see which keybindings are bound?</h4>
+<p>Run <code>/config</code> and navigate to the keybindings section. You can also check <code>~/.claude/keybindings.json</code> directly.</p>
+<h4>What's the fastest way to undo a wrong edit Claude made?</h4>
+<p>Three options: (1) <code>git checkout -- &lt;file&gt;</code> if the change isn't committed; (2) <code>git reset HEAD~1</code> if it's committed but not pushed; (3) <code>Esc Esc</code> to fork the conversation before the bad edit and try a different approach.</p>
+<h4>Can I run Claude Code in a sandbox?</h4>
+<p>Yes. Use <code>--permission-mode plan</code> for strict read-only, or run inside a Docker container with limited filesystem access. Claude Code respects <code>permissions.deny</code> patterns even with broad allow lists.</p>
+<h4>How do I share a slash command with someone outside my repo?</h4>
+<p>The slash command file is just Markdown. Send them <code>.claude/commands/foo.md</code> and ask them to drop it in their <code>~/.claude/commands/</code> (global) or their project's <code>.claude/commands/</code>.</p>
+<h4>Why doesn't <code>/init</code> generate everything I need in CLAUDE.md?</h4>
+<p>It generates a starter based on what it finds. Treat the output as a draft — review and trim. The good CLAUDE.md is what you keep after deleting half of what <code>/init</code> wrote.</p>
+<h4>How do I use Claude Code in CI without an interactive prompt?</h4>
+<p>Print mode: <code>claude -p "&lt;prompt&gt;"</code>. Combined with <code>--output-format json</code> and <code>--max-turns N</code>, it's scriptable. Set <code>ANTHROPIC_API_KEY</code> in your CI environment.</p>
+<h4>Where do I report a bug or request a feature?</h4>
+<p><a href="https://github.com/anthropics/claude-code/issues">github.com/anthropics/claude-code/issues</a> is the canonical issue tracker. Search before filing — many issues are duplicates.</p>
+<p><em>Related: <a href="/blog/claude-code-folder-complete-guide">.claude/ folder complete guide</a> · <a href="/blog/claude-code-hooks-complete-guide">Hooks practical guide</a> · <a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP servers</a></em></p>`
+    }
+  ]
+};
+
+const CHEATSHEET_ZH: ArticleContent = {
+  title: "Claude Code 速查表——所有命令、快捷键与隐藏技巧（2026）",
+  metaTitle: "Claude Code 速查表：命令、快捷键、隐藏命令 (2026)",
+  metaDescription: "完整 Claude Code 速查表：所有斜杠命令、键盘快捷键、特殊前缀（!、#、@）、CLI 标志和隐藏技巧。收藏本页备查。",
+  excerpt: "一页放在编辑器旁边，回答\"Claude Code 里那个东西怎么做来着？\"的问题。所有斜杠命令、键盘快捷键、!/#/@ 前缀技巧、值得记住的 CLI 标志。收藏后忘掉文档。",
+  sections: [
+    {
+      heading: "最常用命令一览",
+      body: `<p>本页只收藏一个块的话，就这个：</p>
+<table>
+<tr><th>动作</th><th>怎么做</th></tr>
+<tr><td>初始化项目（创建 CLAUDE.md）</td><td><code>/init</code></td></tr>
+<tr><td>压缩对话上下文</td><td><code>/compact</code></td></tr>
+<tr><td>清空当前会话</td><td><code>/clear</code></td></tr>
+<tr><td>列出自定义斜杠命令</td><td><code>/help</code></td></tr>
+<tr><td>切换模型</td><td><code>/model</code></td></tr>
+<tr><td>列出活动 MCP 服务器</td><td><code>/mcp</code></td></tr>
+<tr><td>从会话内编辑 CLAUDE.md</td><td><code>/memory</code></td></tr>
+<tr><td>不离开 Claude 跑 shell 命令</td><td><code>!ls -la</code></td></tr>
+<tr><td>在 prompt 引用文件</td><td><code>@src/auth.ts</code></td></tr>
+<tr><td>添加事实到项目记忆</td><td><code># API 速率限制 60/min</code></td></tr>
+<tr><td>切换到 plan 模式</td><td><code>Shift+Tab</code> 两次</td></tr>
+<tr><td>取消当前操作</td><td><code>Esc</code></td></tr>
+<tr><td>编辑前一条消息</td><td><code>Esc</code> 一次</td></tr>
+<tr><td>跳到任意更早消息</td><td><code>Esc</code> 两次</td></tr>
+<tr><td>退出 Claude Code</td><td><code>/exit</code> 或 <code>Ctrl+D</code></td></tr>
+</table>
+<p>本指南其余部分覆盖长尾。特定子系统的深度文章见我们的 <a href="/blog/claude-code-folder-complete-guide">.claude/ 文件夹指南</a>、<a href="/blog/claude-code-hooks-complete-guide">hooks 指南</a>、<a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP 服务器排名</a>。</p>`
+    },
+    {
+      heading: "内置斜杠命令（完整清单）",
+      body: `<p>任何会话里输入 <code>/</code> 都会得到所有命令的自动补全。版本经常更新；如果你的版本里少某个命令，跑 <code>/help</code> 看你版本的精确清单。</p>
+<h4>核心工作流</h4>
+<table>
+<tr><th>命令</th><th>效果</th></tr>
+<tr><td><code>/help</code></td><td>列出所有可用命令（内置 + 自定义）</td></tr>
+<tr><td><code>/clear</code></td><td>清空当前会话，重新开始</td></tr>
+<tr><td><code>/compact [指令]</code></td><td>总结老上下文释放 token 预算。可选指令引导保留什么。</td></tr>
+<tr><td><code>/init</code></td><td>扫描项目生成起步版 CLAUDE.md</td></tr>
+<tr><td><code>/memory</code></td><td>在编辑器打开 CLAUDE.md（或 .claude/CLAUDE.md）</td></tr>
+<tr><td><code>/exit</code></td><td>退出会话</td></tr>
+</table>
+<h4>配置</h4>
+<table>
+<tr><th>命令</th><th>效果</th></tr>
+<tr><td><code>/config</code></td><td>打开设置 UI（主题、模型、键绑定）</td></tr>
+<tr><td><code>/model</code></td><td>会话中切换模型（Opus / Sonnet / Haiku）</td></tr>
+<tr><td><code>/permissions</code></td><td>编辑工具的 allow/deny 清单</td></tr>
+<tr><td><code>/agents</code></td><td>列出、编辑或创建自定义子代理</td></tr>
+<tr><td><code>/mcp</code></td><td>列出活动 MCP 服务器连接 + 它们的工具</td></tr>
+<tr><td><code>/hooks</code></td><td>检查当前会话的已配置 hooks</td></tr>
+<tr><td><code>/login</code> / <code>/logout</code></td><td>切换 Anthropic 账号或重新认证</td></tr>
+</table>
+<h4>会话管理</h4>
+<table>
+<tr><th>命令</th><th>效果</th></tr>
+<tr><td><code>/resume</code></td><td>挑一个之前的会话继续</td></tr>
+<tr><td><code>/cost</code></td><td>显示当前会话的 token 用量与预估成本</td></tr>
+<tr><td><code>/status</code></td><td>显示当前模型、模式、工作目录</td></tr>
+<tr><td><code>/doctor</code></td><td>安装问题诊断</td></tr>
+</table>`
+    },
+    {
+      heading: "键盘快捷键",
+      body: `<p>大多数在 CLI 与 IDE 扩展间通用。Mac 用 <code>Cmd</code> 替换显示的 <code>Ctrl</code>；Windows/Linux 上系统快捷键可能覆盖。</p>
+<table>
+<tr><th>快捷键</th><th>效果</th></tr>
+<tr><td><code>Esc</code></td><td>取消当前操作；如果输入为空，跳到前一条消息编辑</td></tr>
+<tr><td><code>Esc Esc</code>（双击）</td><td>打开消息选择器——跳到对话中任意更早消息</td></tr>
+<tr><td><code>Tab</code></td><td>自动补全文件路径、命令名或选项</td></tr>
+<tr><td><code>Shift+Tab</code></td><td>循环模式：default → plan → auto-accept → default</td></tr>
+<tr><td><code>↑ / ↓</code></td><td>循环 prompt 历史</td></tr>
+<tr><td><code>Ctrl+R</code></td><td>切换详细输出（显示完整工具输入/输出）</td></tr>
+<tr><td><code>Ctrl+C</code></td><td>取消当前运行的工具；按两次退出会话</td></tr>
+<tr><td><code>Ctrl+D</code></td><td>退出会话（输入为空时）</td></tr>
+<tr><td><code>Ctrl+L</code></td><td>清屏（仅终端；不清空对话）</td></tr>
+<tr><td><code>Ctrl+J</code></td><td>插入字面换行（vs <code>Enter</code> 提交）</td></tr>
+<tr><td><code>Alt+Enter</code> / <code>Opt+Enter</code></td><td>同 <code>Ctrl+J</code>——换行不提交</td></tr>
+</table>
+<p><strong>模式说明</strong>：</p>
+<ul>
+<li><strong>Default</strong>：Claude 在每个未在 allow 内的工具调用前询问</li>
+<li><strong>Plan</strong>：Claude 只读，不编辑。适合"我们先讨论方案"</li>
+<li><strong>Auto-accept</strong>：Claude 不询问就执行 <code>permissions.allow</code> 里的一切。生产代码上慎用</li>
+</ul>`
+    },
+    {
+      heading: "特殊输入前缀——!、#、@",
+      body: `<p>三个单字符前缀改变 Claude 处理你输入的方式。新用户大多错过；知道之后非常有用。</p>
+<h4>! —— 跑 shell 命令</h4>
+<p>prompt 开头 <code>!</code> 后的任何东西作为 shell 命令运行，输出包含进对话：</p>
+<pre><code>!git log --oneline -5
+!find . -name "*.test.ts" | head</code></pre>
+<p>输出会被总结进对话上下文，Claude 能基于此推理。省去"我跑个命令、粘贴输出、再问 Claude"的来回。</p>
+<h4># —— 添加到项目记忆</h4>
+<p><code>#</code> 后的任何东西被追加到 <code>CLAUDE.md</code> 作为记住的事实：</p>
+<pre><code># API 速率限制是每分钟 60 请求
+# 生产数据库只读副本，写入走主库 db-writer.internal</code></pre>
+<p>有用：当下捕获事实而不是记着以后更新 CLAUDE.md。</p>
+<h4>@ —— 引用文件或符号</h4>
+<p><code>@</code> 配自动补全把 Claude 指向特定文件或符号：</p>
+<pre><code>把 @src/auth/login.ts 重构为用新的 session API。
+@validateUser 做什么、在哪里被调用？</code></pre>
+<p>Claude 在响应前读引用的文件。比说"看 src/auth/login.ts"快——路径在自动补全时已经验证。</p>`
+    },
+    {
+      heading: "CLI 标志与启动选项",
+      body: `<p>跑 <code>claude --help</code> 看权威清单。值得记的标志：</p>
+<table>
+<tr><th>标志</th><th>效果</th></tr>
+<tr><td><code>claude</code></td><td>在当前目录启动交互会话</td></tr>
+<tr><td><code>claude -p "&lt;prompt&gt;"</code></td><td>Print 模式：非交互运行 prompt，输出到 stdout，退出。Pipe 友好。</td></tr>
+<tr><td><code>claude --resume</code></td><td>从清单挑一个之前会话</td></tr>
+<tr><td><code>claude --continue</code></td><td>继续此目录最近的会话</td></tr>
+<tr><td><code>claude --add-dir &lt;path&gt;</code></td><td>把另一个目录加进 Claude 的工作集（不改 cwd）</td></tr>
+<tr><td><code>claude --model &lt;name&gt;</code></td><td>覆盖默认模型（如 <code>claude-opus-4-5</code>）</td></tr>
+<tr><td><code>claude --permission-mode &lt;mode&gt;</code></td><td>启动时设权限模式：<code>default</code>、<code>plan</code>、<code>acceptEdits</code>、<code>bypassPermissions</code></td></tr>
+<tr><td><code>claude --output-format json</code></td><td>（Print 模式）发 JSON 而非纯文本。脚本好用。</td></tr>
+<tr><td><code>claude --include-partial-messages</code></td><td>（Print 模式）输出包含中间工具调用</td></tr>
+<tr><td><code>claude mcp add &lt;name&gt; -- &lt;cmd&gt;</code></td><td>注册新 MCP 服务器</td></tr>
+<tr><td><code>claude mcp list</code> / <code>get</code> / <code>remove</code></td><td>不开编辑器管理 MCP 服务器</td></tr>
+<tr><td><code>claude doctor</code></td><td>诊断安装、IDE 集成、连通性</td></tr>
+<tr><td><code>claude config get/set/list</code></td><td>从 CLI 管理 settings.json</td></tr>
+</table>
+<h4>Print 模式管线技巧</h4>
+<pre><code>cat error.log | claude -p "总结最常见的错误模式" --output-format json | jq</code></pre>
+<p>Pipe 友好的 print 模式让 Claude 成为正经 Unix 工具。配 <code>find</code>、<code>grep</code>、<code>jq</code>、<code>awk</code> 释放强力。</p>`
+    },
+    {
+      heading: "配置文件位置",
+      body: `<p>所有东西住哪。层级从最全局到最具体；后面的覆盖前面的：</p>
+<table>
+<tr><th>路径</th><th>用途</th></tr>
+<tr><td><code>~/.claude/settings.json</code></td><td>全局用户设置（适用所有项目）</td></tr>
+<tr><td><code>~/.claude/CLAUDE.md</code></td><td>全局常驻指令</td></tr>
+<tr><td><code>~/.claude.json</code></td><td>账户状态、MCP 服务器注册、oauth token</td></tr>
+<tr><td><code>~/.claude/agents/</code></td><td>全局子代理（所有项目可用）</td></tr>
+<tr><td><code>~/.claude/commands/</code></td><td>全局斜杠命令</td></tr>
+<tr><td><code>./CLAUDE.md</code></td><td>项目常驻指令（提交到 Git）</td></tr>
+<tr><td><code>./.claude/settings.json</code></td><td>项目设置（提交）</td></tr>
+<tr><td><code>./.claude/settings.local.json</code></td><td>个人覆盖（gitignored）</td></tr>
+<tr><td><code>./.claude/agents/</code></td><td>项目子代理（提交）</td></tr>
+<tr><td><code>./.claude/commands/</code></td><td>项目斜杠命令（提交）</td></tr>
+<tr><td><code>./.mcp.json</code></td><td>项目级 MCP 服务器（通过 <code>--scope project</code> 提交）</td></tr>
+</table>`
+    },
+    {
+      heading: "高阶用户技巧",
+      body: `<p>分隔自信用户与新手的八个技巧。</p>
+<h4>1. 带意图地 compact</h4>
+<p><code>/compact</code> 单独跑会通用总结。<code>/compact 保留文件路径与失败的测试名</code> 告诉总结器什么重要。长会话的大量上下文恢复。</p>
+<h4>2. 用 Esc-Esc 分支对话</h4>
+<p>20 条消息前发现该问得不一样？<code>Esc Esc</code> 打开消息选择器；选消息、编辑、Claude 从那个分支继续。原分支保留。</p>
+<h4>3. 软链接 CLAUDE.md 跨兄弟仓库共享</h4>
+<p>如果有多个仓库共享常驻指令：</p>
+<pre><code>ln -s /shared/CLAUDE.md ~/work/repo-a/CLAUDE.md
+ln -s /shared/CLAUDE.md ~/work/repo-b/CLAUDE.md</code></pre>
+<p>编辑一次，处处生效。</p>
+<h4>4. 把 Claude 输出管道到其他命令</h4>
+<p>Print 模式 + <code>--output-format json</code> + <code>jq</code> = 正经自动化：</p>
+<pre><code>claude -p "列出 src/ 里所有 TODO 注释" --output-format json | jq -r '.text'</code></pre>
+<h4>5. 用 <code>run_in_background</code> 后台长任务</h4>
+<p>会话内让 Claude 用 <code>run_in_background</code> 跑长任务。对会阻塞对话的构建和测试有用。</p>
+<h4>6. monorepo 工作流用 <code>--add-dir</code></h4>
+<p>如果你在 <code>~/code/main-app</code> 里工作但需要 Claude 也看 <code>~/code/shared-lib</code>，用 <code>claude --add-dir ~/code/shared-lib</code> 启动。或会话中跑 <code>/add-dir</code>。</p>
+<h4>7. 状态行显示 git 分支</h4>
+<p>加到 <code>settings.json</code>：</p>
+<pre><code>{
+  "statusLine": {
+    "type": "command",
+    "command": "echo $(git branch --show-current 2>/dev/null) | tr -d '\\n'"
+  }
+}</code></pre>
+<p>现在 Claude Code 底部总显示你的分支。在"我在 main 上提交"发生前抓住。</p>
+<h4>8. 全局 ~/.claude/CLAUDE.md 放个人偏好</h4>
+<p>"简洁"、"我没让你别加注释"、"用 TypeScript strict mode" 这种放进全局 CLAUDE.md。项目 CLAUDE.md 在上面加项目特定。</p>`
+    },
+    {
+      heading: "常见问题",
+      body: `<h4>怎么看哪些键绑定被绑了？</h4>
+<p>跑 <code>/config</code> 导航到键绑定区。也能直接查 <code>~/.claude/keybindings.json</code>。</p>
+<h4>撤销 Claude 错误编辑最快的方法是？</h4>
+<p>三个选项：(1) 没提交就 <code>git checkout -- &lt;file&gt;</code>；(2) 已提交未推送就 <code>git reset HEAD~1</code>；(3) <code>Esc Esc</code> 在坏编辑前分支对话试不同方案。</p>
+<h4>能在沙箱跑 Claude Code 吗？</h4>
+<p>能。用 <code>--permission-mode plan</code> 严格只读，或在文件系统访问受限的 Docker 容器里跑。Claude Code 即使在宽 allow 清单下也尊重 <code>permissions.deny</code> 模式。</p>
+<h4>怎么把斜杠命令分享给仓库外的人？</h4>
+<p>斜杠命令文件就是 Markdown。发他们 <code>.claude/commands/foo.md</code>，让他们丢进自己的 <code>~/.claude/commands/</code>（全局）或项目的 <code>.claude/commands/</code>。</p>
+<h4>为什么 <code>/init</code> 不在 CLAUDE.md 里生成我需要的所有？</h4>
+<p>它基于发现的内容生成起步版。把输出当草稿——审查与修剪。好的 CLAUDE.md 是删掉 <code>/init</code> 写的一半之后剩下的。</p>
+<h4>怎么在 CI 用 Claude Code 而不要交互 prompt？</h4>
+<p>Print 模式：<code>claude -p "&lt;prompt&gt;"</code>。配 <code>--output-format json</code> 与 <code>--max-turns N</code> 可脚本化。在 CI 环境设 <code>ANTHROPIC_API_KEY</code>。</p>
+<h4>报 bug 或请求特性去哪？</h4>
+<p><a href="https://github.com/anthropics/claude-code/issues">github.com/anthropics/claude-code/issues</a> 是权威 issue tracker。提交前搜——很多是重复。</p>
+<p><em>相关：<a href="/blog/claude-code-folder-complete-guide">.claude/ 文件夹完整指南</a> · <a href="/blog/claude-code-hooks-complete-guide">Hooks 实战指南</a> · <a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP 服务器</a></em></p>`
+    }
+  ]
+};
+
+const CHEATSHEET_KO: ArticleContent = {
+  title: "Claude Code 치트 시트 — 모든 명령, 단축키, 숨겨진 트릭 (2026)",
+  metaTitle: "Claude Code 치트 시트: 명령, 단축키, 숨은 명령 (2026)",
+  metaDescription: "완전한 Claude Code 치트 시트: 모든 슬래시 명령, 키보드 단축키, 특수 접두사(!, #, @), CLI 플래그, 숨겨진 트릭. 이 페이지를 북마크하세요.",
+  excerpt: "에디터 옆에 두는 한 페이지로 \"Claude Code에서 그거 어떻게 하더라?\"라는 질문에 답합니다. 모든 슬래시 명령, 키보드 단축키, !/#/@ 접두사 트릭, 외울 만한 CLI 플래그. 북마크하고 문서를 잊으세요.",
+  sections: [
+    {
+      heading: "가장 많이 쓰는 명령 한눈에",
+      body: `<p>이 페이지에서 한 블록만 북마크한다면, 이거로 하세요:</p>
+<table>
+<tr><th>액션</th><th>방법</th></tr>
+<tr><td>프로젝트 초기화 (CLAUDE.md 생성)</td><td><code>/init</code></td></tr>
+<tr><td>대화 컨텍스트 압축</td><td><code>/compact</code></td></tr>
+<tr><td>현재 세션 클리어</td><td><code>/clear</code></td></tr>
+<tr><td>커스텀 슬래시 명령 나열</td><td><code>/help</code></td></tr>
+<tr><td>모델 전환</td><td><code>/model</code></td></tr>
+<tr><td>활성 MCP 서버 나열</td><td><code>/mcp</code></td></tr>
+<tr><td>세션 내에서 CLAUDE.md 편집</td><td><code>/memory</code></td></tr>
+<tr><td>Claude 떠나지 않고 셸 명령 실행</td><td><code>!ls -la</code></td></tr>
+<tr><td>프롬프트에서 파일 참조</td><td><code>@src/auth.ts</code></td></tr>
+<tr><td>프로젝트 메모리에 사실 추가</td><td><code># API 속도 제한 60/min</code></td></tr>
+<tr><td>plan 모드로 전환</td><td><code>Shift+Tab</code> 두 번</td></tr>
+<tr><td>현재 작업 취소</td><td><code>Esc</code></td></tr>
+<tr><td>이전 메시지 편집</td><td><code>Esc</code> 한 번</td></tr>
+<tr><td>이전 어떤 메시지로든 점프</td><td><code>Esc</code> 두 번</td></tr>
+<tr><td>Claude Code 종료</td><td><code>/exit</code> 또는 <code>Ctrl+D</code></td></tr>
+</table>
+<p>이 가이드의 나머지는 롱테일을 다룹니다. 특정 서브시스템 깊이 다이브는 <a href="/blog/claude-code-folder-complete-guide">.claude/ 폴더 가이드</a>, <a href="/blog/claude-code-hooks-complete-guide">hooks 가이드</a>, <a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP 서버 순위</a>를 참조하세요.</p>`
+    },
+    {
+      heading: "빌트인 슬래시 명령 (전체 리스트)",
+      body: `<p>아무 세션에서 <code>/</code>를 입력하면 모든 명령의 자동완성을 얻습니다. 버전이 자주 업데이트됩니다; 당신 버전에 명령이 없으면 <code>/help</code>를 실행해 정확한 리스트를 보세요.</p>
+<h4>핵심 워크플로우</h4>
+<table>
+<tr><th>명령</th><th>효과</th></tr>
+<tr><td><code>/help</code></td><td>모든 사용 가능 명령 나열 (빌트인 + 커스텀)</td></tr>
+<tr><td><code>/clear</code></td><td>현재 세션 클리어, 새로 시작</td></tr>
+<tr><td><code>/compact [지시]</code></td><td>오래된 컨텍스트 요약해 토큰 예산 확보. 선택적 지시가 무엇을 유지할지 안내.</td></tr>
+<tr><td><code>/init</code></td><td>프로젝트 스캔해 시작용 CLAUDE.md 생성</td></tr>
+<tr><td><code>/memory</code></td><td>에디터에서 CLAUDE.md (또는 .claude/CLAUDE.md) 열기</td></tr>
+<tr><td><code>/exit</code></td><td>세션 종료</td></tr>
+</table>
+<h4>구성</h4>
+<table>
+<tr><th>명령</th><th>효과</th></tr>
+<tr><td><code>/config</code></td><td>설정 UI 열기 (테마, 모델, 키바인딩)</td></tr>
+<tr><td><code>/model</code></td><td>세션 중 모델 전환 (Opus / Sonnet / Haiku)</td></tr>
+<tr><td><code>/permissions</code></td><td>도구의 allow/deny 리스트 편집</td></tr>
+<tr><td><code>/agents</code></td><td>커스텀 서브에이전트 나열, 편집 또는 생성</td></tr>
+<tr><td><code>/mcp</code></td><td>활성 MCP 서버 연결 + 도구 나열</td></tr>
+<tr><td><code>/hooks</code></td><td>현재 세션의 구성된 hooks 검사</td></tr>
+<tr><td><code>/login</code> / <code>/logout</code></td><td>Anthropic 계정 전환 또는 재인증</td></tr>
+</table>
+<h4>세션 관리</h4>
+<table>
+<tr><th>명령</th><th>효과</th></tr>
+<tr><td><code>/resume</code></td><td>이전 세션 골라 계속</td></tr>
+<tr><td><code>/cost</code></td><td>현재 세션 토큰 사용량과 예상 비용 표시</td></tr>
+<tr><td><code>/status</code></td><td>현재 모델, 모드, 작업 디렉토리 표시</td></tr>
+<tr><td><code>/doctor</code></td><td>설치 문제 진단</td></tr>
+</table>`
+    },
+    {
+      heading: "키보드 단축키",
+      body: `<p>대부분 CLI와 IDE 확장에서 보편적. Mac은 표시된 <code>Ctrl</code>을 <code>Cmd</code>로; Windows/Linux에서는 시스템 단축키가 오버라이드할 수 있음.</p>
+<table>
+<tr><th>단축키</th><th>효과</th></tr>
+<tr><td><code>Esc</code></td><td>현재 작업 취소; 입력이 비었으면 이전 메시지로 점프해 편집</td></tr>
+<tr><td><code>Esc Esc</code> (더블 탭)</td><td>메시지 피커 열기 — 대화의 어떤 이전 메시지로든 점프</td></tr>
+<tr><td><code>Tab</code></td><td>파일 경로, 명령명, 옵션 자동완성</td></tr>
+<tr><td><code>Shift+Tab</code></td><td>모드 순환: default → plan → auto-accept → default</td></tr>
+<tr><td><code>↑ / ↓</code></td><td>프롬프트 히스토리 순환</td></tr>
+<tr><td><code>Ctrl+R</code></td><td>상세 출력 토글 (전체 도구 입력/출력 표시)</td></tr>
+<tr><td><code>Ctrl+C</code></td><td>현재 실행 중인 도구 취소; 두 번 누르면 세션 종료</td></tr>
+<tr><td><code>Ctrl+D</code></td><td>세션 종료 (입력이 비었을 때)</td></tr>
+<tr><td><code>Ctrl+L</code></td><td>화면 클리어 (터미널만; 대화 클리어 안 함)</td></tr>
+<tr><td><code>Ctrl+J</code></td><td>리터럴 줄바꿈 삽입 (제출하는 <code>Enter</code>와 대조)</td></tr>
+<tr><td><code>Alt+Enter</code> / <code>Opt+Enter</code></td><td><code>Ctrl+J</code>와 동일 — 제출 없는 줄바꿈</td></tr>
+</table>
+<p><strong>모드 설명</strong>:</p>
+<ul>
+<li><strong>Default</strong>: Claude는 이미 허용되지 않은 모든 도구 호출 전 묻습니다</li>
+<li><strong>Plan</strong>: Claude는 읽기만, 절대 편집 안 함. "먼저 접근 방식을 논의하자"에 적합</li>
+<li><strong>Auto-accept</strong>: Claude는 묻지 않고 <code>permissions.allow</code> 안의 모든 것 실행. 프로덕션 코드에서 신중히 사용</li>
+</ul>`
+    },
+    {
+      heading: "특수 입력 접두사 — !, #, @",
+      body: `<p>세 개의 단일 문자 접두사가 Claude가 입력을 처리하는 방식을 바꿉니다. 신규 사용자가 대부분 놓치지만, 알면 깊이 유용합니다.</p>
+<h4>! — 셸 명령 실행</h4>
+<p>프롬프트 시작의 <code>!</code> 뒤 모든 것이 셸 명령으로 실행되고 출력이 대화에 포함됩니다:</p>
+<pre><code>!git log --oneline -5
+!find . -name "*.test.ts" | head</code></pre>
+<p>출력이 대화 컨텍스트로 요약되고, Claude가 그 위에서 추론할 수 있습니다. "명령 실행, 출력 붙여넣기, Claude에게 묻기" 댄스를 절약.</p>
+<h4># — 프로젝트 메모리에 추가</h4>
+<p><code>#</code> 뒤 모든 것이 기억할 사실로 <code>CLAUDE.md</code>에 추가됩니다:</p>
+<pre><code># API 속도 제한은 분당 60 요청
+# 프로덕션 데이터베이스는 읽기 전용 복제본, 쓰기는 db-writer.internal의 프라이머리로</code></pre>
+<p>유용함: 나중에 CLAUDE.md 업데이트 기억하는 대신 그 순간 사실 캡처.</p>
+<h4>@ — 파일 또는 심볼 참조</h4>
+<p>자동완성과 함께 <code>@</code>가 Claude를 특정 파일 또는 심볼로 가리킵니다:</p>
+<pre><code>@src/auth/login.ts를 새 세션 API를 사용하도록 리팩토링하세요.
+@validateUser는 무엇을 하고 어디서 호출되나요?</code></pre>
+<p>Claude는 응답 전 참조된 파일을 읽습니다. "src/auth/login.ts를 봐"라고 요청하는 것보다 빠름 — 경로가 자동완성 시점에 검증됨.</p>`
+    },
+    {
+      heading: "CLI 플래그와 실행 옵션",
+      body: `<p><code>claude --help</code>를 실행해 정식 리스트를 보세요. 외울 만한 플래그:</p>
+<table>
+<tr><th>플래그</th><th>효과</th></tr>
+<tr><td><code>claude</code></td><td>현재 디렉토리에서 인터랙티브 세션 시작</td></tr>
+<tr><td><code>claude -p "&lt;프롬프트&gt;"</code></td><td>Print 모드: 비인터랙티브로 프롬프트 실행, stdout으로 출력, 종료. Pipe 친화적.</td></tr>
+<tr><td><code>claude --resume</code></td><td>리스트에서 이전 세션 골라</td></tr>
+<tr><td><code>claude --continue</code></td><td>이 디렉토리의 가장 최근 세션 계속</td></tr>
+<tr><td><code>claude --add-dir &lt;path&gt;</code></td><td>Claude의 작업 세트에 다른 디렉토리 추가 (cwd 변경 없이)</td></tr>
+<tr><td><code>claude --model &lt;name&gt;</code></td><td>기본 모델 오버라이드 (예: <code>claude-opus-4-5</code>)</td></tr>
+<tr><td><code>claude --permission-mode &lt;mode&gt;</code></td><td>시작 시 권한 모드 설정: <code>default</code>, <code>plan</code>, <code>acceptEdits</code>, <code>bypassPermissions</code></td></tr>
+<tr><td><code>claude --output-format json</code></td><td>(Print 모드) 일반 텍스트 대신 JSON 발행. 스크립팅에 좋음.</td></tr>
+<tr><td><code>claude --include-partial-messages</code></td><td>(Print 모드) 출력에 중간 도구 호출 포함</td></tr>
+<tr><td><code>claude mcp add &lt;name&gt; -- &lt;cmd&gt;</code></td><td>새 MCP 서버 등록</td></tr>
+<tr><td><code>claude mcp list</code> / <code>get</code> / <code>remove</code></td><td>에디터 없이 MCP 서버 관리</td></tr>
+<tr><td><code>claude doctor</code></td><td>설치, IDE 통합, 연결성 진단</td></tr>
+<tr><td><code>claude config get/set/list</code></td><td>CLI에서 settings.json 관리</td></tr>
+</table>
+<h4>Print 모드 파이프라인 트릭</h4>
+<pre><code>cat error.log | claude -p "가장 일반적인 에러 패턴 요약" --output-format json | jq</code></pre>
+<p>Pipe 친화적 print 모드가 Claude를 제대로 된 Unix 도구로 만듭니다. <code>find</code>, <code>grep</code>, <code>jq</code>, <code>awk</code>와 결합해 진지한 파워.</p>`
+    },
+    {
+      heading: "구성 파일 위치",
+      body: `<p>모든 것이 사는 곳. 가장 글로벌에서 가장 구체적까지 계층; 뒤가 앞을 오버라이드:</p>
+<table>
+<tr><th>경로</th><th>용도</th></tr>
+<tr><td><code>~/.claude/settings.json</code></td><td>글로벌 사용자 설정 (모든 프로젝트에 적용)</td></tr>
+<tr><td><code>~/.claude/CLAUDE.md</code></td><td>글로벌 상시 지침</td></tr>
+<tr><td><code>~/.claude.json</code></td><td>계정 상태, MCP 서버 등록, oauth 토큰</td></tr>
+<tr><td><code>~/.claude/agents/</code></td><td>글로벌 서브에이전트 (모든 프로젝트에 사용 가능)</td></tr>
+<tr><td><code>~/.claude/commands/</code></td><td>글로벌 슬래시 명령</td></tr>
+<tr><td><code>./CLAUDE.md</code></td><td>프로젝트 상시 지침 (Git에 커밋)</td></tr>
+<tr><td><code>./.claude/settings.json</code></td><td>프로젝트 설정 (커밋)</td></tr>
+<tr><td><code>./.claude/settings.local.json</code></td><td>개인 오버라이드 (gitignored)</td></tr>
+<tr><td><code>./.claude/agents/</code></td><td>프로젝트 서브에이전트 (커밋)</td></tr>
+<tr><td><code>./.claude/commands/</code></td><td>프로젝트 슬래시 명령 (커밋)</td></tr>
+<tr><td><code>./.mcp.json</code></td><td>프로젝트 범위 MCP 서버 (<code>--scope project</code>로 커밋)</td></tr>
+</table>`
+    },
+    {
+      heading: "파워 유저 팁",
+      body: `<p>자신감 있는 사용자를 초보자와 분리하는 여덟 가지 트릭.</p>
+<h4>1. 의도를 가지고 compact</h4>
+<p><code>/compact</code> 단독은 일반적으로 요약합니다. <code>/compact 파일 경로와 실패한 테스트 이름 유지</code>가 요약기에 무엇이 중요한지 알려줍니다. 긴 세션의 대규모 컨텍스트 회복.</p>
+<h4>2. Esc-Esc로 대화 분기</h4>
+<p>20 메시지 전 다르게 물어봤어야 함을 깨달았나요? <code>Esc Esc</code>가 메시지 피커를 엽니다; 메시지 선택, 편집, Claude가 그 분기에서 계속. 원본 분기는 보존됩니다.</p>
+<h4>3. 형제들 간 공유에 CLAUDE.md 심볼릭 링크</h4>
+<p>상시 지침을 공유해야 하는 여러 저장소가 있다면:</p>
+<pre><code>ln -s /shared/CLAUDE.md ~/work/repo-a/CLAUDE.md
+ln -s /shared/CLAUDE.md ~/work/repo-b/CLAUDE.md</code></pre>
+<p>한 번 편집, 모든 곳에 적용.</p>
+<h4>4. Claude 출력을 다른 명령에 파이프</h4>
+<p>Print 모드 + <code>--output-format json</code> + <code>jq</code> = 진지한 자동화:</p>
+<pre><code>claude -p "src/의 모든 TODO 주석 나열" --output-format json | jq -r '.text'</code></pre>
+<h4>5. <code>run_in_background</code>로 긴 작업 백그라운드</h4>
+<p>세션 내에서 Claude에게 <code>run_in_background</code>로 긴 실행 작업을 요청하세요. 그렇지 않으면 대화를 막을 빌드와 테스트에 유용.</p>
+<h4>6. monorepo 워크플로우에 <code>--add-dir</code></h4>
+<p><code>~/code/main-app</code>에서 작업하면서 Claude가 <code>~/code/shared-lib</code>도 봐야 한다면, <code>claude --add-dir ~/code/shared-lib</code>로 실행. 또는 세션 중 <code>/add-dir</code> 실행.</p>
+<h4>7. git 브랜치용 상태 줄</h4>
+<p><code>settings.json</code>에 추가:</p>
+<pre><code>{
+  "statusLine": {
+    "type": "command",
+    "command": "echo $(git branch --show-current 2>/dev/null) | tr -d '\\n'"
+  }
+}</code></pre>
+<p>이제 Claude Code 하단에 항상 브랜치 표시. "main에 커밋 중"을 발생 전 잡습니다.</p>
+<h4>8. 개인 선호용 글로벌 ~/.claude/CLAUDE.md 유지</h4>
+<p>"간결하게", "요청 안 했으면 주석 추가하지 마", "TypeScript strict 모드 사용" 같은 것들이 글로벌 CLAUDE.md에 속합니다. 프로젝트 CLAUDE.md가 위에 프로젝트별 것 추가.</p>`
+    },
+    {
+      heading: "자주 묻는 질문",
+      body: `<h4>어떤 키바인딩이 바인딩되어 있는지 어떻게 보나요?</h4>
+<p><code>/config</code>를 실행하고 키바인딩 섹션으로 이동. <code>~/.claude/keybindings.json</code>도 직접 확인 가능.</p>
+<h4>Claude가 잘못한 편집을 되돌리는 가장 빠른 방법은?</h4>
+<p>세 옵션: (1) 변경이 커밋되지 않았으면 <code>git checkout -- &lt;file&gt;</code>; (2) 커밋되었지만 푸시되지 않았으면 <code>git reset HEAD~1</code>; (3) 잘못된 편집 전에 대화를 분기하려면 <code>Esc Esc</code> 후 다른 접근 시도.</p>
+<h4>Claude Code를 샌드박스에서 실행할 수 있나요?</h4>
+<p>네. 엄격한 읽기 전용에는 <code>--permission-mode plan</code> 사용, 또는 제한된 파일 시스템 접근의 Docker 컨테이너 안에서 실행. Claude Code는 광범위한 allow 리스트가 있어도 <code>permissions.deny</code> 패턴을 존중합니다.</p>
+<h4>저장소 외부 사람과 슬래시 명령을 공유하려면?</h4>
+<p>슬래시 명령 파일은 그냥 Markdown입니다. <code>.claude/commands/foo.md</code>를 보내고 그들의 <code>~/.claude/commands/</code>(글로벌) 또는 프로젝트의 <code>.claude/commands/</code>에 넣으라고 하세요.</p>
+<h4>왜 <code>/init</code>이 CLAUDE.md에 내가 필요한 모든 것을 생성하지 않나요?</h4>
+<p>찾은 것을 기반으로 시작용을 생성합니다. 출력을 초안으로 취급 — 검토하고 다듬으세요. 좋은 CLAUDE.md는 <code>/init</code>이 쓴 절반을 삭제한 후 남는 것입니다.</p>
+<h4>인터랙티브 프롬프트 없이 CI에서 Claude Code 사용은?</h4>
+<p>Print 모드: <code>claude -p "&lt;프롬프트&gt;"</code>. <code>--output-format json</code>과 <code>--max-turns N</code>과 결합하면 스크립팅 가능. CI 환경에 <code>ANTHROPIC_API_KEY</code> 설정.</p>
+<h4>버그 또는 기능 요청 어디서 하나요?</h4>
+<p><a href="https://github.com/anthropics/claude-code/issues">github.com/anthropics/claude-code/issues</a>가 정식 이슈 트래커입니다. 제출 전 검색 — 많은 이슈가 중복.</p>
+<p><em>관련: <a href="/blog/claude-code-folder-complete-guide">.claude/ 폴더 완벽 가이드</a> · <a href="/blog/claude-code-hooks-complete-guide">Hooks 실전 가이드</a> · <a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP 서버</a></em></p>`
+    }
+  ]
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
+  {
+    slug: "claude-code-cheat-sheet-complete",
+    publishedAt: "2026-05-05",
+    readingTime: 9,
+    tags: ["claude-code", "cheat-sheet", "reference", "commands", "shortcuts", "tips"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code',
+    content: {
+      en: CHEATSHEET_EN,
+      zh: CHEATSHEET_ZH,
+      ko: CHEATSHEET_KO,
+    },
+  },
   {
     slug: "top-10-mcp-servers-claude-code-2026",
     publishedAt: "2026-05-05",
