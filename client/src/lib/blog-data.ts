@@ -5558,7 +5558,828 @@ fi</code></pre>
   ]
 };
 
+// === Claude Code Hooks Complete Guide ===
+const HOOKS_GUIDE_EN: ArticleContent = {
+  title: "Claude Code Hooks: Complete Practical Guide with Real Examples (2026)",
+  metaTitle: "Claude Code Hooks Guide — PreToolUse, PostToolUse & More (2026)",
+  metaDescription: "Practical Claude Code hooks guide: every lifecycle event, matcher syntax, real shell scripts for auto-format, secret scanning, danger guards. Debug tips included.",
+  excerpt: "Claude Code hooks turn the AI assistant from a helpful collaborator into a disciplined teammate. This is the practical guide — every lifecycle event, the JSON protocol on stdin, real scripts you can copy, and the four mistakes that make hooks worse than no hooks at all.",
+  sections: [
+    {
+      heading: "Why Hooks Matter",
+      body: `<p>If <code>CLAUDE.md</code> tells Claude what your project is, and <code>settings.json</code> tells it what tools it can use, <strong>Claude Code hooks</strong> tell it what must happen <em>around</em> every tool call. They turn the AI assistant from a helpful collaborator into a disciplined teammate.</p>
+<p>The trick is that hooks fire deterministically — they are shell commands, not LLM prompts. When a <code>PostToolUse</code> hook says "run Prettier on the edited file," Prettier runs every time. The model cannot forget. The model cannot decide to skip it because the conversation is getting long. This is the <em>only</em> way to enforce a rule with 100% reliability in an LLM-driven workflow.</p>
+<p>This guide is the practical companion to our <a href="/blog/claude-code-folder-complete-guide">.claude/ folder complete guide</a> — that one explains the layout; this one explains the hooks subsystem in depth, with copy-pasteable shell scripts for the most common use cases.</p>`
+    },
+    {
+      heading: "The Six Lifecycle Events",
+      body: `<p>Every hook attaches to one of six events. Pick the right event and the rest is easy; pick the wrong event and you fight the system.</p>
+<table>
+<tr><th>Event</th><th>Fires</th><th>Best For</th></tr>
+<tr><td><code>SessionStart</code></td><td>Once when Claude Code session begins</td><td>Cache warmup, env validation, telemetry start</td></tr>
+<tr><td><code>UserPromptSubmit</code></td><td>Each time user submits a prompt</td><td>Auto-inject context (current branch, env, time)</td></tr>
+<tr><td><code>PreToolUse</code></td><td>Before any tool call (Bash, Edit, Write...)</td><td>Guards: block dangerous commands, scan for secrets</td></tr>
+<tr><td><code>PostToolUse</code></td><td>After any tool call</td><td>Cleanup: auto-format, lint, run quick tests</td></tr>
+<tr><td><code>Stop</code></td><td>When Claude finishes a response</td><td>Notifications (mac say, desktop notif)</td></tr>
+<tr><td><code>SessionEnd</code></td><td>Once when session ends</td><td>Telemetry flush, log archival</td></tr>
+</table>
+<p>The two you will actually use most: <code>PreToolUse</code> (guards) and <code>PostToolUse</code> (cleanup). Sections 4 and 5 cover both with real examples.</p>`
+    },
+    {
+      heading: "Hook Configuration Anatomy",
+      body: `<p>Hooks live in <code>.claude/settings.json</code> (team-shared) or <code>.claude/settings.local.json</code> (personal) under the <code>hooks</code> key. The structure:</p>
+<pre><code>{
+  "hooks": {
+    "&lt;EventName&gt;": [
+      {
+        "matcher": "&lt;tool-name-regex&gt;",
+        "hooks": [
+          { "type": "command", "command": "&lt;shell-command-or-script&gt;" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<p>Three knobs:</p>
+<ol>
+<li><strong>Event name</strong>: one of the six from the table above</li>
+<li><strong>Matcher</strong>: a regex against tool names. <code>"Edit|Write|MultiEdit"</code> matches any file-write tool. <code>"Bash"</code> matches only Bash. Empty string or omitted = match everything for that event.</li>
+<li><strong>Command</strong>: any executable shell command. Can be inline (<code>"echo hello"</code>) or a path to a script (<code>".claude/hooks/format.sh"</code>).</li>
+</ol>
+<h4>The JSON Protocol</h4>
+<p>Every hook receives a JSON event payload on <strong>stdin</strong>. The shape varies by event but always includes:</p>
+<pre><code>{
+  "session_id": "abc-123",
+  "transcript_path": "/path/to/conversation.jsonl",
+  "cwd": "/path/to/project",
+  "hook_event_name": "PostToolUse",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "/abs/path/to/edited/file.ts",
+    "old_string": "...",
+    "new_string": "..."
+  },
+  "tool_response": {
+    "success": true
+  }
+}</code></pre>
+<p>Read it with <code>jq</code> or any JSON parser. The exit code matters:</p>
+<ul>
+<li><strong>Exit 0</strong> = success, allow tool call to proceed (PreToolUse) or move on (PostToolUse)</li>
+<li><strong>Exit 2 (PreToolUse)</strong> = block the tool call. <code>stderr</code> output is shown to Claude as the reason.</li>
+<li><strong>Exit non-zero (PostToolUse)</strong> = warning logged, but tool call already happened — too late to undo.</li>
+</ul>`
+    },
+    {
+      heading: "PostToolUse Recipes",
+      body: `<p>Three drop-in scripts for the most common cleanup needs. Save each one in <code>.claude/hooks/</code>, <code>chmod +x</code>, and reference from <code>settings.json</code>.</p>
+<h4>Recipe 1: Auto-format edited files</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/format.sh — runs Prettier on edited TS/JS/JSON/MD files
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+[[ -z "$FILE" || ! -f "$FILE" ]] && exit 0
+
+case "$FILE" in
+  *.ts|*.tsx|*.js|*.jsx|*.json|*.md|*.css|*.html)
+    npx --no-install prettier --write "$FILE" 2>/dev/null
+    ;;
+esac
+exit 0</code></pre>
+<p>Wire it up in <code>settings.json</code>:</p>
+<pre><code>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [{ "type": "command", "command": ".claude/hooks/format.sh" }]
+      }
+    ]
+  }
+}</code></pre>
+<h4>Recipe 2: Run typecheck after every edit</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/typecheck.sh — surface TS errors immediately
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+# Only check TS files
+[[ "$FILE" != *.ts && "$FILE" != *.tsx ]] && exit 0
+
+# Run incremental tsc; non-zero exit shows errors but doesn't undo the edit
+if ! npx --no-install tsc --noEmit --incremental 2>&1 | head -20; then
+  echo "[typecheck hook] errors above" >&2
+fi
+exit 0</code></pre>
+<p>Trade-off: this adds 2-5 seconds per edit. Worth it if your team values fast feedback over speed of iteration.</p>
+<h4>Recipe 3: Quick test for the changed module</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/quick-test.sh — run tests for the changed file's module only
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+[[ -z "$FILE" ]] && exit 0
+
+# Find related test file by convention: src/foo.ts → src/foo.test.ts
+TEST_FILE=$(echo "$FILE" | sed 's/\\.\\(ts\\|tsx\\|js\\|jsx\\)$/.test.\\1/')
+[[ ! -f "$TEST_FILE" ]] && exit 0
+
+npx --no-install vitest run "$TEST_FILE" --reporter=basic 2>&1 | tail -10
+exit 0</code></pre>`
+    },
+    {
+      heading: "PreToolUse Recipes (Guards)",
+      body: `<p>PreToolUse is your safety net. Three guards every team should have.</p>
+<h4>Recipe 4: Block dangerous commands</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/danger-guard.sh — block irreversible Bash invocations
+
+INPUT=$(cat)
+CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+# Patterns we never want to see
+DANGER='(rm -rf /|rm -rf ~|rm -rf \\$HOME|git reset --hard origin|git push --force.*main|git push --force.*master|DROP TABLE|TRUNCATE TABLE)'
+
+if echo "$CMD" | grep -qE "$DANGER"; then
+  echo "[danger-guard] BLOCKED: command matches danger pattern: $CMD" >&2
+  echo "If you really need this, run it manually outside Claude Code." >&2
+  exit 2  # exit 2 = block the tool call
+fi
+exit 0</code></pre>
+<p>Wire up to Bash only:</p>
+<pre><code>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": ".claude/hooks/danger-guard.sh" }]
+      }
+    ]
+  }
+}</code></pre>
+<h4>Recipe 5: Block edits that contain secrets</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/secret-scan.sh — block writes that look like they contain secrets
+
+INPUT=$(cat)
+NEW=$(echo "$INPUT" | jq -r '.tool_input.new_string // .tool_input.content // empty')
+
+# Common secret patterns
+SECRET_RE='(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]+PRIVATE KEY-----)'
+
+if echo "$NEW" | grep -qE "$SECRET_RE"; then
+  echo "[secret-scan] BLOCKED: edit appears to contain a secret (API key, GitHub PAT, AWS key, or private key)" >&2
+  echo "Move the secret to .env.local (gitignored) and reference it via process.env." >&2
+  exit 2
+fi
+exit 0</code></pre>
+<h4>Recipe 6: Block commits to protected branches</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/branch-guard.sh — block git commits on main/master
+
+INPUT=$(cat)
+CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+# Only care about git commit invocations
+if ! echo "$CMD" | grep -qE '^git commit'; then
+  exit 0
+fi
+
+BRANCH=$(git branch --show-current 2>/dev/null)
+if [[ "$BRANCH" == "main" || "$BRANCH" == "master" ]]; then
+  echo "[branch-guard] BLOCKED: cannot commit directly to $BRANCH. Create a feature branch first: git checkout -b feature/..." >&2
+  exit 2
+fi
+exit 0</code></pre>
+<p>This one alone has prevented countless "oops, I committed to main" incidents. Pair it with the same regex matcher as Recipe 4.</p>`
+    },
+    {
+      heading: "UserPromptSubmit Recipe — Auto-inject Context",
+      body: `<p>Some context is too noisy to put in <code>CLAUDE.md</code> but valuable per-prompt: current git branch, recent commits, current time. The <code>UserPromptSubmit</code> hook lets you inject it into every prompt.</p>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/inject-context.sh — prepend useful context to user prompts
+
+# Use stdout to add context (it gets prepended to the prompt)
+echo "&lt;context&gt;"
+echo "Current branch: $(git branch --show-current 2>/dev/null)"
+echo "Recent commits:"
+git log --oneline -3 2>/dev/null
+echo "Current time: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+echo "&lt;/context&gt;"
+exit 0</code></pre>
+<p>Wire up:</p>
+<pre><code>{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [{ "type": "command", "command": ".claude/hooks/inject-context.sh" }]
+      }
+    ]
+  }
+}</code></pre>
+<p>Now every prompt arrives with branch + recent history + timestamp prepended. Claude is no longer confused about whether you're on a feature branch, no longer makes up dates, no longer asks "what was the last commit?"</p>
+<p><strong>Use sparingly</strong>. Each line of injected context burns tokens. Inject only what genuinely helps; resist the urge to dump everything.</p>`
+    },
+    {
+      heading: "Debugging Hooks (and Common Pitfalls)",
+      body: `<p>Hooks fail silently. The model does not see your stderr unless you exit non-zero on a PreToolUse. Here's how to debug.</p>
+<h4>Step 1: Verify the hook fires at all</h4>
+<p>Add a debug log line as the first thing the script does:</p>
+<pre><code>#!/usr/bin/env bash
+echo "[$(date)] hook fired: $0" &gt;&gt; /tmp/claude-hooks.log
+INPUT=$(cat)
+echo "$INPUT" &gt;&gt; /tmp/claude-hooks.log
+# ... rest of the hook ...</code></pre>
+<p>Then <code>tail -f /tmp/claude-hooks.log</code> in another terminal while you trigger the event. If nothing appears, the hook is not firing — check matcher, file path, and executable bit.</p>
+<h4>Common Pitfalls</h4>
+<ol>
+<li><strong>Forgot <code>chmod +x</code></strong>. The script needs to be executable. Add to your team's onboarding doc.</li>
+<li><strong>Matcher doesn't match</strong>. The matcher is a regex against tool name. <code>"edit"</code> (lowercase) does not match <code>Edit</code>. Use <code>"Edit|Write|MultiEdit"</code> exactly.</li>
+<li><strong>Path is relative to wrong directory</strong>. The hook runs with cwd = your project root, not <code>.claude/hooks/</code>. Use absolute paths or paths from project root.</li>
+<li><strong>Hook silently rewrites Claude's output</strong>. Don't. Hooks should observe and gate, not modify Claude's text. If you need to enforce a style, use <code>PostToolUse</code> + format-on-edit, not output rewriting.</li>
+<li><strong>Hook is slow on the hot path</strong>. A 5-second hook on PostToolUse turns Claude's session into molasses. Run heavy checks (full test suite, full lint) only at SessionEnd or in CI, not on every edit.</li>
+<li><strong>Hook depends on a tool that's not installed</strong>. <code>npx prettier</code> assumes prettier is in node_modules. Add a <code>command -v prettier &gt;/dev/null || exit 0</code> guard so the hook degrades gracefully on machines without the tool.</li>
+</ol>`
+    },
+    {
+      heading: "Frequently Asked Questions",
+      body: `<h4>What's the difference between PreToolUse and PostToolUse?</h4>
+<p><code>PreToolUse</code> fires before the tool runs and can block it (exit 2). <code>PostToolUse</code> fires after the tool completes and cannot undo it. Use Pre for guards, Post for cleanup.</p>
+<h4>Can hooks read the file Claude is about to edit?</h4>
+<p>Yes — the <code>tool_input.file_path</code> field on PreToolUse for Edit/Write tools tells you the path. Read the file content from disk; the hook runs with full file system access.</p>
+<h4>How do I disable a hook for one session?</h4>
+<p>Move the hook config from <code>settings.json</code> to <code>settings.local.json</code> with the matcher set to something that won't match (e.g. <code>"DISABLED"</code>). Or comment out the entry. There's no per-session disable flag.</p>
+<h4>Do hooks run in CI / on Vercel builds?</h4>
+<p>No — hooks fire only inside Claude Code sessions. Your build pipeline never sees them. If you need the same logic in CI, write the script as a standalone command and call it from both the hook and your CI YAML.</p>
+<h4>Can a hook modify Claude's prompt before it's sent to the model?</h4>
+<p>The <code>UserPromptSubmit</code> hook can prepend stdout content to the prompt. Other events cannot modify the prompt. This is a deliberate design — hooks should be transparent observers, not silent rewriters.</p>
+<h4>Why doesn't my hook fire on the very first prompt of a session?</h4>
+<p>It does, but <code>SessionStart</code> fires before <code>UserPromptSubmit</code>. If you're seeing your hook miss the first prompt, check whether you accidentally attached it to <code>SessionStart</code> (which only fires once).</p>
+<h4>How do I test a hook without running Claude Code?</h4>
+<p>Pipe a fake JSON event to it from the command line:</p>
+<pre><code>echo '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/test.ts"}}' | .claude/hooks/format.sh</code></pre>
+<p>Inspect the exit code (<code>echo $?</code>) and stderr to verify behavior.</p>
+<p><em>Related: <a href="/blog/claude-code-folder-complete-guide">.claude/ folder complete guide</a> · <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet command cheat sheet</a> · <a href="/">Claude Buddy Checker</a></em></p>`
+    }
+  ]
+};
+
+const HOOKS_GUIDE_ZH: ArticleContent = {
+  title: "Claude Code Hooks 实战指南：完整事件、真实代码示例（2026）",
+  metaTitle: "Claude Code Hooks 实战指南——PreToolUse、PostToolUse 详解 (2026)",
+  metaDescription: "Claude Code hooks 实战指南：每个生命周期事件、matcher 语法、自动格式化、密钥扫描、危险命令拦截的真实 shell 脚本，含调试技巧。",
+  excerpt: "Claude Code hooks 把 AI 助手从有用的合作者变成有纪律的队友。本文深入每个生命周期事件、stdin 上的 JSON 协议、可直接复用的脚本，以及让 hooks 比「没有 hooks」更糟的四个错误。",
+  sections: [
+    {
+      heading: "为什么需要 Hooks",
+      body: `<p>如果 <code>CLAUDE.md</code> 告诉 Claude 你的项目是什么，<code>settings.json</code> 告诉它能用什么工具，那么 <strong>Claude Code hooks</strong> 告诉它每次工具调用<em>周围</em>必须发生什么。它们把 AI 助手从有用的合作者变成有纪律的队友。</p>
+<p>关键在于 hooks 是确定性触发的——它们是 shell 命令，不是 LLM prompt。当一个 <code>PostToolUse</code> hook 说"对编辑过的文件跑 Prettier"，Prettier 每次都会跑。模型不会忘。模型不会因为对话变长就决定跳过。这是 LLM 驱动工作流中<em>唯一</em>能 100% 可靠强制规则的方式。</p>
+<p>本文是<a href="/blog/claude-code-folder-complete-guide">.claude/ 文件夹完整指南</a>的实战姊妹篇——那篇讲布局，本篇深挖 hooks 子系统，附最常见用例的可粘贴 shell 脚本。</p>`
+    },
+    {
+      heading: "六个生命周期事件",
+      body: `<p>每个 hook 都附加到六个事件之一。选对事件其余的就轻松；选错事件你就要跟系统对抗。</p>
+<table>
+<tr><th>事件</th><th>触发时机</th><th>最适合</th></tr>
+<tr><td><code>SessionStart</code></td><td>Claude Code 会话开始时一次</td><td>缓存预热、env 校验、遥测启动</td></tr>
+<tr><td><code>UserPromptSubmit</code></td><td>用户每次提交 prompt 时</td><td>自动注入上下文（当前分支、env、时间）</td></tr>
+<tr><td><code>PreToolUse</code></td><td>任何工具调用之前（Bash、Edit、Write 等）</td><td>护栏：阻止危险命令、扫描密钥</td></tr>
+<tr><td><code>PostToolUse</code></td><td>任何工具调用之后</td><td>清理：自动格式化、lint、跑快速测试</td></tr>
+<tr><td><code>Stop</code></td><td>Claude 完成响应时</td><td>通知（mac say、桌面提醒）</td></tr>
+<tr><td><code>SessionEnd</code></td><td>会话结束时一次</td><td>遥测刷盘、日志归档</td></tr>
+</table>
+<p>实际你最常用的两个：<code>PreToolUse</code>（护栏）和 <code>PostToolUse</code>（清理）。第 4 节和第 5 节用真实示例覆盖两者。</p>`
+    },
+    {
+      heading: "Hook 配置剖析",
+      body: `<p>Hooks 配置在 <code>.claude/settings.json</code>（团队共享）或 <code>.claude/settings.local.json</code>（个人）的 <code>hooks</code> 键下。结构：</p>
+<pre><code>{
+  "hooks": {
+    "&lt;事件名&gt;": [
+      {
+        "matcher": "&lt;工具名 regex&gt;",
+        "hooks": [
+          { "type": "command", "command": "&lt;shell 命令或脚本路径&gt;" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<p>三个旋钮：</p>
+<ol>
+<li><strong>事件名</strong>：上表中的六个之一</li>
+<li><strong>Matcher</strong>：对工具名的 regex。<code>"Edit|Write|MultiEdit"</code> 匹配任何写文件工具。<code>"Bash"</code> 只匹配 Bash。空字符串或省略 = 该事件下匹配所有。</li>
+<li><strong>Command</strong>：任何可执行的 shell 命令。可以内联（<code>"echo hello"</code>）或脚本路径（<code>".claude/hooks/format.sh"</code>）。</li>
+</ol>
+<h4>JSON 协议</h4>
+<p>每个 hook 都从 <strong>stdin</strong> 收到一个 JSON 事件载荷。形状因事件而异，但始终包含：</p>
+<pre><code>{
+  "session_id": "abc-123",
+  "transcript_path": "/path/to/conversation.jsonl",
+  "cwd": "/path/to/project",
+  "hook_event_name": "PostToolUse",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "/abs/path/to/edited/file.ts",
+    "old_string": "...",
+    "new_string": "..."
+  },
+  "tool_response": {
+    "success": true
+  }
+}</code></pre>
+<p>用 <code>jq</code> 或任何 JSON parser 读。退出码很重要：</p>
+<ul>
+<li><strong>退出 0</strong> = 成功，允许工具调用继续（PreToolUse）或继续推进（PostToolUse）</li>
+<li><strong>退出 2 (PreToolUse)</strong> = 阻止工具调用。<code>stderr</code> 输出会作为原因展示给 Claude。</li>
+<li><strong>非零退出 (PostToolUse)</strong> = 记录警告，但工具调用已发生——撤销已晚。</li>
+</ul>`
+    },
+    {
+      heading: "PostToolUse 实战配方",
+      body: `<p>三个针对最常见清理需求的可直接套用脚本。每个保存到 <code>.claude/hooks/</code>，<code>chmod +x</code>，从 <code>settings.json</code> 引用。</p>
+<h4>配方 1：自动格式化编辑过的文件</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/format.sh —— 对编辑过的 TS/JS/JSON/MD 文件跑 Prettier
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+[[ -z "$FILE" || ! -f "$FILE" ]] && exit 0
+
+case "$FILE" in
+  *.ts|*.tsx|*.js|*.jsx|*.json|*.md|*.css|*.html)
+    npx --no-install prettier --write "$FILE" 2>/dev/null
+    ;;
+esac
+exit 0</code></pre>
+<p>在 <code>settings.json</code> 接入：</p>
+<pre><code>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [{ "type": "command", "command": ".claude/hooks/format.sh" }]
+      }
+    ]
+  }
+}</code></pre>
+<h4>配方 2：每次编辑后跑类型检查</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/typecheck.sh —— 立刻显现 TS 错误
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+# 只检查 TS 文件
+[[ "$FILE" != *.ts && "$FILE" != *.tsx ]] && exit 0
+
+# 增量 tsc；非零退出显示错误但不撤销编辑
+if ! npx --no-install tsc --noEmit --incremental 2>&1 | head -20; then
+  echo "[typecheck hook] errors above" >&2
+fi
+exit 0</code></pre>
+<p>权衡：每次编辑加 2-5 秒。如果团队看重快速反馈胜过迭代速度，值得。</p>
+<h4>配方 3：对改动模块跑快速测试</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/quick-test.sh —— 只跑改动文件所在模块的测试
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+[[ -z "$FILE" ]] && exit 0
+
+# 按约定找对应测试文件：src/foo.ts → src/foo.test.ts
+TEST_FILE=$(echo "$FILE" | sed 's/\\.\\(ts\\|tsx\\|js\\|jsx\\)$/.test.\\1/')
+[[ ! -f "$TEST_FILE" ]] && exit 0
+
+npx --no-install vitest run "$TEST_FILE" --reporter=basic 2>&1 | tail -10
+exit 0</code></pre>`
+    },
+    {
+      heading: "PreToolUse 实战配方（护栏）",
+      body: `<p>PreToolUse 是你的安全网。每个团队都该有的三个护栏。</p>
+<h4>配方 4：阻止危险命令</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/danger-guard.sh —— 阻止不可逆的 Bash 调用
+
+INPUT=$(cat)
+CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+# 永远不想看到的模式
+DANGER='(rm -rf /|rm -rf ~|rm -rf \\$HOME|git reset --hard origin|git push --force.*main|git push --force.*master|DROP TABLE|TRUNCATE TABLE)'
+
+if echo "$CMD" | grep -qE "$DANGER"; then
+  echo "[danger-guard] BLOCKED: 命令匹配危险模式: $CMD" >&2
+  echo "如果你真的需要这个，在 Claude Code 外手动运行。" >&2
+  exit 2  # 退出 2 = 阻止工具调用
+fi
+exit 0</code></pre>
+<p>只接 Bash：</p>
+<pre><code>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": ".claude/hooks/danger-guard.sh" }]
+      }
+    ]
+  }
+}</code></pre>
+<h4>配方 5：阻止包含密钥的编辑</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/secret-scan.sh —— 阻止看起来含密钥的写入
+
+INPUT=$(cat)
+NEW=$(echo "$INPUT" | jq -r '.tool_input.new_string // .tool_input.content // empty')
+
+# 常见密钥模式
+SECRET_RE='(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]+PRIVATE KEY-----)'
+
+if echo "$NEW" | grep -qE "$SECRET_RE"; then
+  echo "[secret-scan] BLOCKED: 编辑似乎包含密钥（API key、GitHub PAT、AWS key 或 private key）" >&2
+  echo "把密钥移到 .env.local（gitignored），通过 process.env 引用。" >&2
+  exit 2
+fi
+exit 0</code></pre>
+<h4>配方 6：阻止向受保护分支提交</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/branch-guard.sh —— 阻止在 main/master 上 git commit
+
+INPUT=$(cat)
+CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+# 只关心 git commit 调用
+if ! echo "$CMD" | grep -qE '^git commit'; then
+  exit 0
+fi
+
+BRANCH=$(git branch --show-current 2>/dev/null)
+if [[ "$BRANCH" == "main" || "$BRANCH" == "master" ]]; then
+  echo "[branch-guard] BLOCKED: 不能直接提交到 $BRANCH。先建特性分支：git checkout -b feature/..." >&2
+  exit 2
+fi
+exit 0</code></pre>
+<p>仅这一条就避免了无数次"哎呀，我提交到 main 了"的事故。配方 4 同样的 matcher 接入。</p>`
+    },
+    {
+      heading: "UserPromptSubmit 实战配方——自动注入上下文",
+      body: `<p>有些上下文塞进 <code>CLAUDE.md</code> 太吵但每个 prompt 都有价值：当前 git 分支、最近 commits、当前时间。<code>UserPromptSubmit</code> hook 让你把它注入每个 prompt。</p>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/inject-context.sh —— 给用户 prompt 前置有用的上下文
+
+# 用 stdout 添加上下文（会前置到 prompt）
+echo "&lt;context&gt;"
+echo "Current branch: $(git branch --show-current 2>/dev/null)"
+echo "Recent commits:"
+git log --oneline -3 2>/dev/null
+echo "Current time: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+echo "&lt;/context&gt;"
+exit 0</code></pre>
+<p>接入：</p>
+<pre><code>{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [{ "type": "command", "command": ".claude/hooks/inject-context.sh" }]
+      }
+    ]
+  }
+}</code></pre>
+<p>现在每个 prompt 都带有分支 + 最近历史 + 时间戳前置。Claude 不再搞不清楚你在不在特性分支、不再编日期、不再问"上次提交是什么？"</p>
+<p><strong>节制使用</strong>。注入的每行上下文都消耗 token。只注入真正有助的；克制把所有东西都倒进去的冲动。</p>`
+    },
+    {
+      heading: "调试 Hooks（与常见陷阱）",
+      body: `<p>Hooks 静默失败。模型看不到你的 stderr，除非你在 PreToolUse 上非零退出。下面是怎么调试。</p>
+<h4>步骤 1：先验证 hook 真的触发</h4>
+<p>在脚本第一件事添加调试日志：</p>
+<pre><code>#!/usr/bin/env bash
+echo "[$(date)] hook fired: $0" &gt;&gt; /tmp/claude-hooks.log
+INPUT=$(cat)
+echo "$INPUT" &gt;&gt; /tmp/claude-hooks.log
+# ...其余 hook 内容...</code></pre>
+<p>然后另一个终端 <code>tail -f /tmp/claude-hooks.log</code>，触发事件。如果什么都没出现，hook 没触发——检查 matcher、文件路径、可执行位。</p>
+<h4>常见陷阱</h4>
+<ol>
+<li><strong>忘了 <code>chmod +x</code></strong>。脚本要可执行。加进团队入职文档。</li>
+<li><strong>Matcher 不匹配</strong>。matcher 是对工具名的 regex。<code>"edit"</code>（小写）不匹配 <code>Edit</code>。精确用 <code>"Edit|Write|MultiEdit"</code>。</li>
+<li><strong>路径相对错误目录</strong>。hook 运行时 cwd = 项目根，不是 <code>.claude/hooks/</code>。用绝对路径或从项目根的路径。</li>
+<li><strong>Hook 静默改写 Claude 输出</strong>。别。Hooks 应观察与把关，不要修改 Claude 的文本。如果你要强制风格，用 <code>PostToolUse</code> + 编辑后格式化，不要重写输出。</li>
+<li><strong>Hook 在热路径上慢</strong>。PostToolUse 上的 5 秒 hook 把 Claude 会话变糖浆。重检查（完整测试套件、完整 lint）只在 SessionEnd 或 CI 跑，不要每次编辑。</li>
+<li><strong>Hook 依赖未安装的工具</strong>。<code>npx prettier</code> 假设 prettier 在 node_modules。加一个 <code>command -v prettier &gt;/dev/null || exit 0</code> 守卫，让 hook 在没工具的机器优雅降级。</li>
+</ol>`
+    },
+    {
+      heading: "常见问题",
+      body: `<h4>PreToolUse 和 PostToolUse 有什么区别？</h4>
+<p><code>PreToolUse</code> 在工具运行前触发，可以阻止它（退出 2）。<code>PostToolUse</code> 在工具完成后触发，无法撤销。Pre 用于护栏，Post 用于清理。</p>
+<h4>Hook 能读 Claude 即将编辑的文件吗？</h4>
+<p>能——PreToolUse 上 Edit/Write 工具的 <code>tool_input.file_path</code> 字段告诉你路径。从磁盘读文件内容；hook 有完整文件系统访问权。</p>
+<h4>怎么为单个会话禁用一个 hook？</h4>
+<p>把 hook 配置从 <code>settings.json</code> 移到 <code>settings.local.json</code>，matcher 设为不会匹配的（如 <code>"DISABLED"</code>）。或者注释掉条目。没有 per-session 禁用标志。</p>
+<h4>Hooks 在 CI / Vercel 构建上跑吗？</h4>
+<p>不——hooks 只在 Claude Code 会话内触发。你的构建管线永远看不到。如果你需要 CI 也跑同样逻辑，把脚本写成独立命令，hook 和 CI YAML 都调用它。</p>
+<h4>Hook 能在发给模型前修改 Claude 的 prompt 吗？</h4>
+<p><code>UserPromptSubmit</code> hook 能把 stdout 内容前置到 prompt。其他事件不能修改 prompt。这是有意为之——hooks 应是透明观察者，不是静默重写者。</p>
+<h4>为什么 hook 在会话第一个 prompt 不触发？</h4>
+<p>它会的，但 <code>SessionStart</code> 在 <code>UserPromptSubmit</code> 之前触发。如果你看到 hook 漏掉第一个 prompt，检查是不是不小心接到了 <code>SessionStart</code>（只触发一次）。</p>
+<h4>不跑 Claude Code 怎么测试 hook？</h4>
+<p>从命令行喂个假 JSON 事件给它：</p>
+<pre><code>echo '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/test.ts"}}' | .claude/hooks/format.sh</code></pre>
+<p>检查退出码（<code>echo $?</code>）和 stderr 验证行为。</p>
+<p><em>相关：<a href="/blog/claude-code-folder-complete-guide">.claude/ 文件夹完整指南</a> · <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet 命令速查表</a> · <a href="/">Claude Buddy 查询器</a></em></p>`
+    }
+  ]
+};
+
+const HOOKS_GUIDE_KO: ArticleContent = {
+  title: "Claude Code Hooks 실전 가이드: 모든 이벤트와 실제 코드 예시 (2026)",
+  metaTitle: "Claude Code Hooks 실전 가이드 — PreToolUse, PostToolUse 완벽 (2026)",
+  metaDescription: "Claude Code hooks 실전 가이드: 모든 라이프사이클 이벤트, matcher 문법, 자동 포맷팅, 시크릿 스캔, 위험 명령 차단의 실제 셸 스크립트. 디버깅 팁 포함.",
+  excerpt: "Claude Code hooks는 AI 어시스턴트를 도움이 되는 협력자에서 규율 있는 팀원으로 바꿉니다. 모든 라이프사이클 이벤트, stdin의 JSON 프로토콜, 복사해서 쓸 수 있는 실제 스크립트, 그리고 hooks를 hooks 없는 것보다 나쁘게 만드는 네 가지 실수.",
+  sections: [
+    {
+      heading: "왜 Hooks가 중요한가",
+      body: `<p><code>CLAUDE.md</code>가 Claude에게 당신 프로젝트가 무엇인지 알려주고 <code>settings.json</code>이 어떤 도구를 쓸 수 있는지 알려준다면, <strong>Claude Code hooks</strong>는 모든 도구 호출 <em>주변</em>에서 무엇이 일어나야 하는지 알려줍니다. AI 어시스턴트를 도움이 되는 협력자에서 규율 있는 팀원으로 바꿉니다.</p>
+<p>핵심은 hooks가 결정론적으로 발동된다는 것입니다 — 셸 명령이지 LLM 프롬프트가 아닙니다. <code>PostToolUse</code> hook이 "편집된 파일에 Prettier 실행"이라고 하면 Prettier는 매번 실행됩니다. 모델은 잊을 수 없습니다. 모델은 대화가 길어진다고 건너뛸 수 없습니다. 이것이 LLM 주도 워크플로우에서 100% 신뢰성으로 규칙을 강제할 <em>유일한</em> 방법입니다.</p>
+<p>이 글은 <a href="/blog/claude-code-folder-complete-guide">.claude/ 폴더 완벽 가이드</a>의 실전 자매편입니다 — 그쪽이 레이아웃을 설명하면, 이쪽은 hooks 서브시스템을 깊이 파고들며 가장 흔한 사용 사례에 대한 복사-붙여넣기 가능한 셸 스크립트를 제공합니다.</p>`
+    },
+    {
+      heading: "여섯 가지 라이프사이클 이벤트",
+      body: `<p>모든 hook은 여섯 이벤트 중 하나에 붙습니다. 올바른 이벤트를 고르면 나머지가 쉽고; 틀린 이벤트를 고르면 시스템과 싸우게 됩니다.</p>
+<table>
+<tr><th>이벤트</th><th>발동 시점</th><th>적합한 용도</th></tr>
+<tr><td><code>SessionStart</code></td><td>Claude Code 세션 시작 시 한 번</td><td>캐시 워밍, env 검증, 텔레메트리 시작</td></tr>
+<tr><td><code>UserPromptSubmit</code></td><td>사용자가 프롬프트를 제출할 때마다</td><td>컨텍스트 자동 주입(현재 브랜치, env, 시간)</td></tr>
+<tr><td><code>PreToolUse</code></td><td>모든 도구 호출 전(Bash, Edit, Write 등)</td><td>가드: 위험한 명령 차단, 시크릿 스캔</td></tr>
+<tr><td><code>PostToolUse</code></td><td>모든 도구 호출 후</td><td>정리: 자동 포맷, lint, 빠른 테스트</td></tr>
+<tr><td><code>Stop</code></td><td>Claude가 응답을 마칠 때</td><td>알림(mac say, 데스크톱 알림)</td></tr>
+<tr><td><code>SessionEnd</code></td><td>세션 종료 시 한 번</td><td>텔레메트리 플러시, 로그 아카이빙</td></tr>
+</table>
+<p>실제로 가장 많이 쓸 두 가지: <code>PreToolUse</code>(가드)와 <code>PostToolUse</code>(정리). 4절과 5절이 둘 다 실제 예시로 다룹니다.</p>`
+    },
+    {
+      heading: "Hook 설정 해부",
+      body: `<p>Hooks는 <code>.claude/settings.json</code>(팀 공유) 또는 <code>.claude/settings.local.json</code>(개인)의 <code>hooks</code> 키 아래에 있습니다. 구조:</p>
+<pre><code>{
+  "hooks": {
+    "&lt;이벤트명&gt;": [
+      {
+        "matcher": "&lt;도구명 regex&gt;",
+        "hooks": [
+          { "type": "command", "command": "&lt;셸 명령 또는 스크립트 경로&gt;" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<p>세 가지 노브:</p>
+<ol>
+<li><strong>이벤트명</strong>: 위 표의 여섯 가지 중 하나</li>
+<li><strong>Matcher</strong>: 도구명에 대한 regex. <code>"Edit|Write|MultiEdit"</code>는 모든 파일 쓰기 도구 매칭. <code>"Bash"</code>는 Bash만 매칭. 빈 문자열 또는 생략 = 해당 이벤트의 모든 것 매칭.</li>
+<li><strong>Command</strong>: 모든 실행 가능한 셸 명령. 인라인(<code>"echo hello"</code>) 또는 스크립트 경로(<code>".claude/hooks/format.sh"</code>) 가능.</li>
+</ol>
+<h4>JSON 프로토콜</h4>
+<p>모든 hook은 <strong>stdin</strong>으로 JSON 이벤트 페이로드를 받습니다. 모양은 이벤트별로 다르지만 항상 포함:</p>
+<pre><code>{
+  "session_id": "abc-123",
+  "transcript_path": "/path/to/conversation.jsonl",
+  "cwd": "/path/to/project",
+  "hook_event_name": "PostToolUse",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "/abs/path/to/edited/file.ts",
+    "old_string": "...",
+    "new_string": "..."
+  },
+  "tool_response": {
+    "success": true
+  }
+}</code></pre>
+<p><code>jq</code>나 어떤 JSON 파서로든 읽으세요. 종료 코드가 중요합니다:</p>
+<ul>
+<li><strong>종료 0</strong> = 성공, 도구 호출 진행 허용(PreToolUse) 또는 다음으로(PostToolUse)</li>
+<li><strong>종료 2 (PreToolUse)</strong> = 도구 호출 차단. <code>stderr</code> 출력이 이유로 Claude에 표시됨.</li>
+<li><strong>0이 아닌 종료 (PostToolUse)</strong> = 경고 로깅, 도구 호출은 이미 발생 — 되돌리기 늦음.</li>
+</ul>`
+    },
+    {
+      heading: "PostToolUse 레시피",
+      body: `<p>가장 흔한 정리 요구를 위한 세 가지 즉시 사용 가능 스크립트. 각각 <code>.claude/hooks/</code>에 저장, <code>chmod +x</code>, <code>settings.json</code>에서 참조.</p>
+<h4>레시피 1: 편집된 파일 자동 포맷</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/format.sh — 편집된 TS/JS/JSON/MD 파일에 Prettier 실행
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+[[ -z "$FILE" || ! -f "$FILE" ]] && exit 0
+
+case "$FILE" in
+  *.ts|*.tsx|*.js|*.jsx|*.json|*.md|*.css|*.html)
+    npx --no-install prettier --write "$FILE" 2>/dev/null
+    ;;
+esac
+exit 0</code></pre>
+<p><code>settings.json</code>에서 연결:</p>
+<pre><code>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [{ "type": "command", "command": ".claude/hooks/format.sh" }]
+      }
+    ]
+  }
+}</code></pre>
+<h4>레시피 2: 매 편집 후 타입체크</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/typecheck.sh — TS 에러 즉시 표시
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+# TS 파일만 체크
+[[ "$FILE" != *.ts && "$FILE" != *.tsx ]] && exit 0
+
+# 증분 tsc; 0이 아닌 종료가 에러를 보이지만 편집을 되돌리진 않음
+if ! npx --no-install tsc --noEmit --incremental 2>&1 | head -20; then
+  echo "[typecheck hook] errors above" >&2
+fi
+exit 0</code></pre>
+<p>트레이드오프: 편집당 2-5초 추가. 팀이 반복 속도보다 빠른 피드백을 중시하면 가치 있음.</p>
+<h4>레시피 3: 변경된 모듈에 빠른 테스트</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/quick-test.sh — 변경 파일이 속한 모듈의 테스트만 실행
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+[[ -z "$FILE" ]] && exit 0
+
+# 관례에 따라 관련 테스트 파일 찾기: src/foo.ts → src/foo.test.ts
+TEST_FILE=$(echo "$FILE" | sed 's/\\.\\(ts\\|tsx\\|js\\|jsx\\)$/.test.\\1/')
+[[ ! -f "$TEST_FILE" ]] && exit 0
+
+npx --no-install vitest run "$TEST_FILE" --reporter=basic 2>&1 | tail -10
+exit 0</code></pre>`
+    },
+    {
+      heading: "PreToolUse 레시피 (가드)",
+      body: `<p>PreToolUse는 안전망입니다. 모든 팀이 가져야 할 세 가지 가드.</p>
+<h4>레시피 4: 위험한 명령 차단</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/danger-guard.sh — 되돌릴 수 없는 Bash 호출 차단
+
+INPUT=$(cat)
+CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+# 절대 보고 싶지 않은 패턴
+DANGER='(rm -rf /|rm -rf ~|rm -rf \\$HOME|git reset --hard origin|git push --force.*main|git push --force.*master|DROP TABLE|TRUNCATE TABLE)'
+
+if echo "$CMD" | grep -qE "$DANGER"; then
+  echo "[danger-guard] BLOCKED: 명령이 위험 패턴에 매칭됨: $CMD" >&2
+  echo "정말 필요하면 Claude Code 외부에서 수동으로 실행하세요." >&2
+  exit 2  # 종료 2 = 도구 호출 차단
+fi
+exit 0</code></pre>
+<p>Bash에만 연결:</p>
+<pre><code>{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [{ "type": "command", "command": ".claude/hooks/danger-guard.sh" }]
+      }
+    ]
+  }
+}</code></pre>
+<h4>레시피 5: 시크릿이 포함된 편집 차단</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/secret-scan.sh — 시크릿이 들어 보이는 쓰기 차단
+
+INPUT=$(cat)
+NEW=$(echo "$INPUT" | jq -r '.tool_input.new_string // .tool_input.content // empty')
+
+# 일반 시크릿 패턴
+SECRET_RE='(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36}|AKIA[0-9A-Z]{16}|-----BEGIN [A-Z ]+PRIVATE KEY-----)'
+
+if echo "$NEW" | grep -qE "$SECRET_RE"; then
+  echo "[secret-scan] BLOCKED: 편집에 시크릿이 포함된 듯(API 키, GitHub PAT, AWS 키 또는 개인 키)" >&2
+  echo "시크릿을 .env.local(gitignored)로 옮기고 process.env로 참조하세요." >&2
+  exit 2
+fi
+exit 0</code></pre>
+<h4>레시피 6: 보호된 브랜치 커밋 차단</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/branch-guard.sh — main/master에 git commit 차단
+
+INPUT=$(cat)
+CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
+
+# git commit 호출만 신경 씀
+if ! echo "$CMD" | grep -qE '^git commit'; then
+  exit 0
+fi
+
+BRANCH=$(git branch --show-current 2>/dev/null)
+if [[ "$BRANCH" == "main" || "$BRANCH" == "master" ]]; then
+  echo "[branch-guard] BLOCKED: $BRANCH에 직접 커밋할 수 없음. 먼저 피처 브랜치 생성: git checkout -b feature/..." >&2
+  exit 2
+fi
+exit 0</code></pre>
+<p>이 하나만으로 "어 이런, main에 커밋했다" 사고를 무수히 막았습니다. 레시피 4와 같은 matcher로 연결.</p>`
+    },
+    {
+      heading: "UserPromptSubmit 레시피 — 컨텍스트 자동 주입",
+      body: `<p>일부 컨텍스트는 <code>CLAUDE.md</code>에 넣기엔 시끄럽지만 프롬프트별로 가치 있습니다: 현재 git 브랜치, 최근 커밋, 현재 시간. <code>UserPromptSubmit</code> hook이 모든 프롬프트에 주입하게 해줍니다.</p>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/inject-context.sh — 사용자 프롬프트에 유용한 컨텍스트 앞에 붙임
+
+# stdout으로 컨텍스트 추가(프롬프트에 앞에 붙음)
+echo "&lt;context&gt;"
+echo "Current branch: $(git branch --show-current 2>/dev/null)"
+echo "Recent commits:"
+git log --oneline -3 2>/dev/null
+echo "Current time: $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+echo "&lt;/context&gt;"
+exit 0</code></pre>
+<p>연결:</p>
+<pre><code>{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [{ "type": "command", "command": ".claude/hooks/inject-context.sh" }]
+      }
+    ]
+  }
+}</code></pre>
+<p>이제 모든 프롬프트가 브랜치 + 최근 이력 + 타임스탬프와 함께 도착합니다. Claude는 더 이상 피처 브랜치인지 헷갈리지 않고, 더 이상 날짜를 지어내지 않으며, 더 이상 "마지막 커밋이 뭐였죠?"라고 묻지 않습니다.</p>
+<p><strong>절제해서 사용</strong>하세요. 주입된 모든 줄이 토큰을 태웁니다. 진정 도움이 되는 것만 주입하세요; 모든 것을 던져 넣고 싶은 충동을 참으세요.</p>`
+    },
+    {
+      heading: "Hooks 디버깅 (그리고 흔한 함정)",
+      body: `<p>Hooks는 조용히 실패합니다. 모델은 PreToolUse에서 0이 아닌 종료를 하지 않는 한 stderr를 보지 못합니다. 디버깅 방법:</p>
+<h4>1단계: hook이 발동되긴 하는지 확인</h4>
+<p>스크립트가 하는 첫 번째 일로 디버그 로그 줄을 추가:</p>
+<pre><code>#!/usr/bin/env bash
+echo "[$(date)] hook fired: $0" &gt;&gt; /tmp/claude-hooks.log
+INPUT=$(cat)
+echo "$INPUT" &gt;&gt; /tmp/claude-hooks.log
+# ...나머지 hook...</code></pre>
+<p>그 다음 다른 터미널에서 <code>tail -f /tmp/claude-hooks.log</code>하며 이벤트 트리거. 아무것도 안 보이면 hook이 발동 안 함 — matcher, 파일 경로, 실행 비트 확인.</p>
+<h4>흔한 함정</h4>
+<ol>
+<li><strong><code>chmod +x</code> 잊음</strong>. 스크립트는 실행 가능해야 함. 팀 온보딩 문서에 추가.</li>
+<li><strong>Matcher가 매칭 안 함</strong>. matcher는 도구명에 대한 regex. <code>"edit"</code>(소문자)는 <code>Edit</code>에 매칭 안 함. 정확히 <code>"Edit|Write|MultiEdit"</code> 사용.</li>
+<li><strong>경로가 잘못된 디렉토리에 상대적</strong>. hook은 cwd = 프로젝트 루트로 실행, <code>.claude/hooks/</code>가 아님. 절대 경로나 프로젝트 루트로부터의 경로 사용.</li>
+<li><strong>Hook이 Claude 출력을 조용히 다시 씀</strong>. 하지 마세요. Hooks는 관찰하고 게이트해야지 Claude의 텍스트를 수정하면 안 됩니다. 스타일을 강제하려면 <code>PostToolUse</code> + 편집 후 포맷, 출력 재작성 아님.</li>
+<li><strong>Hook이 핫 패스에서 느림</strong>. PostToolUse의 5초 hook은 Claude 세션을 당밀로 만듭니다. 무거운 체크(전체 테스트 스위트, 전체 lint)는 SessionEnd 또는 CI에서만 실행, 매 편집마다 아님.</li>
+<li><strong>Hook이 설치되지 않은 도구에 의존</strong>. <code>npx prettier</code>는 prettier가 node_modules에 있다고 가정. <code>command -v prettier &gt;/dev/null || exit 0</code> 가드를 추가해 hook이 도구 없는 머신에서 우아하게 다운그레이드되도록.</li>
+</ol>`
+    },
+    {
+      heading: "자주 묻는 질문",
+      body: `<h4>PreToolUse와 PostToolUse 차이는?</h4>
+<p><code>PreToolUse</code>는 도구 실행 전 발동되며 차단할 수 있습니다(종료 2). <code>PostToolUse</code>는 도구 완료 후 발동되며 되돌릴 수 없습니다. 가드는 Pre, 정리는 Post.</p>
+<h4>Hook이 Claude가 곧 편집할 파일을 읽을 수 있나요?</h4>
+<p>네 — Edit/Write 도구의 PreToolUse에 있는 <code>tool_input.file_path</code> 필드가 경로를 알려줍니다. 디스크에서 파일 내용 읽으세요; hook은 전체 파일 시스템 접근권을 가집니다.</p>
+<h4>한 세션 동안 hook을 비활성화하려면?</h4>
+<p>hook 설정을 <code>settings.json</code>에서 <code>settings.local.json</code>으로 옮기고 matcher를 매칭 안 될 것(예: <code>"DISABLED"</code>)으로 설정. 또는 항목 주석 처리. 세션별 비활성화 플래그는 없습니다.</p>
+<h4>Hooks가 CI / Vercel 빌드에서 실행되나요?</h4>
+<p>아니오 — hooks는 Claude Code 세션 내에서만 발동됩니다. 빌드 파이프라인은 절대 보지 못합니다. CI에서 같은 로직이 필요하면 스크립트를 독립 명령으로 작성하고 hook과 CI YAML 모두에서 호출.</p>
+<h4>Hook이 모델로 보내기 전 Claude의 프롬프트를 수정할 수 있나요?</h4>
+<p><code>UserPromptSubmit</code> hook이 stdout 내용을 프롬프트에 앞에 붙일 수 있습니다. 다른 이벤트는 프롬프트를 수정할 수 없습니다. 의도적 설계 — hooks는 투명한 관찰자여야지 조용한 재작성자가 아닙니다.</p>
+<h4>왜 hook이 세션의 첫 프롬프트에 발동 안 하나요?</h4>
+<p>합니다, 그러나 <code>SessionStart</code>가 <code>UserPromptSubmit</code> 전에 발동됩니다. hook이 첫 프롬프트를 놓친다면, 실수로 <code>SessionStart</code>(한 번만 발동)에 붙이지 않았는지 확인하세요.</p>
+<h4>Claude Code 안 돌리고 hook 테스트는?</h4>
+<p>커맨드라인에서 가짜 JSON 이벤트를 파이프:</p>
+<pre><code>echo '{"tool_name":"Edit","tool_input":{"file_path":"/tmp/test.ts"}}' | .claude/hooks/format.sh</code></pre>
+<p>종료 코드(<code>echo $?</code>)와 stderr 검사로 동작 확인.</p>
+<p><em>관련: <a href="/blog/claude-code-folder-complete-guide">.claude/ 폴더 완벽 가이드</a> · <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet 명령 치트 시트</a> · <a href="/">Claude Buddy 체커</a></em></p>`
+    }
+  ]
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
+  {
+    slug: "claude-code-hooks-complete-guide",
+    publishedAt: "2026-05-05",
+    readingTime: 13,
+    tags: ["claude-code", "hooks", "automation", "tutorial", "PreToolUse", "PostToolUse", "shell"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code',
+    content: {
+      en: HOOKS_GUIDE_EN,
+      zh: HOOKS_GUIDE_ZH,
+      ko: HOOKS_GUIDE_KO,
+    },
+  },
   {
     slug: "claude-code-folder-complete-guide",
     publishedAt: "2026-05-05",
