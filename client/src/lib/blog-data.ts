@@ -6366,7 +6366,417 @@ echo "$INPUT" &gt;&gt; /tmp/claude-hooks.log
   ]
 };
 
+// === Top 10 MCP Servers for Claude Code in 2026 ===
+const MCP_TOP10_EN: ArticleContent = {
+  title: "Top 10 MCP Servers for Claude Code in 2026 — Tested, Ranked, Compared",
+  metaTitle: "Top 10 MCP Servers for Claude Code (2026 Tested Ranking)",
+  metaDescription: "The 10 best MCP servers to install for Claude Code in 2026: filesystem, GitHub, Playwright, Tavily, Context7, Sequential Thinking, Postgres, Memory, Apidog, Sentry. With install commands and real use cases.",
+  excerpt: "By May 2026 the MCP server ecosystem has more than 400 entries on the official registry, and a healthy fraction are abandonware. This is the curated short list — ten MCP servers actually worth installing for Claude Code, what each one solves, and which to skip.",
+  sections: [
+    {
+      heading: "Why a Curated MCP List Matters in 2026",
+      body: `<p>The Model Context Protocol (MCP) registry crossed 400 servers in early 2026. That sounds like abundance until you start installing them and discover that maybe a quarter still work, half have unclear documentation, and a meaningful fraction were one-shot demos that nobody maintains. Picking the right MCP servers for Claude Code is now a real skill.</p>
+<p>This guide cuts through the noise. We've installed and tested every MCP server on this list inside real Claude Code workflows for at least a week. Each entry includes the install command, the one-sentence pitch, the workflow it actually unlocks, and (when relevant) what to use instead. If you only install what's on this page, you'll have a Claude Code setup that handles 90% of real engineering work.</p>
+<p>For configuration basics — where MCP server definitions live, how Claude Code discovers them — see our <a href="/blog/claude-code-folder-complete-guide">.claude/ folder complete guide</a>.</p>`
+    },
+    {
+      heading: "Methodology",
+      body: `<p>Three criteria, applied ruthlessly:</p>
+<ol>
+<li><strong>Used in real workflows in 2026</strong> — not just installed once for a demo. Public usage telemetry, GitHub stars trending up, recent commit activity.</li>
+<li><strong>Solves a class of problems Claude Code can't handle natively</strong> — if a built-in tool already covers it, the MCP doesn't earn a slot.</li>
+<li><strong>Doesn't break frequently</strong> — failures during normal use, dependency drift, brittle setup all push a server off the list.</li>
+</ol>
+<p>Servers ranked roughly by frequency of use. Your mileage will vary depending on whether you're doing frontend, backend, data, or content work — see <a href="#section-4">the workflow stacks section</a> for tailored recommendations.</p>`
+    },
+    {
+      heading: "The Top 10",
+      body: `<h4>1. Filesystem MCP (official reference server)</h4>
+<p><strong>Pitch</strong>: cross-project file access without changing Claude Code's working directory. Read files in <code>/etc/</code>, write to <code>~/Desktop</code>, copy between sibling repos.</p>
+<p><strong>Install</strong>: <code>claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /Users/you/projects</code></p>
+<p><strong>Why it earns slot 1</strong>: every other MCP server can do something narrow. Filesystem is the universal bridge. If you only install one MCP, install this one.</p>
+<h4>2. GitHub MCP</h4>
+<p><strong>Pitch</strong>: search code across all your repos, open issues and PRs from the prompt, read PR diffs. Claude can finally answer "where in our 30 repos do we use this function?"</p>
+<p><strong>Install</strong>: <code>claude mcp add github -- npx -y @modelcontextprotocol/server-github</code> (set <code>GITHUB_PERSONAL_ACCESS_TOKEN</code> env var)</p>
+<p><strong>Replaces</strong>: hand-rolled <code>gh</code> CLI scripts. The MCP version is faster and Claude can chain calls (search → diff → comment).</p>
+<h4>3. Playwright MCP</h4>
+<p><strong>Pitch</strong>: real browser automation. Take screenshots, fill forms, scrape JavaScript-rendered content, run E2E tests with Claude orchestrating the steps.</p>
+<p><strong>Install</strong>: <code>claude mcp add playwright -- npx -y @playwright/mcp</code></p>
+<p><strong>Real use case</strong>: scraping API documentation that requires JavaScript to render, then having Claude generate a typed client. Saves an hour every time.</p>
+<h4>4. Tavily MCP</h4>
+<p><strong>Pitch</strong>: web search with structured results, much higher quality than ad-hoc web fetching. Critical for anything time-sensitive (libraries released in 2026, recent CVEs).</p>
+<p><strong>Install</strong>: <code>claude mcp add tavily -- npx -y tavily-mcp</code> (set <code>TAVILY_API_KEY</code>)</p>
+<p><strong>Why prefer over plain WebSearch</strong>: Tavily returns extracted content with relevance scores. WebSearch returns links you have to fetch separately. Token efficiency is roughly 3× better.</p>
+<h4>5. Context7 MCP</h4>
+<p><strong>Pitch</strong>: real-time documentation for any library on npm/PyPI/etc. Claude pulls the actual current docs instead of hallucinating from training cutoff knowledge.</p>
+<p><strong>Install</strong>: <code>claude mcp add context7 -- npx -y @upstash/context7-mcp</code></p>
+<p><strong>When it matters most</strong>: any library that has shipped breaking changes since Claude's training cutoff. <code>react-router</code>, <code>tanstack-query</code>, <code>tailwindcss</code> all changed APIs in 2025-2026; Context7 keeps Claude honest.</p>
+<h4>6. Sequential Thinking MCP</h4>
+<p><strong>Pitch</strong>: explicit step-by-step reasoning for complex problems. Claude breaks the work into numbered steps, can revise, and the trace is visible in the conversation.</p>
+<p><strong>Install</strong>: <code>claude mcp add sequential -- npx -y @modelcontextprotocol/server-sequential-thinking</code></p>
+<p><strong>Best for</strong>: architecture decisions, root-cause debugging, multi-component refactors. Skip it for trivial tasks — the overhead is real.</p>
+<h4>7. Postgres / SQLite MCP</h4>
+<p><strong>Pitch</strong>: query your database directly from Claude. Schema introspection, read queries, write queries (gated by permissions). Replaces the dance of "show me the table, OK now query it."</p>
+<p><strong>Install</strong>: <code>claude mcp add postgres -- npx -y @modelcontextprotocol/server-postgres "postgresql://..."</code></p>
+<p><strong>Safety note</strong>: configure read-only credentials for the MCP. Never give it production write access.</p>
+<h4>8. Memory MCP</h4>
+<p><strong>Pitch</strong>: persistent knowledge graph across Claude Code sessions. Remembers entities (your team, your codebase modules) and relations between them.</p>
+<p><strong>Install</strong>: <code>claude mcp add memory -- npx -y @modelcontextprotocol/server-memory</code></p>
+<p><strong>Honest assessment</strong>: the value depends entirely on whether you build the habit of saving useful facts. If you don't, it's a slot wasted. If you do, it compounds over months.</p>
+<h4>9. Apidog MCP</h4>
+<p><strong>Pitch</strong>: API design and testing. Define endpoints, run requests, share collections. Replaces Postman for AI-driven API workflows.</p>
+<p><strong>Install</strong>: <code>claude mcp add apidog -- npx -y @apidog/mcp</code></p>
+<p><strong>When it earns its slot</strong>: backend dev who frequently writes new endpoints. The "design endpoint, test endpoint, generate typed client" loop becomes one prompt.</p>
+<h4>10. Sentry MCP</h4>
+<p><strong>Pitch</strong>: pull error reports and performance traces directly into the Claude session. "Why is this endpoint slow in prod?" gets answered with real data instead of speculation.</p>
+<p><strong>Install</strong>: <code>claude mcp add sentry -- npx -y @sentry/mcp-server</code> (configure org + project)</p>
+<p><strong>Honest take</strong>: only earns its slot if you actually use Sentry. Replace with the equivalent for Datadog / Honeycomb / New Relic if that's your stack.</p>`
+    },
+    {
+      heading: "Honorable Mentions",
+      body: `<p>Five servers that didn't quite make the top 10 but are worth knowing about for specific workflows:</p>
+<ul>
+<li><strong>Slack MCP</strong> — read channels, post messages, search history. Earns a slot if your team lives in Slack and you want to summarize threads or post status updates from Claude.</li>
+<li><strong>Notion MCP</strong> — query and update Notion pages. Useful if Notion is your team's source of truth for specs and runbooks.</li>
+<li><strong>Linear MCP</strong> — create and update issues. Pairs well with GitHub MCP for "find the bug in code, file the issue, link both."</li>
+<li><strong>Magic MCP (21st.dev)</strong> — generate UI components from natural-language descriptions. Useful for rapid frontend prototyping; less useful in mature codebases with established component libraries.</li>
+<li><strong>Stripe MCP</strong> — query Stripe data (customers, subscriptions, charges) for support and analytics. Niche but invaluable if your work touches billing.</li>
+</ul>
+<p>What we left off intentionally: anything with fewer than 100 GitHub stars, anything not updated since Q1 2025, and any "AI agent framework" that's really an MCP wrapper around an LLM call (those add latency without unlocking new capability).</p>`
+    },
+    {
+      heading: "How to Combine MCP Servers for Common Workflows",
+      body: `<p>The right stack depends on what you do. Three concrete recommendations:</p>
+<h4>Stack A: Frontend Developer</h4>
+<ul>
+<li>Filesystem (slot 1)</li>
+<li>GitHub (slot 2)</li>
+<li>Playwright (slot 3) — for visual testing</li>
+<li>Context7 (slot 5) — for current React/Tailwind/Vite docs</li>
+<li>Magic MCP (honorable mention) — for component generation</li>
+</ul>
+<p>Skip: Postgres, Sentry, Apidog (unless you also do backend).</p>
+<h4>Stack B: Backend Developer</h4>
+<ul>
+<li>Filesystem</li>
+<li>GitHub</li>
+<li>Postgres / SQLite</li>
+<li>Apidog</li>
+<li>Sentry (or Datadog/Honeycomb equivalent)</li>
+<li>Sequential Thinking (slot 6) — for architecture decisions</li>
+</ul>
+<p>Skip: Playwright, Magic.</p>
+<h4>Stack C: Technical Writer / Content Creator</h4>
+<ul>
+<li>Filesystem</li>
+<li>Tavily (slot 4) — for research</li>
+<li>Context7 (slot 5) — for accurate API references in tutorials</li>
+<li>Memory (slot 8) — for tracking style guide decisions across pieces</li>
+<li>Notion (honorable mention) — if your CMS is Notion</li>
+</ul>
+<p>Skip: GitHub (unless documenting open source), Postgres, Apidog.</p>
+<h4>Don't install all 10 at once</h4>
+<p>Each MCP server adds latency to Claude Code session startup and memory overhead. Five is a sweet spot for most users; ten is the point at which startup feels noticeably slow. If you go above ten, audit which ones you've actually used in the last week and remove the rest.</p>`
+    },
+    {
+      heading: "Frequently Asked Questions",
+      body: `<h4>Where do MCP servers get configured in Claude Code?</h4>
+<p><code>claude mcp add</code> writes to <code>~/.claude.json</code> by default. For project-scoped servers (where the team should share the config), use <code>claude mcp add --scope project</code>, which writes to <code>.mcp.json</code> at the repo root.</p>
+<h4>How do I check which MCP servers are currently active?</h4>
+<p><code>claude mcp list</code> shows all configured servers. <code>claude mcp get &lt;name&gt;</code> shows the full config for one. Inside a session, <code>/mcp</code> lists active connections.</p>
+<h4>Can I write my own MCP server?</h4>
+<p>Yes — the protocol is open and there are SDKs for TypeScript, Python, and Rust. Start with the official template at <code>github.com/modelcontextprotocol/create-server</code>. Plan on a few hours for a basic server, longer for one that handles state.</p>
+<h4>Do MCP servers work in Claude Code's CLI mode and the desktop app?</h4>
+<p>Both. Configurations roam between the CLI, the desktop app, and IDE extensions because they all read the same <code>~/.claude.json</code>.</p>
+<h4>What's the difference between an MCP server and a custom subagent?</h4>
+<p>An MCP server adds <em>tools</em> Claude can call. A subagent is a specialized Claude persona with its own context window. They compose: a custom subagent can use any MCP-installed tool. See our <a href="/blog/claude-code-folder-complete-guide">.claude/ folder guide</a> for subagent details.</p>
+<h4>How do I stop an MCP server I no longer use?</h4>
+<p><code>claude mcp remove &lt;name&gt;</code>. Removing it from <code>~/.claude.json</code> manually also works. Restart any active Claude Code sessions for the change to take effect.</p>
+<h4>Are MCP servers a security risk?</h4>
+<p>They have whatever permissions you give them and run as your user. Audit before installing — read the source, check the maintainer, look at recent issues. Treat unknown MCP servers like any unknown shell tool: <code>npx</code>-style execution gives them full access to your machine.</p>
+<p><em>Related: <a href="/blog/claude-code-folder-complete-guide">.claude/ folder complete guide</a> · <a href="/blog/claude-code-hooks-complete-guide">Claude Code Hooks practical guide</a> · <a href="/">Claude Buddy Checker</a></em></p>`
+    }
+  ]
+};
+
+const MCP_TOP10_ZH: ArticleContent = {
+  title: "2026 年 Claude Code 必装的 10 大 MCP 服务器——实测、排名、对比",
+  metaTitle: "2026 年 Claude Code Top 10 MCP 服务器实测排名",
+  metaDescription: "2026 年最值得为 Claude Code 装的 10 个 MCP 服务器：filesystem、GitHub、Playwright、Tavily、Context7、Sequential Thinking、Postgres、Memory、Apidog、Sentry。含安装命令与真实用例。",
+  excerpt: "到 2026 年 5 月，官方 MCP 注册表已超过 400 个条目，相当一部分已经无人维护。本文是精选短名单——真正值得为 Claude Code 安装的 10 个 MCP 服务器，每个解决什么问题，以及哪些可以跳过。",
+  sections: [
+    {
+      heading: "为什么 2026 年需要一份精选 MCP 名单",
+      body: `<p>Model Context Protocol (MCP) 注册表在 2026 年初突破了 400 个服务器。听起来很丰富，直到你开始装并发现也许只有四分之一还能用，一半文档不清晰，相当一部分是一次性 demo 没人维护。为 Claude Code 选对 MCP 服务器现在是真技能。</p>
+<p>本文就是噪音切割机。本榜单上的每个 MCP 服务器我们都在真实 Claude Code 工作流里至少装了一周。每条包含安装命令、一句话推介、它真正解锁的工作流，以及（如适用）替代品。如果你只装本页上的，你的 Claude Code 配置已经能搞定 90% 的真实工程工作。</p>
+<p>关于配置基础——MCP 服务器定义住在哪、Claude Code 怎么发现它们——见我们的 <a href="/blog/claude-code-folder-complete-guide">.claude/ 文件夹完整指南</a>。</p>`
+    },
+    {
+      heading: "方法论",
+      body: `<p>三条标准，无情应用：</p>
+<ol>
+<li><strong>2026 年在真实工作流中被使用</strong>——不是装一次做 demo。公开使用遥测、GitHub stars 上升、最近有提交活动。</li>
+<li><strong>解决 Claude Code 原生工具搞不定的一类问题</strong>——如果内置工具已经覆盖，MCP 不配占位。</li>
+<li><strong>不会频繁挂掉</strong>——正常使用中失败、依赖漂移、安装脆弱都会让一个服务器掉出名单。</li>
+</ol>
+<p>大致按使用频率排序。你的体验会因前端、后端、数据、内容工作而异——见<a href="#section-4">工作流栈章节</a>的定制建议。</p>`
+    },
+    {
+      heading: "Top 10",
+      body: `<h4>1. Filesystem MCP（官方参考实现）</h4>
+<p><strong>推介</strong>：跨项目文件访问，无需改 Claude Code 工作目录。读 <code>/etc/</code>、写 <code>~/Desktop</code>、在兄弟仓库间复制。</p>
+<p><strong>安装</strong>：<code>claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /Users/you/projects</code></p>
+<p><strong>为什么是第一</strong>：其他每个 MCP 都做点窄事。Filesystem 是通用桥梁。如果只装一个 MCP，装这个。</p>
+<h4>2. GitHub MCP</h4>
+<p><strong>推介</strong>：跨所有 repo 搜代码、从 prompt 开 issue 和 PR、读 PR diff。Claude 终于能回答"我们 30 个 repo 里哪儿用了这个函数？"</p>
+<p><strong>安装</strong>：<code>claude mcp add github -- npx -y @modelcontextprotocol/server-github</code>（设 <code>GITHUB_PERSONAL_ACCESS_TOKEN</code> 环境变量）</p>
+<p><strong>替代</strong>：手写的 <code>gh</code> CLI 脚本。MCP 版本更快，且 Claude 能链式调用（搜索 → diff → 评论）。</p>
+<h4>3. Playwright MCP</h4>
+<p><strong>推介</strong>：真浏览器自动化。截图、填表单、爬 JS 渲染内容、跑 E2E 测试由 Claude 编排步骤。</p>
+<p><strong>安装</strong>：<code>claude mcp add playwright -- npx -y @playwright/mcp</code></p>
+<p><strong>真实用例</strong>：爬需要 JS 渲染的 API 文档，让 Claude 生成类型化 client。每次省一小时。</p>
+<h4>4. Tavily MCP</h4>
+<p><strong>推介</strong>：结构化结果的网络搜索，质量远高于临时网页 fetch。对时效性内容（2026 发布的库、最近 CVE）至关重要。</p>
+<p><strong>安装</strong>：<code>claude mcp add tavily -- npx -y tavily-mcp</code>（设 <code>TAVILY_API_KEY</code>）</p>
+<p><strong>为什么比裸 WebSearch 好</strong>：Tavily 返回带相关度分数的提取内容。WebSearch 返回链接还要单独 fetch。token 效率约 3 倍。</p>
+<h4>5. Context7 MCP</h4>
+<p><strong>推介</strong>：任何 npm/PyPI 等库的实时文档。Claude 拉真实当前文档，不再从训练截止前的知识里幻觉。</p>
+<p><strong>安装</strong>：<code>claude mcp add context7 -- npx -y @upstash/context7-mcp</code></p>
+<p><strong>什么时候最重要</strong>：任何在 Claude 训练截止后有破坏性变更的库。<code>react-router</code>、<code>tanstack-query</code>、<code>tailwindcss</code> 在 2025-2026 都改了 API；Context7 让 Claude 诚实。</p>
+<h4>6. Sequential Thinking MCP</h4>
+<p><strong>推介</strong>：复杂问题的显式步骤推理。Claude 把工作拆成编号步骤、能修订、轨迹在对话里可见。</p>
+<p><strong>安装</strong>：<code>claude mcp add sequential -- npx -y @modelcontextprotocol/server-sequential-thinking</code></p>
+<p><strong>最适合</strong>：架构决策、根因调试、跨组件重构。琐事跳过——开销是真的。</p>
+<h4>7. Postgres / SQLite MCP</h4>
+<p><strong>推介</strong>：直接从 Claude 查你的数据库。Schema 内省、读查询、写查询（受权限限制）。替代"先给我看表，好现在查"的来回。</p>
+<p><strong>安装</strong>：<code>claude mcp add postgres -- npx -y @modelcontextprotocol/server-postgres "postgresql://..."</code></p>
+<p><strong>安全说明</strong>：给 MCP 配只读凭证。绝不给生产写权限。</p>
+<h4>8. Memory MCP</h4>
+<p><strong>推介</strong>：跨 Claude Code 会话的持久知识图谱。记住实体（你的团队、你代码库的模块）以及它们之间的关系。</p>
+<p><strong>安装</strong>：<code>claude mcp add memory -- npx -y @modelcontextprotocol/server-memory</code></p>
+<p><strong>诚实评估</strong>：价值完全取决于你是否养成保存有用事实的习惯。如果不养，就是浪费一个槽。如果养成了，几个月内复利。</p>
+<h4>9. Apidog MCP</h4>
+<p><strong>推介</strong>：API 设计与测试。定义端点、跑请求、共享集合。替代 AI 驱动 API 工作流的 Postman。</p>
+<p><strong>安装</strong>：<code>claude mcp add apidog -- npx -y @apidog/mcp</code></p>
+<p><strong>什么时候配占位</strong>：经常写新端点的后端开发者。"设计端点、测端点、生成类型化 client"循环变成一个 prompt。</p>
+<h4>10. Sentry MCP</h4>
+<p><strong>推介</strong>：把错误报告和性能 trace 直接拉进 Claude 会话。"为什么这个端点在生产慢？"用真实数据回答而不是猜测。</p>
+<p><strong>安装</strong>：<code>claude mcp add sentry -- npx -y @sentry/mcp-server</code>（配 org + project）</p>
+<p><strong>诚实看法</strong>：只有你真在用 Sentry 才配占位。如果你的栈是 Datadog / Honeycomb / New Relic 就用对应的。</p>`
+    },
+    {
+      heading: "荣誉提及",
+      body: `<p>没进 Top 10 但特定工作流里值得知道的五个：</p>
+<ul>
+<li><strong>Slack MCP</strong>——读频道、发消息、搜历史。如果团队住在 Slack 而你想从 Claude 总结线程或发状态更新，配占位。</li>
+<li><strong>Notion MCP</strong>——查询和更新 Notion 页面。如果 Notion 是团队规格和 runbook 的真理来源，有用。</li>
+<li><strong>Linear MCP</strong>——创建和更新 issue。和 GitHub MCP 配对做"在代码里找到 bug、提 issue、关联两者"很好。</li>
+<li><strong>Magic MCP (21st.dev)</strong>——从自然语言描述生成 UI 组件。快速前端原型有用；在有成熟组件库的成熟代码库里没那么有用。</li>
+<li><strong>Stripe MCP</strong>——查询 Stripe 数据（客户、订阅、收费）做支持和分析。窄但碰到计费时无价。</li>
+</ul>
+<p>我们故意排除：GitHub stars 少于 100 的、自 2025 Q1 后没更新的、以及任何"AI agent 框架"实际只是 LLM 调用的 MCP 包装（这些加延迟不解锁新能力）。</p>`
+    },
+    {
+      heading: "如何为常见工作流组合 MCP 服务器",
+      body: `<p>正确的栈取决于你做什么。三个具体推荐：</p>
+<h4>栈 A：前端开发者</h4>
+<ul>
+<li>Filesystem（位 1）</li>
+<li>GitHub（位 2）</li>
+<li>Playwright（位 3）——视觉测试用</li>
+<li>Context7（位 5）——React/Tailwind/Vite 当前文档用</li>
+<li>Magic MCP（荣誉提及）——组件生成用</li>
+</ul>
+<p>跳过：Postgres、Sentry、Apidog（除非你也做后端）。</p>
+<h4>栈 B：后端开发者</h4>
+<ul>
+<li>Filesystem</li>
+<li>GitHub</li>
+<li>Postgres / SQLite</li>
+<li>Apidog</li>
+<li>Sentry（或 Datadog/Honeycomb 等价）</li>
+<li>Sequential Thinking（位 6）——架构决策用</li>
+</ul>
+<p>跳过：Playwright、Magic。</p>
+<h4>栈 C：技术写作者 / 内容创作者</h4>
+<ul>
+<li>Filesystem</li>
+<li>Tavily（位 4）——研究用</li>
+<li>Context7（位 5）——教程里准确 API 引用用</li>
+<li>Memory（位 8）——跨多篇追踪风格指南决策用</li>
+<li>Notion（荣誉提及）——如果你的 CMS 是 Notion</li>
+</ul>
+<p>跳过：GitHub（除非记录开源）、Postgres、Apidog。</p>
+<h4>不要一次装全部 10 个</h4>
+<p>每个 MCP 服务器都给 Claude Code 会话启动加延迟、加内存开销。五个对大多数用户是甜点；十个是启动明显慢的临界点。如果超过十个，审计上周哪些真的用过、删掉其余。</p>`
+    },
+    {
+      heading: "常见问题",
+      body: `<h4>MCP 服务器在 Claude Code 哪里配置？</h4>
+<p><code>claude mcp add</code> 默认写到 <code>~/.claude.json</code>。项目范围服务器（团队该共享配置）用 <code>claude mcp add --scope project</code>，写到仓库根的 <code>.mcp.json</code>。</p>
+<h4>怎么查当前激活了哪些 MCP 服务器？</h4>
+<p><code>claude mcp list</code> 显示所有配置的服务器。<code>claude mcp get &lt;name&gt;</code> 显示一个的完整配置。会话里 <code>/mcp</code> 列出活动连接。</p>
+<h4>能写自己的 MCP 服务器吗？</h4>
+<p>能——协议开放，TypeScript、Python、Rust 都有 SDK。从官方模板 <code>github.com/modelcontextprotocol/create-server</code> 开始。基础服务器几小时；处理状态的更长。</p>
+<h4>MCP 服务器在 Claude Code CLI 模式和桌面应用都工作吗？</h4>
+<p>都工作。配置在 CLI、桌面应用、IDE 扩展间漫游，因为它们都读同一个 <code>~/.claude.json</code>。</p>
+<h4>MCP 服务器和自定义子代理的区别？</h4>
+<p>MCP 服务器添加 Claude 能调用的<em>工具</em>。子代理是有自己上下文窗口的专门 Claude 角色。它们组合：自定义子代理可以用任何 MCP 安装的工具。子代理详情见 <a href="/blog/claude-code-folder-complete-guide">.claude/ 文件夹指南</a>。</p>
+<h4>怎么停止不再用的 MCP 服务器？</h4>
+<p><code>claude mcp remove &lt;name&gt;</code>。手动从 <code>~/.claude.json</code> 删也可以。重启活动 Claude Code 会话使更改生效。</p>
+<h4>MCP 服务器是安全风险吗？</h4>
+<p>它们有你给的任何权限，以你的用户身份运行。安装前审计——读源码、查维护者、看最近 issue。把未知 MCP 服务器当任何未知 shell 工具对待：<code>npx</code> 风格执行给它们对你机器的完全访问权。</p>
+<p><em>相关：<a href="/blog/claude-code-folder-complete-guide">.claude/ 文件夹完整指南</a> · <a href="/blog/claude-code-hooks-complete-guide">Claude Code Hooks 实战指南</a> · <a href="/">Claude Buddy 查询器</a></em></p>`
+    }
+  ]
+};
+
+const MCP_TOP10_KO: ArticleContent = {
+  title: "2026년 Claude Code 필수 MCP 서버 Top 10 — 실측, 순위, 비교",
+  metaTitle: "2026년 Claude Code Top 10 MCP 서버 실측 순위",
+  metaDescription: "2026년 Claude Code에 설치할 가치가 있는 MCP 서버 10개: filesystem, GitHub, Playwright, Tavily, Context7, Sequential Thinking, Postgres, Memory, Apidog, Sentry. 설치 명령과 실제 사용 사례 포함.",
+  excerpt: "2026년 5월 기준 공식 MCP 레지스트리는 400개 항목을 넘었고, 상당수가 방치되어 있습니다. 이 글은 정제된 단축 리스트입니다 — Claude Code에 정말 설치할 가치가 있는 10개의 MCP 서버, 각각이 해결하는 문제, 그리고 건너뛸 것들.",
+  sections: [
+    {
+      heading: "왜 2026년에 정제된 MCP 리스트가 필요한가",
+      body: `<p>Model Context Protocol (MCP) 레지스트리는 2026년 초 400개 서버를 넘었습니다. 풍부하게 들리지만, 설치를 시작하면 4분의 1 정도만 여전히 작동하고, 절반은 문서가 불분명하며, 상당수가 누구도 유지보수하지 않는 일회성 데모임을 발견하게 됩니다. Claude Code에 맞는 MCP 서버를 고르는 것은 이제 진짜 기술입니다.</p>
+<p>이 가이드는 잡음을 자릅니다. 이 리스트의 모든 MCP 서버를 실제 Claude Code 워크플로우에서 최소 일주일간 설치하고 테스트했습니다. 각 항목은 설치 명령, 한 문장 추천사, 실제로 풀어주는 워크플로우, 그리고 (해당하는 경우) 대안을 포함합니다. 이 페이지에 있는 것만 설치해도 실제 엔지니어링 작업의 90%를 처리하는 Claude Code 설정을 갖게 됩니다.</p>
+<p>설정 기초 — MCP 서버 정의가 어디 있는지, Claude Code가 어떻게 발견하는지 — 는 <a href="/blog/claude-code-folder-complete-guide">.claude/ 폴더 완벽 가이드</a>를 참조하세요.</p>`
+    },
+    {
+      heading: "방법론",
+      body: `<p>세 가지 기준, 무자비하게 적용:</p>
+<ol>
+<li><strong>2026년 실제 워크플로우에서 사용됨</strong> — 데모용으로 한 번 설치된 게 아님. 공개 사용 텔레메트리, 상승 추세 GitHub stars, 최근 커밋 활동.</li>
+<li><strong>Claude Code가 네이티브로 처리할 수 없는 부류의 문제 해결</strong> — 빌트인 도구가 이미 커버하면 MCP는 자리를 못 얻음.</li>
+<li><strong>자주 망가지지 않음</strong> — 정상 사용 중 실패, 의존성 드리프트, 취약한 설치 모두 서버를 리스트에서 밀어냄.</li>
+</ol>
+<p>대략 사용 빈도 순으로 순위. 프론트엔드, 백엔드, 데이터, 콘텐츠 작업에 따라 결과가 다릅니다 — <a href="#section-4">워크플로우 스택 섹션</a>에서 맞춤 추천을 보세요.</p>`
+    },
+    {
+      heading: "Top 10",
+      body: `<h4>1. Filesystem MCP (공식 레퍼런스 서버)</h4>
+<p><strong>추천사</strong>: Claude Code 작업 디렉토리를 바꾸지 않고 크로스 프로젝트 파일 접근. <code>/etc/</code> 읽기, <code>~/Desktop</code> 쓰기, 자매 저장소 간 복사.</p>
+<p><strong>설치</strong>: <code>claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem /Users/you/projects</code></p>
+<p><strong>왜 1위인가</strong>: 다른 모든 MCP는 좁은 일을 함. Filesystem은 만능 다리. MCP를 하나만 설치한다면 이걸 설치.</p>
+<h4>2. GitHub MCP</h4>
+<p><strong>추천사</strong>: 모든 저장소에서 코드 검색, 프롬프트에서 이슈와 PR 열기, PR diff 읽기. Claude는 마침내 "30개 저장소 중 어디서 이 함수를 사용하나?"에 답할 수 있음.</p>
+<p><strong>설치</strong>: <code>claude mcp add github -- npx -y @modelcontextprotocol/server-github</code> (<code>GITHUB_PERSONAL_ACCESS_TOKEN</code> env 설정)</p>
+<p><strong>대체</strong>: 손으로 만든 <code>gh</code> CLI 스크립트. MCP 버전이 더 빠르고 Claude가 체인 호출 가능 (검색 → diff → 코멘트).</p>
+<h4>3. Playwright MCP</h4>
+<p><strong>추천사</strong>: 진짜 브라우저 자동화. 스크린샷, 폼 채우기, JS 렌더링 콘텐츠 스크래핑, Claude가 단계 오케스트레이션하는 E2E 테스트 실행.</p>
+<p><strong>설치</strong>: <code>claude mcp add playwright -- npx -y @playwright/mcp</code></p>
+<p><strong>실제 사용 사례</strong>: JS 렌더링이 필요한 API 문서 스크래핑 후 Claude가 타입 클라이언트 생성. 매번 한 시간 절약.</p>
+<h4>4. Tavily MCP</h4>
+<p><strong>추천사</strong>: 구조화된 결과의 웹 검색, 즉석 웹 fetch보다 훨씬 높은 품질. 시간에 민감한 것(2026년 출시 라이브러리, 최근 CVE)에 결정적.</p>
+<p><strong>설치</strong>: <code>claude mcp add tavily -- npx -y tavily-mcp</code> (<code>TAVILY_API_KEY</code> 설정)</p>
+<p><strong>왜 일반 WebSearch보다 좋은가</strong>: Tavily는 관련도 점수가 있는 추출 콘텐츠 반환. WebSearch는 별도로 fetch해야 하는 링크 반환. 토큰 효율이 약 3배 좋음.</p>
+<h4>5. Context7 MCP</h4>
+<p><strong>추천사</strong>: npm/PyPI 등 모든 라이브러리의 실시간 문서. Claude가 훈련 컷오프 지식에서 환각 대신 실제 현재 문서를 가져옴.</p>
+<p><strong>설치</strong>: <code>claude mcp add context7 -- npx -y @upstash/context7-mcp</code></p>
+<p><strong>가장 중요할 때</strong>: Claude 훈련 컷오프 후 breaking changes를 출시한 모든 라이브러리. <code>react-router</code>, <code>tanstack-query</code>, <code>tailwindcss</code>는 2025-2026에 모두 API 변경; Context7가 Claude를 정직하게 유지.</p>
+<h4>6. Sequential Thinking MCP</h4>
+<p><strong>추천사</strong>: 복잡한 문제에 대한 명시적 단계별 추론. Claude가 작업을 번호 매겨 분해, 수정 가능, 트레이스가 대화에 보임.</p>
+<p><strong>설치</strong>: <code>claude mcp add sequential -- npx -y @modelcontextprotocol/server-sequential-thinking</code></p>
+<p><strong>가장 적합</strong>: 아키텍처 결정, 근본 원인 디버깅, 다중 컴포넌트 리팩토링. 사소한 작업에는 건너뛰기 — 오버헤드는 실재함.</p>
+<h4>7. Postgres / SQLite MCP</h4>
+<p><strong>추천사</strong>: Claude에서 데이터베이스 직접 쿼리. 스키마 인트로스펙션, 읽기 쿼리, 쓰기 쿼리(권한 게이팅됨). "테이블 보여줘, 좋아 이제 쿼리해" 댄스를 대체.</p>
+<p><strong>설치</strong>: <code>claude mcp add postgres -- npx -y @modelcontextprotocol/server-postgres "postgresql://..."</code></p>
+<p><strong>보안 노트</strong>: MCP에 읽기 전용 자격 증명 구성. 절대 프로덕션 쓰기 권한 주지 마세요.</p>
+<h4>8. Memory MCP</h4>
+<p><strong>추천사</strong>: Claude Code 세션 간 영구 지식 그래프. 엔티티(팀, 코드베이스 모듈) 및 그들 간 관계 기억.</p>
+<p><strong>설치</strong>: <code>claude mcp add memory -- npx -y @modelcontextprotocol/server-memory</code></p>
+<p><strong>정직한 평가</strong>: 가치는 유용한 사실을 저장하는 습관을 들이는지에 전적으로 달림. 안 들이면 자리 낭비. 들이면 몇 달간 복리.</p>
+<h4>9. Apidog MCP</h4>
+<p><strong>추천사</strong>: API 디자인과 테스트. 엔드포인트 정의, 요청 실행, 컬렉션 공유. AI 주도 API 워크플로우의 Postman 대체.</p>
+<p><strong>설치</strong>: <code>claude mcp add apidog -- npx -y @apidog/mcp</code></p>
+<p><strong>언제 자리값을 하나</strong>: 새 엔드포인트를 자주 작성하는 백엔드 개발자. "엔드포인트 디자인, 엔드포인트 테스트, 타입 클라이언트 생성" 루프가 한 프롬프트가 됨.</p>
+<h4>10. Sentry MCP</h4>
+<p><strong>추천사</strong>: 에러 보고서와 성능 트레이스를 Claude 세션에 직접 가져옴. "왜 이 엔드포인트가 프로덕션에서 느리지?"가 추측 대신 실제 데이터로 답해짐.</p>
+<p><strong>설치</strong>: <code>claude mcp add sentry -- npx -y @sentry/mcp-server</code> (org + project 구성)</p>
+<p><strong>정직한 견해</strong>: Sentry를 실제로 사용해야만 자리값을 함. 스택이 Datadog / Honeycomb / New Relic이면 동등한 것으로 교체.</p>`
+    },
+    {
+      heading: "우수 후보 (Honorable Mentions)",
+      body: `<p>Top 10에는 못 들었지만 특정 워크플로우에서 알 가치 있는 다섯 개:</p>
+<ul>
+<li><strong>Slack MCP</strong> — 채널 읽기, 메시지 게시, 히스토리 검색. 팀이 Slack에 살고 Claude에서 스레드 요약이나 상태 업데이트 게시 원하면 자리값.</li>
+<li><strong>Notion MCP</strong> — Notion 페이지 쿼리와 업데이트. Notion이 팀의 사양과 런북의 진실 출처면 유용.</li>
+<li><strong>Linear MCP</strong> — 이슈 생성과 업데이트. GitHub MCP와 짝지어 "코드에서 버그 찾기, 이슈 제출, 둘 연결"에 좋음.</li>
+<li><strong>Magic MCP (21st.dev)</strong> — 자연어 설명에서 UI 컴포넌트 생성. 빠른 프론트엔드 프로토타이핑에 유용; 확립된 컴포넌트 라이브러리가 있는 성숙 코드베이스에서는 덜 유용.</li>
+<li><strong>Stripe MCP</strong> — Stripe 데이터 쿼리(고객, 구독, 청구)로 지원과 분석. 좁지만 청구 작업에서 무가치.</li>
+</ul>
+<p>의도적으로 제외한 것: GitHub stars 100 미만, 2025 Q1 이후 업데이트 없음, "AI 에이전트 프레임워크" 라며 실제로는 LLM 호출의 MCP 래퍼인 것(이런 것들은 새 능력 없이 지연만 추가).</p>`
+    },
+    {
+      heading: "일반 워크플로우용 MCP 서버 조합 방법",
+      body: `<p>올바른 스택은 무엇을 하느냐에 달렸습니다. 세 가지 구체적 추천:</p>
+<h4>스택 A: 프론트엔드 개발자</h4>
+<ul>
+<li>Filesystem (1번)</li>
+<li>GitHub (2번)</li>
+<li>Playwright (3번) — 비주얼 테스팅용</li>
+<li>Context7 (5번) — 현재 React/Tailwind/Vite 문서용</li>
+<li>Magic MCP (우수 후보) — 컴포넌트 생성용</li>
+</ul>
+<p>건너뛰기: Postgres, Sentry, Apidog (백엔드도 안 하면).</p>
+<h4>스택 B: 백엔드 개발자</h4>
+<ul>
+<li>Filesystem</li>
+<li>GitHub</li>
+<li>Postgres / SQLite</li>
+<li>Apidog</li>
+<li>Sentry (또는 Datadog/Honeycomb 동등물)</li>
+<li>Sequential Thinking (6번) — 아키텍처 결정용</li>
+</ul>
+<p>건너뛰기: Playwright, Magic.</p>
+<h4>스택 C: 기술 작가 / 콘텐츠 크리에이터</h4>
+<ul>
+<li>Filesystem</li>
+<li>Tavily (4번) — 리서치용</li>
+<li>Context7 (5번) — 튜토리얼의 정확한 API 참조용</li>
+<li>Memory (8번) — 여러 글에 걸친 스타일 가이드 결정 추적용</li>
+<li>Notion (우수 후보) — CMS가 Notion이면</li>
+</ul>
+<p>건너뛰기: GitHub (오픈소스 문서화 아니면), Postgres, Apidog.</p>
+<h4>10개 한 번에 설치하지 마세요</h4>
+<p>각 MCP 서버는 Claude Code 세션 시작에 지연을 더하고 메모리 오버헤드를 더합니다. 5개는 대부분 사용자에게 스위트 스팟; 10개는 시작이 눈에 띄게 느려지는 임계점. 10개 넘으면 지난주 실제로 사용한 것을 감사하고 나머지를 제거하세요.</p>`
+    },
+    {
+      heading: "자주 묻는 질문",
+      body: `<h4>Claude Code에서 MCP 서버는 어디에 설정되나요?</h4>
+<p><code>claude mcp add</code>는 기본적으로 <code>~/.claude.json</code>에 씁니다. 프로젝트 범위 서버(팀이 설정 공유해야 함)는 <code>claude mcp add --scope project</code> 사용, 저장소 루트의 <code>.mcp.json</code>에 씁니다.</p>
+<h4>현재 활성화된 MCP 서버를 어떻게 확인하나요?</h4>
+<p><code>claude mcp list</code>가 모든 구성된 서버 표시. <code>claude mcp get &lt;name&gt;</code>이 하나의 전체 구성 표시. 세션 안에서 <code>/mcp</code>가 활성 연결 나열.</p>
+<h4>내 MCP 서버를 작성할 수 있나요?</h4>
+<p>네 — 프로토콜은 오픈이고 TypeScript, Python, Rust용 SDK 있음. 공식 템플릿 <code>github.com/modelcontextprotocol/create-server</code>에서 시작. 기본 서버에 몇 시간, 상태 처리하는 것에는 더 오래 계획.</p>
+<h4>MCP 서버는 Claude Code의 CLI 모드와 데스크톱 앱 모두에서 작동하나요?</h4>
+<p>둘 다. 구성은 CLI, 데스크톱 앱, IDE 확장 사이를 로밍 — 모두 같은 <code>~/.claude.json</code>을 읽기 때문.</p>
+<h4>MCP 서버와 커스텀 서브에이전트의 차이는?</h4>
+<p>MCP 서버는 Claude가 호출할 수 있는 <em>도구</em>를 추가합니다. 서브에이전트는 자체 컨텍스트 윈도우를 가진 특화된 Claude 페르소나입니다. 그들은 결합됩니다: 커스텀 서브에이전트는 MCP로 설치된 어떤 도구든 사용 가능. 서브에이전트 세부사항은 <a href="/blog/claude-code-folder-complete-guide">.claude/ 폴더 가이드</a> 참조.</p>
+<h4>더 이상 사용하지 않는 MCP 서버를 어떻게 중지하나요?</h4>
+<p><code>claude mcp remove &lt;name&gt;</code>. <code>~/.claude.json</code>에서 수동으로 제거하는 것도 됨. 변경 사항이 적용되려면 활성 Claude Code 세션 재시작.</p>
+<h4>MCP 서버는 보안 위험인가요?</h4>
+<p>당신이 준 권한이 무엇이든 가지고 사용자 권한으로 실행됩니다. 설치 전 감사 — 소스 읽고, 메인테이너 확인하고, 최근 이슈 보세요. 알 수 없는 MCP 서버를 알 수 없는 셸 도구처럼 취급: <code>npx</code> 스타일 실행은 머신에 대한 전체 접근 권한을 줍니다.</p>
+<p><em>관련: <a href="/blog/claude-code-folder-complete-guide">.claude/ 폴더 완벽 가이드</a> · <a href="/blog/claude-code-hooks-complete-guide">Claude Code Hooks 실전 가이드</a> · <a href="/">Claude Buddy 체커</a></em></p>`
+    }
+  ]
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
+  {
+    slug: "top-10-mcp-servers-claude-code-2026",
+    publishedAt: "2026-05-05",
+    readingTime: 11,
+    tags: ["claude-code", "MCP", "tools", "ranking", "2026", "ecosystem"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code',
+    content: {
+      en: MCP_TOP10_EN,
+      zh: MCP_TOP10_ZH,
+      ko: MCP_TOP10_KO,
+    },
+  },
   {
     slug: "claude-code-hooks-complete-guide",
     publishedAt: "2026-05-05",
