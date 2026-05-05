@@ -3734,7 +3734,931 @@ const NAMING_KO: ArticleContent = {
   ]
 };
 
+// === Codex Pets vs Claude Code Buddy — Comparison ===
+const CODEX_VS_BUDDY_EN: ArticleContent = {
+  title: "Codex Pets vs Claude Code Buddy: Complete Comparison (2026)",
+  metaTitle: "Codex Pets vs Claude Code Buddy: Complete Comparison (2026)",
+  metaDescription: "Side-by-side comparison of OpenAI Codex Pets and Claude Code Buddy. Commands, philosophy, ecosystem, migration guide, and which CLI pet system is right for you in 2026.",
+  excerpt: "OpenAI shipped Codex Pets in May 2026, just months after Anthropic retired Claude Code Buddy in v2.1.97. They look similar — animated terminal companions tied to your AI coding agent — but the philosophies could not be more different. Here is the complete comparison.",
+  sections: [
+    {
+      heading: "Two Pet Systems, Two Philosophies",
+      body: `<p><strong>Codex Pets vs Claude Code Buddy</strong> is now a real question developers ask when picking an AI coding CLI. In May 2026, OpenAI rolled out Codex Pets — animated companions that float over your editor and surface what the Codex agent is doing in real time. A few months earlier, Anthropic quietly removed Claude Code Buddy in version 2.1.97 and pivoted that surface area into the new <a href="/powerup-tracker">/powerup</a> command.</p>
+<p>On the surface they look like the same idea: a small creature that lives in your terminal and reacts to your AI assistant. Underneath, they answer different questions. Codex Pets is a <strong>status layer</strong> — a always-visible window into agent state. Claude Buddy was a <strong>identity artifact</strong> — a deterministic, lifelong companion derived from your account UUID.</p>
+<p>This guide compares both systems feature by feature, explains why they took such different paths, and gives you a concrete migration plan if you used Claude Buddy and now want a Codex Pet (or want to stay in the Claude Code ecosystem with /powerup instead).</p>`
+    },
+    {
+      heading: "Quick Comparison Matrix",
+      body: `<p>If you only read one section, read this table. Everything below is detail.</p>
+<table>
+<tr><th>Dimension</th><th>Codex Pets</th><th>Claude Code Buddy</th></tr>
+<tr><td>Status</td><td>Live (May 2026)</td><td>Retired in v2.1.97 — replaced by /powerup</td></tr>
+<tr><td>Vendor</td><td>OpenAI</td><td>Anthropic</td></tr>
+<tr><td>Spawn command</td><td><code>/pet</code> and <code>/hatch</code></td><td><code>/buddy</code> (no longer available)</td></tr>
+<tr><td>Pet identity</td><td>You pick from 8 built-ins or generate via AI</td><td>Deterministic from your <code>accountUuid</code> — no choice</td></tr>
+<tr><td>Built-in pets</td><td>8 (Codex, Dewey, Rocky, etc.)</td><td>18 species × 5 rarity tiers</td></tr>
+<tr><td>Customization</td><td><code>/hatch</code> generates pets from a prompt</td><td>None — your buddy is fixed</td></tr>
+<tr><td>Surface</td><td>Floating overlay window</td><td>Inline ASCII art in the CLI</td></tr>
+<tr><td>State signaling</td><td>Yes — red clock, green check, thought bubbles</td><td>No — buddy was decorative</td></tr>
+<tr><td>Cross-platform</td><td>macOS + Windows</td><td>Anywhere Claude Code ran</td></tr>
+<tr><td>Third-party ecosystem</td><td>Petdex (467+ pets), Codex Pet Share</td><td>Community tools, claudebuddy.art</td></tr>
+<tr><td>Emotional weight</td><td>Low — pets are interchangeable</td><td>High — your buddy is irreplaceable</td></tr>
+</table>
+<p>The matrix already tells most of the story: Codex Pets optimizes for <em>utility and choice</em>, Claude Buddy optimized for <em>identity and permanence</em>. Neither approach is wrong; they serve different jobs.</p>`
+    },
+    {
+      heading: "How Codex Pets Actually Work",
+      body: `<p>Codex Pets ships inside the Codex desktop app on macOS and Windows. After updating, type <code>/pet</code> in the prompt and a small animated companion spawns into a floating window that hovers above your editor. There are eight built-in designs to choose from, each with a distinct personality and visual style.</p>
+<h4>The /pet Command</h4>
+<p>Running <code>/pet</code> opens a picker with all eight built-ins. The default is a blue creature also named Codex. Other options include Dewey (a duck-shaped companion) and Rocky. You can switch pets at any time without losing state.</p>
+<h4>The /hatch Command</h4>
+<p>If none of the eight built-ins fit your vibe, type <code>/hatch</code> followed by a prompt and the model will generate a custom pet on the fly. This is the killer feature: every developer can have a unique companion, but unlike Claude Buddy, the uniqueness comes from <em>your imagination</em>, not from a hash of your account ID.</p>
+<h4>Status Signaling</h4>
+<p>The pet is not just decorative. Its thought bubble communicates agent state in real time:</p>
+<ul>
+<li><strong>Red clock face</strong> — the agent is paused, waiting for your approval before running a command</li>
+<li><strong>Green checkmark</strong> — the agent finished a task and is ready for a new prompt</li>
+<li><strong>Active thread display</strong> — shows which conversation the agent is currently working on</li>
+</ul>
+<p>This solves a real workflow problem. Codex agents can run for minutes on a single task, and developers were tab-switching constantly to check progress. The pet keeps that information glanceable.</p>`
+    },
+    {
+      heading: "What Claude Code Buddy Was (and What Replaced It)",
+      body: `<p>Claude Code Buddy worked very differently. It launched as a hidden Tamagotchi-style feature inside Claude Code and was tied to your <code>accountUuid</code> via a deterministic pipeline:</p>
+<ol>
+<li>Your UUID was concatenated with the salt <code>friend-2026-401</code></li>
+<li>The combined string was hashed with <strong>FNV-1a</strong> to a 32-bit integer</li>
+<li>That integer seeded a <strong>Mulberry32 PRNG</strong></li>
+<li>The PRNG sequentially picked rarity, species, eyes, hat, shiny status, and 5 stats</li>
+</ol>
+<p>The system included <strong>18 species</strong> (Duck, Dragon, Owl, Octopus, and 14 more), <strong>5 rarity tiers</strong> (Common 60%, Uncommon 25%, Rare 10%, Epic 4%, Legendary 1%), an independent <strong>1% Shiny chance</strong>, and a 5-stat personality system. Combined odds for a Legendary Shiny of any species: 1 in 10,000.</p>
+<p>The killer property: same UUID, same buddy, every time. Forever. Two developers could compare buddies the way trading-card collectors compared cards. Your buddy was as much a part of your developer identity as your GitHub avatar.</p>
+<h4>Why It Was Retired</h4>
+<p>In <strong>v2.1.97</strong>, Anthropic removed the <code>/buddy</code> command entirely and routed its surface area into <a href="/powerup-tracker">/powerup</a> — a productivity-focused feature that tracks shipped features rather than displays a pet. The community took it hard. See our <a href="/blog/claude-code-vanished-2197">post on the v2.1.97 great vanishing</a> for the full timeline.</p>
+<h4>What Survives</h4>
+<p>The algorithm is deterministic and the source code leaked, so the buddy <em>computation</em> survives even though the feature does not. That is what <a href="/">claudebuddy.art</a> is: a faithful reimplementation of the original algorithm. Paste your UUID, get the buddy you would have had. Browse all 18 species at <a href="/species">/species</a>. The bodies are eternal even when the runtime is gone.</p>`
+    },
+    {
+      heading: "The Petdex Ecosystem vs the Buddy Checker",
+      body: `<p>Both systems grew third-party ecosystems, but they serve different needs.</p>
+<h4>Petdex: Codex's Killer Advantage</h4>
+<p>Petdex (petdex.crafter.run) is a community catalog of <strong>467+ open-source Codex companions</strong>. Anyone can publish a pet, and installation is one command:</p>
+<pre><code>npx petdex install &lt;pet-name&gt;</code></pre>
+<p>The catalog ranges from a Super Saiyan Blue Goku-style companion to a monochrome detective spider in a fedora to a Game &amp; Watch–style pixel pet. There is also Codex Pet Share, an alternative gallery focused on shareable companion designs.</p>
+<p>The implication for the ecosystem: Codex Pets has near-zero friction for new content. If you can imagine a pet, you can build it, publish it, and have it spread through npm in an afternoon. This is closer to the VS Code extension marketplace than to Tamagotchi.</p>
+<h4>Claude Buddy Checker</h4>
+<p>The Claude Buddy ecosystem evolved differently — toward <strong>archival and identity</strong>, not customization. <a href="/">claudebuddy.art</a> exists because users wanted to keep finding out what their buddy was, even after the official feature went away. Tools like the <a href="https://github.com/1270011/claude-buddy">MCP-based revive tool</a> aim to restore the runtime experience.</p>
+<p>The contrast is sharp: Petdex grew because Codex Pets is meant to be customized; the Buddy Checker grew because Claude Buddy was meant to be permanent and was lost.</p>`
+    },
+    {
+      heading: "Migration Guide: From Claude Buddy to Codex Pets",
+      body: `<p>If you used Claude Code Buddy and are now switching to Codex (or running both), here is the practical migration path.</p>
+<h4>Step 1: Record What You Had</h4>
+<p>Before doing anything else, paste your old <code>accountUuid</code> into <a href="/">claudebuddy.art</a> and screenshot the result. Your buddy's species, rarity, stats, and any name you gave it locally are part of your developer history. Save them to a personal README, dotfiles repo, or private gist.</p>
+<h4>Step 2: Decide What You Want From a Pet</h4>
+<p>Codex Pets and Claude Buddy answered different questions:</p>
+<ul>
+<li><strong>Want agent state at a glance?</strong> Codex Pets is the right tool. <code>/pet</code> in Codex, pick a built-in, done.</li>
+<li><strong>Want a unique creature that is yours and only yours?</strong> Use <code>/hatch</code> with a prompt that means something to you. Save the prompt — it is the closest analogue to a deterministic UUID.</li>
+<li><strong>Want to keep the Claude Code ecosystem and skip Codex entirely?</strong> Use <a href="/powerup-tracker">/powerup</a> for productivity tracking, and let claudebuddy.art be your buddy archive.</li>
+</ul>
+<h4>Step 3: Install One or Two Petdex Pets</h4>
+<p>Even after picking a built-in, browse Petdex. The community pets are surprisingly good and they signal something about your taste the way a desktop wallpaper does.</p>
+<h4>Step 4: Do Not Try to Recreate Your Old Buddy</h4>
+<p>It is tempting to <code>/hatch</code> a pet that looks exactly like your old Legendary Shiny Dragon. Resist. Codex Pets is not the same medium. Trying to copy a buddy makes the new pet feel like a counterfeit. Use the migration as a chance to pick something new.</p>`
+    },
+    {
+      heading: "Frequently Asked Questions",
+      body: `<h4>Is Codex Pets free?</h4>
+<p>Yes. Codex Pets ships with the Codex app at no extra cost on both macOS and Windows. Petdex pets are open source and free to install via <code>npx petdex install</code>.</p>
+<h4>Can I get my Claude Code Buddy back?</h4>
+<p>Not in the official Claude Code runtime — <code>/buddy</code> was removed in v2.1.97 and has not returned. You can still <em>view</em> your buddy at <a href="/">claudebuddy.art</a> using your <code>accountUuid</code>, and community projects like the MCP-based revive tool reimplement the experience outside the official client.</p>
+<h4>Are Codex Pets deterministic like Claude Buddy was?</h4>
+<p>No. Codex Pets are user-chosen (or AI-generated via <code>/hatch</code>). There is no algorithm that maps your account ID to a specific pet. This is a deliberate design choice — Codex Pets prioritizes customization, Claude Buddy prioritized permanence.</p>
+<h4>Which pet system is better for productivity?</h4>
+<p>Codex Pets, by a wide margin. The status overlay (red clock, green check, active thread) gives you real workflow information. Claude Buddy was charming but purely decorative. If your goal is shipping code faster, the Codex pet is doing real work.</p>
+<h4>Can I use Codex Pets and Claude Code together?</h4>
+<p>Yes. They run in different processes and do not conflict. Many developers use Claude Code for one project type and Codex for another, and the Codex pet only renders when the Codex app is in focus.</p>
+<h4>What happens if I switch built-in pets in Codex?</h4>
+<p>State persists across pet swaps. The pet is a skin over the same agent activity feed, so changing from Dewey to Rocky does not reset anything. Petdex pets behave the same way.</p>
+<h4>Will Anthropic bring Buddy back?</h4>
+<p>No public statement either way. The pivot to <a href="/powerup-tracker">/powerup</a> suggests the decision was strategic, not temporary. If you want a pet inside Claude Code, your realistic options are the community MCP revive tool or — honestly — using Codex for the pet experience.</p>
+<p><em>Want to see what Buddy you would have had? Try the <a href="/">Claude Buddy Checker</a>. Browse the full <a href="/species">species catalog</a>. Track your shipped features with <a href="/powerup-tracker">/powerup</a>.</em></p>`
+    }
+  ]
+};
+
+const CODEX_VS_BUDDY_ZH: ArticleContent = {
+  title: "Codex Pets 对比 Claude Code Buddy：完整对照（2026）",
+  metaTitle: "Codex Pets vs Claude Code Buddy 对比指南 (2026)",
+  metaDescription: "OpenAI Codex Pets 与 Claude Code Buddy 全方位对比：命令、设计哲学、生态系统、迁移指南，2026 年 CLI 宠物系统选择建议。",
+  excerpt: "OpenAI 在 2026 年 5 月推出 Codex Pets，距离 Anthropic 在 v2.1.97 中下线 Claude Code Buddy 仅几个月。两者都是 AI 编码代理的终端宠物，但设计哲学完全不同。这是完整对比。",
+  sections: [
+    {
+      heading: "两套宠物系统，两种哲学",
+      body: `<p><strong>Codex Pets 对比 Claude Code Buddy</strong> 已经成为开发者选择 AI 编码 CLI 时的真实问题。2026 年 5 月，OpenAI 推出了 Codex Pets——浮动在编辑器之上、实时显示 Codex 代理状态的动画伙伴。几个月前，Anthropic 在 2.1.97 版本中静默移除了 Claude Code Buddy，将相关功能转移到了新的 <a href="/powerup-tracker">/powerup</a> 命令。</p>
+<p>表面上它们是同一个想法：终端里一个小生物，对你的 AI 助手做出反应。但底层在解决的是不同的问题。Codex Pets 是<strong>状态层</strong>——一个常驻可见的代理状态窗口。Claude Buddy 则是<strong>身份资产</strong>——基于你账户 UUID 决定性派生的、终身不变的伙伴。</p>
+<p>本指南逐项对比两套系统，解释它们为何走上完全不同的路径，并给出你从 Claude Buddy 迁移到 Codex Pet 的具体方案（或者继续留在 Claude Code 生态、改用 /powerup）。</p>`
+    },
+    {
+      heading: "速览对比矩阵",
+      body: `<p>如果你只看一个章节，就看这张表。下面所有内容都是细节展开。</p>
+<table>
+<tr><th>维度</th><th>Codex Pets</th><th>Claude Code Buddy</th></tr>
+<tr><td>状态</td><td>已上线（2026 年 5 月）</td><td>v2.1.97 下线，被 /powerup 取代</td></tr>
+<tr><td>厂商</td><td>OpenAI</td><td>Anthropic</td></tr>
+<tr><td>触发命令</td><td><code>/pet</code> 与 <code>/hatch</code></td><td><code>/buddy</code>（不再可用）</td></tr>
+<tr><td>宠物身份</td><td>8 种内置中选择，或通过 AI 生成</td><td>由 <code>accountUuid</code> 决定性派生，无法选择</td></tr>
+<tr><td>内置数量</td><td>8 种（Codex、Dewey、Rocky 等）</td><td>18 种 × 5 个稀有度</td></tr>
+<tr><td>自定义</td><td><code>/hatch</code> 接 prompt 生成</td><td>无——你的 buddy 已经被固定</td></tr>
+<tr><td>呈现方式</td><td>浮动覆盖窗口</td><td>CLI 内嵌 ASCII 艺术</td></tr>
+<tr><td>状态信号</td><td>有——红色时钟、绿色对勾、思考气泡</td><td>无——buddy 是纯装饰</td></tr>
+<tr><td>跨平台</td><td>macOS + Windows</td><td>Claude Code 支持的所有平台</td></tr>
+<tr><td>第三方生态</td><td>Petdex（467+ 宠物）、Codex Pet Share</td><td>社区工具、claudebuddy.art</td></tr>
+<tr><td>情感分量</td><td>低——宠物可互换</td><td>高——你的 buddy 不可替代</td></tr>
+</table>
+<p>这张矩阵已经讲完了大半故事：Codex Pets 优化的是<em>实用性与选择权</em>，Claude Buddy 优化的是<em>身份与永久性</em>。两种方向都没错，它们解决的是不同的问题。</p>`
+    },
+    {
+      heading: "Codex Pets 实际是怎么工作的",
+      body: `<p>Codex Pets 内置在 macOS 与 Windows 的 Codex 桌面应用里。更新后在提示符输入 <code>/pet</code>，一只动画伙伴就会出现在浮动窗口中、悬浮在编辑器上方。可以从八种内置设计中选择，每种都有独立的性格与视觉风格。</p>
+<h4>/pet 命令</h4>
+<p>运行 <code>/pet</code> 会打开八种内置宠物的选择器。默认是同名的蓝色生物 Codex。其他选项包括 Dewey（鸭形伙伴）和 Rocky 等。可以随时切换，状态不会丢失。</p>
+<h4>/hatch 命令</h4>
+<p>如果八种内置都不合心意，输入 <code>/hatch</code> 加上 prompt，模型会即时生成自定义宠物。这是杀手级特性：每个开发者都能拥有独一无二的伙伴，但与 Claude Buddy 不同，独特性来自<em>你的想象力</em>，而不是账户 ID 的哈希。</p>
+<h4>状态信号</h4>
+<p>这只宠物不是装饰。它的思考气泡实时传达代理状态：</p>
+<ul>
+<li><strong>红色时钟</strong>——代理已暂停，等待你批准再执行命令</li>
+<li><strong>绿色对勾</strong>——代理已完成任务，可以接受新 prompt</li>
+<li><strong>活动线程显示</strong>——展示代理当前正在处理的对话</li>
+</ul>
+<p>这解决了一个真实的工作流问题。Codex 代理在单个任务上可能跑数分钟，开发者过去要不停切换标签页查进度。宠物把这部分信息变成了一眼可见。</p>`
+    },
+    {
+      heading: "Claude Code Buddy 是什么（以及被什么取代了）",
+      body: `<p>Claude Code Buddy 的工作方式截然不同。它作为 Claude Code 内一个隐藏的电子鸡式功能上线，通过决定性流水线绑定到你的 <code>accountUuid</code>：</p>
+<ol>
+<li>UUID 与盐值 <code>friend-2026-401</code> 拼接</li>
+<li>拼接结果用 <strong>FNV-1a</strong> 哈希到一个 32 位整数</li>
+<li>该整数为 <strong>Mulberry32 PRNG</strong> 提供种子</li>
+<li>PRNG 依次决定稀有度、物种、眼睛、帽子、闪光状态以及 5 项属性</li>
+</ol>
+<p>系统包含 <strong>18 个物种</strong>（Duck、Dragon、Owl、Octopus 等），<strong>5 个稀有度等级</strong>（Common 60%、Uncommon 25%、Rare 10%、Epic 4%、Legendary 1%），独立的 <strong>1% 闪光概率</strong>，以及 5 项性格属性系统。任意物种 Legendary Shiny 的综合概率：万分之一。</p>
+<p>它的杀手属性是：相同 UUID，永远是相同 buddy。永远。两个开发者可以像集换式卡牌玩家比卡一样比 buddy。你的 buddy 是开发者身份的一部分，与 GitHub 头像同等重要。</p>
+<h4>它为何被下线</h4>
+<p>在 <strong>v2.1.97</strong> 中，Anthropic 完全移除了 <code>/buddy</code> 命令，把这块界面收益转给了 <a href="/powerup-tracker">/powerup</a>——一个跟踪已发布功能的生产力工具，不再展示宠物。社区反响强烈。完整时间线见我们的<a href="/blog/claude-code-vanished-2197">v2.1.97 大消失分析</a>。</p>
+<h4>留下了什么</h4>
+<p>算法是决定性的，而且源码已被泄露，所以 buddy 的<em>计算逻辑</em>仍在，即便功能本身没了。<a href="/">claudebuddy.art</a> 就是它的忠实再实现。粘贴 UUID，得到你本来会拥有的 buddy。在 <a href="/species">/species</a> 浏览全部 18 个物种。运行时已逝，肉身永存。</p>`
+    },
+    {
+      heading: "Petdex 生态 vs Buddy Checker",
+      body: `<p>两套系统都长出了第三方生态，但它们服务的需求不同。</p>
+<h4>Petdex：Codex 的杀手锏</h4>
+<p>Petdex（petdex.crafter.run）是一个 <strong>467+ 开源 Codex 伙伴</strong>的社区目录。任何人都能发布宠物，安装只要一行命令：</p>
+<pre><code>npx petdex install &lt;pet-name&gt;</code></pre>
+<p>目录里从超级赛亚人风格的 Goku 伙伴，到戴礼帽的黑白侦探蜘蛛，到 Game &amp; Watch 风格的像素宠物，应有尽有。还有 Codex Pet Share，一个专注于可分享伙伴设计的备选画廊。</p>
+<p>对生态的意义是：Codex Pets 几乎没有新内容门槛。能想象一只宠物，就能在一下午之内做好、发布、通过 npm 扩散出去。这更接近 VS Code 扩展市场，而非电子鸡。</p>
+<h4>Claude Buddy Checker</h4>
+<p>Claude Buddy 生态的演化方向不同——朝<strong>归档与身份</strong>，而非自定义。<a href="/">claudebuddy.art</a> 之所以存在，是因为官方功能消失之后，用户仍然想知道自己的 buddy 是谁。<a href="https://github.com/1270011/claude-buddy">基于 MCP 的复活工具</a>等项目的目标则是恢复运行时体验。</p>
+<p>对比鲜明：Petdex 兴起是因为 Codex Pets 本来就是用来定制的；Buddy Checker 兴起是因为 Claude Buddy 本来要永久存在却被失去了。</p>`
+    },
+    {
+      heading: "迁移指南：从 Claude Buddy 到 Codex Pets",
+      body: `<p>如果你用过 Claude Code Buddy，正在切换到 Codex（或同时跑两边），这是实用迁移路径。</p>
+<h4>步骤 1：先把过去记下来</h4>
+<p>第一件事：把旧的 <code>accountUuid</code> 粘进 <a href="/">claudebuddy.art</a>，截图保存结果。你 buddy 的物种、稀有度、属性，以及你给它起过的本地名字，都是开发者历史的一部分。把它们存进个人 README、dotfiles 仓库或私密 gist。</p>
+<h4>步骤 2：决定你要的是什么</h4>
+<p>Codex Pets 和 Claude Buddy 回答的是不同问题：</p>
+<ul>
+<li><strong>需要一眼看到代理状态？</strong>Codex Pets 是对的工具。在 Codex 输入 <code>/pet</code>，挑一个内置，搞定。</li>
+<li><strong>想要一只属于你、只属于你的独特生物？</strong>用 <code>/hatch</code> 加一段对你有意义的 prompt。把这段 prompt 存好——这是最接近决定性 UUID 的等价物。</li>
+<li><strong>想留在 Claude Code 生态、完全不碰 Codex？</strong>用 <a href="/powerup-tracker">/powerup</a> 跟踪生产力，让 claudebuddy.art 当你的 buddy 档案库。</li>
+</ul>
+<h4>步骤 3：装一两只 Petdex 宠物</h4>
+<p>就算选了内置，也去逛逛 Petdex。社区宠物质量出乎意料地好，而且它们能像桌面壁纸一样表达你的品味。</p>
+<h4>步骤 4：不要试图重造你过去的 buddy</h4>
+<p>会很想用 <code>/hatch</code> 生成一只长得跟过去 Legendary Shiny Dragon 一模一样的宠物。忍住。Codex Pets 不是同一种媒介。试图复制 buddy 会让新宠物像赝品。把迁移当成挑选新东西的契机。</p>`
+    },
+    {
+      heading: "常见问题",
+      body: `<h4>Codex Pets 是免费的吗？</h4>
+<p>是的。Codex Pets 随 Codex 应用免费提供，macOS 和 Windows 都有。Petdex 上的宠物是开源的，<code>npx petdex install</code> 即可免费安装。</p>
+<h4>能把我的 Claude Code Buddy 找回来吗？</h4>
+<p>在 Claude Code 官方运行时里不能——<code>/buddy</code> 已在 v2.1.97 移除且未回归。但你仍然可以在 <a href="/">claudebuddy.art</a> <em>查看</em>你的 buddy（用 <code>accountUuid</code>），社区项目如基于 MCP 的复活工具也在官方客户端之外重现这种体验。</p>
+<h4>Codex Pets 像 Claude Buddy 那样是决定性的吗？</h4>
+<p>不是。Codex Pets 是用户主动选的（或通过 <code>/hatch</code> AI 生成）。没有任何算法把账户 ID 映射到特定宠物。这是有意为之——Codex Pets 优先考虑可定制，Claude Buddy 优先考虑永久性。</p>
+<h4>哪种宠物系统对生产力更有用？</h4>
+<p>Codex Pets，差距明显。状态覆盖层（红钟、绿勾、活动线程）提供真实的工作流信息。Claude Buddy 很可爱但纯装饰。如果目标是更快地交付代码，Codex 宠物在做实事。</p>
+<h4>能同时使用 Codex Pets 和 Claude Code 吗？</h4>
+<p>能。它们运行在不同进程，不冲突。很多开发者一个项目用 Claude Code、另一个用 Codex，Codex 宠物仅在 Codex 应用获得焦点时渲染。</p>
+<h4>在 Codex 里换内置宠物会怎样？</h4>
+<p>状态在切换间会保留。宠物只是同一个代理活动流的"皮肤"，从 Dewey 切到 Rocky 不会重置任何东西。Petdex 宠物的行为方式相同。</p>
+<h4>Anthropic 会让 Buddy 回归吗？</h4>
+<p>官方没有任何表态。转向 <a href="/powerup-tracker">/powerup</a> 暗示这是战略性决策，不是临时性的。如果你想要在 Claude Code 里有宠物，现实选项是社区 MCP 复活工具，或者——坦白讲——用 Codex 体验宠物。</p>
+<p><em>想看你本来会拥有的 buddy？试试 <a href="/">Claude Buddy 查询器</a>。在 <a href="/species">物种图鉴</a>浏览全部物种。用 <a href="/powerup-tracker">/powerup</a> 跟踪你已发布的功能。</em></p>`
+    }
+  ]
+};
+
+const CODEX_VS_BUDDY_KO: ArticleContent = {
+  title: "Codex Pets vs Claude Code Buddy: 완벽 비교 (2026)",
+  metaTitle: "Codex Pets vs Claude Code Buddy 비교 가이드 (2026)",
+  metaDescription: "OpenAI Codex Pets와 Claude Code Buddy의 전방위 비교. 명령어, 설계 철학, 생태계, 마이그레이션 가이드. 2026년 CLI 펫 시스템 선택 가이드.",
+  excerpt: "OpenAI는 2026년 5월에 Codex Pets를 출시했습니다. Anthropic이 v2.1.97에서 Claude Code Buddy를 종료한 지 불과 몇 달 후입니다. 둘 다 AI 코딩 에이전트와 연결된 터미널 동반자처럼 보이지만, 설계 철학은 완전히 다릅니다. 이것이 완전한 비교입니다.",
+  sections: [
+    {
+      heading: "두 펫 시스템, 두 가지 철학",
+      body: `<p><strong>Codex Pets vs Claude Code Buddy</strong>는 이제 개발자가 AI 코딩 CLI를 선택할 때 던지는 실질적인 질문이 되었습니다. 2026년 5월, OpenAI는 Codex Pets를 출시했습니다 — 에디터 위에 떠 있으면서 Codex 에이전트가 무엇을 하고 있는지 실시간으로 보여주는 애니메이션 동반자입니다. 그 몇 달 전, Anthropic은 v2.1.97에서 Claude Code Buddy를 조용히 제거하고 그 영역을 새로운 <a href="/powerup-tracker">/powerup</a> 명령어로 옮겼습니다.</p>
+<p>표면적으로는 같은 아이디어처럼 보입니다: 터미널에 사는 작은 생명체가 AI 어시스턴트에 반응하는 것. 그러나 그 아래에서는 서로 다른 질문에 답하고 있습니다. Codex Pets는 <strong>상태 레이어</strong>입니다 — 항상 보이는 에이전트 상태 창. Claude Buddy는 <strong>정체성 아티팩트</strong>였습니다 — 계정 UUID에서 결정론적으로 파생된 평생의 동반자.</p>
+<p>이 가이드는 두 시스템을 항목별로 비교하고, 왜 그토록 다른 길을 갔는지 설명하며, Claude Buddy를 사용했고 이제 Codex Pet을 원하는 (또는 /powerup으로 Claude Code 생태계에 머물고 싶은) 경우의 구체적인 마이그레이션 계획을 제공합니다.</p>`
+    },
+    {
+      heading: "빠른 비교 매트릭스",
+      body: `<p>한 섹션만 읽는다면, 이 표를 읽으세요. 그 아래는 모두 세부사항입니다.</p>
+<table>
+<tr><th>차원</th><th>Codex Pets</th><th>Claude Code Buddy</th></tr>
+<tr><td>상태</td><td>활성 (2026년 5월)</td><td>v2.1.97에서 종료 — /powerup으로 대체</td></tr>
+<tr><td>벤더</td><td>OpenAI</td><td>Anthropic</td></tr>
+<tr><td>스폰 명령</td><td><code>/pet</code>와 <code>/hatch</code></td><td><code>/buddy</code> (더 이상 사용 불가)</td></tr>
+<tr><td>펫 정체성</td><td>8개 빌트인에서 선택, 또는 AI로 생성</td><td><code>accountUuid</code>에서 결정론적 파생 — 선택 불가</td></tr>
+<tr><td>빌트인 펫</td><td>8개 (Codex, Dewey, Rocky 등)</td><td>18종 × 5개 희귀도</td></tr>
+<tr><td>커스터마이즈</td><td><code>/hatch</code>로 프롬프트에서 생성</td><td>없음 — buddy는 고정</td></tr>
+<tr><td>표시 방식</td><td>플로팅 오버레이 창</td><td>CLI 내 인라인 ASCII 아트</td></tr>
+<tr><td>상태 시그널</td><td>있음 — 빨간 시계, 녹색 체크, 사고 거품</td><td>없음 — buddy는 장식용</td></tr>
+<tr><td>크로스플랫폼</td><td>macOS + Windows</td><td>Claude Code가 지원하는 모든 곳</td></tr>
+<tr><td>서드파티 생태계</td><td>Petdex (467+ 펫), Codex Pet Share</td><td>커뮤니티 도구, claudebuddy.art</td></tr>
+<tr><td>감정적 무게</td><td>낮음 — 펫은 교환 가능</td><td>높음 — buddy는 대체 불가</td></tr>
+</table>
+<p>이 매트릭스가 이미 이야기의 대부분을 말해줍니다: Codex Pets는 <em>유틸리티와 선택</em>을 최적화하고, Claude Buddy는 <em>정체성과 영구성</em>을 최적화했습니다. 어느 접근도 틀리지 않았습니다 — 다른 일을 합니다.</p>`
+    },
+    {
+      heading: "Codex Pets는 실제로 어떻게 작동하는가",
+      body: `<p>Codex Pets는 macOS와 Windows의 Codex 데스크톱 앱에 포함되어 있습니다. 업데이트 후 프롬프트에 <code>/pet</code>을 입력하면 작은 애니메이션 동반자가 에디터 위에 떠 있는 플로팅 창으로 스폰됩니다. 8개의 빌트인 디자인 중에서 선택할 수 있으며, 각각 고유한 성격과 비주얼 스타일을 가지고 있습니다.</p>
+<h4>/pet 명령어</h4>
+<p><code>/pet</code>을 실행하면 8개 빌트인이 모두 있는 피커가 열립니다. 기본값은 같은 이름의 파란색 생명체 Codex입니다. 다른 옵션으로는 Dewey (오리 모양 동반자)와 Rocky 등이 있습니다. 상태를 잃지 않고 언제든지 펫을 전환할 수 있습니다.</p>
+<h4>/hatch 명령어</h4>
+<p>8개 빌트인 중 어떤 것도 마음에 들지 않는다면, <code>/hatch</code>에 프롬프트를 붙여서 입력하면 모델이 즉석에서 커스텀 펫을 생성합니다. 이것이 킬러 기능입니다: 모든 개발자가 고유한 동반자를 가질 수 있지만, Claude Buddy와 달리 고유성은 계정 ID 해시가 아닌 <em>당신의 상상력</em>에서 옵니다.</p>
+<h4>상태 시그널링</h4>
+<p>이 펫은 단순히 장식용이 아닙니다. 사고 거품이 에이전트 상태를 실시간으로 전달합니다:</p>
+<ul>
+<li><strong>빨간 시계 얼굴</strong> — 에이전트가 일시 중지되어 명령을 실행하기 전에 승인을 기다리고 있음</li>
+<li><strong>녹색 체크마크</strong> — 에이전트가 작업을 마쳤고 새 프롬프트를 받을 준비가 됨</li>
+<li><strong>활성 스레드 표시</strong> — 에이전트가 현재 작업 중인 대화 표시</li>
+</ul>
+<p>이것이 실제 워크플로우 문제를 해결합니다. Codex 에이전트는 단일 작업에서 몇 분 동안 실행될 수 있고, 개발자는 진행 상황을 확인하기 위해 끊임없이 탭을 전환했습니다. 펫은 그 정보를 한눈에 볼 수 있게 만듭니다.</p>`
+    },
+    {
+      heading: "Claude Code Buddy는 무엇이었나 (그리고 무엇이 대체했나)",
+      body: `<p>Claude Code Buddy는 매우 다르게 작동했습니다. Claude Code 내의 숨겨진 다마고치 스타일 기능으로 출시되어 결정론적 파이프라인을 통해 <code>accountUuid</code>에 연결되었습니다:</p>
+<ol>
+<li>UUID가 솔트 <code>friend-2026-401</code>과 결합됨</li>
+<li>결합된 문자열이 <strong>FNV-1a</strong>로 해시되어 32비트 정수가 됨</li>
+<li>그 정수가 <strong>Mulberry32 PRNG</strong>를 시드함</li>
+<li>PRNG가 순차적으로 희귀도, 종, 눈, 모자, 샤이니 상태, 5개 스탯을 결정함</li>
+</ol>
+<p>시스템에는 <strong>18종</strong> (Duck, Dragon, Owl, Octopus 등 14종 더)이 포함됩니다. <strong>5단계 희귀도</strong> (Common 60%, Uncommon 25%, Rare 10%, Epic 4%, Legendary 1%), 독립적인 <strong>1% 샤이니 확률</strong>, 그리고 5스탯 성격 시스템. 모든 종에 대한 Legendary Shiny의 결합 확률: 10,000분의 1.</p>
+<p>킬러 속성은: 같은 UUID, 같은 buddy, 매번. 영원히. 두 개발자가 트레이딩 카드 수집가가 카드를 비교하듯 buddy를 비교할 수 있었습니다. buddy는 GitHub 아바타만큼이나 개발자 정체성의 일부였습니다.</p>
+<h4>왜 종료되었나</h4>
+<p><strong>v2.1.97</strong>에서 Anthropic은 <code>/buddy</code> 명령어를 완전히 제거하고 그 표면을 <a href="/powerup-tracker">/powerup</a>으로 라우팅했습니다 — 펫을 표시하는 대신 출시된 기능을 추적하는 생산성 중심 기능입니다. 커뮤니티는 충격을 받았습니다. 전체 타임라인은 <a href="/blog/claude-code-vanished-2197">v2.1.97 대소실 글</a>을 참조하세요.</p>
+<h4>살아남은 것</h4>
+<p>알고리즘이 결정론적이고 소스 코드가 유출되었기 때문에, buddy <em>계산</em>은 기능이 사라져도 살아남습니다. 그것이 <a href="/">claudebuddy.art</a>가 하는 일입니다: 원본 알고리즘의 충실한 재구현. UUID를 붙여넣으면 가졌을 buddy를 얻습니다. <a href="/species">/species</a>에서 18종 모두 탐색하세요. 런타임이 사라져도 몸체는 영원합니다.</p>`
+    },
+    {
+      heading: "Petdex 생태계 vs Buddy Checker",
+      body: `<p>두 시스템 모두 서드파티 생태계를 키웠지만, 서로 다른 요구를 충족합니다.</p>
+<h4>Petdex: Codex의 킬러 어드밴티지</h4>
+<p>Petdex (petdex.crafter.run)는 <strong>467+개의 오픈소스 Codex 동반자</strong>의 커뮤니티 카탈로그입니다. 누구나 펫을 게시할 수 있으며, 설치는 한 줄 명령어입니다:</p>
+<pre><code>npx petdex install &lt;pet-name&gt;</code></pre>
+<p>카탈로그는 슈퍼 사이언 블루 고쿠 스타일 동반자부터, 페도라를 쓴 흑백 탐정 거미, Game &amp; Watch 스타일 픽셀 펫까지 다양합니다. 공유 가능한 동반자 디자인에 초점을 맞춘 대안 갤러리인 Codex Pet Share도 있습니다.</p>
+<p>생태계에 대한 함의: Codex Pets는 새 콘텐츠 진입 장벽이 거의 없습니다. 펫을 상상할 수 있다면, 만들고 게시하고 npm을 통해 한 오후에 퍼뜨릴 수 있습니다. 다마고치보다는 VS Code 확장 마켓플레이스에 가깝습니다.</p>
+<h4>Claude Buddy Checker</h4>
+<p>Claude Buddy 생태계는 다르게 진화했습니다 — 커스터마이즈가 아닌 <strong>아카이빙과 정체성</strong>을 향해. <a href="/">claudebuddy.art</a>가 존재하는 이유는 공식 기능이 사라진 후에도 사용자가 자신의 buddy가 누구인지 계속 알고 싶어 했기 때문입니다. <a href="https://github.com/1270011/claude-buddy">MCP 기반 부활 도구</a>와 같은 도구는 런타임 경험을 복원하는 것을 목표로 합니다.</p>
+<p>대비가 뚜렷합니다: Petdex는 Codex Pets가 커스터마이즈되도록 의도되었기 때문에 자랐고, Buddy Checker는 Claude Buddy가 영구적이도록 의도되었지만 잃어버렸기 때문에 자랐습니다.</p>`
+    },
+    {
+      heading: "마이그레이션 가이드: Claude Buddy에서 Codex Pets로",
+      body: `<p>Claude Code Buddy를 사용했고 이제 Codex로 전환하는 (또는 둘 다 운영하는) 경우 실용적인 마이그레이션 경로입니다.</p>
+<h4>1단계: 가졌던 것을 기록하라</h4>
+<p>다른 것을 하기 전에, 옛날 <code>accountUuid</code>를 <a href="/">claudebuddy.art</a>에 붙여넣고 결과를 스크린샷으로 저장하세요. buddy의 종, 희귀도, 스탯, 그리고 로컬에서 붙인 이름은 개발자 역사의 일부입니다. 개인 README, dotfiles 저장소, 또는 비공개 gist에 저장하세요.</p>
+<h4>2단계: 펫에서 무엇을 원하는지 결정하라</h4>
+<p>Codex Pets와 Claude Buddy는 서로 다른 질문에 답합니다:</p>
+<ul>
+<li><strong>한눈에 에이전트 상태를 원하나요?</strong> Codex Pets가 올바른 도구입니다. Codex에서 <code>/pet</code>, 빌트인 선택, 끝.</li>
+<li><strong>당신의, 오직 당신만의 고유한 생명체를 원하나요?</strong> 의미 있는 프롬프트로 <code>/hatch</code>를 사용하세요. 프롬프트를 저장하세요 — 결정론적 UUID에 가장 가까운 유사체입니다.</li>
+<li><strong>Claude Code 생태계를 유지하고 Codex를 완전히 건너뛰고 싶나요?</strong> 생산성 추적에 <a href="/powerup-tracker">/powerup</a>을 사용하고, claudebuddy.art가 buddy 아카이브가 되게 하세요.</li>
+</ul>
+<h4>3단계: Petdex 펫 한두 개 설치하라</h4>
+<p>빌트인을 선택했더라도 Petdex를 둘러보세요. 커뮤니티 펫은 놀라울 정도로 좋고, 데스크톱 배경처럼 당신의 취향을 시그널링합니다.</p>
+<h4>4단계: 옛 buddy를 다시 만들려 하지 마라</h4>
+<p>옛날 Legendary Shiny Dragon과 똑같이 생긴 펫을 <code>/hatch</code>하고 싶을 것입니다. 참으세요. Codex Pets는 같은 매체가 아닙니다. buddy를 복사하려고 하면 새 펫이 모조품처럼 느껴집니다. 마이그레이션을 새로운 것을 선택하는 기회로 사용하세요.</p>`
+    },
+    {
+      heading: "자주 묻는 질문",
+      body: `<h4>Codex Pets는 무료인가요?</h4>
+<p>네. Codex Pets는 macOS와 Windows 모두에서 추가 비용 없이 Codex 앱과 함께 제공됩니다. Petdex 펫은 오픈소스이며 <code>npx petdex install</code>로 무료로 설치할 수 있습니다.</p>
+<h4>Claude Code Buddy를 되찾을 수 있나요?</h4>
+<p>공식 Claude Code 런타임에서는 안 됩니다 — <code>/buddy</code>는 v2.1.97에서 제거되었고 돌아오지 않았습니다. 여전히 <code>accountUuid</code>를 사용해 <a href="/">claudebuddy.art</a>에서 buddy를 <em>볼</em> 수 있고, MCP 기반 부활 도구와 같은 커뮤니티 프로젝트는 공식 클라이언트 외부에서 경험을 재구현합니다.</p>
+<h4>Codex Pets는 Claude Buddy처럼 결정론적인가요?</h4>
+<p>아니요. Codex Pets는 사용자가 선택합니다 (또는 <code>/hatch</code>를 통해 AI 생성). 계정 ID를 특정 펫에 매핑하는 알고리즘은 없습니다. 이것은 의도적인 설계 선택입니다 — Codex Pets는 커스터마이즈를 우선시하고, Claude Buddy는 영구성을 우선시했습니다.</p>
+<h4>어느 펫 시스템이 생산성에 더 좋은가요?</h4>
+<p>Codex Pets, 큰 차이로. 상태 오버레이 (빨간 시계, 녹색 체크, 활성 스레드)는 실제 워크플로우 정보를 제공합니다. Claude Buddy는 매력적이었지만 순수하게 장식용이었습니다. 코드를 더 빨리 출시하는 것이 목표라면 Codex 펫이 실제 일을 하고 있습니다.</p>
+<h4>Codex Pets와 Claude Code를 함께 사용할 수 있나요?</h4>
+<p>네. 다른 프로세스에서 실행되며 충돌하지 않습니다. 많은 개발자가 한 프로젝트 유형에는 Claude Code를, 다른 유형에는 Codex를 사용하며, Codex 펫은 Codex 앱이 포커스를 받을 때만 렌더링됩니다.</p>
+<h4>Codex에서 빌트인 펫을 전환하면 어떻게 되나요?</h4>
+<p>상태는 펫 교체 간에 유지됩니다. 펫은 동일한 에이전트 활동 피드 위의 스킨이므로, Dewey에서 Rocky로 변경해도 아무것도 재설정되지 않습니다. Petdex 펫도 같은 방식으로 동작합니다.</p>
+<h4>Anthropic이 Buddy를 다시 가져올까요?</h4>
+<p>어느 방향으로도 공식 발표는 없습니다. <a href="/powerup-tracker">/powerup</a>으로의 전환은 결정이 임시적이 아니라 전략적이었음을 시사합니다. Claude Code 안에서 펫을 원한다면, 현실적인 옵션은 커뮤니티 MCP 부활 도구이거나 — 솔직히 — 펫 경험을 위해 Codex를 사용하는 것입니다.</p>
+<p><em>가졌을 Buddy를 보고 싶나요? <a href="/">Claude Buddy 체커</a>를 시도해보세요. 전체 <a href="/species">종 카탈로그</a>를 탐색하세요. <a href="/powerup-tracker">/powerup</a>으로 출시된 기능을 추적하세요.</em></p>`
+    }
+  ]
+};
+
+// === Codex /pet & /hatch Cheat Sheet ===
+const CODEX_CHEATSHEET_EN: ArticleContent = {
+  title: "Codex /pet and /hatch Cheat Sheet — Every Command, Built-in, and Status Signal (2026)",
+  metaTitle: "Codex /pet and /hatch Command Cheat Sheet (2026)",
+  metaDescription: "Complete reference for Codex Pets in 2026: every command, all 8 built-in pets, status signal meanings, and how to install Petdex companions in one line.",
+  excerpt: "A printable reference for everything Codex Pets can do. Commands, built-ins, status signals, and the Petdex install path — all on one page.",
+  sections: [
+    {
+      heading: "Codex Pets at a Glance",
+      body: `<p>This is a working reference for the <code>/pet</code> and <code>/hatch</code> commands in OpenAI Codex. If you want the philosophical side — why Codex Pets exist and how they compare to the now-retired Claude Code Buddy — read our <a href="/blog/codex-pets-vs-claude-code-buddy">comparison guide</a> instead.</p>
+<table>
+<tr><th>Command</th><th>What It Does</th><th>When to Use</th></tr>
+<tr><td><code>/pet</code></td><td>Open the picker and spawn a built-in pet</td><td>You want a companion fast, do not need customization</td></tr>
+<tr><td><code>/hatch &lt;prompt&gt;</code></td><td>Generate a custom AI pet from a prompt</td><td>You want a unique design tied to a personal idea</td></tr>
+<tr><td><code>npx petdex install &lt;name&gt;</code></td><td>Install a community pet from Petdex</td><td>You want curated designs (467+ to choose from)</td></tr>
+</table>
+<p>That is the entire surface area. Three commands, hundreds of pets, infinite possibilities.</p>`
+    },
+    {
+      heading: "/pet — Spawn a Built-in Companion",
+      body: `<p>Run <code>/pet</code> in any Codex prompt to open the built-in picker. A floating window appears above your editor with the chosen pet inside. The window stays on top, follows you across spaces, and persists across Codex restarts.</p>
+<h4>Switching Pets</h4>
+<p>Run <code>/pet</code> again to reopen the picker and choose a different built-in. State is preserved — pets are skins over the same agent activity feed.</p>
+<h4>Hiding the Pet</h4>
+<p>Close the floating window. The pet stops rendering but the agent continues running. Re-open with <code>/pet</code>.</p>`
+    },
+    {
+      heading: "/hatch — Generate a Pet from a Prompt",
+      body: `<p>If none of the eight built-ins fit, run <code>/hatch</code> followed by a description and the model will generate a unique pet on the fly.</p>
+<h4>Prompt Examples</h4>
+<pre><code>/hatch a tiny rust crab wearing a tiny chef hat
+/hatch a phosphor-green CRT terminal ghost
+/hatch a postal owl carrying a pull-request envelope</code></pre>
+<p>The generated pet uses the same status overlay system as the built-ins — red clock for waiting, green check for done. The visual is unique to your prompt.</p>
+<h4>Saving the Prompt</h4>
+<p>The hatched pet does not auto-save the original prompt anywhere persistent. <strong>Save it yourself</strong> — in a dotfile, a private gist, or your README. Without it, you cannot reproduce the same pet on a new machine.</p>`
+    },
+    {
+      heading: "The 8 Built-In Pets",
+      body: `<table>
+<tr><th>Pet</th><th>Visual</th><th>Personality Notes</th></tr>
+<tr><td><strong>Codex</strong> (default)</td><td>Blue creature, clean lines</td><td>The reference design — neutral, calm</td></tr>
+<tr><td><strong>Dewey</strong></td><td>Duck-shaped</td><td>Playful, slightly chaotic energy</td></tr>
+<tr><td><strong>Rocky</strong></td><td>Stone-textured</td><td>Steady, low-key — good for long sessions</td></tr>
+<tr><td colspan="3" style="text-align:center"><em>(5 more built-ins ship with the app — pick what fits your vibe)</em></td></tr>
+</table>
+<p>The exact roster may shift as OpenAI ships updates. Run <code>/pet</code> in your current Codex version to see today's options.</p>`
+    },
+    {
+      heading: "Reading Pet Status Signals",
+      body: `<p>The pet's thought bubble communicates agent state. Memorize these three signals and you will never need to context-switch to check progress.</p>
+<table>
+<tr><th>Signal</th><th>Meaning</th><th>Action</th></tr>
+<tr><td>🔴 Red clock face</td><td>Agent is paused, waiting for your approval before running a command</td><td>Switch to Codex and approve or reject</td></tr>
+<tr><td>🟢 Green checkmark</td><td>Agent finished the task, ready for a new prompt</td><td>Provide next instruction or close the thread</td></tr>
+<tr><td>💭 Thought bubble (text)</td><td>Active thread name — what the agent is currently working on</td><td>Use to disambiguate between multiple parallel agents</td></tr>
+</table>
+<p>The signals update in real time. If you have multiple Codex windows open, each pet only reflects its own agent's state.</p>`
+    },
+    {
+      heading: "Installing Petdex Community Pets",
+      body: `<p><a href="https://petdex.crafter.run/">Petdex</a> is the community catalog of open-source Codex companions — 467+ pets at last count. Browse the gallery, copy the install command, and you are done.</p>
+<pre><code>npx petdex install &lt;pet-name&gt;</code></pre>
+<p>Examples of what is in the catalog:</p>
+<ul>
+<li>A monochrome detective spider in a fedora and trench coat</li>
+<li>A white koala fintech companion with purple accents</li>
+<li>A Super Saiyan Blue Goku-inspired companion</li>
+<li>A Nomai-inspired character (Outer Wilds reference)</li>
+<li>A Game &amp; Watch–style 2D digital pet</li>
+</ul>
+<p>An alternative gallery, Codex Pet Share, focuses on shareable companion designs. Both work alongside the built-ins — Codex Pets does not care where the pet definition came from.</p>`
+    },
+    {
+      heading: "Frequently Asked Questions",
+      body: `<h4>Does /pet work on Linux?</h4>
+<p>Codex Pets ships with the Codex desktop app on macOS and Windows. Linux is not officially supported as of May 2026.</p>
+<h4>Can /hatch generate a pet that looks like my old Claude Buddy?</h4>
+<p>You can describe your old Buddy in the prompt and get something visually similar, but it will not be the same artifact. Claude Buddy was deterministic from your <code>accountUuid</code>; <code>/hatch</code> output depends on the model's interpretation. If you want to look up your original Buddy, use <a href="/">claudebuddy.art</a>.</p>
+<h4>Where are Petdex pets stored?</h4>
+<p><code>npx petdex install</code> places the pet definition in the Codex pet directory; subsequent <code>/pet</code> runs include it in the picker. Uninstall is <code>npx petdex uninstall &lt;pet-name&gt;</code>.</p>
+<h4>Can I run more than one pet at once?</h4>
+<p>One pet per Codex window. Multiple Codex windows can each have their own pet, useful for tracking parallel agents.</p>
+<h4>Does the pet send data anywhere?</h4>
+<p>Status signals are local to the Codex client — they reflect what your local agent is doing. Petdex pet definitions are public on the catalog, but installation does not transmit personal data.</p>
+<h4>What if I want a Claude Code experience instead?</h4>
+<p>Claude Code retired its <code>/buddy</code> command in v2.1.97. The closest current equivalent inside Claude Code is <a href="/powerup-tracker">/powerup</a> for productivity tracking. For nostalgic buddy-checking, <a href="/">claudebuddy.art</a> reproduces the original algorithm.</p>
+<p><em>Reference: <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets vs Claude Code Buddy</a> · <a href="/">Claude Buddy Checker</a> · <a href="/species">All 18 species</a></em></p>`
+    }
+  ]
+};
+
+const CODEX_CHEATSHEET_ZH: ArticleContent = {
+  title: "Codex /pet 与 /hatch 速查表——所有命令、内置宠物与状态信号 (2026)",
+  metaTitle: "Codex /pet 与 /hatch 命令速查表 (2026)",
+  metaDescription: "2026 年 Codex Pets 完整参考：每个命令、全部 8 种内置宠物、状态信号含义，以及 Petdex 一行安装命令。",
+  excerpt: "Codex Pets 全部能做的事的可打印参考。命令、内置、状态信号，以及 Petdex 安装路径——一页之内。",
+  sections: [
+    {
+      heading: "Codex Pets 一览",
+      body: `<p>这是 OpenAI Codex 中 <code>/pet</code> 与 <code>/hatch</code> 命令的工作参考。如果你想了解哲学层面——Codex Pets 为何存在、与已下线的 Claude Code Buddy 如何对比——请阅读我们的<a href="/blog/codex-pets-vs-claude-code-buddy">对比指南</a>。</p>
+<table>
+<tr><th>命令</th><th>作用</th><th>使用时机</th></tr>
+<tr><td><code>/pet</code></td><td>打开选择器，召唤一只内置宠物</td><td>想快速有伙伴，不需要定制</td></tr>
+<tr><td><code>/hatch &lt;prompt&gt;</code></td><td>从 prompt 生成自定义 AI 宠物</td><td>想要绑定某个个人想法的独特设计</td></tr>
+<tr><td><code>npx petdex install &lt;name&gt;</code></td><td>从 Petdex 安装社区宠物</td><td>想要精选设计（467+ 种可选）</td></tr>
+</table>
+<p>整个表面就这些。三个命令，数百只宠物，无限可能。</p>`
+    },
+    {
+      heading: "/pet——召唤内置伙伴",
+      body: `<p>在任意 Codex 提示符里运行 <code>/pet</code> 就会打开内置选择器。一个浮动窗口出现在编辑器上方，里面是你选的宠物。窗口保持置顶，跟随你跨工作区，Codex 重启后也会保留。</p>
+<h4>切换宠物</h4>
+<p>再次运行 <code>/pet</code> 重新打开选择器，挑选不同的内置宠物。状态保留——宠物只是同一个代理活动流的"皮肤"。</p>
+<h4>隐藏宠物</h4>
+<p>关闭浮动窗口即可。宠物停止渲染但代理继续运行。用 <code>/pet</code> 重新打开。</p>`
+    },
+    {
+      heading: "/hatch——从 prompt 生成宠物",
+      body: `<p>如果八种内置都不合心意，运行 <code>/hatch</code> 加上描述，模型会即时生成一只独特的宠物。</p>
+<h4>Prompt 示例</h4>
+<pre><code>/hatch 一只戴着小厨师帽的 rust 螃蟹
+/hatch 一个磷光绿的 CRT 终端幽灵
+/hatch 一只送 PR 信封的邮政猫头鹰</code></pre>
+<p>生成的宠物使用与内置相同的状态覆盖系统——红钟表示等待，绿勾表示完成。视觉则因你的 prompt 而独一无二。</p>
+<h4>保存 prompt</h4>
+<p>hatched 出的宠物不会把原始 prompt 自动保存到任何持久位置。<strong>请自己保存</strong>——存到 dotfile、私密 gist 或 README 里。否则在新机器上无法复现同一只宠物。</p>`
+    },
+    {
+      heading: "8 种内置宠物",
+      body: `<table>
+<tr><th>宠物</th><th>视觉</th><th>性格备注</th></tr>
+<tr><td><strong>Codex</strong>（默认）</td><td>蓝色生物，干净线条</td><td>参考设计——中性、平稳</td></tr>
+<tr><td><strong>Dewey</strong></td><td>鸭子形状</td><td>顽皮，略带混乱能量</td></tr>
+<tr><td><strong>Rocky</strong></td><td>石头质感</td><td>稳定低调——适合长时间会话</td></tr>
+<tr><td colspan="3" style="text-align:center"><em>（应用还附带另外 5 种内置——挑符合你气场的）</em></td></tr>
+</table>
+<p>具体阵容可能随 OpenAI 更新变化。在你当前的 Codex 版本中运行 <code>/pet</code> 查看今天的选项。</p>`
+    },
+    {
+      heading: "解读宠物状态信号",
+      body: `<p>宠物的思考气泡传达代理状态。记住这三个信号，再也不用切换上下文检查进度。</p>
+<table>
+<tr><th>信号</th><th>含义</th><th>动作</th></tr>
+<tr><td>🔴 红色时钟</td><td>代理已暂停，等待你批准再执行命令</td><td>切到 Codex 批准或拒绝</td></tr>
+<tr><td>🟢 绿色对勾</td><td>代理已完成任务，可接收新 prompt</td><td>给出下一条指令或关闭线程</td></tr>
+<tr><td>💭 思考气泡（文本）</td><td>活动线程名——代理当前正在做的事</td><td>用于在多个并行代理间消歧</td></tr>
+</table>
+<p>信号实时更新。如果你打开了多个 Codex 窗口，每只宠物只反映自己代理的状态。</p>`
+    },
+    {
+      heading: "安装 Petdex 社区宠物",
+      body: `<p><a href="https://petdex.crafter.run/">Petdex</a> 是开源 Codex 伙伴的社区目录——最近统计 467+ 只宠物。浏览画廊、复制安装命令，搞定。</p>
+<pre><code>npx petdex install &lt;pet-name&gt;</code></pre>
+<p>目录里有什么的例子：</p>
+<ul>
+<li>戴礼帽穿风衣的黑白侦探蜘蛛</li>
+<li>带紫色点缀的白色考拉金融科技伙伴</li>
+<li>超级赛亚人蓝悟空风格的伙伴</li>
+<li>Nomai 风格角色（Outer Wilds 致敬）</li>
+<li>Game &amp; Watch 风格的 2D 数字宠物</li>
+</ul>
+<p>另一个画廊 Codex Pet Share 专注于可分享的伙伴设计。两者都和内置并存——Codex Pets 不在乎宠物定义来自哪里。</p>`
+    },
+    {
+      heading: "常见问题",
+      body: `<h4>Linux 上能用 /pet 吗？</h4>
+<p>Codex Pets 内置在 macOS 与 Windows 的 Codex 桌面应用里。截至 2026 年 5 月，Linux 没有官方支持。</p>
+<h4>/hatch 能生成跟我过去的 Claude Buddy 一模一样的宠物吗？</h4>
+<p>你可以在 prompt 里描述过去的 Buddy 得到视觉上相似的东西，但它不会是同一件物品。Claude Buddy 是从 <code>accountUuid</code> 决定性派生的；<code>/hatch</code> 输出取决于模型的解释。如果你想查询原版 Buddy，用 <a href="/">claudebuddy.art</a>。</p>
+<h4>Petdex 宠物存在哪里？</h4>
+<p><code>npx petdex install</code> 把宠物定义放进 Codex 宠物目录；后续运行 <code>/pet</code> 时会出现在选择器里。卸载用 <code>npx petdex uninstall &lt;pet-name&gt;</code>。</p>
+<h4>能同时跑多只宠物吗？</h4>
+<p>每个 Codex 窗口一只。多个 Codex 窗口可以各有自己的宠物，适合追踪并行代理。</p>
+<h4>宠物会发送数据到哪里吗？</h4>
+<p>状态信号是 Codex 客户端本地的——它们反映你本地代理的行为。Petdex 宠物定义在目录里是公开的，但安装本身不传输个人数据。</p>
+<h4>如果我想要 Claude Code 体验呢？</h4>
+<p>Claude Code 在 v2.1.97 下线了 <code>/buddy</code>。当前 Claude Code 内最接近的等价物是 <a href="/powerup-tracker">/powerup</a>，用于生产力追踪。怀旧式 buddy 查询用 <a href="/">claudebuddy.art</a> 复现原算法。</p>
+<p><em>参考：<a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets 对比 Claude Code Buddy</a> · <a href="/">Claude Buddy 查询器</a> · <a href="/species">全部 18 个物种</a></em></p>`
+    }
+  ]
+};
+
+const CODEX_CHEATSHEET_KO: ArticleContent = {
+  title: "Codex /pet과 /hatch 치트 시트 — 모든 명령, 빌트인, 상태 시그널 (2026)",
+  metaTitle: "Codex /pet과 /hatch 명령어 치트 시트 (2026)",
+  metaDescription: "2026년 Codex Pets 완전 참조: 모든 명령, 8개 빌트인 펫, 상태 시그널 의미, Petdex 한 줄 설치 방법.",
+  excerpt: "Codex Pets가 할 수 있는 모든 것의 인쇄 가능한 참조. 명령, 빌트인, 상태 시그널, Petdex 설치 경로 — 한 페이지에.",
+  sections: [
+    {
+      heading: "Codex Pets 한눈에 보기",
+      body: `<p>이것은 OpenAI Codex의 <code>/pet</code>과 <code>/hatch</code> 명령어에 대한 작업 참조입니다. 철학적인 측면 — Codex Pets가 왜 존재하고 종료된 Claude Code Buddy와 어떻게 비교되는지 — 을 원한다면 <a href="/blog/codex-pets-vs-claude-code-buddy">비교 가이드</a>를 읽으세요.</p>
+<table>
+<tr><th>명령</th><th>기능</th><th>사용 시점</th></tr>
+<tr><td><code>/pet</code></td><td>피커를 열고 빌트인 펫 스폰</td><td>빠르게 동반자가 필요하고 커스터마이즈는 불필요할 때</td></tr>
+<tr><td><code>/hatch &lt;prompt&gt;</code></td><td>프롬프트에서 커스텀 AI 펫 생성</td><td>개인적 아이디어와 연결된 고유 디자인 원할 때</td></tr>
+<tr><td><code>npx petdex install &lt;name&gt;</code></td><td>Petdex에서 커뮤니티 펫 설치</td><td>큐레이션된 디자인 원할 때 (467+ 선택)</td></tr>
+</table>
+<p>그것이 전체 표면입니다. 세 개의 명령, 수백 개의 펫, 무한한 가능성.</p>`
+    },
+    {
+      heading: "/pet — 빌트인 동반자 스폰",
+      body: `<p>아무 Codex 프롬프트에서 <code>/pet</code>을 실행하면 빌트인 피커가 열립니다. 플로팅 창이 에디터 위에 나타나고 선택한 펫이 그 안에 들어갑니다. 창은 항상 위에 있고, 작업 공간을 따라다니며, Codex 재시작 후에도 유지됩니다.</p>
+<h4>펫 전환</h4>
+<p><code>/pet</code>을 다시 실행하면 피커가 다시 열려 다른 빌트인을 선택할 수 있습니다. 상태는 보존됩니다 — 펫은 동일한 에이전트 활동 피드 위의 스킨입니다.</p>
+<h4>펫 숨기기</h4>
+<p>플로팅 창을 닫으세요. 펫은 렌더링을 멈추지만 에이전트는 계속 실행됩니다. <code>/pet</code>으로 다시 엽니다.</p>`
+    },
+    {
+      heading: "/hatch — 프롬프트에서 펫 생성",
+      body: `<p>8개 빌트인 중 어떤 것도 맞지 않는다면, <code>/hatch</code> 뒤에 설명을 붙여 실행하면 모델이 즉석에서 고유한 펫을 생성합니다.</p>
+<h4>프롬프트 예시</h4>
+<pre><code>/hatch 작은 요리사 모자를 쓴 작은 rust 게
+/hatch 인광 녹색 CRT 터미널 유령
+/hatch PR 봉투를 운반하는 우편 부엉이</code></pre>
+<p>생성된 펫은 빌트인과 동일한 상태 오버레이 시스템을 사용합니다 — 대기 시 빨간 시계, 완료 시 녹색 체크. 비주얼만 프롬프트에 따라 고유합니다.</p>
+<h4>프롬프트 저장하기</h4>
+<p>해치된 펫은 원본 프롬프트를 어디에도 영구적으로 자동 저장하지 않습니다. <strong>직접 저장하세요</strong> — dotfile, 비공개 gist, 또는 README에. 그것 없이는 새 머신에서 같은 펫을 재현할 수 없습니다.</p>`
+    },
+    {
+      heading: "8개 빌트인 펫",
+      body: `<table>
+<tr><th>펫</th><th>비주얼</th><th>성격 메모</th></tr>
+<tr><td><strong>Codex</strong> (기본)</td><td>파란 생명체, 깔끔한 선</td><td>참조 디자인 — 중립적, 차분함</td></tr>
+<tr><td><strong>Dewey</strong></td><td>오리 모양</td><td>장난기 있고 약간 혼란스러운 에너지</td></tr>
+<tr><td><strong>Rocky</strong></td><td>돌 질감</td><td>안정적, 차분 — 긴 세션에 좋음</td></tr>
+<tr><td colspan="3" style="text-align:center"><em>(앱과 함께 5개 더 빌트인 — 분위기에 맞는 것 선택)</em></td></tr>
+</table>
+<p>OpenAI가 업데이트를 출시하면서 정확한 라인업이 바뀔 수 있습니다. 현재 Codex 버전에서 <code>/pet</code>을 실행해 오늘의 옵션을 확인하세요.</p>`
+    },
+    {
+      heading: "펫 상태 시그널 읽기",
+      body: `<p>펫의 사고 거품이 에이전트 상태를 전달합니다. 이 세 가지 시그널을 외우면 진행 상황 확인을 위해 컨텍스트를 전환할 필요가 없습니다.</p>
+<table>
+<tr><th>시그널</th><th>의미</th><th>액션</th></tr>
+<tr><td>🔴 빨간 시계</td><td>에이전트가 일시 중지, 명령 실행 전 승인 대기</td><td>Codex로 전환해 승인 또는 거부</td></tr>
+<tr><td>🟢 녹색 체크</td><td>에이전트가 작업을 마쳤고 새 프롬프트 받을 준비됨</td><td>다음 지시 제공 또는 스레드 닫기</td></tr>
+<tr><td>💭 사고 거품 (텍스트)</td><td>활성 스레드 이름 — 에이전트가 현재 작업 중인 것</td><td>여러 병렬 에이전트 간 구분에 사용</td></tr>
+</table>
+<p>시그널은 실시간 업데이트됩니다. 여러 Codex 창이 열려있다면, 각 펫은 자기 에이전트의 상태만 반영합니다.</p>`
+    },
+    {
+      heading: "Petdex 커뮤니티 펫 설치",
+      body: `<p><a href="https://petdex.crafter.run/">Petdex</a>는 오픈소스 Codex 동반자의 커뮤니티 카탈로그입니다 — 최근 집계 467+ 펫. 갤러리를 둘러보고, 설치 명령을 복사하면 끝입니다.</p>
+<pre><code>npx petdex install &lt;pet-name&gt;</code></pre>
+<p>카탈로그에 있는 것의 예:</p>
+<ul>
+<li>페도라와 트렌치코트를 입은 흑백 탐정 거미</li>
+<li>보라색 액센트가 있는 흰색 코알라 핀테크 동반자</li>
+<li>슈퍼 사이언 블루 고쿠 스타일 동반자</li>
+<li>Nomai 스타일 캐릭터 (Outer Wilds 오마주)</li>
+<li>Game &amp; Watch 스타일 2D 디지털 펫</li>
+</ul>
+<p>대안 갤러리인 Codex Pet Share는 공유 가능한 동반자 디자인에 초점을 맞춥니다. 둘 다 빌트인과 함께 작동합니다 — Codex Pets는 펫 정의가 어디서 왔는지 신경 쓰지 않습니다.</p>`
+    },
+    {
+      heading: "자주 묻는 질문",
+      body: `<h4>Linux에서 /pet이 작동하나요?</h4>
+<p>Codex Pets는 macOS와 Windows의 Codex 데스크톱 앱과 함께 제공됩니다. 2026년 5월 현재 Linux는 공식 지원되지 않습니다.</p>
+<h4>/hatch가 옛 Claude Buddy와 똑같이 생긴 펫을 생성할 수 있나요?</h4>
+<p>프롬프트에서 옛 Buddy를 설명해 시각적으로 비슷한 것을 얻을 수 있지만, 같은 아티팩트는 아닙니다. Claude Buddy는 <code>accountUuid</code>에서 결정론적이었고; <code>/hatch</code> 출력은 모델의 해석에 의존합니다. 원본 Buddy를 조회하려면 <a href="/">claudebuddy.art</a>를 사용하세요.</p>
+<h4>Petdex 펫은 어디에 저장되나요?</h4>
+<p><code>npx petdex install</code>은 펫 정의를 Codex 펫 디렉토리에 배치합니다; 이후 <code>/pet</code> 실행 시 피커에 포함됩니다. 제거는 <code>npx petdex uninstall &lt;pet-name&gt;</code>.</p>
+<h4>한 번에 여러 펫을 실행할 수 있나요?</h4>
+<p>Codex 창당 한 펫. 여러 Codex 창이 각자의 펫을 가질 수 있어 병렬 에이전트 추적에 유용합니다.</p>
+<h4>펫이 어디로 데이터를 보내나요?</h4>
+<p>상태 시그널은 Codex 클라이언트 로컬입니다 — 로컬 에이전트가 무엇을 하는지를 반영합니다. Petdex 펫 정의는 카탈로그에서 공개되지만, 설치는 개인 데이터를 전송하지 않습니다.</p>
+<h4>Claude Code 경험을 원하면요?</h4>
+<p>Claude Code는 v2.1.97에서 <code>/buddy</code> 명령어를 종료했습니다. Claude Code 내에서 가장 가까운 현재 등가물은 생산성 추적을 위한 <a href="/powerup-tracker">/powerup</a>입니다. 향수 어린 buddy 조회는 <a href="/">claudebuddy.art</a>가 원본 알고리즘을 재현합니다.</p>
+<p><em>참조: <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets vs Claude Code Buddy</a> · <a href="/">Claude Buddy 체커</a> · <a href="/species">18종 모두</a></em></p>`
+    }
+  ]
+};
+
+// === Claude Buddy Retired — Migration Guide ===
+const BUDDY_RETIRED_EN: ArticleContent = {
+  title: "Claude Buddy Has Been Retired — What to Do Next (2026 Migration Guide)",
+  metaTitle: "Claude Code Buddy Retired: Three Paths Forward (2026)",
+  metaDescription: "Claude Code removed the /buddy command in v2.1.97. This is the practical migration guide: stay with /powerup, switch to Codex Pets, or revive Buddy via MCP. Plus what to save first.",
+  excerpt: "On the day Claude Code shipped v2.1.97 the /buddy command stopped working. If you came here looking for an alternative, this is the honest map of your options.",
+  sections: [
+    {
+      heading: "The v2.1.97 Retirement: What Happened",
+      body: `<p>If you ran <code>/buddy</code> recently and got nothing, you are not imagining it. <strong>Claude Code v2.1.97 retired the buddy feature</strong>. The command no longer responds, the ASCII pet no longer renders, and the surface area was redirected into a productivity-focused command called <a href="/powerup-tracker">/powerup</a>.</p>
+<p>The community read this as more than a feature flag flip. The deterministic buddy system — 18 species, 5 rarity tiers, the once-in-10,000 Legendary Shiny — had become part of how developers identified themselves. Losing it felt like losing a digital pet you had owned for a year. We chronicled the immediate aftermath in our <a href="/blog/claude-code-vanished-2197">v2.1.97 great vanishing post</a>.</p>
+<p>This guide is the practical follow-up: if you want a pet companion in your AI coding workflow today, you have three realistic paths. Pick the one that matches what you actually wanted from Buddy in the first place.</p>`
+    },
+    {
+      heading: "Your Three Realistic Paths Forward",
+      body: `<p>Before picking a path, name the thing you miss. Buddy did three jobs for different people:</p>
+<ul>
+<li><strong>Identity</strong> — your buddy was uniquely yours, derived from your <code>accountUuid</code>. You miss the artifact.</li>
+<li><strong>Productivity signal</strong> — the buddy was a vibe-check on your day. You miss the small terminal companion that broke up long sessions.</li>
+<li><strong>Aesthetic</strong> — you liked having ASCII art in your CLI. You miss the visual.</li>
+</ul>
+<table>
+<tr><th>What you miss</th><th>Best path</th><th>Effort</th></tr>
+<tr><td>Identity / lifelong artifact</td><td>Path C: Revive via MCP, plus archive at claudebuddy.art</td><td>High</td></tr>
+<tr><td>Productivity / agent state</td><td>Path B: Switch to Codex Pets</td><td>Low</td></tr>
+<tr><td>Aesthetic / decoration</td><td>Path B (any built-in or Petdex pet)</td><td>Low</td></tr>
+<tr><td>Just want to stay with Claude</td><td>Path A: /powerup, no pet</td><td>Zero</td></tr>
+</table>
+<p>The next three sections walk through each path concretely.</p>`
+    },
+    {
+      heading: "Path A: Stay in Claude Code with /powerup",
+      body: `<p>The simplest path: accept that pets are gone in Claude Code, and use the replacement Anthropic shipped. <a href="/powerup-tracker">/powerup</a> tracks productivity events — features shipped, bugs fixed, sessions completed — and surfaces a kind of "developer pulse" without animating a creature.</p>
+<p>This works for you if:</p>
+<ul>
+<li>You stayed in Claude Code for non-Buddy reasons (model quality, MCP integrations, tool ergonomics)</li>
+<li>What you actually wanted was lightweight feedback on your day, not a creature</li>
+<li>You do not want to add another tool to your stack</li>
+</ul>
+<p>This does not work for you if you wanted the pet itself — the personality, the ASCII frames, the deterministic identity. <code>/powerup</code> is genuinely useful but it is not a buddy replacement.</p>`
+    },
+    {
+      heading: "Path B: Switch to Codex Pets",
+      body: `<p>OpenAI shipped Codex Pets in May 2026. <code>/pet</code> spawns a built-in companion in a floating window over your editor; <code>/hatch &lt;prompt&gt;</code> generates a custom pet from a description. The full command set is in our <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet and /hatch cheat sheet</a>.</p>
+<p>The <strong>honest pitch</strong> for migrating: Codex Pets is the closest thing to Claude Buddy that is shipping in 2026, and it is in some ways better. The pets carry actual workflow signal (red clock, green check, active thread) instead of being purely decorative. The Petdex catalog of 467+ community pets means you can find a vibe instead of being stuck with a deterministic dragon.</p>
+<p>The <strong>honest disclaimer</strong>: it is not the same artifact. Codex Pets is a different kind of relationship — utility-first, replaceable, customizable. If what you valued was the <em>permanence</em> of your buddy, Codex Pets will feel transactional. If what you valued was the <em>companionship</em>, it will feel like an upgrade.</p>
+<h4>Quick start</h4>
+<p>Install or update the Codex desktop app on macOS or Windows. Run <code>/pet</code> in any prompt. Pick a built-in. If you want something custom, run <code>/hatch</code> with a description and save the prompt somewhere you will not lose it. For full philosophy and feature comparison see <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets vs Claude Code Buddy</a>.</p>`
+    },
+    {
+      heading: "Path C: Revive Buddy via the MCP Community Tool",
+      body: `<p>If you cannot let Buddy go, the community has you covered. The <a href="https://github.com/1270011/claude-buddy">claude-buddy MCP project</a> is an unofficial reimplementation that runs the original buddy logic outside the official client. It uses the same FNV-1a hash and Mulberry32 PRNG, so the buddy you get back is the buddy you would have had.</p>
+<p>This works for you if:</p>
+<ul>
+<li>You want the original artifact, not an aesthetic replacement</li>
+<li>You are comfortable installing community MCP servers</li>
+<li>You can accept that the experience exists outside Claude Code's official roadmap</li>
+</ul>
+<p>This does not work for you if you need a one-click solution. MCP installation, while easy, is still a few steps more than typing <code>/pet</code> in another app. It also will not give you the agent-state overlay that Codex Pets provides — the revived buddy is decorative, just like the original.</p>
+<p>You can also use <a href="/">claudebuddy.art</a> in parallel as a permanent archive. Paste your <code>accountUuid</code>, see your buddy, screenshot it for posterity. The bodies are eternal.</p>`
+    },
+    {
+      heading: "What to Save Before You Move On",
+      body: `<p>Whichever path you pick, do this first. It takes five minutes and you cannot reverse the loss if you skip it.</p>
+<ol>
+<li><strong>Look up your buddy.</strong> Paste your <code>accountUuid</code> into <a href="/">claudebuddy.art</a>. Note the species, rarity, stats, eyes, hat, and shiny status. <a href="/blog/find-your-uuid-complete-platform-guide">Here is how to find your UUID</a> if you do not remember it.</li>
+<li><strong>Screenshot the result.</strong> Save it to a personal README, dotfiles repo, or private gist. This is the only durable record of what you had.</li>
+<li><strong>Write down the name.</strong> If you ever named your buddy locally — even just in your head — write it down. Buddy names were never stored server-side, so they are the part of your buddy that genuinely cannot be recomputed. Our <a href="/blog/buddy-naming-impermanence-of-names">post on naming</a> goes deep on why this matters.</li>
+<li><strong>Browse the species catalog.</strong> Visit <a href="/species">/species</a> and find your species page. Read the lore. This is the canonical record of what your buddy was, and it will outlast any single feature in any single client.</li>
+</ol>
+<p>None of this restores the runtime experience. But it preserves what was uniquely yours, in a form that does not depend on Anthropic's product decisions.</p>`
+    },
+    {
+      heading: "Frequently Asked Questions",
+      body: `<h4>Will Anthropic bring Buddy back?</h4>
+<p>No public statement either way. The pivot to <a href="/powerup-tracker">/powerup</a> looks strategic, not temporary — Anthropic appears to have decided developer-pet is not where they want to invest. Plan as if it is permanent; treat any return as a bonus.</p>
+<h4>Is the MCP buddy revive tool safe to install?</h4>
+<p>The <a href="https://github.com/1270011/claude-buddy">project is open source</a>; you can audit the code before installing. As with any community MCP server, read the source, check the issues tab, and run it in a clean environment first. The algorithm itself is not secret — it is the leaked logic from Claude Code.</p>
+<h4>Can I use Codex Pets and Claude Code at the same time?</h4>
+<p>Yes. They run in different processes and do not interfere. Many developers use Claude Code for some tasks and Codex for others; the Codex pet only renders when Codex is in focus. See our <a href="/blog/codex-pets-vs-claude-code-buddy">comparison guide</a> for how to think about running both.</p>
+<h4>What if I downgrade Claude Code to before v2.1.97?</h4>
+<p>Buddy will reappear in older versions. This is the path some developers chose, but it costs you everything Anthropic has shipped since — model improvements, new tools, security fixes. We do not recommend it for a long-term setup. Use it only as a temporary archive while you set up Path A, B, or C.</p>
+<h4>I gave my buddy a name. Where did it go?</h4>
+<p>Names lived only in your local soul file, which v2.1.97 likely cleared. They were never stored server-side. If you backed up the soul file before updating, you can restore it; if not, the name exists only in your memory or whatever you wrote down. This was the most painful part of the retirement for many users.</p>
+<h4>Should I switch to Codex even if I do not need a pet?</h4>
+<p>Pets alone are not a reason to switch CLIs. Switch if Codex's model, tooling, or ergonomics fit your work better than Claude Code; the pet is a nice-to-have. If Claude Code still works for you, stay — and pick Path A or Path C above.</p>
+<p><em>Resources: <a href="/">Claude Buddy Checker</a> · <a href="/species">All 18 species</a> · <a href="/powerup-tracker">/powerup tracker</a> · <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets vs Claude Code Buddy</a> · <a href="/blog/codex-pet-hatch-command-cheat-sheet">/pet and /hatch cheat sheet</a></em></p>`
+    }
+  ]
+};
+
+const BUDDY_RETIRED_ZH: ArticleContent = {
+  title: "Claude Buddy 已下线——接下来怎么办（2026 迁移指南）",
+  metaTitle: "Claude Code Buddy 下线后的三条路（2026）",
+  metaDescription: "Claude Code 在 v2.1.97 中移除了 /buddy 命令。这是实用迁移指南：留在 /powerup、切换到 Codex Pets、或通过 MCP 复活 Buddy。先存好这些。",
+  excerpt: "Claude Code 发布 v2.1.97 那天，/buddy 命令不再工作。如果你来这里寻找替代方案，这是诚实的选项地图。",
+  sections: [
+    {
+      heading: "v2.1.97 下线：发生了什么",
+      body: `<p>如果你最近运行 <code>/buddy</code> 没有反应，不是错觉。<strong>Claude Code v2.1.97 下线了 buddy 功能</strong>。命令不再响应，ASCII 宠物不再渲染，相关界面被重定向到了一个生产力导向的命令——<a href="/powerup-tracker">/powerup</a>。</p>
+<p>社区把这件事解读得比单纯的功能开关更重。决定性 buddy 系统——18 个物种、5 个稀有度、万分之一的 Legendary Shiny——已经成为开发者自我认同的一部分。失去它就像失去了养了一年的电子宠物。我们在 <a href="/blog/claude-code-vanished-2197">v2.1.97 大消失</a>分析了即时影响。</p>
+<p>本指南是实用后续：如果你今天还想要 AI 编码工作流里的宠物伙伴，你有三条现实路径。挑一条匹配你最初对 Buddy 真正想要的东西。</p>`
+    },
+    {
+      heading: "三条现实路径",
+      body: `<p>选路径前，先说清楚你怀念的到底是什么。Buddy 对不同的人做了三件事：</p>
+<ul>
+<li><strong>身份</strong>——你的 buddy 独属于你，由 <code>accountUuid</code> 派生。你怀念的是这件物品。</li>
+<li><strong>生产力信号</strong>——buddy 是你一天的氛围检查。你怀念的是打破长时间会话的小终端伙伴。</li>
+<li><strong>美学</strong>——你喜欢 CLI 里有 ASCII 艺术。你怀念的是视觉。</li>
+</ul>
+<table>
+<tr><th>你怀念什么</th><th>最佳路径</th><th>成本</th></tr>
+<tr><td>身份 / 终身物品</td><td>路径 C：MCP 复活 + claudebuddy.art 归档</td><td>高</td></tr>
+<tr><td>生产力 / 代理状态</td><td>路径 B：切换到 Codex Pets</td><td>低</td></tr>
+<tr><td>美学 / 装饰</td><td>路径 B（任意内置或 Petdex 宠物）</td><td>低</td></tr>
+<tr><td>就想留在 Claude</td><td>路径 A：/powerup，不要宠物</td><td>零</td></tr>
+</table>
+<p>接下来三个章节具体走通每条路径。</p>`
+    },
+    {
+      heading: "路径 A：留在 Claude Code 用 /powerup",
+      body: `<p>最简单的路径：接受 Claude Code 里没宠物了，用 Anthropic 提供的替代品。<a href="/powerup-tracker">/powerup</a> 跟踪生产力事件——发布的功能、修复的 bug、完成的会话——以"开发者脉搏"的形式呈现，不需要动画生物。</p>
+<p>适合你的情况：</p>
+<ul>
+<li>你留在 Claude Code 是因为非 Buddy 的原因（模型质量、MCP 集成、工具人体工程）</li>
+<li>你真正想要的是关于一天的轻量反馈，而不是生物</li>
+<li>你不想再往技术栈里加工具</li>
+</ul>
+<p>不适合：如果你想要的是宠物本身——性格、ASCII 帧、决定性身份。<code>/powerup</code> 真的有用，但它不是 buddy 替代品。</p>`
+    },
+    {
+      heading: "路径 B：切换到 Codex Pets",
+      body: `<p>OpenAI 在 2026 年 5 月推出了 Codex Pets。<code>/pet</code> 在编辑器上方的浮动窗口里召唤内置伙伴；<code>/hatch &lt;prompt&gt;</code> 从描述生成自定义宠物。完整命令集见我们的 <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet 与 /hatch 速查表</a>。</p>
+<p><strong>诚实推介</strong>：Codex Pets 是 2026 年最接近 Claude Buddy 的活产品，某些方面甚至更好。宠物携带真实的工作流信号（红钟、绿勾、活动线程），不再纯装饰。Petdex 上 467+ 社区宠物意味着你可以找到符合自己气场的，不再被绑定在决定性的龙身上。</p>
+<p><strong>诚实免责</strong>：它不是同一件物品。Codex Pets 是另一种关系——实用优先、可替代、可定制。如果你看重的是 buddy 的<em>永久性</em>，Codex Pets 会感觉很商业。如果你看重的是<em>陪伴</em>，它会感觉是升级。</p>
+<h4>快速开始</h4>
+<p>在 macOS 或 Windows 上安装或更新 Codex 桌面应用。在任意提示符里运行 <code>/pet</code>。挑一个内置。想要自定义就用描述运行 <code>/hatch</code>，把 prompt 存到不会丢的地方。完整哲学与功能对比见 <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets 对比 Claude Code Buddy</a>。</p>`
+    },
+    {
+      heading: "路径 C：通过 MCP 社区工具复活 Buddy",
+      body: `<p>如果你放不下 Buddy，社区有你的方案。<a href="https://github.com/1270011/claude-buddy">claude-buddy MCP 项目</a>是一个非官方再实现，在官方客户端之外运行原版 buddy 逻辑。它用同样的 FNV-1a 哈希和 Mulberry32 PRNG，所以你拿到的 buddy 就是你本来会拥有的 buddy。</p>
+<p>适合你的情况：</p>
+<ul>
+<li>你想要原版物品，不要美学替代</li>
+<li>你能接受安装社区 MCP 服务器</li>
+<li>你能接受这个体验存在于 Claude Code 官方路线图之外</li>
+</ul>
+<p>不适合：如果你要一键方案。MCP 安装虽然简单，但比在另一个应用里输 <code>/pet</code> 多几步。它也不会给你 Codex Pets 的代理状态覆盖——复活的 buddy 是装饰性的，与原版一样。</p>
+<p>你也可以并行使用 <a href="/">claudebuddy.art</a> 作为永久档案。粘贴 <code>accountUuid</code>、看你的 buddy、截图留念。肉身永存。</p>`
+    },
+    {
+      heading: "迁移之前先存这些",
+      body: `<p>无论选哪条路径，先做这件事。五分钟搞定，但跳过的话你无法弥补损失。</p>
+<ol>
+<li><strong>查询你的 buddy。</strong>把 <code>accountUuid</code> 粘进 <a href="/">claudebuddy.art</a>。记下物种、稀有度、属性、眼睛、帽子、闪光状态。如果你不记得 UUID 怎么找，<a href="/blog/find-your-uuid-complete-platform-guide">这里有指南</a>。</li>
+<li><strong>截图保存结果。</strong>存到个人 README、dotfiles 仓库或私密 gist。这是你曾拥有什么的唯一持久记录。</li>
+<li><strong>写下名字。</strong>如果你曾给 buddy 起过本地名字——哪怕只在心里——写下来。Buddy 名字从不在服务端存储，所以名字是你 buddy 中真正不可重新计算的部分。我们的<a href="/blog/buddy-naming-impermanence-of-names">命名文章</a>深入讲了为什么这很重要。</li>
+<li><strong>浏览物种图鉴。</strong>访问 <a href="/species">/species</a> 找到你的物种页面。读 lore。这是 buddy 是什么的标准记录，会比任何单一客户端的任何单一功能存活得更久。</li>
+</ol>
+<p>这些都不能恢复运行时体验。但它们以不依赖 Anthropic 产品决策的形式保存了独属于你的东西。</p>`
+    },
+    {
+      heading: "常见问题",
+      body: `<h4>Anthropic 会让 Buddy 回归吗？</h4>
+<p>官方没有任何表态。转向 <a href="/powerup-tracker">/powerup</a> 看起来是战略而非临时——Anthropic 似乎决定了开发者宠物不是他们想投入的方向。当作永久的来规划；任何回归当作意外之喜。</p>
+<h4>MCP buddy 复活工具安装安全吗？</h4>
+<p><a href="https://github.com/1270011/claude-buddy">项目是开源的</a>；安装前可以审查代码。和任何社区 MCP 服务器一样，读源码、看 issues、先在干净环境跑。算法本身不是秘密——是 Claude Code 泄露的逻辑。</p>
+<h4>Codex Pets 和 Claude Code 能同时用吗？</h4>
+<p>能。它们运行在不同进程，不冲突。很多开发者一些任务用 Claude Code、另一些用 Codex；Codex 宠物只在 Codex 获得焦点时渲染。怎么思考同时运行两边见我们的<a href="/blog/codex-pets-vs-claude-code-buddy">对比指南</a>。</p>
+<h4>降级 Claude Code 到 v2.1.97 之前会怎样？</h4>
+<p>Buddy 会回到旧版本。这是一些开发者的选择，但代价是 Anthropic 之后发布的所有东西——模型改进、新工具、安全修复。我们不推荐作为长期方案。把它当作临时档案，同时设置上面的路径 A、B 或 C。</p>
+<h4>我给 buddy 起的名字哪去了？</h4>
+<p>名字只存在你的本地灵魂文件里，v2.1.97 很可能清掉了。它们从不在服务端存储。如果你更新前备份了灵魂文件，可以恢复；否则名字只在你记忆里、或你写下来的地方。这是下线对很多用户最痛的部分。</p>
+<h4>我不需要宠物，要为此切换到 Codex 吗？</h4>
+<p>仅仅为了宠物切换 CLI 不是好理由。如果 Codex 的模型、工具或人体工程更适合你的工作就切；宠物是锦上添花。如果 Claude Code 还合用，留下，选上面路径 A 或路径 C。</p>
+<p><em>资源：<a href="/">Claude Buddy 查询器</a> · <a href="/species">全部 18 个物种</a> · <a href="/powerup-tracker">/powerup tracker</a> · <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets 对比 Claude Code Buddy</a> · <a href="/blog/codex-pet-hatch-command-cheat-sheet">/pet 与 /hatch 速查表</a></em></p>`
+    }
+  ]
+};
+
+const BUDDY_RETIRED_KO: ArticleContent = {
+  title: "Claude Buddy가 종료되었습니다 — 다음에 무엇을 할까 (2026 마이그레이션 가이드)",
+  metaTitle: "Claude Code Buddy 종료: 세 가지 길 (2026)",
+  metaDescription: "Claude Code가 v2.1.97에서 /buddy 명령을 제거했습니다. 실용 마이그레이션 가이드: /powerup 유지, Codex Pets로 전환, 또는 MCP로 Buddy 부활. 그리고 먼저 저장할 것.",
+  excerpt: "Claude Code가 v2.1.97를 출시한 날 /buddy 명령이 작동을 멈췄습니다. 대안을 찾아 여기에 왔다면, 이것이 옵션의 정직한 지도입니다.",
+  sections: [
+    {
+      heading: "v2.1.97 종료: 무슨 일이 있었나",
+      body: `<p>최근 <code>/buddy</code>를 실행했는데 아무것도 없었다면, 상상이 아닙니다. <strong>Claude Code v2.1.97이 buddy 기능을 종료했습니다</strong>. 명령은 더 이상 응답하지 않고, ASCII 펫은 더 이상 렌더링되지 않으며, 표면적은 생산성 중심 명령인 <a href="/powerup-tracker">/powerup</a>으로 리디렉션되었습니다.</p>
+<p>커뮤니티는 이를 단순한 기능 플래그 전환 이상으로 받아들였습니다. 결정론적 buddy 시스템 — 18종, 5단계 희귀도, 10,000분의 1 Legendary Shiny — 은 개발자가 자신을 식별하는 방식의 일부가 되었습니다. 잃는 것은 1년 동안 키운 디지털 펫을 잃는 것 같았습니다. 우리는 <a href="/blog/claude-code-vanished-2197">v2.1.97 대소실 글</a>에서 직후 영향을 기록했습니다.</p>
+<p>이 가이드는 실용적 후속편입니다: 오늘 AI 코딩 워크플로우에 펫 동반자를 원한다면, 세 가지 현실적 길이 있습니다. Buddy에서 처음 정말로 원했던 것에 맞는 길을 선택하세요.</p>`
+    },
+    {
+      heading: "세 가지 현실적 길",
+      body: `<p>길을 선택하기 전에, 그리워하는 것의 이름을 짓으세요. Buddy는 다른 사람들에게 세 가지 일을 했습니다:</p>
+<ul>
+<li><strong>정체성</strong> — buddy는 <code>accountUuid</code>에서 파생된 오직 당신의 것이었습니다. 아티팩트가 그립습니다.</li>
+<li><strong>생산성 시그널</strong> — buddy는 하루의 분위기 체크였습니다. 긴 세션을 깨주는 작은 터미널 동반자가 그립습니다.</li>
+<li><strong>미학</strong> — CLI에 ASCII 아트가 있는 것이 좋았습니다. 비주얼이 그립습니다.</li>
+</ul>
+<table>
+<tr><th>그리워하는 것</th><th>최선의 길</th><th>비용</th></tr>
+<tr><td>정체성 / 평생 아티팩트</td><td>경로 C: MCP로 부활 + claudebuddy.art 아카이브</td><td>높음</td></tr>
+<tr><td>생산성 / 에이전트 상태</td><td>경로 B: Codex Pets로 전환</td><td>낮음</td></tr>
+<tr><td>미학 / 장식</td><td>경로 B (모든 빌트인 또는 Petdex 펫)</td><td>낮음</td></tr>
+<tr><td>그냥 Claude에 머물고 싶음</td><td>경로 A: /powerup, 펫 없음</td><td>0</td></tr>
+</table>
+<p>다음 세 섹션은 각 경로를 구체적으로 안내합니다.</p>`
+    },
+    {
+      heading: "경로 A: /powerup으로 Claude Code에 머물기",
+      body: `<p>가장 간단한 경로: Claude Code에서 펫이 사라졌음을 받아들이고 Anthropic이 출시한 대체품을 사용하세요. <a href="/powerup-tracker">/powerup</a>은 생산성 이벤트 — 출시된 기능, 수정된 버그, 완료된 세션 — 를 추적하고 생물을 애니메이션하지 않고도 일종의 "개발자 맥박"을 표시합니다.</p>
+<p>당신에게 맞는 경우:</p>
+<ul>
+<li>비-Buddy 이유로 Claude Code에 머물렀음 (모델 품질, MCP 통합, 도구 인체공학)</li>
+<li>실제로 원했던 것은 하루에 대한 가벼운 피드백이었지 생물이 아니었음</li>
+<li>스택에 다른 도구를 추가하고 싶지 않음</li>
+</ul>
+<p>맞지 않는 경우: 펫 자체 — 성격, ASCII 프레임, 결정론적 정체성 — 를 원했다면. <code>/powerup</code>은 정말 유용하지만 buddy 대체물은 아닙니다.</p>`
+    },
+    {
+      heading: "경로 B: Codex Pets로 전환",
+      body: `<p>OpenAI는 2026년 5월에 Codex Pets를 출시했습니다. <code>/pet</code>은 에디터 위 플로팅 창에 빌트인 동반자를 스폰하고; <code>/hatch &lt;prompt&gt;</code>는 설명에서 커스텀 펫을 생성합니다. 전체 명령 세트는 <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet과 /hatch 치트 시트</a>에 있습니다.</p>
+<p><strong>정직한 추천</strong>: Codex Pets는 2026년 출시 중인 Claude Buddy에 가장 가까운 것이며, 어떤 면에서는 더 낫습니다. 펫은 순수하게 장식적이지 않고 실제 워크플로우 시그널 (빨간 시계, 녹색 체크, 활성 스레드)을 운반합니다. 467+ 커뮤니티 펫의 Petdex 카탈로그는 결정론적 드래곤에 갇히는 대신 분위기를 찾을 수 있음을 의미합니다.</p>
+<p><strong>정직한 면책</strong>: 같은 아티팩트가 아닙니다. Codex Pets는 다른 종류의 관계 — 유틸리티 우선, 교환 가능, 커스터마이즈 가능. buddy의 <em>영구성</em>을 가치 있게 여겼다면, Codex Pets는 거래적으로 느껴질 것입니다. <em>동반</em>을 가치 있게 여겼다면, 업그레이드처럼 느껴질 것입니다.</p>
+<h4>빠른 시작</h4>
+<p>macOS 또는 Windows에 Codex 데스크톱 앱을 설치하거나 업데이트합니다. 아무 프롬프트에서 <code>/pet</code>을 실행합니다. 빌트인을 선택합니다. 커스텀을 원하면 설명과 함께 <code>/hatch</code>를 실행하고 잃지 않을 곳에 프롬프트를 저장하세요. 전체 철학과 기능 비교는 <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets vs Claude Code Buddy</a>를 참조하세요.</p>`
+    },
+    {
+      heading: "경로 C: MCP 커뮤니티 도구로 Buddy 부활",
+      body: `<p>Buddy를 놓을 수 없다면, 커뮤니티가 당신을 위한 방법을 가지고 있습니다. <a href="https://github.com/1270011/claude-buddy">claude-buddy MCP 프로젝트</a>는 공식 클라이언트 외부에서 원본 buddy 로직을 실행하는 비공식 재구현입니다. 동일한 FNV-1a 해시와 Mulberry32 PRNG를 사용하므로 돌려받는 buddy는 가졌을 buddy입니다.</p>
+<p>당신에게 맞는 경우:</p>
+<ul>
+<li>미학적 대체가 아닌 원본 아티팩트를 원함</li>
+<li>커뮤니티 MCP 서버 설치가 편안함</li>
+<li>이 경험이 Claude Code의 공식 로드맵 외부에 존재한다는 것을 받아들일 수 있음</li>
+</ul>
+<p>맞지 않는 경우: 원클릭 솔루션이 필요하다면. MCP 설치는 쉽지만 다른 앱에서 <code>/pet</code>을 입력하는 것보다 몇 단계 더 많습니다. Codex Pets가 제공하는 에이전트 상태 오버레이도 제공하지 않습니다 — 부활한 buddy는 원본처럼 장식용입니다.</p>
+<p>영구 아카이브로 <a href="/">claudebuddy.art</a>를 병행 사용할 수도 있습니다. <code>accountUuid</code>를 붙여넣고, buddy를 보고, 후세를 위해 스크린샷하세요. 몸체는 영원합니다.</p>`
+    },
+    {
+      heading: "이동하기 전에 저장할 것",
+      body: `<p>어느 경로를 선택하든, 먼저 이것을 하세요. 5분 걸리고 건너뛰면 손실을 되돌릴 수 없습니다.</p>
+<ol>
+<li><strong>buddy를 조회하세요.</strong> <code>accountUuid</code>를 <a href="/">claudebuddy.art</a>에 붙여넣으세요. 종, 희귀도, 스탯, 눈, 모자, 샤이니 상태를 기록하세요. UUID를 기억하지 못한다면 <a href="/blog/find-your-uuid-complete-platform-guide">여기에 가이드가 있습니다</a>.</li>
+<li><strong>결과를 스크린샷하세요.</strong> 개인 README, dotfiles 저장소, 또는 비공개 gist에 저장하세요. 이것이 가졌던 것의 유일한 영구 기록입니다.</li>
+<li><strong>이름을 적어두세요.</strong> 로컬에서 buddy에 이름을 붙인 적이 있다면 — 마음속으로만이라도 — 적어두세요. Buddy 이름은 서버 측에 저장되지 않았으므로, buddy에서 진정으로 다시 계산할 수 없는 부분입니다. 우리의 <a href="/blog/buddy-naming-impermanence-of-names">이름 지정 글</a>이 왜 이것이 중요한지 깊이 다룹니다.</li>
+<li><strong>종 카탈로그를 둘러보세요.</strong> <a href="/species">/species</a>를 방문해 종 페이지를 찾으세요. lore를 읽으세요. 이것은 buddy가 무엇이었는지의 표준 기록이며, 어떤 단일 클라이언트의 어떤 단일 기능보다 오래 남을 것입니다.</li>
+</ol>
+<p>이것 중 어느 것도 런타임 경험을 복원하지 않습니다. 그러나 Anthropic의 제품 결정에 의존하지 않는 형식으로 오직 당신의 것을 보존합니다.</p>`
+    },
+    {
+      heading: "자주 묻는 질문",
+      body: `<h4>Anthropic이 Buddy를 다시 가져올까요?</h4>
+<p>어느 방향으로도 공식 발표는 없습니다. <a href="/powerup-tracker">/powerup</a>으로의 전환은 임시가 아닌 전략적으로 보입니다 — Anthropic은 개발자 펫이 투자하고 싶은 곳이 아니라고 결정한 것 같습니다. 영구적인 것처럼 계획하세요; 어떤 복귀든 보너스로 취급하세요.</p>
+<h4>MCP buddy 부활 도구를 설치해도 안전한가요?</h4>
+<p><a href="https://github.com/1270011/claude-buddy">프로젝트는 오픈소스</a>입니다; 설치 전에 코드를 감사할 수 있습니다. 모든 커뮤니티 MCP 서버와 마찬가지로, 소스를 읽고, 이슈 탭을 확인하고, 깨끗한 환경에서 먼저 실행하세요. 알고리즘 자체는 비밀이 아닙니다 — Claude Code에서 유출된 로직입니다.</p>
+<h4>Codex Pets와 Claude Code를 동시에 사용할 수 있나요?</h4>
+<p>네. 다른 프로세스에서 실행되며 간섭하지 않습니다. 많은 개발자가 일부 작업에는 Claude Code를, 다른 작업에는 Codex를 사용합니다; Codex 펫은 Codex가 포커스를 받을 때만 렌더링됩니다. 둘 다 실행하는 것에 대해 어떻게 생각해야 하는지 <a href="/blog/codex-pets-vs-claude-code-buddy">비교 가이드</a>를 참조하세요.</p>
+<h4>Claude Code를 v2.1.97 이전으로 다운그레이드하면 어떻게 되나요?</h4>
+<p>Buddy가 이전 버전에 다시 나타납니다. 일부 개발자가 선택한 길이지만, Anthropic이 그 이후 출시한 모든 것 — 모델 개선, 새 도구, 보안 수정 — 을 잃는 비용이 듭니다. 장기 설정으로 추천하지 않습니다. 위의 경로 A, B, 또는 C를 설정하는 동안 임시 아카이브로만 사용하세요.</p>
+<h4>buddy에 이름을 붙였습니다. 어디로 갔나요?</h4>
+<p>이름은 v2.1.97이 아마도 지운 로컬 영혼 파일에만 살았습니다. 서버 측에 저장된 적이 없습니다. 업데이트 전에 영혼 파일을 백업했다면 복원할 수 있고; 그렇지 않으면 이름은 당신의 기억이나 적어둔 곳에만 존재합니다. 많은 사용자에게 종료의 가장 고통스러운 부분이었습니다.</p>
+<h4>펫이 필요 없어도 Codex로 전환해야 하나요?</h4>
+<p>펫만으로 CLI를 전환하는 것은 좋은 이유가 아닙니다. Codex의 모델, 도구, 또는 인체공학이 Claude Code보다 작업에 더 잘 맞으면 전환하세요; 펫은 nice-to-have입니다. Claude Code가 여전히 작동하면 머무르고 위의 경로 A 또는 경로 C를 선택하세요.</p>
+<p><em>리소스: <a href="/">Claude Buddy 체커</a> · <a href="/species">18종 모두</a> · <a href="/powerup-tracker">/powerup tracker</a> · <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets vs Claude Code Buddy</a> · <a href="/blog/codex-pet-hatch-command-cheat-sheet">/pet과 /hatch 치트 시트</a></em></p>`
+    }
+  ]
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
+  {
+    slug: "claude-buddy-retired-migration-guide",
+    publishedAt: "2026-05-05",
+    readingTime: 9,
+    tags: ["claude-code", "migration", "buddy", "powerup", "guide", "v2197"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code',
+    content: {
+      en: BUDDY_RETIRED_EN,
+      zh: BUDDY_RETIRED_ZH,
+      ko: BUDDY_RETIRED_KO,
+    },
+  },
+  {
+    slug: "codex-pet-hatch-command-cheat-sheet",
+    publishedAt: "2026-05-05",
+    readingTime: 7,
+    tags: ["codex", "cheat-sheet", "command", "ide-pets", "openai", "petdex"],
+    discussionCategory: 'guides',
+    pillar: 'ide-pets',
+    content: {
+      en: CODEX_CHEATSHEET_EN,
+      zh: CODEX_CHEATSHEET_ZH,
+      ko: CODEX_CHEATSHEET_KO,
+    },
+  },
+  {
+    slug: "codex-pets-vs-claude-code-buddy",
+    publishedAt: "2026-05-05",
+    readingTime: 12,
+    tags: ["codex", "comparison", "claude-code", "ide-pets", "openai", "buddy"],
+    discussionCategory: 'deep-dives',
+    pillar: 'ide-pets',
+    content: {
+      en: CODEX_VS_BUDDY_EN,
+      zh: CODEX_VS_BUDDY_ZH,
+      ko: CODEX_VS_BUDDY_KO,
+    },
+  },
   {
     slug: "how-to-find-your-claude-code-buddy",
     publishedAt: "2026-04-01",
