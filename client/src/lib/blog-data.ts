@@ -7358,7 +7358,959 @@ ln -s /shared/CLAUDE.md ~/work/repo-b/CLAUDE.md</code></pre>
   ]
 };
 
+// === Phase 3 A: Prompt Caching Complete Guide ===
+const PROMPT_CACHING_EN: ArticleContent = {
+  title: "Claude API Prompt Caching: Complete Guide to Cutting Token Costs by 90% (2026)",
+  metaTitle: "Claude API Prompt Caching Complete Guide (2026)",
+  metaDescription: "Cut Claude API token costs by up to 90% with prompt caching. Pricing math, SDK patterns, what to cache, cache invalidation, monitoring hit rate. TypeScript + Python examples.",
+  excerpt: "Prompt caching is the single highest-leverage optimization for any production app on the Anthropic API. A 30,000-token system prompt that costs $0.09 per request without caching costs $0.009 with it — and the engineering effort is roughly one afternoon. This is the complete guide.",
+  sections: [
+    {
+      heading: "The Problem Prompt Caching Solves",
+      body: `<p>If your Claude-powered app sends the same large context with every request — a 20-page system prompt, a tool catalog, a long document the user is asking questions about — you are paying full price for the same tokens hundreds or thousands of times. <strong>Claude API prompt caching</strong> lets you tell Anthropic "this prefix won't change for the next few minutes; charge me cheaply when I send it again."</p>
+<p>The savings are real. Cache reads price at <strong>10% of base input cost</strong>. A 30,000-token system prompt that costs $0.09 per request on Sonnet 4.6 ($3/M input) costs $0.009 with a cache hit — a 90% reduction on the prefix portion. For high-traffic endpoints this turns into thousands of dollars a month.</p>
+<p>This guide is the practical companion to our <a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP servers</a> article, but at the API level rather than the Claude Code level. If you're building on the SDK, prompt caching is the optimization that pays for itself in the first day.</p>`
+    },
+    {
+      heading: "How Prompt Caching Works",
+      body: `<p>The mental model: the API has an internal cache keyed by the exact prefix of your request. You mark cut points in your messages with <code>cache_control</code>, and Anthropic stores everything up to that point. The next request that has the same prefix gets a cache hit and pays the discounted read price.</p>
+<pre><code>Request 1 (cache write — full base price + 25% surcharge):
+  [system: 30K tokens] [user: 100 tokens]   ← cache_control here
+                          ↓
+                     [Anthropic stores prefix]
+
+Request 2 within TTL (cache hit — 10% read price):
+  [system: 30K tokens] [user: 200 tokens]   ← same prefix, new tail
+                          ↓
+                     [served from cache]</code></pre>
+<p><strong>Two important rules</strong>:</p>
+<ol>
+<li><strong>The prefix must match exactly</strong>. One character of difference and you miss the cache. Build your prefixes deterministically.</li>
+<li><strong>The cut point must be at a block boundary</strong>. You can't cache the middle of a message. <code>cache_control</code> goes on the last block you want included in the cached prefix.</li>
+</ol>`
+    },
+    {
+      heading: "The Two Cache Tiers — 5 Minutes and 1 Hour",
+      body: `<p>Anthropic offers two TTL options, with different write surcharges:</p>
+<table>
+<tr><th>Tier</th><th>TTL</th><th>Write Surcharge</th><th>Read Discount</th><th>Best For</th></tr>
+<tr><td>Default (5 min)</td><td>5 minutes</td><td>+25% on write</td><td>−90% on read</td><td>Active conversations, multi-turn agents</td></tr>
+<tr><td>Extended (1 hour)</td><td>1 hour</td><td>+100% on write</td><td>−90% on read</td><td>Long-lived sessions, batch workloads with bursty traffic</td></tr>
+</table>
+<p>The 1-hour tier costs <strong>twice as much to write</strong> but reads at the same discount. The math: 1-hour caching pays off when you expect at least 4 cache reads (because you've paid 2× the write cost vs default tier — you need 4 reads at −90% to break even on the extra 1× write surcharge).</p>
+<pre><code>// Default 5-minute cache
+{ "type": "text", "text": "...", "cache_control": { "type": "ephemeral" } }
+
+// Extended 1-hour cache
+{ "type": "text", "text": "...", "cache_control": { "type": "ephemeral", "ttl": "1h" } }</code></pre>
+<p><strong>Default rule of thumb</strong>: start with 5-minute cache. Switch to 1-hour only when you have telemetry showing your cache hit rate would benefit (next-section).</p>`
+    },
+    {
+      heading: "Pricing Math With Real Numbers",
+      body: `<p>Concrete example — Sonnet 4.6 prices (May 2026):</p>
+<table>
+<tr><th>Operation</th><th>Price per 1M tokens</th></tr>
+<tr><td>Input (uncached)</td><td>$3.00</td></tr>
+<tr><td>Cache write (5min)</td><td>$3.75 (+25%)</td></tr>
+<tr><td>Cache write (1h)</td><td>$6.00 (+100%)</td></tr>
+<tr><td>Cache read</td><td>$0.30 (−90%)</td></tr>
+<tr><td>Output</td><td>$15.00</td></tr>
+</table>
+<h4>Scenario: 30K-token system prompt, 1000 requests over 5 minutes</h4>
+<table>
+<tr><th>Strategy</th><th>System prompt cost</th><th>Total saved</th></tr>
+<tr><td>No caching</td><td>1000 × 30K × $3/M = <strong>$90.00</strong></td><td>—</td></tr>
+<tr><td>5-min caching</td><td>1× $3.75/M × 30K + 999× $0.30/M × 30K = $0.11 + $9.00 = <strong>$9.11</strong></td><td>$80.89 (90%)</td></tr>
+</table>
+<h4>Scenario: same 30K prompt, 5000 requests over 1 hour (heavy multi-turn agent)</h4>
+<table>
+<tr><th>Strategy</th><th>System prompt cost</th><th>Total saved</th></tr>
+<tr><td>No caching</td><td>5000 × 30K × $3/M = <strong>$450.00</strong></td><td>—</td></tr>
+<tr><td>5-min caching (12 writes)</td><td>12× $3.75/M × 30K + 4988× $0.30/M × 30K = $1.35 + $44.89 = <strong>$46.24</strong></td><td>$403.76 (90%)</td></tr>
+<tr><td>1h caching (1 write)</td><td>1× $6/M × 30K + 4999× $0.30/M × 30K = $0.18 + $44.99 = <strong>$45.17</strong></td><td>$404.83 (90%)</td></tr>
+</table>
+<p>Both tiers save roughly the same in steady-state — the 1h tier wins by $1 in this scenario because it avoids re-writes. The real difference shows up in <strong>burst-then-quiet</strong> patterns where 5-min caching expires between bursts.</p>`
+    },
+    {
+      heading: "The Anthropic SDK Pattern",
+      body: `<h4>TypeScript</h4>
+<pre><code>import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic();
+
+const SYSTEM_PROMPT = "..."; // 30K tokens of stable instructions
+
+async function ask(question: string) {
+  return client.messages.create({
+    model: "claude-sonnet-4-6",
+    max_tokens: 1024,
+    system: [
+      {
+        type: "text",
+        text: SYSTEM_PROMPT,
+        cache_control: { type: "ephemeral" }, // ← cut here
+      },
+    ],
+    messages: [{ role: "user", content: question }],
+  });
+}</code></pre>
+<h4>Python</h4>
+<pre><code>import anthropic
+
+client = anthropic.Anthropic()
+
+SYSTEM_PROMPT = "..."  # 30K tokens
+
+def ask(question: str):
+    return client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=1024,
+        system=[
+            {
+                "type": "text",
+                "text": SYSTEM_PROMPT,
+                "cache_control": {"type": "ephemeral"},
+            }
+        ],
+        messages=[{"role": "user", "content": question}],
+    )</code></pre>
+<h4>Multiple cut points (cache layers)</h4>
+<p>You can mark up to <strong>4 cache breakpoints</strong> per request. Useful when you have a stable global prefix + per-tenant context + per-conversation context:</p>
+<pre><code>system: [
+  { type: "text", text: GLOBAL_INSTRUCTIONS, cache_control: { type: "ephemeral" } },
+  { type: "text", text: TENANT_DOCS, cache_control: { type: "ephemeral" } },
+],
+messages: [
+  { role: "user", content: [
+      { type: "text", text: CONVERSATION_HISTORY, cache_control: { type: "ephemeral" } },
+      { type: "text", text: latest_question }
+  ]}
+]</code></pre>
+<p>The cache will hit at whatever the longest matching prefix is. New tenant traffic still benefits from the global cache; new conversations still benefit from the tenant cache.</p>`
+    },
+    {
+      heading: "What to Cache (and What Not to)",
+      body: `<p>The bar is simple: <strong>cache anything large that doesn't change between requests within the TTL</strong>. Anthropic enforces a minimum cacheable size (1024 tokens for Sonnet/Opus, 2048 for Haiku) — smaller blocks won't earn the surcharge back.</p>
+<h4>Strong candidates</h4>
+<ul>
+<li><strong>System prompts</strong> over 1K tokens — almost always worth caching</li>
+<li><strong>Tool definitions</strong> — schemas don't change between calls in a session</li>
+<li><strong>RAG context</strong> when the same chunks are retrieved repeatedly within a session</li>
+<li><strong>Long documents</strong> that the user is asking multiple questions about ("read this 50-page contract, then ask")</li>
+<li><strong>Few-shot examples</strong> — same examples used many times</li>
+</ul>
+<h4>Don't cache</h4>
+<ul>
+<li>Anything below the minimum size</li>
+<li>Anything that changes per request (timestamps, request IDs, recent dynamic context)</li>
+<li>Output blocks (only input is cacheable; this isn't even an option in the API)</li>
+<li>Conversation tails that are still growing — the unstable part</li>
+</ul>
+<h4>The hidden trap: dynamic data inside system prompts</h4>
+<p>If your system prompt includes <code>Current time: ${'{{'}new Date(){'}}'}</code>, you'll never get a cache hit because the prefix changes every request. Common gotchas: timestamps, user IDs, request UUIDs, A/B test variants. Move dynamic content out of the cached prefix and into the message tail.</p>`
+    },
+    {
+      heading: "Measuring Cache Hit Rate and Common Mistakes",
+      body: `<p>Every API response includes <code>usage</code> with cache stats. Log these to know if your caching is actually working:</p>
+<pre><code>response.usage = {
+  input_tokens: 50,                  // tokens NOT served from cache
+  cache_creation_input_tokens: 0,    // tokens written to cache this request
+  cache_read_input_tokens: 30000,    // tokens read from cache
+  output_tokens: 200,
+}</code></pre>
+<p><strong>Healthy steady-state cache</strong>: <code>cache_read_input_tokens</code> should dominate. <code>cache_creation_input_tokens</code> should be near zero except on the first request of each TTL window.</p>
+<h4>Five Common Mistakes</h4>
+<ol>
+<li><strong>Caching below the minimum size</strong>. You pay the write surcharge but no read discount applies. Always check your block size against the model's minimum (1024 for Sonnet, 2048 for Haiku).</li>
+<li><strong>Dynamic data in cached blocks</strong>. Timestamps, UUIDs, user IDs in the cached prefix mean every request is a cache miss + a cache write. Telemetry will show this immediately — <code>cache_creation</code> won't drop.</li>
+<li><strong>Wrong cut point</strong>. Putting <code>cache_control</code> too early misses caching the bulk of your stable context. Put it on the <em>last</em> block you want included.</li>
+<li><strong>Using 1h tier for low-traffic endpoints</strong>. The 100% write surcharge eats your savings unless you'll get many reads. Stay on default (5min) until telemetry justifies switching.</li>
+<li><strong>Not warming the cache before bursts</strong>. If you know a flood of requests is coming (e.g. scheduled batch job), do one warm-up request a few seconds before. The 25% write surcharge is paid by the warm-up, not by your real traffic.</li>
+</ol>`
+    },
+    {
+      heading: "Frequently Asked Questions",
+      body: `<h4>Does prompt caching work with streaming responses?</h4>
+<p>Yes. The cache hit/miss is determined at request submission, independent of streaming. Both streaming and non-streaming benefit equally.</p>
+<h4>Can I cache messages from previous turns in a conversation?</h4>
+<p>Yes — that's one of the most valuable patterns. Mark <code>cache_control</code> on the last message of the conversation history. As the conversation grows, the cached prefix grows with it, and only the new turn pays full price.</p>
+<h4>Does prompt caching work for tool use?</h4>
+<p>Yes. Tool definitions are part of the cacheable prefix. If you have 20 tools with detailed descriptions, caching them saves substantially.</p>
+<h4>What happens when the cache expires mid-request?</h4>
+<p>The next request after expiration is a cache miss + new cache write. The expiration is silent — your code doesn't get notified. Monitor <code>cache_creation_input_tokens</code> to detect expiration patterns.</p>
+<h4>Is caching available on all Claude models?</h4>
+<p>Caching is available on Sonnet 4.x, Opus 4.x, and Haiku 4.x. Older models (Claude 3.x) had limited caching; they're being deprecated. Always check the official model availability page for the current matrix.</p>
+<h4>Can I share a cache across different API keys or projects?</h4>
+<p>No. Caches are scoped to your organization and the exact request prefix. Different API keys within the same org may share a cache if their prefixes match exactly, but cross-org sharing doesn't happen.</p>
+<h4>How does caching interact with the Anthropic Workbench / Console?</h4>
+<p>The same caching rules apply — your Workbench requests can hit caches if the prefix matches. Most teams don't see Workbench cache hits because Workbench traffic is too low-volume for prefixes to repeat within TTL.</p>
+<p><em>Related: <a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP servers for Claude Code</a> · <a href="/blog/claude-code-folder-complete-guide">.claude/ folder complete guide</a> · <a href="/blog/claude-code-hooks-complete-guide">Claude Code Hooks practical guide</a></em></p>`
+    }
+  ]
+};
+
+const PROMPT_CACHING_ZH: ArticleContent = {
+  title: "Claude API Prompt Caching 完整指南——把 token 成本砍掉 90%（2026）",
+  metaTitle: "Claude API Prompt Caching 完整指南 (2026)",
+  metaDescription: "用 prompt caching 把 Claude API token 成本最多砍掉 90%。定价数学、SDK 模式、缓存什么、缓存失效、监控命中率。TypeScript + Python 示例。",
+  excerpt: "Prompt caching 是 Anthropic API 上任何生产应用的最高杠杆优化。一个 30000 token 的 system prompt，没缓存每次请求 $0.09，缓存后 $0.009——而工程投入约一下午。这是完整指南。",
+  sections: [
+    {
+      heading: "Prompt Caching 解决什么问题",
+      body: `<p>如果你的 Claude 应用每次请求都发送同样的大上下文——20 页 system prompt、工具目录、用户在问问题的长文档——你就在为同样的 token 付几百几千次全价。<strong>Claude API prompt caching</strong> 让你告诉 Anthropic"这个前缀接下来几分钟不会变；我再发同样的就便宜点收费"。</p>
+<p>节省是实打实的。缓存读取按 <strong>基础输入价的 10%</strong> 收费。30000 token 的 system prompt 在 Sonnet 4.6（$3/M input）上每次请求 $0.09，命中缓存只 $0.009——前缀部分省 90%。高流量端点每月省几千美元。</p>
+<p>本文是 <a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP 服务器</a> 文章在 API 层的实战姊妹篇，而不是 Claude Code 层。如果你在 SDK 上构建，prompt caching 是上线第一天就能回本的优化。</p>`
+    },
+    {
+      heading: "Prompt Caching 怎么工作",
+      body: `<p>心智模型：API 内部用你请求的精确前缀做缓存键。你用 <code>cache_control</code> 在 messages 里标切点，Anthropic 存储到该点为止的所有内容。下一个有同样前缀的请求会命中缓存，按打折读取价付费。</p>
+<pre><code>请求 1（缓存写入——全价 + 25% 加价）：
+  [system: 30K tokens] [user: 100 tokens]   ← 这里 cache_control
+                          ↓
+                     [Anthropic 存储前缀]
+
+TTL 内的请求 2（缓存命中——10% 读取价）：
+  [system: 30K tokens] [user: 200 tokens]   ← 同前缀，新尾巴
+                          ↓
+                     [从缓存提供]</code></pre>
+<p><strong>两条重要规则</strong>：</p>
+<ol>
+<li><strong>前缀必须精确匹配</strong>。差一个字符就不命中。前缀要确定性构建。</li>
+<li><strong>切点必须在块边界</strong>。不能缓存消息中间。<code>cache_control</code> 放在你想包含进缓存前缀的最后一个块上。</li>
+</ol>`
+    },
+    {
+      heading: "两个缓存层级——5 分钟和 1 小时",
+      body: `<p>Anthropic 提供两个 TTL 选项，写入加价不同：</p>
+<table>
+<tr><th>层级</th><th>TTL</th><th>写入加价</th><th>读取折扣</th><th>最适合</th></tr>
+<tr><td>默认（5 分钟）</td><td>5 分钟</td><td>+25%</td><td>−90%</td><td>活跃对话、多轮 agent</td></tr>
+<tr><td>扩展（1 小时）</td><td>1 小时</td><td>+100%</td><td>−90%</td><td>长会话、突发流量批处理</td></tr>
+</table>
+<p>1 小时层级<strong>写入贵两倍</strong>，但读取折扣相同。算术：1 小时缓存在你预期至少 4 次缓存读取时回本（因为你比默认层多付了 1× 的写入开销——需要 4 次 −90% 读取来抹平）。</p>
+<pre><code>// 默认 5 分钟缓存
+{ "type": "text", "text": "...", "cache_control": { "type": "ephemeral" } }
+
+// 扩展 1 小时缓存
+{ "type": "text", "text": "...", "cache_control": { "type": "ephemeral", "ttl": "1h" } }</code></pre>
+<p><strong>默认经验</strong>：从 5 分钟缓存开始。只有在遥测显示你的命中率会因 1 小时缓存受益时才切换（下一节）。</p>`
+    },
+    {
+      heading: "用真实数字算定价",
+      body: `<p>具体示例——Sonnet 4.6 价格（2026 年 5 月）：</p>
+<table>
+<tr><th>操作</th><th>每 1M token 价格</th></tr>
+<tr><td>输入（未缓存）</td><td>$3.00</td></tr>
+<tr><td>缓存写入（5 分钟）</td><td>$3.75（+25%）</td></tr>
+<tr><td>缓存写入（1 小时）</td><td>$6.00（+100%）</td></tr>
+<tr><td>缓存读取</td><td>$0.30（−90%）</td></tr>
+<tr><td>输出</td><td>$15.00</td></tr>
+</table>
+<h4>场景：30K token system prompt，5 分钟内 1000 次请求</h4>
+<table>
+<tr><th>策略</th><th>System prompt 成本</th><th>总省</th></tr>
+<tr><td>不缓存</td><td>1000 × 30K × $3/M = <strong>$90.00</strong></td><td>—</td></tr>
+<tr><td>5 分钟缓存</td><td>1× $3.75/M × 30K + 999× $0.30/M × 30K = $0.11 + $9.00 = <strong>$9.11</strong></td><td>$80.89（90%）</td></tr>
+</table>
+<h4>场景：同 30K prompt，1 小时内 5000 次请求（重多轮 agent）</h4>
+<table>
+<tr><th>策略</th><th>System prompt 成本</th><th>总省</th></tr>
+<tr><td>不缓存</td><td>5000 × 30K × $3/M = <strong>$450.00</strong></td><td>—</td></tr>
+<tr><td>5 分钟缓存（12 次写）</td><td>12× $3.75/M × 30K + 4988× $0.30/M × 30K = $1.35 + $44.89 = <strong>$46.24</strong></td><td>$403.76（90%）</td></tr>
+<tr><td>1 小时缓存（1 次写）</td><td>1× $6/M × 30K + 4999× $0.30/M × 30K = $0.18 + $44.99 = <strong>$45.17</strong></td><td>$404.83（90%）</td></tr>
+</table>
+<p>稳态下两个层级省的差不多——这个场景 1 小时层级因避免重写多省 $1。真实差异显现在<strong>突发-然后安静</strong>模式下，5 分钟缓存在突发间隔失效。</p>`
+    },
+    {
+      heading: "Anthropic SDK 模式",
+      body: `<h4>TypeScript</h4>
+<pre><code>import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic();
+
+const SYSTEM_PROMPT = "..."; // 30K token 稳定指令
+
+async function ask(question: string) {
+  return client.messages.create({
+    model: "claude-sonnet-4-6",
+    max_tokens: 1024,
+    system: [
+      {
+        type: "text",
+        text: SYSTEM_PROMPT,
+        cache_control: { type: "ephemeral" }, // ← 这里切
+      },
+    ],
+    messages: [{ role: "user", content: question }],
+  });
+}</code></pre>
+<h4>Python</h4>
+<pre><code>import anthropic
+
+client = anthropic.Anthropic()
+
+SYSTEM_PROMPT = "..."  # 30K tokens
+
+def ask(question: str):
+    return client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=1024,
+        system=[
+            {
+                "type": "text",
+                "text": SYSTEM_PROMPT,
+                "cache_control": {"type": "ephemeral"},
+            }
+        ],
+        messages=[{"role": "user", "content": question}],
+    )</code></pre>
+<h4>多个切点（缓存层）</h4>
+<p>每个请求最多可标 <strong>4 个缓存断点</strong>。当你有稳定全局前缀 + 租户上下文 + 会话上下文时有用：</p>
+<pre><code>system: [
+  { type: "text", text: GLOBAL_INSTRUCTIONS, cache_control: { type: "ephemeral" } },
+  { type: "text", text: TENANT_DOCS, cache_control: { type: "ephemeral" } },
+],
+messages: [
+  { role: "user", content: [
+      { type: "text", text: CONVERSATION_HISTORY, cache_control: { type: "ephemeral" } },
+      { type: "text", text: latest_question }
+  ]}
+]</code></pre>
+<p>缓存会命中最长匹配前缀。新租户流量仍受益于全局缓存；新对话仍受益于租户缓存。</p>`
+    },
+    {
+      heading: "缓存什么（不缓存什么）",
+      body: `<p>标准简单：<strong>缓存任何 TTL 内不会变的大块</strong>。Anthropic 强制最小可缓存大小（Sonnet/Opus 1024 token，Haiku 2048）——更小的块挣不回加价。</p>
+<h4>强候选</h4>
+<ul>
+<li><strong>System prompt</strong> 超 1K token——几乎总值得</li>
+<li><strong>工具定义</strong>——会话内 schema 不变</li>
+<li><strong>RAG 上下文</strong> 当同样的 chunk 在会话内反复检索</li>
+<li><strong>长文档</strong> 用户在问多个问题（"读这 50 页合同，然后问"）</li>
+<li><strong>Few-shot 示例</strong>——同样示例用多次</li>
+</ul>
+<h4>不要缓存</h4>
+<ul>
+<li>低于最小尺寸的</li>
+<li>每请求变的（时间戳、请求 ID、最近动态上下文）</li>
+<li>输出块（只输入可缓存；API 里压根不是选项）</li>
+<li>仍在增长的对话尾——不稳定部分</li>
+</ul>
+<h4>隐藏陷阱：system prompt 里的动态数据</h4>
+<p>如果你的 system prompt 包含 <code>Current time: ${'{{'}new Date(){'}}'}</code>，你永远不会命中缓存因为前缀每次请求都变。常见坑：时间戳、用户 ID、请求 UUID、A/B 实验变体。把动态内容从缓存前缀移到消息尾。</p>`
+    },
+    {
+      heading: "测量缓存命中率与常见错误",
+      body: `<p>每个 API 响应都包含 <code>usage</code> 缓存统计。日志这些来知道你的缓存是不是真在工作：</p>
+<pre><code>response.usage = {
+  input_tokens: 50,                  // 未从缓存提供的 token
+  cache_creation_input_tokens: 0,    // 此请求写入缓存的 token
+  cache_read_input_tokens: 30000,    // 从缓存读取的 token
+  output_tokens: 200,
+}</code></pre>
+<p><strong>健康稳态缓存</strong>：<code>cache_read_input_tokens</code> 应主导。<code>cache_creation_input_tokens</code> 除每个 TTL 窗口的第一次请求外应近零。</p>
+<h4>五个常见错误</h4>
+<ol>
+<li><strong>低于最小尺寸缓存</strong>。你付了写入加价但没读取折扣应用。总检查块大小对照模型最小值（Sonnet 1024，Haiku 2048）。</li>
+<li><strong>缓存块里有动态数据</strong>。缓存前缀里的时间戳、UUID、用户 ID 意味着每次请求都是缓存未命中 + 缓存写入。遥测立刻就能看出——<code>cache_creation</code> 不会降。</li>
+<li><strong>错误切点</strong>。<code>cache_control</code> 放太早就错过了缓存大部分稳定上下文。放在你想包含进的<em>最后</em>一个块上。</li>
+<li><strong>低流量端点用 1 小时层级</strong>。100% 写入加价吃掉你的节省，除非你会得到很多读取。在遥测合理化切换前坚持默认（5 分钟）。</li>
+<li><strong>突发前不预热缓存</strong>。如果你知道请求洪流要来（如计划批处理），提前几秒做一次预热请求。25% 写入加价由预热付，不由真实流量付。</li>
+</ol>`
+    },
+    {
+      heading: "常见问题",
+      body: `<h4>Prompt caching 配流式响应工作吗？</h4>
+<p>是。缓存命中/未命中在请求提交时决定，独立于流式。流式和非流式同样受益。</p>
+<h4>能缓存对话前几轮的消息吗？</h4>
+<p>能——这是最有价值的模式之一。在对话历史最后一条消息上标 <code>cache_control</code>。对话增长，缓存前缀也增长，只有新一轮付全价。</p>
+<h4>Prompt caching 在工具使用上工作吗？</h4>
+<p>是。工具定义是可缓存前缀的一部分。如果你有 20 个工具带详细描述，缓存它们大幅省钱。</p>
+<h4>请求中途缓存过期会怎样？</h4>
+<p>过期后下一次请求是缓存未命中 + 新缓存写入。过期是静默的——你的代码不会被通知。监控 <code>cache_creation_input_tokens</code> 检测过期模式。</p>
+<h4>所有 Claude 模型都支持缓存吗？</h4>
+<p>缓存在 Sonnet 4.x、Opus 4.x、Haiku 4.x 上可用。老模型（Claude 3.x）缓存有限；正在弃用。检查官方模型可用性页拿当前矩阵。</p>
+<h4>能在不同 API key 或项目间共享缓存吗？</h4>
+<p>不能。缓存范围是你的组织 + 精确请求前缀。同 org 内不同 API key 如前缀精确匹配可能共享缓存，但跨 org 共享不发生。</p>
+<h4>缓存怎么和 Anthropic Workbench / Console 交互？</h4>
+<p>同样缓存规则适用——你的 Workbench 请求如前缀匹配可命中缓存。大多数团队看不到 Workbench 缓存命中因为 Workbench 流量太低，前缀不在 TTL 内重复。</p>
+<p><em>相关：<a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP 服务器</a> · <a href="/blog/claude-code-folder-complete-guide">.claude/ 文件夹完整指南</a> · <a href="/blog/claude-code-hooks-complete-guide">Hooks 实战指南</a></em></p>`
+    }
+  ]
+};
+
+const PROMPT_CACHING_KO: ArticleContent = {
+  title: "Claude API Prompt Caching 완벽 가이드 — 토큰 비용 90% 절감 (2026)",
+  metaTitle: "Claude API Prompt Caching 완벽 가이드 (2026)",
+  metaDescription: "Prompt caching으로 Claude API 토큰 비용을 최대 90% 절감. 가격 계산, SDK 패턴, 캐시할 것, 캐시 무효화, 적중률 모니터링. TypeScript + Python 예제.",
+  excerpt: "Prompt caching은 Anthropic API의 모든 프로덕션 앱에서 가장 레버리지가 큰 최적화입니다. 30,000 토큰 시스템 프롬프트가 캐싱 없이 요청당 $0.09인 것이 캐싱 후 $0.009 — 엔지니어링 노력은 약 한나절. 이것이 완전한 가이드입니다.",
+  sections: [
+    {
+      heading: "Prompt Caching이 해결하는 문제",
+      body: `<p>Claude로 구동되는 앱이 매 요청마다 같은 큰 컨텍스트 — 20페이지 시스템 프롬프트, 도구 카탈로그, 사용자가 질문하고 있는 긴 문서 — 를 보낸다면, 같은 토큰에 대해 수백~수천 번 정가를 지불하고 있는 것입니다. <strong>Claude API prompt caching</strong>이 Anthropic에 "이 prefix는 다음 몇 분간 변하지 않을 것이니, 다시 보낼 때 저렴하게 청구해주세요"라고 알릴 수 있게 합니다.</p>
+<p>절감은 실재합니다. 캐시 읽기는 <strong>기본 입력 비용의 10%</strong>로 가격 책정됩니다. Sonnet 4.6($3/M input)에서 요청당 $0.09가 드는 30,000 토큰 시스템 프롬프트가 캐시 적중 시 $0.009 — prefix 부분에서 90% 감소. 트래픽이 많은 엔드포인트는 한 달에 수천 달러로 환산됩니다.</p>
+<p>이 글은 <a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP 서버</a> 글의 실전 자매편이지만, Claude Code 레벨이 아닌 API 레벨입니다. SDK 위에서 빌드한다면 prompt caching은 첫날에 본전을 뽑는 최적화입니다.</p>`
+    },
+    {
+      heading: "Prompt Caching 작동 방식",
+      body: `<p>멘탈 모델: API는 요청의 정확한 prefix를 키로 하는 내부 캐시를 가집니다. 메시지에 <code>cache_control</code>로 컷 포인트를 표시하면 Anthropic이 그 지점까지의 모든 것을 저장합니다. 같은 prefix를 가진 다음 요청은 캐시 적중되어 할인된 읽기 가격을 지불합니다.</p>
+<pre><code>요청 1 (캐시 쓰기 — 정가 + 25% 추가):
+  [system: 30K tokens] [user: 100 tokens]   ← 여기 cache_control
+                          ↓
+                     [Anthropic이 prefix 저장]
+
+TTL 내 요청 2 (캐시 적중 — 10% 읽기 가격):
+  [system: 30K tokens] [user: 200 tokens]   ← 같은 prefix, 새 꼬리
+                          ↓
+                     [캐시에서 제공]</code></pre>
+<p><strong>두 가지 중요한 규칙</strong>:</p>
+<ol>
+<li><strong>Prefix는 정확히 일치해야 함</strong>. 한 글자 차이로 캐시 미스. prefix를 결정론적으로 빌드.</li>
+<li><strong>컷 포인트는 블록 경계여야 함</strong>. 메시지 중간을 캐시할 수 없음. <code>cache_control</code>은 캐시 prefix에 포함하고 싶은 마지막 블록에 둠.</li>
+</ol>`
+    },
+    {
+      heading: "두 캐시 티어 — 5분과 1시간",
+      body: `<p>Anthropic은 두 TTL 옵션을 제공하며, 쓰기 추가 요금이 다릅니다:</p>
+<table>
+<tr><th>티어</th><th>TTL</th><th>쓰기 추가</th><th>읽기 할인</th><th>최적</th></tr>
+<tr><td>기본 (5분)</td><td>5분</td><td>+25%</td><td>−90%</td><td>활성 대화, 멀티턴 에이전트</td></tr>
+<tr><td>확장 (1시간)</td><td>1시간</td><td>+100%</td><td>−90%</td><td>긴 세션, 버스트 트래픽 배치</td></tr>
+</table>
+<p>1시간 티어는 <strong>쓰기가 두 배 비싸지만</strong> 읽기는 같은 할인. 계산: 1시간 캐싱은 최소 4번의 캐시 읽기를 예상할 때 본전 (기본 티어 대비 1× 추가 쓰기 비용을 −90% 읽기 4번으로 만회).</p>
+<pre><code>// 기본 5분 캐시
+{ "type": "text", "text": "...", "cache_control": { "type": "ephemeral" } }
+
+// 확장 1시간 캐시
+{ "type": "text", "text": "...", "cache_control": { "type": "ephemeral", "ttl": "1h" } }</code></pre>
+<p><strong>기본 경험칙</strong>: 5분 캐시로 시작. 텔레메트리가 1시간 캐싱이 적중률에 도움이 됨을 보여줄 때만 전환 (다음 섹션).</p>`
+    },
+    {
+      heading: "실제 숫자로 가격 계산",
+      body: `<p>구체적 예시 — Sonnet 4.6 가격 (2026년 5월):</p>
+<table>
+<tr><th>작업</th><th>1M 토큰당 가격</th></tr>
+<tr><td>입력 (캐시 없음)</td><td>$3.00</td></tr>
+<tr><td>캐시 쓰기 (5분)</td><td>$3.75 (+25%)</td></tr>
+<tr><td>캐시 쓰기 (1시간)</td><td>$6.00 (+100%)</td></tr>
+<tr><td>캐시 읽기</td><td>$0.30 (−90%)</td></tr>
+<tr><td>출력</td><td>$15.00</td></tr>
+</table>
+<h4>시나리오: 30K 토큰 시스템 프롬프트, 5분간 1000 요청</h4>
+<table>
+<tr><th>전략</th><th>시스템 프롬프트 비용</th><th>총 절감</th></tr>
+<tr><td>캐싱 없음</td><td>1000 × 30K × $3/M = <strong>$90.00</strong></td><td>—</td></tr>
+<tr><td>5분 캐싱</td><td>1× $3.75/M × 30K + 999× $0.30/M × 30K = $0.11 + $9.00 = <strong>$9.11</strong></td><td>$80.89 (90%)</td></tr>
+</table>
+<h4>시나리오: 같은 30K 프롬프트, 1시간간 5000 요청 (헤비 멀티턴 에이전트)</h4>
+<table>
+<tr><th>전략</th><th>시스템 프롬프트 비용</th><th>총 절감</th></tr>
+<tr><td>캐싱 없음</td><td>5000 × 30K × $3/M = <strong>$450.00</strong></td><td>—</td></tr>
+<tr><td>5분 캐싱 (쓰기 12)</td><td>12× $3.75/M × 30K + 4988× $0.30/M × 30K = $1.35 + $44.89 = <strong>$46.24</strong></td><td>$403.76 (90%)</td></tr>
+<tr><td>1시간 캐싱 (쓰기 1)</td><td>1× $6/M × 30K + 4999× $0.30/M × 30K = $0.18 + $44.99 = <strong>$45.17</strong></td><td>$404.83 (90%)</td></tr>
+</table>
+<p>두 티어 모두 정상 상태에서 비슷하게 절감 — 1시간 티어가 재쓰기를 피해 이 시나리오에서 $1 더 절감. 진짜 차이는 5분 캐시가 버스트 사이에 만료되는 <strong>버스트-침묵</strong> 패턴에서 드러남.</p>`
+    },
+    {
+      heading: "Anthropic SDK 패턴",
+      body: `<h4>TypeScript</h4>
+<pre><code>import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic();
+
+const SYSTEM_PROMPT = "..."; // 30K 토큰의 안정적 지침
+
+async function ask(question: string) {
+  return client.messages.create({
+    model: "claude-sonnet-4-6",
+    max_tokens: 1024,
+    system: [
+      {
+        type: "text",
+        text: SYSTEM_PROMPT,
+        cache_control: { type: "ephemeral" }, // ← 여기 컷
+      },
+    ],
+    messages: [{ role: "user", content: question }],
+  });
+}</code></pre>
+<h4>Python</h4>
+<pre><code>import anthropic
+
+client = anthropic.Anthropic()
+
+SYSTEM_PROMPT = "..."  # 30K 토큰
+
+def ask(question: str):
+    return client.messages.create(
+        model="claude-sonnet-4-6",
+        max_tokens=1024,
+        system=[
+            {
+                "type": "text",
+                "text": SYSTEM_PROMPT,
+                "cache_control": {"type": "ephemeral"},
+            }
+        ],
+        messages=[{"role": "user", "content": question}],
+    )</code></pre>
+<h4>여러 컷 포인트 (캐시 레이어)</h4>
+<p>요청당 최대 <strong>4개 캐시 중단점</strong>을 표시할 수 있습니다. 안정적 글로벌 prefix + 테넌트 컨텍스트 + 대화 컨텍스트가 있을 때 유용:</p>
+<pre><code>system: [
+  { type: "text", text: GLOBAL_INSTRUCTIONS, cache_control: { type: "ephemeral" } },
+  { type: "text", text: TENANT_DOCS, cache_control: { type: "ephemeral" } },
+],
+messages: [
+  { role: "user", content: [
+      { type: "text", text: CONVERSATION_HISTORY, cache_control: { type: "ephemeral" } },
+      { type: "text", text: latest_question }
+  ]}
+]</code></pre>
+<p>캐시는 가장 긴 매칭 prefix에서 적중. 새 테넌트 트래픽도 글로벌 캐시의 혜택을 받음; 새 대화도 테넌트 캐시의 혜택을 받음.</p>`
+    },
+    {
+      heading: "무엇을 캐시할까 (그리고 무엇을 안 할까)",
+      body: `<p>기준은 단순: <strong>TTL 내에서 변하지 않는 큰 것을 모두 캐시</strong>. Anthropic은 최소 캐시 가능 크기를 강제 (Sonnet/Opus 1024 토큰, Haiku 2048) — 더 작은 블록은 추가 요금을 회수하지 못함.</p>
+<h4>강력한 후보</h4>
+<ul>
+<li><strong>1K 토큰을 넘는 시스템 프롬프트</strong> — 거의 항상 캐시할 가치</li>
+<li><strong>도구 정의</strong> — 세션 내 호출 간에 스키마 안 변함</li>
+<li><strong>RAG 컨텍스트</strong> 같은 청크가 세션 내 반복 검색될 때</li>
+<li><strong>긴 문서</strong> 사용자가 여러 질문 ("이 50페이지 계약서 읽고 물어봐")</li>
+<li><strong>Few-shot 예시</strong> — 같은 예시 여러 번 사용</li>
+</ul>
+<h4>캐시 안 함</h4>
+<ul>
+<li>최소 크기 미만</li>
+<li>요청마다 변하는 것 (타임스탬프, 요청 ID, 최근 동적 컨텍스트)</li>
+<li>출력 블록 (입력만 캐시 가능; API에서 옵션도 아님)</li>
+<li>여전히 자라는 대화 꼬리 — 불안정 부분</li>
+</ul>
+<h4>숨은 함정: 시스템 프롬프트 내 동적 데이터</h4>
+<p>시스템 프롬프트에 <code>Current time: ${'{{'}new Date(){'}}'}</code>가 포함되어 있으면 prefix가 매 요청 변하므로 절대 캐시 적중을 얻지 못합니다. 흔한 함정: 타임스탬프, 사용자 ID, 요청 UUID, A/B 테스트 변형. 동적 콘텐츠를 캐시 prefix 밖으로 메시지 꼬리로 옮기세요.</p>`
+    },
+    {
+      heading: "캐시 적중률 측정과 흔한 실수",
+      body: `<p>모든 API 응답은 <code>usage</code>에 캐시 통계 포함. 캐싱이 실제로 작동하는지 알기 위해 로그:</p>
+<pre><code>response.usage = {
+  input_tokens: 50,                  // 캐시에서 제공되지 않은 토큰
+  cache_creation_input_tokens: 0,    // 이 요청에 캐시에 쓰인 토큰
+  cache_read_input_tokens: 30000,    // 캐시에서 읽은 토큰
+  output_tokens: 200,
+}</code></pre>
+<p><strong>건강한 정상 상태 캐시</strong>: <code>cache_read_input_tokens</code>가 지배해야 함. <code>cache_creation_input_tokens</code>는 각 TTL 윈도의 첫 요청 외에는 0에 가까워야 함.</p>
+<h4>다섯 가지 흔한 실수</h4>
+<ol>
+<li><strong>최소 크기 미만 캐싱</strong>. 쓰기 추가 요금은 내지만 읽기 할인이 적용 안 됨. 항상 모델 최소값에 대해 블록 크기 확인 (Sonnet 1024, Haiku 2048).</li>
+<li><strong>캐시 블록 내 동적 데이터</strong>. 캐시 prefix의 타임스탬프, UUID, 사용자 ID는 모든 요청이 캐시 미스 + 캐시 쓰기를 의미. 텔레메트리에 즉시 보임 — <code>cache_creation</code>이 떨어지지 않음.</li>
+<li><strong>잘못된 컷 포인트</strong>. <code>cache_control</code>을 너무 일찍 두면 안정 컨텍스트 대부분의 캐싱을 놓침. 포함하고 싶은 <em>마지막</em> 블록에 두세요.</li>
+<li><strong>저트래픽 엔드포인트에 1시간 티어</strong>. 100% 쓰기 추가 요금이 절감을 먹음, 많은 읽기를 얻을 게 아니라면. 텔레메트리가 전환을 정당화할 때까지 기본 (5분)에 머무르세요.</li>
+<li><strong>버스트 전 캐시 워밍 안 함</strong>. 요청 홍수가 올 것을 안다면 (예: 예약 배치 잡), 몇 초 전에 워밍 요청 한 번. 25% 쓰기 추가 요금은 워밍이 지불, 실제 트래픽이 아님.</li>
+</ol>`
+    },
+    {
+      heading: "자주 묻는 질문",
+      body: `<h4>Prompt caching이 스트리밍 응답에서 작동하나요?</h4>
+<p>네. 캐시 적중/미스는 요청 제출 시 결정되며 스트리밍과 독립적. 스트리밍과 비스트리밍이 동등하게 혜택.</p>
+<h4>대화 이전 턴의 메시지를 캐시할 수 있나요?</h4>
+<p>네 — 가장 가치 있는 패턴 중 하나. 대화 히스토리의 마지막 메시지에 <code>cache_control</code>을 표시. 대화가 자라면 캐시된 prefix도 자라고, 새 턴만 정가 지불.</p>
+<h4>Prompt caching이 도구 사용에 작동하나요?</h4>
+<p>네. 도구 정의는 캐시 가능 prefix의 일부. 상세 설명이 있는 20개 도구가 있다면 캐싱이 상당히 절감.</p>
+<h4>요청 중간에 캐시가 만료되면 어떻게 되나요?</h4>
+<p>만료 후 다음 요청은 캐시 미스 + 새 캐시 쓰기. 만료는 무음 — 코드는 통지받지 않음. <code>cache_creation_input_tokens</code>를 모니터해 만료 패턴 감지.</p>
+<h4>모든 Claude 모델에서 캐싱이 가능한가요?</h4>
+<p>캐싱은 Sonnet 4.x, Opus 4.x, Haiku 4.x에서 사용 가능. 오래된 모델 (Claude 3.x)은 제한된 캐싱; 사용 중단 중. 항상 공식 모델 가용성 페이지에서 현재 매트릭스 확인.</p>
+<h4>다른 API 키나 프로젝트 간에 캐시를 공유할 수 있나요?</h4>
+<p>아니요. 캐시는 조직과 정확한 요청 prefix로 범위 지정. 같은 org 내 다른 API 키는 prefix가 정확히 일치하면 캐시를 공유할 수 있지만 크로스 org 공유는 발생 안 함.</p>
+<h4>캐싱이 Anthropic Workbench / Console과 어떻게 상호작용하나요?</h4>
+<p>같은 캐싱 규칙 적용 — Workbench 요청도 prefix 일치 시 캐시 적중 가능. 대부분 팀은 Workbench 캐시 적중을 못 봄, Workbench 트래픽이 prefix가 TTL 내 반복되기에는 너무 저볼륨.</p>
+<p><em>관련: <a href="/blog/top-10-mcp-servers-claude-code-2026">Top 10 MCP 서버</a> · <a href="/blog/claude-code-folder-complete-guide">.claude/ 폴더 완벽 가이드</a> · <a href="/blog/claude-code-hooks-complete-guide">Hooks 실전 가이드</a></em></p>`
+    }
+  ]
+};
+
+// === Phase 3 B: Claude Code vs Cursor 2026 ===
+const CLAUDE_VS_CURSOR_EN: ArticleContent = {
+  title: "Claude Code vs Cursor in 2026 — Honest Comparison After 6 Months Daily Use",
+  metaTitle: "Claude Code vs Cursor 2026: Honest Comparison & Migration Notes",
+  metaDescription: "Claude Code vs Cursor in 2026 — honest side-by-side after 6 months daily use. Where each wins, pricing reality, migration notes, and which to pick for frontend, backend, and agents.",
+  excerpt: "Both tools shipped major updates in early 2026, and the gap between them is no longer obvious. After six months running both daily across different projects, this is the honest comparison — including where each one is genuinely worse than the other and which workflows make the choice for you.",
+  sections: [
+    {
+      heading: "The Honest Setup",
+      body: `<p>By May 2026, Claude Code and Cursor are the two AI coding tools most engineers compare seriously. They have converged a lot — both have agentic workflows, both support custom commands, both speak MCP, both run on Claude Sonnet/Opus and other frontier models. <strong>Claude Code vs Cursor</strong> is now a question about workflow style and ecosystem fit, not raw capability.</p>
+<p>This piece is based on six months of running both tools daily across three projects: a React 19 SaaS frontend, a Python data pipeline, and an experimental autonomous agent. No vendor sponsorship, no affiliate links — when something is bad I say so.</p>
+<p>For the related "Claude Code vs Codex CLI" question see our <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets vs Claude Code Buddy comparison</a> (which compares the surface-layer experience) and <a href="/blog/claude-buddy-retired-migration-guide">Claude Buddy retirement migration guide</a> (which covers ecosystem departure dynamics).</p>`
+    },
+    {
+      heading: "Quick Comparison Matrix",
+      body: `<table>
+<tr><th>Dimension</th><th>Claude Code</th><th>Cursor</th></tr>
+<tr><td>Surface</td><td>CLI-first, also IDE extension + desktop app</td><td>Forked VS Code (full IDE)</td></tr>
+<tr><td>Default model</td><td>Claude Sonnet 4.6 / Opus 4.7</td><td>User choice (Claude, GPT, Gemini, custom)</td></tr>
+<tr><td>Agentic workflow</td><td>Mature; subagents, hooks, plan mode</td><td>Mature; Composer for multi-file edits</td></tr>
+<tr><td>MCP support</td><td>Native, first-class</td><td>Native (added Q4 2025)</td></tr>
+<tr><td>Custom commands</td><td>.claude/commands/*.md</td><td>.cursor/rules/ + .cursorrules (legacy)</td></tr>
+<tr><td>Hooks</td><td>Six lifecycle events, shell scripts</td><td>Limited (workspace events only)</td></tr>
+<tr><td>Pricing</td><td>$20/mo Pro, $200/mo Max, or pay-per-token via API</td><td>$20/mo Pro, $40/mo Business, $200/mo Ultra</td></tr>
+<tr><td>Inline edit UX</td><td>Diff-then-confirm in CLI</td><td>Cmd+K inline, Composer panel for multi-file</td></tr>
+<tr><td>Best for</td><td>Backend, scripting, agents, headless workflows</td><td>Frontend, daily IDE work, visual feedback loops</td></tr>
+<tr><td>Worst at</td><td>Visual UI work without an IDE pane</td><td>Heavy CLI/scripting workflows</td></tr>
+</table>
+<p>The matrix tells most of the story: <strong>Claude Code wins for terminal-native workflows; Cursor wins for IDE-native workflows</strong>. The next sections drill into the cases where one is meaningfully better than the other.</p>`
+    },
+    {
+      heading: "Where Claude Code Wins",
+      body: `<h4>1. Headless and CI workflows</h4>
+<p><code>claude -p "&lt;prompt&gt;" --output-format json</code> turns Claude into a Unix tool you can pipe through. We use it in CI to auto-generate release notes, summarize Sentry issues, and triage support tickets. Cursor is fundamentally an IDE; this isn't its territory.</p>
+<h4>2. Hooks for hard guarantees</h4>
+<p>The <a href="/blog/claude-code-hooks-complete-guide">Claude Code hooks system</a> with six lifecycle events lets you enforce "every edit gets formatted", "no commits to main", "no secrets get written" with shell-script reliability. Cursor has lighter hook capabilities focused on workspace events; you cannot get the same level of pre-commit / pre-tool guarantees.</p>
+<h4>3. Multi-repo agentic work</h4>
+<p>Claude Code's <code>--add-dir</code> and the filesystem MCP server make cross-repo refactors clean — "find this function across 30 repos and update all callers" is a one-prompt operation. Cursor's project model is one repo per workspace; cross-repo work means switching windows.</p>
+<h4>4. Pure CLI feel for Linux servers</h4>
+<p>SSH into a server, run <code>claude</code>, work. No Electron startup, no display server, no IDE state. Cursor needs the desktop app on each machine.</p>
+<h4>5. Subagents that compose</h4>
+<p>Custom subagents in <code>.claude/agents/</code> can be orchestrated from a slash command — your <code>/audit</code> can invoke security, performance, and docs reviewers in parallel. Cursor's "agent" mode is a single coherent loop; harder to compose.</p>`
+    },
+    {
+      heading: "Where Cursor Wins",
+      body: `<h4>1. Visual UI work</h4>
+<p>Building a complex form? Iterating on Tailwind classes? Cursor's tight integration with the editor — Cmd+K inline edit, side-by-side diff, the Composer panel showing multi-file changes — beats Claude Code's CLI-driven workflow. You see the result of a change in milliseconds; in Claude Code you switch tabs to your dev server.</p>
+<h4>2. Faster onboarding for IDE-native teams</h4>
+<p>If your team lives in VS Code, Cursor is "VS Code that's better at AI." Adoption is almost frictionless because the keybindings, extensions, and terminal panel all work. Claude Code's CLI surface is foreign to engineers who don't live in terminals.</p>
+<h4>3. Composer for large multi-file changes</h4>
+<p>When you want to refactor a UI component and update 8 callers, Cursor's Composer shows all 9 file changes in one panel before applying. Claude Code does this in CLI with diffs in sequence; visually less efficient.</p>
+<h4>4. Tab autocomplete</h4>
+<p>Cursor's tab completion is best-in-class — predictive, context-aware, faster than typing. Claude Code's CLI mode doesn't have this; the IDE extension does, but it's not Cursor-good.</p>
+<h4>5. Per-file model selection</h4>
+<p>Cursor lets you pick which model handles inline edits vs which handles Composer vs which handles tab completion. Claude Code is mostly Anthropic-only by design.</p>`
+    },
+    {
+      heading: "Pricing Reality Check",
+      body: `<table>
+<tr><th>Tier</th><th>Claude Code</th><th>Cursor</th></tr>
+<tr><td>Free / Hobby</td><td>Pay-per-token via API only</td><td>Limited free tier (slow requests)</td></tr>
+<tr><td>Mid ($20/mo)</td><td>Pro: includes Sonnet, generous quota</td><td>Pro: 500 fast requests, unlimited slow</td></tr>
+<tr><td>High ($40-$60)</td><td>—</td><td>Business: $40, includes admin</td></tr>
+<tr><td>Power ($200/mo)</td><td>Max: priority access, larger quota, both Sonnet and Opus</td><td>Ultra: large quota, all models</td></tr>
+<tr><td>Pay-per-token</td><td>Yes, via Anthropic API key (use API pricing)</td><td>Yes, BYOK supported (Anthropic, OpenAI, etc.)</td></tr>
+</table>
+<h4>Honest take on cost</h4>
+<p>For a single developer on Sonnet 4.6, both Pro tiers cost the same ($20/mo) and roughly the same level of usage. <strong>Heavy users save money on Claude Code Max</strong> because the quota at $200 covers more Opus 4.7 usage than Cursor Ultra at the same price. <strong>Light users save money on Cursor</strong> because the slow-request free tier is genuinely usable for occasional work.</p>
+<p>For teams paying via the API instead of a subscription, the calculation is dominated by your <a href="/blog/claude-api-prompt-caching-complete-guide">prompt caching strategy</a> rather than which tool you use. Caching can drop your effective cost 5-10× regardless of front-end choice.</p>`
+    },
+    {
+      heading: "Migration Notes (Both Directions)",
+      body: `<h4>Cursor → Claude Code</h4>
+<ol>
+<li><strong>Move <code>.cursorrules</code> content into <code>CLAUDE.md</code></strong>. The format is similar; trim per our <a href="/blog/claude-code-folder-complete-guide">.claude/ folder guide</a> recommendations.</li>
+<li><strong>Recreate <code>.cursor/rules/*.md</code> as <code>.claude/commands/*.md</code></strong>. Cursor rules are command-like; Claude Code's slash commands cover the same ground with a slightly different syntax.</li>
+<li><strong>Re-add MCP servers</strong>. Both tools register MCP via similar JSON; you can mostly copy-paste your <code>.cursor/mcp.json</code> entries into Claude Code's <code>~/.claude.json</code>. Use <code>claude mcp add</code> to migrate cleanly.</li>
+<li><strong>Adjust to CLI mindset</strong>. The biggest adjustment isn't config; it's working without an editor pane visible while you prompt. Plan for two screens or a split tmux session.</li>
+</ol>
+<h4>Claude Code → Cursor</h4>
+<ol>
+<li><strong>Move <code>CLAUDE.md</code> content into <code>.cursorrules</code></strong> at the project root. Cursor reads this on session start.</li>
+<li><strong>Slash commands → Cursor rules</strong>. Convert each <code>.claude/commands/*.md</code> to a <code>.cursor/rules/*.md</code>. Behavior is similar enough.</li>
+<li><strong>Subagents don't translate cleanly</strong>. Cursor doesn't have a direct equivalent to <code>.claude/agents/</code> with its own context window. Replicate via tighter command prompts.</li>
+<li><strong>Hooks: not portable</strong>. Cursor's hooks model is different and lighter. Some PreToolUse/PostToolUse patterns won't have equivalents — accept the loss or keep that piece in Claude Code via <code>claude -p</code> in CI.</li>
+</ol>`
+    },
+    {
+      heading: "Which to Pick — Three Concrete Recommendations",
+      body: `<h4>Recommendation 1: Frontend developer in a React/Vue/Svelte shop</h4>
+<p>Pick <strong>Cursor</strong>. The visual feedback loop, Cmd+K inline edits, Composer panel for multi-file changes, and the fact that your existing VS Code muscle memory transfers — all dominate. Run Claude Code as a secondary tool for CLI scripting needs.</p>
+<h4>Recommendation 2: Backend / DevOps / data engineer</h4>
+<p>Pick <strong>Claude Code</strong>. Headless CLI workflows, hooks, multi-repo navigation, and the ability to <code>claude -p</code> in shell scripts and CI all favor it. The lack of an IDE pane matters less when most of your work is CLI-shaped anyway.</p>
+<h4>Recommendation 3: Building autonomous agents</h4>
+<p>Pick <strong>Claude Code</strong> for development, but use the <a href="/blog/claude-api-prompt-caching-complete-guide">Anthropic API directly</a> in production. Claude Code's subagent + hooks combination is the best dev environment for prototyping agent workflows; once you're shipping, use the SDK.</p>
+<h4>If you really must pick one for everything</h4>
+<p>For most engineers in 2026, <strong>Claude Code on the CLI + Cursor as the IDE</strong> is the answer — and they cost the same as picking just one because both have $20/mo Pro tiers. The "which one" framing is a false dichotomy.</p>`
+    },
+    {
+      heading: "Frequently Asked Questions",
+      body: `<h4>Can Claude Code use Cursor's keybindings?</h4>
+<p>Not directly — they're different tools with different surfaces. The Claude Code IDE extension for VS Code respects VS Code keybindings, but the CLI has its own minimal set documented in our <a href="/blog/claude-code-cheat-sheet-complete">cheat sheet</a>.</p>
+<h4>Does Cursor work with the same MCP servers as Claude Code?</h4>
+<p>Mostly yes — both implement the open MCP standard. Some servers that depend on specific Claude Code features (like the <code>cwd</code> field in hook events) won't work in Cursor identically, but the overlap is high.</p>
+<h4>Can I run both at the same time on the same repo?</h4>
+<p>Yes. They don't interfere — Claude Code in a terminal pane, Cursor as the editor. Many engineers do this. Just don't have both edit the same file simultaneously.</p>
+<h4>Which one is better for Next.js development specifically?</h4>
+<p>Cursor, for the visual feedback. Build a page, iterate on the CSS, see the browser refresh, repeat. Claude Code can do it but the round-trip is longer.</p>
+<h4>Does Cursor support Anthropic's prompt caching?</h4>
+<p>If you're on BYOK with an Anthropic key, yes — Cursor passes through to the underlying model and caching applies. If you're on Cursor's bundled subscription, it depends on Cursor's internal billing — they don't expose cache hit telemetry the way the SDK does.</p>
+<h4>What about Aider, Continue, and other open-source alternatives?</h4>
+<p>Both Aider and Continue are credible alternatives — Aider especially for terminal-first agentic workflows on a budget. They cost less but have smaller ecosystems. Cursor and Claude Code dominate paid markets in 2026 for a reason.</p>
+<h4>Which has better team / org features?</h4>
+<p>Cursor's Business tier is currently more developed for teams (centralized billing, admin controls, audit logs). Claude Code's team story is improving but as of May 2026 still relies more on shared <code>.claude/</code> conventions in Git than on a central admin panel.</p>
+<p><em>Related: <a href="/blog/claude-code-folder-complete-guide">.claude/ folder complete guide</a> · <a href="/blog/claude-code-hooks-complete-guide">Hooks practical guide</a> · <a href="/blog/claude-api-prompt-caching-complete-guide">Prompt caching guide</a> · <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets vs Claude Buddy</a></em></p>`
+    }
+  ]
+};
+
+const CLAUDE_VS_CURSOR_ZH: ArticleContent = {
+  title: "2026 年 Claude Code 对比 Cursor——日用 6 个月后的诚实评测",
+  metaTitle: "2026 Claude Code vs Cursor：诚实对比与迁移指南",
+  metaDescription: "2026 年 Claude Code 对比 Cursor——日用 6 个月后的诚实横向比较。各自胜场、价格现实、迁移注意，以及前端/后端/agent 该选哪个。",
+  excerpt: "两个工具都在 2026 年初发了大版本，差距不再明显。日用六个月跨多个项目后，这是诚实对比——包括各自真不如对方的地方，以及哪些工作流帮你做选择。",
+  sections: [
+    {
+      heading: "诚实声明",
+      body: `<p>到 2026 年 5 月，Claude Code 和 Cursor 是大多数工程师认真比较的两个 AI 编码工具。它们在很多方面已经趋同——都有 agentic 工作流、都支持自定义命令、都说 MCP、都在 Claude Sonnet/Opus 和其他前沿模型上运行。<strong>Claude Code 对比 Cursor</strong> 现在是关于工作流风格和生态契合，不是纯能力的问题。</p>
+<p>本文基于六个月日用两个工具横跨三个项目：一个 React 19 SaaS 前端、一个 Python 数据管线、一个实验性自主 agent。无供应商赞助、无联盟链接——不好的我会直说。</p>
+<p>关于"Claude Code 对比 Codex CLI"问题见我们的 <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets 对比 Claude Code Buddy</a>（对比表层体验）和 <a href="/blog/claude-buddy-retired-migration-guide">Claude Buddy 下线迁移指南</a>（生态离开动态）。</p>`
+    },
+    {
+      heading: "速览对比矩阵",
+      body: `<table>
+<tr><th>维度</th><th>Claude Code</th><th>Cursor</th></tr>
+<tr><td>表面</td><td>CLI 优先，也有 IDE 扩展 + 桌面应用</td><td>Fork 的 VS Code（完整 IDE）</td></tr>
+<tr><td>默认模型</td><td>Claude Sonnet 4.6 / Opus 4.7</td><td>用户选（Claude、GPT、Gemini、自定义）</td></tr>
+<tr><td>Agentic 工作流</td><td>成熟；子代理、hooks、plan 模式</td><td>成熟；Composer 多文件编辑</td></tr>
+<tr><td>MCP 支持</td><td>原生，一等公民</td><td>原生（2025 Q4 加入）</td></tr>
+<tr><td>自定义命令</td><td>.claude/commands/*.md</td><td>.cursor/rules/ + .cursorrules（遗留）</td></tr>
+<tr><td>Hooks</td><td>六个生命周期事件，shell 脚本</td><td>有限（仅工作区事件）</td></tr>
+<tr><td>定价</td><td>$20/月 Pro、$200/月 Max，或 API 按 token 付费</td><td>$20/月 Pro、$40/月 Business、$200/月 Ultra</td></tr>
+<tr><td>内联编辑 UX</td><td>CLI 中 diff 后确认</td><td>Cmd+K 内联，多文件 Composer 面板</td></tr>
+<tr><td>最适合</td><td>后端、脚本、agents、无头工作流</td><td>前端、日常 IDE 工作、视觉反馈循环</td></tr>
+<tr><td>最不擅长</td><td>没 IDE 面板的视觉 UI 工作</td><td>重 CLI/脚本工作流</td></tr>
+</table>
+<p>矩阵讲了大半故事：<strong>Claude Code 赢在终端原生工作流；Cursor 赢在 IDE 原生工作流</strong>。后续章节挖一个比另一个明显好的具体场景。</p>`
+    },
+    {
+      heading: "Claude Code 胜场",
+      body: `<h4>1. 无头与 CI 工作流</h4>
+<p><code>claude -p "&lt;prompt&gt;" --output-format json</code> 把 Claude 变成可管道的 Unix 工具。我们在 CI 用它自动生成 release notes、总结 Sentry issues、分流支持工单。Cursor 本质是 IDE；这不是它的领地。</p>
+<h4>2. Hooks 提供硬保证</h4>
+<p><a href="/blog/claude-code-hooks-complete-guide">Claude Code hooks 系统</a>的六个生命周期事件让你以 shell 脚本可靠性强制"每个编辑都格式化"、"不许提交到 main"、"不许写入密钥"。Cursor 的 hook 能力较轻、聚焦于工作区事件；拿不到同样级别的 pre-commit / pre-tool 保证。</p>
+<h4>3. 多仓库 agentic 工作</h4>
+<p>Claude Code 的 <code>--add-dir</code> 与 filesystem MCP 服务器让跨仓重构干净——"在 30 个仓库找这个函数并更新所有调用方"是一个 prompt 操作。Cursor 项目模型是一个 workspace 一个仓库；跨仓工作意味着切窗口。</p>
+<h4>4. Linux 服务器纯 CLI 体验</h4>
+<p>SSH 进服务器、跑 <code>claude</code>、干活。无 Electron 启动、无 display server、无 IDE 状态。Cursor 每台机器都需要桌面应用。</p>
+<h4>5. 可组合的子代理</h4>
+<p><code>.claude/agents/</code> 里的自定义子代理可由斜杠命令编排——你的 <code>/audit</code> 能并行调用安全、性能、文档审查者。Cursor 的"agent"模式是单一连贯循环；更难组合。</p>`
+    },
+    {
+      heading: "Cursor 胜场",
+      body: `<h4>1. 视觉 UI 工作</h4>
+<p>构建复杂表单？迭代 Tailwind 类？Cursor 与编辑器的紧密集成——Cmd+K 内联编辑、并排 diff、显示多文件改动的 Composer 面板——比 Claude Code 的 CLI 驱动工作流更好。改动结果在毫秒内可见；Claude Code 里你切到 dev 服务器标签页。</p>
+<h4>2. IDE 原生团队的更快上手</h4>
+<p>如果你团队住在 VS Code，Cursor 就是"AI 更好的 VS Code"。采用几乎无摩擦——键绑定、扩展、终端面板都工作。Claude Code 的 CLI 表面对不住在终端的工程师陌生。</p>
+<h4>3. Composer 处理大多文件改动</h4>
+<p>当你想重构一个 UI 组件并更新 8 个调用方，Cursor 的 Composer 在应用前一个面板里显示所有 9 个文件改动。Claude Code 在 CLI 顺序展示 diff；视觉效率更低。</p>
+<h4>4. Tab 自动补全</h4>
+<p>Cursor 的 tab 补全是同类最佳——预测性、上下文感知、比打字快。Claude Code 的 CLI 模式没这个；IDE 扩展有，但没 Cursor 好。</p>
+<h4>5. 按文件选模型</h4>
+<p>Cursor 让你选哪个模型处理内联编辑、哪个处理 Composer、哪个处理 tab 补全。Claude Code 设计上主要 Anthropic-only。</p>`
+    },
+    {
+      heading: "定价现实检查",
+      body: `<table>
+<tr><th>层级</th><th>Claude Code</th><th>Cursor</th></tr>
+<tr><td>免费 / 业余</td><td>仅 API 按 token 付费</td><td>有限免费层（慢请求）</td></tr>
+<tr><td>中端 ($20/月)</td><td>Pro：含 Sonnet，慷慨配额</td><td>Pro：500 快请求、无限慢请求</td></tr>
+<tr><td>高端 ($40-$60)</td><td>—</td><td>Business：$40，含管理</td></tr>
+<tr><td>强力 ($200/月)</td><td>Max：优先访问、更大配额、Sonnet 和 Opus 都有</td><td>Ultra：大配额、所有模型</td></tr>
+<tr><td>按 token 付费</td><td>是，通过 Anthropic API key（用 API 价格）</td><td>是，支持 BYOK（Anthropic、OpenAI 等）</td></tr>
+</table>
+<h4>诚实成本看法</h4>
+<p>单个开发者在 Sonnet 4.6 上，两边 Pro 层价格相同（$20/月）且使用程度大致相当。<strong>重度用户在 Claude Code Max 省钱</strong>因为 $200 配额覆盖比 Cursor Ultra 同价更多 Opus 4.7 用量。<strong>轻度用户在 Cursor 省钱</strong>因为慢请求免费层对偶尔工作真能用。</p>
+<p>对通过 API 而非订阅付费的团队，计算被你的 <a href="/blog/claude-api-prompt-caching-complete-guide">prompt caching 策略</a> 主导，而不是用哪个工具。无论前端选什么，缓存能把有效成本降 5-10 倍。</p>`
+    },
+    {
+      heading: "迁移注意（双向）",
+      body: `<h4>Cursor → Claude Code</h4>
+<ol>
+<li><strong><code>.cursorrules</code> 内容移到 <code>CLAUDE.md</code></strong>。格式相似；按我们的 <a href="/blog/claude-code-folder-complete-guide">.claude/ 文件夹指南</a>建议修剪。</li>
+<li><strong><code>.cursor/rules/*.md</code> 重建为 <code>.claude/commands/*.md</code></strong>。Cursor 规则像命令；Claude Code 的斜杠命令以略不同的语法覆盖同样地。</li>
+<li><strong>重新添加 MCP 服务器</strong>。两个工具都通过类似 JSON 注册 MCP；你大致可以把 <code>.cursor/mcp.json</code> 条目复制粘贴到 Claude Code 的 <code>~/.claude.json</code>。用 <code>claude mcp add</code> 干净迁移。</li>
+<li><strong>调整到 CLI 心态</strong>。最大调整不是配置；是 prompt 时不让编辑器面板可见地工作。计划两屏或 tmux 分屏。</li>
+</ol>
+<h4>Claude Code → Cursor</h4>
+<ol>
+<li><strong><code>CLAUDE.md</code> 内容移到项目根的 <code>.cursorrules</code></strong>。Cursor 在会话开始读这个。</li>
+<li><strong>斜杠命令 → Cursor 规则</strong>。把每个 <code>.claude/commands/*.md</code> 转成 <code>.cursor/rules/*.md</code>。行为足够相似。</li>
+<li><strong>子代理不干净翻译</strong>。Cursor 没有 <code>.claude/agents/</code> 带自己上下文窗口的直接等价物。通过更紧的命令 prompt 复制。</li>
+<li><strong>Hooks：不可移植</strong>。Cursor 的 hooks 模型不同且更轻。一些 PreToolUse/PostToolUse 模式没等价物——接受损失或通过 CI 里的 <code>claude -p</code> 把那部分留在 Claude Code。</li>
+</ol>`
+    },
+    {
+      heading: "选哪个——三个具体推荐",
+      body: `<h4>推荐 1：React/Vue/Svelte 店里的前端开发者</h4>
+<p>选 <strong>Cursor</strong>。视觉反馈循环、Cmd+K 内联编辑、多文件改动的 Composer 面板，加上你现有的 VS Code 肌肉记忆能转移——全占主导。把 Claude Code 当 CLI 脚本需求的次要工具用。</p>
+<h4>推荐 2：后端 / DevOps / 数据工程师</h4>
+<p>选 <strong>Claude Code</strong>。无头 CLI 工作流、hooks、多仓库导航，以及在 shell 脚本和 CI 里 <code>claude -p</code> 的能力都倾向它。当你大多数工作本来就是 CLI 形状，没有 IDE 面板没那么重要。</p>
+<h4>推荐 3：构建自主 agents</h4>
+<p>开发选 <strong>Claude Code</strong>，但生产用 <a href="/blog/claude-api-prompt-caching-complete-guide">Anthropic API 直接</a>。Claude Code 的子代理 + hooks 组合是 prototype agent 工作流的最佳开发环境；一旦上线就用 SDK。</p>
+<h4>如果你必须为所有事选一个</h4>
+<p>对 2026 年大多数工程师，<strong>CLI 上 Claude Code + Cursor 当 IDE</strong> 是答案——价格和只选一个相同因为两边都有 $20/月 Pro 层。"选哪个"框架是伪二选一。</p>`
+    },
+    {
+      heading: "常见问题",
+      body: `<h4>Claude Code 能用 Cursor 的键绑定吗？</h4>
+<p>不直接——它们是不同表面的不同工具。VS Code 的 Claude Code IDE 扩展尊重 VS Code 键绑定，但 CLI 有自己最小集，记录在我们的 <a href="/blog/claude-code-cheat-sheet-complete">速查表</a>。</p>
+<h4>Cursor 用和 Claude Code 同样的 MCP 服务器吗？</h4>
+<p>大多是——都实现开放 MCP 标准。一些依赖特定 Claude Code 特性（如 hook 事件里的 <code>cwd</code> 字段）的服务器在 Cursor 上不会一样工作，但重叠很高。</p>
+<h4>能在同一仓库同时跑两个吗？</h4>
+<p>能。它们不冲突——Claude Code 在终端面板、Cursor 当编辑器。很多工程师这么做。只是别让两边同时编辑同一个文件。</p>
+<h4>具体到 Next.js 开发哪个更好？</h4>
+<p>Cursor，因为视觉反馈。建一个页面、迭代 CSS、看浏览器刷新、重复。Claude Code 能做但来回更长。</p>
+<h4>Cursor 支持 Anthropic 的 prompt caching 吗？</h4>
+<p>如果你 BYOK 用 Anthropic key，是——Cursor 透传给底层模型，缓存生效。如果你在 Cursor 捆绑订阅上，取决于 Cursor 内部计费——他们不像 SDK 那样暴露缓存命中遥测。</p>
+<h4>Aider、Continue 等开源替代方案怎样？</h4>
+<p>Aider 和 Continue 都是可信替代——Aider 特别适合预算有限的终端优先 agentic 工作流。它们便宜但生态更小。Cursor 和 Claude Code 在 2026 年付费市场占主导是有原因的。</p>
+<h4>哪个团队 / 组织功能更好？</h4>
+<p>Cursor 的 Business 层目前对团队更发达（集中计费、管理控制、审计日志）。Claude Code 团队故事在改善但截至 2026 年 5 月仍更依赖 Git 中共享的 <code>.claude/</code> 约定，而非中央管理面板。</p>
+<p><em>相关：<a href="/blog/claude-code-folder-complete-guide">.claude/ 文件夹完整指南</a> · <a href="/blog/claude-code-hooks-complete-guide">Hooks 实战指南</a> · <a href="/blog/claude-api-prompt-caching-complete-guide">Prompt caching 指南</a> · <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets 对比 Claude Buddy</a></em></p>`
+    }
+  ]
+};
+
+const CLAUDE_VS_CURSOR_KO: ArticleContent = {
+  title: "2026년 Claude Code vs Cursor — 6개월 일상 사용 후 정직한 비교",
+  metaTitle: "2026 Claude Code vs Cursor: 정직한 비교와 마이그레이션",
+  metaDescription: "2026년 Claude Code vs Cursor — 6개월 일상 사용 후 정직한 나란히 비교. 각각의 승리 영역, 가격 현실, 마이그레이션 메모, 프론트엔드/백엔드/에이전트별 선택 가이드.",
+  excerpt: "두 도구 모두 2026년 초 메이저 업데이트를 출시했고, 둘 사이의 격차는 더 이상 명확하지 않습니다. 다양한 프로젝트에서 6개월간 일상으로 둘 다 사용한 후, 이것이 정직한 비교 — 각각이 정말 다른 것보다 나쁜 곳과 어떤 워크플로우가 선택을 결정하는지 포함.",
+  sections: [
+    {
+      heading: "정직한 셋업",
+      body: `<p>2026년 5월 기준, Claude Code와 Cursor는 대부분의 엔지니어가 진지하게 비교하는 두 AI 코딩 도구입니다. 많이 수렴했습니다 — 둘 다 agentic 워크플로우 보유, 둘 다 커스텀 명령 지원, 둘 다 MCP 사용, 둘 다 Claude Sonnet/Opus 및 다른 프론티어 모델에서 실행. <strong>Claude Code vs Cursor</strong>는 이제 워크플로우 스타일과 생태계 적합성에 대한 질문이지, 순수 능력이 아닙니다.</p>
+<p>이 글은 세 프로젝트에서 6개월간 일상으로 두 도구를 실행한 것에 기반합니다: React 19 SaaS 프론트엔드, Python 데이터 파이프라인, 실험적 자율 에이전트. 벤더 스폰서 없음, 제휴 링크 없음 — 나쁜 것은 그렇게 말합니다.</p>
+<p>관련 "Claude Code vs Codex CLI" 질문은 <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets vs Claude Code Buddy 비교</a>(표면 레이어 경험 비교)와 <a href="/blog/claude-buddy-retired-migration-guide">Claude Buddy 종료 마이그레이션 가이드</a>(생태계 출발 역학)를 참조하세요.</p>`
+    },
+    {
+      heading: "빠른 비교 매트릭스",
+      body: `<table>
+<tr><th>차원</th><th>Claude Code</th><th>Cursor</th></tr>
+<tr><td>표면</td><td>CLI 우선, IDE 확장 + 데스크톱 앱도</td><td>포크된 VS Code (완전 IDE)</td></tr>
+<tr><td>기본 모델</td><td>Claude Sonnet 4.6 / Opus 4.7</td><td>사용자 선택 (Claude, GPT, Gemini, 커스텀)</td></tr>
+<tr><td>Agentic 워크플로우</td><td>성숙; 서브에이전트, hooks, plan 모드</td><td>성숙; 멀티 파일 편집을 위한 Composer</td></tr>
+<tr><td>MCP 지원</td><td>네이티브, 일등 시민</td><td>네이티브 (2025 Q4 추가)</td></tr>
+<tr><td>커스텀 명령</td><td>.claude/commands/*.md</td><td>.cursor/rules/ + .cursorrules (레거시)</td></tr>
+<tr><td>Hooks</td><td>여섯 라이프사이클 이벤트, 셸 스크립트</td><td>제한적 (워크스페이스 이벤트만)</td></tr>
+<tr><td>가격</td><td>$20/월 Pro, $200/월 Max, 또는 API 토큰별 결제</td><td>$20/월 Pro, $40/월 Business, $200/월 Ultra</td></tr>
+<tr><td>인라인 편집 UX</td><td>CLI에서 diff 후 확인</td><td>Cmd+K 인라인, 멀티 파일은 Composer 패널</td></tr>
+<tr><td>최적</td><td>백엔드, 스크립팅, 에이전트, 헤드리스 워크플로우</td><td>프론트엔드, 일상 IDE 작업, 시각적 피드백 루프</td></tr>
+<tr><td>최약</td><td>IDE 패널 없는 시각적 UI 작업</td><td>무거운 CLI/스크립팅 워크플로우</td></tr>
+</table>
+<p>매트릭스가 대부분의 이야기를 합니다: <strong>Claude Code는 터미널 네이티브 워크플로우에서 승리; Cursor는 IDE 네이티브 워크플로우에서 승리</strong>. 다음 섹션은 하나가 다른 것보다 의미 있게 나은 사례로 들어갑니다.</p>`
+    },
+    {
+      heading: "Claude Code가 이기는 곳",
+      body: `<h4>1. 헤드리스 및 CI 워크플로우</h4>
+<p><code>claude -p "&lt;프롬프트&gt;" --output-format json</code>은 Claude를 파이프할 수 있는 Unix 도구로 만듭니다. 우리는 CI에서 릴리스 노트 자동 생성, Sentry 이슈 요약, 지원 티켓 분류에 사용합니다. Cursor는 본질적으로 IDE; 이건 그 영역이 아님.</p>
+<h4>2. 하드 보장을 위한 Hooks</h4>
+<p>여섯 라이프사이클 이벤트가 있는 <a href="/blog/claude-code-hooks-complete-guide">Claude Code hooks 시스템</a>은 셸 스크립트 신뢰성으로 "모든 편집은 포맷됨", "main에 커밋 안 됨", "시크릿 안 쓰임"을 강제할 수 있게 합니다. Cursor는 워크스페이스 이벤트에 초점을 맞춘 더 가벼운 hook 능력 보유; 같은 수준의 사전 커밋/사전 도구 보장 못 얻음.</p>
+<h4>3. 멀티 저장소 agentic 작업</h4>
+<p>Claude Code의 <code>--add-dir</code>과 filesystem MCP 서버가 크로스 저장소 리팩터링을 깔끔하게 만듭니다 — "30개 저장소에서 이 함수 찾고 모든 호출자 업데이트"는 한 프롬프트 작업. Cursor의 프로젝트 모델은 워크스페이스당 한 저장소; 크로스 저장소 작업은 윈도우 전환 의미.</p>
+<h4>4. Linux 서버용 순수 CLI 느낌</h4>
+<p>서버에 SSH, <code>claude</code> 실행, 작업. Electron 시작 없음, 디스플레이 서버 없음, IDE 상태 없음. Cursor는 각 머신에 데스크톱 앱 필요.</p>
+<h4>5. 조합 가능한 서브에이전트</h4>
+<p><code>.claude/agents/</code>의 커스텀 서브에이전트는 슬래시 명령에서 오케스트레이션 가능 — <code>/audit</code>가 보안, 성능, 문서 검토자를 병렬로 호출 가능. Cursor의 "agent" 모드는 단일 일관 루프; 조합하기 더 어려움.</p>`
+    },
+    {
+      heading: "Cursor가 이기는 곳",
+      body: `<h4>1. 시각적 UI 작업</h4>
+<p>복잡한 폼 빌드? Tailwind 클래스 반복? Cursor의 에디터와의 긴밀한 통합 — Cmd+K 인라인 편집, 나란히 diff, 멀티 파일 변경을 보여주는 Composer 패널 — 이 Claude Code의 CLI 주도 워크플로우를 이깁니다. 변경 결과를 밀리초로 봄; Claude Code에서는 dev 서버 탭으로 전환.</p>
+<h4>2. IDE 네이티브 팀의 더 빠른 온보딩</h4>
+<p>팀이 VS Code에 살면 Cursor는 "AI에 더 좋은 VS Code". 채택이 거의 마찰 없음 — 키바인딩, 확장, 터미널 패널 모두 작동. Claude Code의 CLI 표면은 터미널에 살지 않는 엔지니어에게 낯섦.</p>
+<h4>3. 큰 멀티 파일 변경을 위한 Composer</h4>
+<p>UI 컴포넌트 리팩터링하고 8개 호출자 업데이트하고 싶을 때, Cursor의 Composer가 적용 전에 9개 파일 변경 모두를 한 패널에 표시. Claude Code는 CLI에서 순서대로 diff 표시; 시각적으로 덜 효율적.</p>
+<h4>4. Tab 자동완성</h4>
+<p>Cursor의 tab 완성은 동급 최고 — 예측적, 컨텍스트 인식, 타이핑보다 빠름. Claude Code의 CLI 모드는 이게 없음; IDE 확장은 있지만 Cursor만큼 좋지 않음.</p>
+<h4>5. 파일별 모델 선택</h4>
+<p>Cursor는 어떤 모델이 인라인 편집을 처리하고, 어떤 게 Composer를, 어떤 게 tab 완성을 처리할지 고르게 합니다. Claude Code는 설계상 주로 Anthropic 전용.</p>`
+    },
+    {
+      heading: "가격 현실 체크",
+      body: `<table>
+<tr><th>티어</th><th>Claude Code</th><th>Cursor</th></tr>
+<tr><td>무료 / 취미</td><td>API 토큰별 결제만</td><td>제한된 무료 티어 (느린 요청)</td></tr>
+<tr><td>중급 ($20/월)</td><td>Pro: Sonnet 포함, 후한 쿼터</td><td>Pro: 500 빠른 요청, 무제한 느린</td></tr>
+<tr><td>고급 ($40-$60)</td><td>—</td><td>Business: $40, 관리 포함</td></tr>
+<tr><td>파워 ($200/월)</td><td>Max: 우선 접근, 더 큰 쿼터, Sonnet과 Opus 둘 다</td><td>Ultra: 큰 쿼터, 모든 모델</td></tr>
+<tr><td>토큰별 결제</td><td>예, Anthropic API 키 통해 (API 가격 사용)</td><td>예, BYOK 지원 (Anthropic, OpenAI 등)</td></tr>
+</table>
+<h4>비용에 대한 정직한 견해</h4>
+<p>Sonnet 4.6에서 단일 개발자에게 두 Pro 티어 모두 같은 가격($20/월)이며 사용 수준 대략 같음. <strong>헤비 유저는 Claude Code Max에서 돈 절약</strong>, $200 쿼터가 같은 가격의 Cursor Ultra보다 더 많은 Opus 4.7 사용량 커버하기 때문. <strong>라이트 유저는 Cursor에서 돈 절약</strong>, 느린 요청 무료 티어가 가끔 작업에 진정 사용 가능하기 때문.</p>
+<p>구독 대신 API로 결제하는 팀에게는 계산이 어떤 도구를 쓰느냐보다 <a href="/blog/claude-api-prompt-caching-complete-guide">prompt caching 전략</a>이 지배. 캐싱은 프론트엔드 선택과 무관하게 효과적 비용을 5-10× 떨어뜨릴 수 있습니다.</p>`
+    },
+    {
+      heading: "마이그레이션 메모 (양방향)",
+      body: `<h4>Cursor → Claude Code</h4>
+<ol>
+<li><strong><code>.cursorrules</code> 콘텐츠를 <code>CLAUDE.md</code>로 이동</strong>. 형식 비슷; <a href="/blog/claude-code-folder-complete-guide">.claude/ 폴더 가이드</a> 추천에 따라 다듬으세요.</li>
+<li><strong><code>.cursor/rules/*.md</code>를 <code>.claude/commands/*.md</code>로 재생성</strong>. Cursor 규칙은 명령 같음; Claude Code의 슬래시 명령이 약간 다른 문법으로 같은 영역 커버.</li>
+<li><strong>MCP 서버 재추가</strong>. 두 도구 모두 비슷한 JSON으로 MCP 등록; <code>.cursor/mcp.json</code> 항목을 Claude Code의 <code>~/.claude.json</code>으로 대부분 복붙 가능. <code>claude mcp add</code>를 사용해 깔끔히 마이그레이션.</li>
+<li><strong>CLI 마인드셋으로 조정</strong>. 가장 큰 조정은 설정이 아님; 프롬프트할 때 에디터 패널이 보이지 않게 작업하는 것. 두 화면 또는 분할 tmux 세션 계획.</li>
+</ol>
+<h4>Claude Code → Cursor</h4>
+<ol>
+<li><strong><code>CLAUDE.md</code> 콘텐츠를 프로젝트 루트의 <code>.cursorrules</code>로 이동</strong>. Cursor가 세션 시작에 이를 읽음.</li>
+<li><strong>슬래시 명령 → Cursor 규칙</strong>. 각 <code>.claude/commands/*.md</code>를 <code>.cursor/rules/*.md</code>로 변환. 행동 충분히 비슷.</li>
+<li><strong>서브에이전트는 깔끔하게 번역 안 됨</strong>. Cursor는 자체 컨텍스트 윈도우가 있는 <code>.claude/agents/</code>의 직접 등가물 없음. 더 빡빡한 명령 프롬프트로 복제.</li>
+<li><strong>Hooks: 이식 불가</strong>. Cursor의 hooks 모델 다르고 가벼움. 일부 PreToolUse/PostToolUse 패턴은 등가물 없음 — 손실을 받아들이거나 CI에서 <code>claude -p</code>로 그 부분을 Claude Code에 유지.</li>
+</ol>`
+    },
+    {
+      heading: "어느 것을 고를까 — 세 가지 구체적 추천",
+      body: `<h4>추천 1: React/Vue/Svelte 샵의 프론트엔드 개발자</h4>
+<p><strong>Cursor</strong> 선택. 시각적 피드백 루프, Cmd+K 인라인 편집, 멀티 파일 변경의 Composer 패널, 그리고 기존 VS Code 근육 기억이 전이되는 사실 — 모두 우세. CLI 스크립팅 필요에 Claude Code를 보조 도구로 실행.</p>
+<h4>추천 2: 백엔드 / DevOps / 데이터 엔지니어</h4>
+<p><strong>Claude Code</strong> 선택. 헤드리스 CLI 워크플로우, hooks, 멀티 저장소 탐색, 그리고 셸 스크립트와 CI에서 <code>claude -p</code> 능력 모두 이를 선호. 작업 대부분이 어차피 CLI 형태이면 IDE 패널 부재가 덜 중요.</p>
+<h4>추천 3: 자율 에이전트 빌드</h4>
+<p>개발에는 <strong>Claude Code</strong>를 선택하되 프로덕션은 <a href="/blog/claude-api-prompt-caching-complete-guide">Anthropic API 직접</a> 사용. Claude Code의 서브에이전트 + hooks 조합이 에이전트 워크플로우 프로토타이핑에 최고의 개발 환경; 출시 시 SDK 사용.</p>
+<h4>모든 것에 정말 하나만 골라야 한다면</h4>
+<p>2026년 대부분 엔지니어에게 <strong>CLI에 Claude Code + IDE로 Cursor</strong>가 답 — 둘 다 $20/월 Pro 티어 있으므로 하나만 고르는 것과 가격 같음. "어느 것" 프레이밍은 거짓 이분법.</p>`
+    },
+    {
+      heading: "자주 묻는 질문",
+      body: `<h4>Claude Code가 Cursor의 키바인딩을 사용할 수 있나요?</h4>
+<p>직접은 아님 — 다른 표면을 가진 다른 도구. VS Code의 Claude Code IDE 확장은 VS Code 키바인딩 존중하지만 CLI는 자체 최소 세트, 우리의 <a href="/blog/claude-code-cheat-sheet-complete">치트 시트</a>에 기록.</p>
+<h4>Cursor는 Claude Code와 같은 MCP 서버에서 작동하나요?</h4>
+<p>대부분 — 둘 다 오픈 MCP 표준 구현. hook 이벤트의 <code>cwd</code> 필드 같은 특정 Claude Code 기능에 의존하는 일부 서버는 Cursor에서 동일하게 작동 안 하지만 겹침이 큼.</p>
+<h4>같은 저장소에서 둘을 동시에 실행할 수 있나요?</h4>
+<p>네. 간섭 안 함 — 터미널 패널의 Claude Code, 에디터로 Cursor. 많은 엔지니어가 이렇게 함. 둘이 같은 파일을 동시에 편집만 안 하면 됨.</p>
+<h4>Next.js 개발에 구체적으로 어느 것이 더 나은가요?</h4>
+<p>시각적 피드백 때문에 Cursor. 페이지 빌드, CSS 반복, 브라우저 새로고침 보기, 반복. Claude Code도 가능하지만 왕복이 더 김.</p>
+<h4>Cursor는 Anthropic의 prompt caching을 지원하나요?</h4>
+<p>Anthropic 키로 BYOK이면 네 — Cursor가 기저 모델로 패스스루하고 캐싱 적용. Cursor 번들 구독이면 Cursor 내부 청구에 따라 다름 — SDK처럼 캐시 적중 텔레메트리 노출 안 함.</p>
+<h4>Aider, Continue 등 오픈소스 대안은요?</h4>
+<p>Aider와 Continue 모두 신뢰할 수 있는 대안 — 특히 Aider는 예산 있는 터미널 우선 agentic 워크플로우에. 가격은 낮지만 생태계 작음. Cursor와 Claude Code가 2026년 유료 시장을 지배하는 이유 있음.</p>
+<h4>어느 것이 더 나은 팀/조직 기능이 있나요?</h4>
+<p>Cursor의 Business 티어가 현재 팀에 더 발달 (중앙 청구, 관리 컨트롤, 감사 로그). Claude Code의 팀 스토리는 개선 중이지만 2026년 5월 기준 여전히 중앙 관리 패널보다 Git의 공유 <code>.claude/</code> 관례에 더 의존.</p>
+<p><em>관련: <a href="/blog/claude-code-folder-complete-guide">.claude/ 폴더 완벽 가이드</a> · <a href="/blog/claude-code-hooks-complete-guide">Hooks 실전 가이드</a> · <a href="/blog/claude-api-prompt-caching-complete-guide">Prompt caching 가이드</a> · <a href="/blog/codex-pets-vs-claude-code-buddy">Codex Pets vs Claude Buddy</a></em></p>`
+    }
+  ]
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
+  {
+    slug: "claude-code-vs-cursor-2026",
+    publishedAt: "2026-05-06",
+    readingTime: 12,
+    tags: ["claude-code", "cursor", "comparison", "ide", "tooling", "2026"],
+    discussionCategory: 'deep-dives',
+    pillar: 'claude-code',
+    content: {
+      en: CLAUDE_VS_CURSOR_EN,
+      zh: CLAUDE_VS_CURSOR_ZH,
+      ko: CLAUDE_VS_CURSOR_KO,
+    },
+  },
+  {
+    slug: "claude-api-prompt-caching-complete-guide",
+    publishedAt: "2026-05-06",
+    readingTime: 12,
+    tags: ["claude-api", "prompt-caching", "anthropic-sdk", "cost-optimization", "tutorial"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code',
+    content: {
+      en: PROMPT_CACHING_EN,
+      zh: PROMPT_CACHING_ZH,
+      ko: PROMPT_CACHING_KO,
+    },
+  },
   {
     slug: "claude-code-cheat-sheet-complete",
     publishedAt: "2026-05-05",
