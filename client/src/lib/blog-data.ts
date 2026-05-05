@@ -4619,7 +4619,959 @@ const BUDDY_RETIRED_KO: ArticleContent = {
   ]
 };
 
+// === The Complete .claude/ Folder Guide ===
+const CLAUDE_FOLDER_EN: ArticleContent = {
+  title: "The Complete .claude/ Folder Guide — Configure Claude Code for Team Workflows (2026)",
+  metaTitle: "Claude Code .claude Folder: Complete Setup Guide (2026)",
+  metaDescription: "Everything that lives in the Claude Code .claude folder: CLAUDE.md, settings.json, custom slash commands, subagents, hooks. Real team workflow examples for 2026.",
+  excerpt: "The Claude Code .claude folder is where a generic AI assistant becomes your project's specialist. Here is what every file does, how teams share it via Git, and the seven mistakes that turn this folder into a footgun.",
+  sections: [
+    {
+      heading: "What Lives in the .claude/ Folder",
+      body: `<p>Open any well-configured Claude Code project and you will find a <code>.claude/</code> folder at the repo root. This is where a generic AI assistant becomes your project's specialist — it knows your codebase conventions, has access to the right tools, and follows your team's workflow rules. <strong>Configuring the Claude Code .claude folder properly is the highest-leverage one-time investment a team can make</strong>, and yet the official docs scatter the information across half a dozen pages. This guide consolidates everything in one place.</p>
+<p>Here is the complete inventory:</p>
+<pre><code>.claude/
+├── settings.json              # team-shared, committed to Git
+├── settings.local.json        # personal, gitignored
+├── commands/                  # custom slash commands
+│   ├── deploy.md
+│   └── review.md
+├── agents/                    # custom subagents
+│   ├── pr-reviewer.md
+│   └── test-writer.md
+├── hooks/                     # shell scripts triggered by events
+│   └── post-edit.sh
+└── CLAUDE.md                  # also valid here, though usually at repo root</code></pre>
+<p>And at the repo root, working alongside <code>.claude/</code>:</p>
+<pre><code>CLAUDE.md                     # project memory and standing instructions
+.gitignore                    # must include .claude/settings.local.json</code></pre>
+<p>Each file plays a different role. The next sections walk through them in the order you will most often touch them: <a href="#section-1">CLAUDE.md</a> first (every project), then <a href="#section-2">settings.json</a> (permissions and hooks), then the <a href="#section-3">commands/</a>, <a href="#section-4">agents/</a>, and <a href="#section-5">hooks/</a> directories for power users. We finish with <a href="#section-6">team-sharing patterns</a> and <a href="#section-7">common pitfalls</a>.</p>`
+    },
+    {
+      heading: "CLAUDE.md — Project Memory and Standing Instructions",
+      body: `<p><code>CLAUDE.md</code> is the single most important file in your Claude Code setup. It loads into every session as standing instructions — the AI reads it before responding to your first message and treats its contents as binding context.</p>
+<p>The file lives at the repo root by default (Claude Code looks there first), though you can also place it inside <code>.claude/</code>. Most teams use the repo root because it is more discoverable to humans browsing the project.</p>
+<h4>What to Put in CLAUDE.md</h4>
+<p>Three categories of content earn their keep:</p>
+<ol>
+<li><strong>Common commands</strong> — the half-dozen shell commands developers actually run (<code>npm run dev</code>, <code>pytest</code>, <code>cargo check</code>). Include the flags. Claude will use these instead of inventing similar-but-wrong invocations.</li>
+<li><strong>Architecture overview</strong> — entry points, routing layer, state management approach, key directories. Three to five bullet points; not a full architecture document.</li>
+<li><strong>Conventions</strong> — naming, import paths, where new files go. The patterns Claude cannot derive from reading three files.</li>
+</ol>
+<h4>What to Leave Out</h4>
+<p>Everything Claude can derive by reading the actual code. Type definitions, function signatures, dependency lists — Claude can read <code>package.json</code> and <code>tsconfig.json</code>. Stuffing CLAUDE.md with derivable information just bloats every session and pushes the useful instructions further down.</p>
+<h4>Real Example</h4>
+<pre><code># MyApp
+
+## Common Commands
+
+\`\`\`bash
+npm run dev        # Vite dev server, port 3000
+npm run build      # tsc + vite build → dist/
+npm run check      # tsc --noEmit
+npm run test       # vitest run
+\`\`\`
+
+## Architecture
+
+- React 19 SPA with Wouter (not React Router) for routing
+- Tailwind v4 via Vite plugin (no PostCSS, no tailwind.config.js)
+- All state in Zustand stores under client/src/stores/
+- Path alias: @/* → client/src/*
+
+## Conventions
+
+- New components → client/src/components/
+- shadcn/ui components are in client/src/components/ui/, do not edit
+- All user-facing strings must use the t() hook from I18nContext</code></pre>
+<p>This is the kind of CLAUDE.md that pays for itself in one session. Compare to a 200-line monster that no human reads and no agent benefits from.</p>`
+    },
+    {
+      heading: "settings.json — Permissions, Hooks, Environment",
+      body: `<p>If <code>CLAUDE.md</code> is the brain, <code>.claude/settings.json</code> is the operating manual. It controls what tools Claude is allowed to use, what hooks fire on tool events, what environment variables get loaded, and a handful of quality-of-life options.</p>
+<p>The schema is documented at <code>https://json.schemastore.org/claude-code-settings.json</code> — point your editor at it for autocomplete.</p>
+<h4>Permissions</h4>
+<p>The most consequential field is <code>permissions.allow</code> — a list of patterns that Claude can run without asking. Without explicit allows, Claude prompts on every shell command, which gets tedious fast.</p>
+<pre><code>{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(pytest:*)",
+      "Read(./src/**)",
+      "Edit(./src/**)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)"
+    ]
+  }
+}</code></pre>
+<p>The pattern syntax is glob-style for paths and prefix-style for shell commands. <code>Bash(npm run *)</code> matches any <code>npm run</code> invocation; <code>Bash(git diff:*)</code> matches any <code>git diff</code> with arguments.</p>
+<p><strong>Allow generously for read operations, conservatively for writes</strong>. The tedium of confirming every <code>git diff</code> is real, and the risk of an unwanted <code>git diff</code> is zero. The same is not true for <code>git push</code>.</p>
+<h4>Environment Variables</h4>
+<pre><code>{
+  "env": {
+    "NODE_ENV": "development",
+    "DEBUG": "myapp:*"
+  }
+}</code></pre>
+<p>These get exported into Claude's tool-call environment. Useful for non-secret configuration that should be consistent across the team. <strong>Never put real secrets here</strong> — <code>settings.json</code> is checked into Git.</p>
+<h4>Quality-of-Life Settings</h4>
+<pre><code>{
+  "model": "claude-opus-4-5",
+  "outputStyle": "concise",
+  "statusLine": {
+    "type": "command",
+    "command": "echo $(git branch --show-current) | tr -d '\\n'"
+  }
+}</code></pre>
+<p>The <code>statusLine</code> field is underused — it lets you display anything (current branch, uptime, deploy environment) at the bottom of the Claude Code UI. Cheap context that prevents a class of mistakes.</p>`
+    },
+    {
+      heading: "Custom Slash Commands in .claude/commands/",
+      body: `<p>Custom slash commands live in <code>.claude/commands/</code> as Markdown files. The filename becomes the command name: <code>.claude/commands/deploy.md</code> defines <code>/deploy</code>.</p>
+<p>Inside each file you write the prompt that Claude executes when the command runs. Standard frontmatter optionally restricts which tools the command can use:</p>
+<pre><code>---
+description: Run a full pre-deploy check
+allowed-tools: Bash, Read
+---
+
+Run these checks in order. Stop if any fail:
+
+1. \`npm run check\` — TypeScript must pass with zero errors
+2. \`npm run test\` — All tests must pass
+3. \`npm run build\` — Production build must succeed
+4. Check that no .env files have uncommitted changes
+5. Confirm we are on the main branch
+
+If everything passes, output \`READY TO DEPLOY\`. Otherwise output the exact command that failed.</code></pre>
+<p>Now anyone on the team can type <code>/deploy</code> in Claude Code and run the same five-step pre-flight check. The benefit is not just convenience — it is that the deploy procedure is now <em>versioned in Git</em>. New team members get it for free.</p>
+<h4>Arguments</h4>
+<p>Use <code>$ARGUMENTS</code> to pass arguments through:</p>
+<pre><code>---
+description: Generate a migration for the named table
+---
+
+Create a database migration for the table: $ARGUMENTS
+
+Use the migration template at scripts/migration-template.sql. Place the new
+file in db/migrations/ with the naming convention \`{timestamp}_{table}.sql\`.</code></pre>
+<p>Then <code>/migrate users</code> generates a migration for the <code>users</code> table.</p>
+<h4>What to Make a Slash Command</h4>
+<p>Anything you do more than three times. Pre-deploy checks, generating boilerplate (new component, new test file, new API route), kicking off a complex review (security review, performance audit). One-off tasks should stay in regular conversation.</p>`
+    },
+    {
+      heading: "Custom Subagents in .claude/agents/",
+      body: `<p>Subagents are specialized Claude personas that can be delegated to from a main session. They live in <code>.claude/agents/</code> as Markdown files with frontmatter:</p>
+<pre><code>---
+name: pr-reviewer
+description: Reviews pull request changes for security, performance, and style
+tools: Read, Grep, Bash
+model: claude-opus-4-5
+---
+
+You are an experienced engineer reviewing a pull request.
+
+Focus on:
+1. Security vulnerabilities (auth bypasses, injection, secrets in code)
+2. Performance regressions (N+1 queries, blocking I/O on hot paths)
+3. Test coverage for the changed lines
+4. Adherence to the project's CLAUDE.md conventions
+
+Be direct. If the PR is fine, say so in one sentence. If not, list issues
+in priority order with file:line references.</code></pre>
+<p>The main session invokes them via the Agent tool. The subagent runs with its own context window, returns a focused result, and does not pollute the main conversation with intermediate exploration.</p>
+<h4>When to Use a Subagent vs a Slash Command</h4>
+<table>
+<tr><th>Use a slash command when…</th><th>Use a subagent when…</th></tr>
+<tr><td>The work is procedural (run X, then Y, then Z)</td><td>The work needs judgment and exploration</td></tr>
+<tr><td>You want the conversation to stay in main session</td><td>You want isolated context (e.g. for parallel investigations)</td></tr>
+<tr><td>The output is short (status, summary)</td><td>The output is a detailed report you'll read once</td></tr>
+</table>
+<p>A common pattern: a slash command that orchestrates several subagent calls. <code>/audit</code> might invoke a security reviewer, a performance reviewer, and a docs reviewer in parallel, then synthesize results.</p>`
+    },
+    {
+      heading: "Hooks in .claude/hooks/ — Automate Around Tool Calls",
+      body: `<p>Hooks are shell commands that fire on Claude Code lifecycle events. They live in <code>settings.json</code> (or <code>.claude/settings.local.json</code> for personal hooks) under the <code>hooks</code> key:</p>
+<pre><code>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/format.sh" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<p>This runs <code>.claude/hooks/format.sh</code> after every <code>Edit</code>, <code>Write</code>, or <code>MultiEdit</code> tool call — typical use case: run Prettier on the changed file so the AI's output always lands formatted.</p>
+<h4>Available Events</h4>
+<ul>
+<li><code>PreToolUse</code> — fires before a tool runs. Can block the call by exiting non-zero. Useful for guardrails.</li>
+<li><code>PostToolUse</code> — fires after a tool runs. Useful for cleanup or formatting.</li>
+<li><code>UserPromptSubmit</code> — fires when the user submits a prompt. Useful for adding context.</li>
+<li><code>Stop</code> — fires when Claude finishes a response. Useful for notifications.</li>
+<li><code>SessionStart</code> / <code>SessionEnd</code> — useful for warming caches or saving telemetry.</li>
+</ul>
+<h4>Real Example: Auto-format Edited Files</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/format.sh
+# Read the JSON event from stdin, extract the edited file path, run Prettier.
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+if [[ -n "$FILE" && -f "$FILE" ]]; then
+  case "$FILE" in
+    *.ts|*.tsx|*.js|*.jsx|*.json|*.md)
+      npx prettier --write "$FILE" 2>/dev/null
+      ;;
+  esac
+fi</code></pre>
+<p>Make it executable (<code>chmod +x</code>), commit it, and now every team member's edits get formatted automatically. No more "Claude wrote it without trailing commas" PR comments.</p>`
+    },
+    {
+      heading: "Sharing the .claude/ Folder Across a Team",
+      body: `<p>The team-sharing model has one rule: <strong>commit settings.json, gitignore settings.local.json</strong>. Everything else flows from there.</p>
+<h4>What Goes Where</h4>
+<table>
+<tr><th>File / Directory</th><th>Committed to Git?</th><th>Why</th></tr>
+<tr><td><code>CLAUDE.md</code></td><td>Yes</td><td>Project knowledge belongs to the team</td></tr>
+<tr><td><code>.claude/settings.json</code></td><td>Yes</td><td>Permissions, hooks, env — team baseline</td></tr>
+<tr><td><code>.claude/settings.local.json</code></td><td>No (gitignore)</td><td>Personal preferences, machine-specific paths</td></tr>
+<tr><td><code>.claude/commands/</code></td><td>Yes</td><td>Slash commands are workflow assets</td></tr>
+<tr><td><code>.claude/agents/</code></td><td>Yes</td><td>Subagent definitions are team assets</td></tr>
+<tr><td><code>.claude/hooks/*.sh</code></td><td>Yes</td><td>Hooks must be reproducible across machines</td></tr>
+</table>
+<h4>Required .gitignore Entry</h4>
+<pre><code># In .gitignore at repo root:
+.claude/settings.local.json</code></pre>
+<p>This is non-negotiable. <code>settings.local.json</code> is where developers put personal touches that should not affect teammates: a more permissive allow-list, a different model preference, machine-specific tool paths. Committing it leaks personal config and creates merge conflicts on every change.</p>
+<h4>The settings.local.json Override Pattern</h4>
+<p>Claude Code merges <code>settings.json</code> and <code>settings.local.json</code> at session start, with the local file winning on conflicts. The intent: <strong>team baseline + personal overrides</strong>. A common usage:</p>
+<pre><code>// .claude/settings.json (committed)
+{
+  "permissions": {
+    "allow": ["Bash(npm run *)", "Read(./src/**)", "Edit(./src/**)"],
+    "deny": ["Bash(rm -rf *)"]
+  }
+}
+
+// .claude/settings.local.json (gitignored)
+{
+  "permissions": {
+    "allow": ["Bash(docker *)", "Bash(kubectl *)"]
+  }
+}</code></pre>
+<p>Now everyone on the team gets the safe baseline, and a developer who actually uses Docker can opt-in to those permissions on their machine without imposing them on others.</p>`
+    },
+    {
+      heading: "Eight Common Mistakes and How to Fix Them",
+      body: `<p>Patterns we see in audits of Claude Code setups across teams. Each one trades a little setup pain now for a lot of tool-call pain later.</p>
+<h4>1. CLAUDE.md is a 500-line wall of derivable information</h4>
+<p>Fix: delete everything Claude can read from package.json, tsconfig, README. Keep only what you wish a new hire would memorize on day one.</p>
+<h4>2. settings.json with no permissions block</h4>
+<p>Fix: add at least the <code>permissions.allow</code> list for your top-five most-run commands. Your wrist will thank you.</p>
+<h4>3. settings.local.json committed to Git</h4>
+<p>Fix: <code>git rm --cached .claude/settings.local.json</code>, add to <code>.gitignore</code>, and tell your team to re-create personal versions.</p>
+<h4>4. Slash commands that duplicate shell commands</h4>
+<p>If <code>/test</code> just runs <code>npm test</code>, you don't need a slash command. Save them for procedures that involve multiple steps or judgment.</p>
+<h4>5. Subagents that have access to all tools</h4>
+<p>Defeats the purpose. A pr-reviewer subagent should not have <code>Edit</code> or <code>Write</code> in its <code>tools</code> list — review is read-only.</p>
+<h4>6. Hooks that mutate Claude's input or output silently</h4>
+<p>Hooks should observe and gate, not rewrite. Silent rewriting hides what Claude actually did from the user, which is bad for trust and bad for debugging.</p>
+<h4>7. Environment variables in settings.json with real secrets</h4>
+<p>Fix: never. Use a secrets manager or the user's shell environment. <code>settings.json</code> is committed.</p>
+<h4>8. No CLAUDE.md update process</h4>
+<p>The most insidious one. CLAUDE.md goes stale within weeks if no one owns it. Add a quarterly calendar reminder, or better: include "review CLAUDE.md" in your release checklist.</p>`
+    },
+    {
+      heading: "A Real Team Workflow Example",
+      body: `<p>Here is a complete <code>.claude/</code> setup for a hypothetical mid-size React + Node team. Six files, all committed (except settings.local.json), about 250 lines total.</p>
+<pre><code>repo/
+├── CLAUDE.md                              # 60 lines — commands, arch, conventions
+├── .gitignore                             # contains: .claude/settings.local.json
+└── .claude/
+    ├── settings.json                       # 40 lines — permissions, hooks, env
+    ├── commands/
+    │   ├── deploy.md                       # /deploy — pre-flight + production push
+    │   ├── new-component.md                # /new-component &lt;name&gt;
+    │   └── audit.md                        # /audit — invokes 3 subagents
+    ├── agents/
+    │   ├── security-reviewer.md            # focuses on auth, injection, secrets
+    │   ├── performance-reviewer.md         # focuses on queries, rendering
+    │   └── docs-reviewer.md                # focuses on README and inline docs
+    └── hooks/
+        ├── format.sh                       # PostToolUse: Prettier on edited files
+        └── pre-push-check.sh               # PreToolUse: blocks git push if checks fail</code></pre>
+<p>Time investment: roughly half a day for one engineer to write the initial set, then 30-minute increments as patterns emerge. Payoff: every developer on the team gets the same disciplined Claude setup automatically. New hires are productive on day one. The same <code>/deploy</code> works on every machine.</p>
+<p>For more on individual pieces: see our <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet command cheat sheet</a> for a different CLI's command system, and <a href="/">the Buddy Checker</a> for what was lost when Claude Code v2.1.97 retired the buddy feature.</p>`
+    },
+    {
+      heading: "Frequently Asked Questions",
+      body: `<h4>Where does Claude Code look for the .claude folder?</h4>
+<p>It walks up from your current working directory looking for <code>.claude/</code> or <code>CLAUDE.md</code>. The first match wins, which means a project's local config beats anything global. There is also a global config at <code>~/.claude/</code> for cross-project defaults.</p>
+<h4>Can I have a global CLAUDE.md that applies to all projects?</h4>
+<p>Yes — put it at <code>~/.claude/CLAUDE.md</code>. It loads for every Claude Code session. Use this for personal preferences (preferred response style, common abbreviations) rather than project-specific instructions.</p>
+<h4>Should I check .claude/ into Git?</h4>
+<p>Yes for <code>settings.json</code>, slash commands, agents, hooks, and CLAUDE.md. No for <code>settings.local.json</code> — that goes in <code>.gitignore</code>. The committed files become a team asset; the local file stays personal.</p>
+<h4>How do I share permissions across multiple projects without copy-pasting?</h4>
+<p>Put common permissions in <code>~/.claude/settings.json</code> (your global config). Project-level <code>.claude/settings.json</code> adds project-specific permissions on top. Both merge at session start with project-level winning on conflicts.</p>
+<h4>What's the difference between a slash command and a subagent?</h4>
+<p>Slash commands run in your main session and consume your context window. Subagents run in their own session with isolated context. Use slash commands for procedural work where you want the dialog visible; use subagents for exploratory work where you only want the conclusion. See section 5 for a comparison table.</p>
+<h4>Can I disable hooks for a single command?</h4>
+<p>Not easily — hooks fire on every matching event. The workaround is to make the hook itself smart enough to no-op based on the event payload (e.g. skip Prettier if the file is in a vendor directory). Read the JSON from stdin in the hook script and decide whether to run.</p>
+<h4>Why isn't my custom slash command showing up?</h4>
+<p>Three things to check: (1) the file is in <code>.claude/commands/</code> with a <code>.md</code> extension, (2) the filename has no spaces or special characters, (3) you've restarted Claude Code after adding it (some versions cache the command list at session start).</p>
+<p><em>Related reading: <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet and /hatch command cheat sheet</a> · <a href="/blog/claude-buddy-retired-migration-guide">Claude Buddy retired — migration guide</a> · <a href="/">Claude Buddy Checker</a></em></p>`
+    }
+  ]
+};
+
+const CLAUDE_FOLDER_ZH: ArticleContent = {
+  title: "Claude Code .claude 文件夹完整指南——为团队工作流配置 Claude Code（2026）",
+  metaTitle: "Claude Code .claude 文件夹完整配置指南 (2026)",
+  metaDescription: "Claude Code .claude 文件夹里所有文件详解：CLAUDE.md、settings.json、自定义斜杠命令、子代理、hooks。2026 年真实团队工作流示例。",
+  excerpt: "Claude Code .claude 文件夹是把通用 AI 助手变成你项目专家的关键。本文讲清楚每个文件的作用、团队如何通过 Git 共享，以及让这个文件夹变成隐患的七个常见错误。",
+  sections: [
+    {
+      heading: ".claude/ 文件夹里都有什么",
+      body: `<p>打开任何配置良好的 Claude Code 项目，你都会在仓库根目录看到一个 <code>.claude/</code> 文件夹。这就是把通用 AI 助手变成你项目专家的地方——它知道你的代码库约定、可访问正确的工具、遵循团队工作流规则。<strong>正确配置 Claude Code .claude 文件夹是团队能做的最高杠杆的一次性投入</strong>，但官方文档把信息分散在六七个页面里。本指南把所有内容统一在一处。</p>
+<p>完整清单如下：</p>
+<pre><code>.claude/
+├── settings.json              # 团队共享，提交到 Git
+├── settings.local.json        # 个人配置，gitignored
+├── commands/                  # 自定义斜杠命令
+│   ├── deploy.md
+│   └── review.md
+├── agents/                    # 自定义子代理
+│   ├── pr-reviewer.md
+│   └── test-writer.md
+├── hooks/                     # 由事件触发的 shell 脚本
+│   └── post-edit.sh
+└── CLAUDE.md                  # 这里也合法，但通常放在仓库根</code></pre>
+<p>仓库根目录里，与 <code>.claude/</code> 配合的还有：</p>
+<pre><code>CLAUDE.md                     # 项目记忆与常驻指令
+.gitignore                    # 必须包含 .claude/settings.local.json</code></pre>
+<p>每个文件扮演不同角色。后面的章节按你最常接触的顺序讲解：先 <a href="#section-1">CLAUDE.md</a>（每个项目都用），然后 <a href="#section-2">settings.json</a>（权限与 hooks），接着是高级用户用的 <a href="#section-3">commands/</a>、<a href="#section-4">agents/</a>、<a href="#section-5">hooks/</a> 三个目录。最后讲 <a href="#section-6">团队共享模式</a>与<a href="#section-7">常见陷阱</a>。</p>`
+    },
+    {
+      heading: "CLAUDE.md——项目记忆与常驻指令",
+      body: `<p><code>CLAUDE.md</code> 是 Claude Code 配置中最重要的单个文件。它在每个会话启动时作为常驻指令加载——AI 在响应你的第一条消息之前就读取它，并把内容当作具有约束力的上下文。</p>
+<p>这个文件默认放在仓库根目录（Claude Code 优先在那找），也可以放在 <code>.claude/</code> 内。大多数团队用仓库根，因为对人类浏览项目时更显眼。</p>
+<h4>CLAUDE.md 该写什么</h4>
+<p>有三类内容值得占据 CLAUDE.md 的位置：</p>
+<ol>
+<li><strong>常用命令</strong>——开发者实际跑的那五六个 shell 命令（<code>npm run dev</code>、<code>pytest</code>、<code>cargo check</code>）。带上参数。Claude 会用这些而不是自己编一个相似但错的调用。</li>
+<li><strong>架构概述</strong>——入口点、路由层、状态管理方法、关键目录。三到五个要点；不是完整的架构文档。</li>
+<li><strong>约定</strong>——命名、import 路径、新文件去哪。Claude 读三个文件推不出来的那些模式。</li>
+</ol>
+<h4>不要写什么</h4>
+<p>Claude 通过读真实代码就能推导的一切。类型定义、函数签名、依赖列表——Claude 能读 <code>package.json</code> 和 <code>tsconfig.json</code>。把可推导信息塞进 CLAUDE.md 只会让每个会话变臃肿，把真正有用的指令推到下面。</p>
+<h4>真实示例</h4>
+<pre><code># MyApp
+
+## Common Commands
+
+\`\`\`bash
+npm run dev        # Vite dev 服务器，端口 3000
+npm run build      # tsc + vite build → dist/
+npm run check      # tsc --noEmit
+npm run test       # vitest run
+\`\`\`
+
+## Architecture
+
+- React 19 SPA，用 Wouter（不是 React Router）做路由
+- Tailwind v4 通过 Vite 插件（无 PostCSS，无 tailwind.config.js）
+- 所有状态在 client/src/stores/ 下的 Zustand stores
+- 路径别名：@/* → client/src/*
+
+## Conventions
+
+- 新组件 → client/src/components/
+- shadcn/ui 组件在 client/src/components/ui/，不要修改
+- 所有面向用户的字符串必须用 I18nContext 的 t() hook</code></pre>
+<p>这种 CLAUDE.md 一个会话就回本。对比那种 200 行的怪物——没人读、Agent 也不受益。</p>`
+    },
+    {
+      heading: "settings.json——权限、Hooks、环境",
+      body: `<p>如果说 <code>CLAUDE.md</code> 是大脑，<code>.claude/settings.json</code> 就是操作手册。它控制 Claude 能用哪些工具、什么 hook 在什么工具事件触发、加载哪些环境变量，以及一些生活质量选项。</p>
+<p>Schema 文档在 <code>https://json.schemastore.org/claude-code-settings.json</code>——把编辑器指向它就有自动补全。</p>
+<h4>权限 Permissions</h4>
+<p>最重要的字段是 <code>permissions.allow</code>——一个无需询问就能运行的模式列表。没有显式 allow，Claude 每个 shell 命令都问，很快就累。</p>
+<pre><code>{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(pytest:*)",
+      "Read(./src/**)",
+      "Edit(./src/**)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)"
+    ]
+  }
+}</code></pre>
+<p>模式语法对路径是 glob 风格，对 shell 命令是前缀风格。<code>Bash(npm run *)</code> 匹配任何 <code>npm run</code> 调用；<code>Bash(git diff:*)</code> 匹配任何带参数的 <code>git diff</code>。</p>
+<p><strong>读操作慷慨些，写操作保守些</strong>。每次确认 <code>git diff</code> 的烦躁是真的，意外的 <code>git diff</code> 风险是零。<code>git push</code> 不是同一回事。</p>
+<h4>环境变量</h4>
+<pre><code>{
+  "env": {
+    "NODE_ENV": "development",
+    "DEBUG": "myapp:*"
+  }
+}</code></pre>
+<p>这些会被导出到 Claude 的工具调用环境里。适合放团队需要保持一致的非密配置。<strong>绝不放真正的 secrets</strong>——<code>settings.json</code> 是要提交到 Git 的。</p>
+<h4>生活质量设置</h4>
+<pre><code>{
+  "model": "claude-opus-4-5",
+  "outputStyle": "concise",
+  "statusLine": {
+    "type": "command",
+    "command": "echo $(git branch --show-current) | tr -d '\\n'"
+  }
+}</code></pre>
+<p><code>statusLine</code> 字段被低估了——它能让你在 Claude Code UI 底部显示任何东西（当前分支、运行时间、部署环境）。便宜的上下文，能预防一类错误。</p>`
+    },
+    {
+      heading: ".claude/commands/——自定义斜杠命令",
+      body: `<p>自定义斜杠命令以 Markdown 文件存在 <code>.claude/commands/</code>。文件名变成命令名：<code>.claude/commands/deploy.md</code> 定义 <code>/deploy</code>。</p>
+<p>每个文件里写命令运行时 Claude 执行的 prompt。标准 frontmatter 可选地限制命令能用的工具：</p>
+<pre><code>---
+description: 跑完整的部署前检查
+allowed-tools: Bash, Read
+---
+
+按顺序跑这些检查。任何一个失败就停下：
+
+1. \`npm run check\`——TypeScript 必须零错误通过
+2. \`npm run test\`——所有测试必须通过
+3. \`npm run build\`——生产构建必须成功
+4. 检查没有 .env 文件有未提交改动
+5. 确认在 main 分支
+
+如果全部通过，输出 \`READY TO DEPLOY\`。否则输出失败的精确命令。</code></pre>
+<p>现在团队任何人在 Claude Code 输入 <code>/deploy</code> 都跑同样的五步预检。好处不只是方便——而是部署流程现在<em>已经版本化在 Git 里</em>。新人免费拿到。</p>
+<h4>参数</h4>
+<p>用 <code>$ARGUMENTS</code> 传参：</p>
+<pre><code>---
+description: 为指定表生成迁移
+---
+
+为下面这个表创建数据库迁移：$ARGUMENTS
+
+用 scripts/migration-template.sql 的迁移模板。新文件放进 db/migrations/，
+命名约定是 \`{timestamp}_{table}.sql\`。</code></pre>
+<p>然后 <code>/migrate users</code> 给 <code>users</code> 表生成迁移。</p>
+<h4>什么该做成斜杠命令</h4>
+<p>做超过三次的事。部署前检查、生成样板（新组件、新测试文件、新 API 路由）、启动复杂审查（安全审查、性能审计）。一次性任务留在普通对话里。</p>`
+    },
+    {
+      heading: ".claude/agents/——自定义子代理",
+      body: `<p>子代理（Subagent）是可以从主会话委派的专门 Claude 角色。它们以 Markdown 文件存在 <code>.claude/agents/</code>，带 frontmatter：</p>
+<pre><code>---
+name: pr-reviewer
+description: 审查 pull request 改动的安全、性能、风格
+tools: Read, Grep, Bash
+model: claude-opus-4-5
+---
+
+你是经验丰富的工程师，正在审查一个 pull request。
+
+聚焦：
+1. 安全漏洞（认证绕过、注入、代码里的密钥）
+2. 性能回退（N+1 查询、热路径上的阻塞 I/O）
+3. 改动行的测试覆盖
+4. 是否符合项目 CLAUDE.md 的约定
+
+直接说。如果 PR 没问题就一句话说。否则按优先级列出问题，附 file:line 引用。</code></pre>
+<p>主会话通过 Agent 工具调用它们。子代理在自己的上下文窗口里跑，返回聚焦的结果，不会用中间探索污染主对话。</p>
+<h4>什么时候用子代理 vs 斜杠命令</h4>
+<table>
+<tr><th>用斜杠命令当……</th><th>用子代理当……</th></tr>
+<tr><td>工作是流程性的（跑 X，然后 Y，然后 Z）</td><td>工作需要判断与探索</td></tr>
+<tr><td>你想对话留在主会话里</td><td>你想要隔离的上下文（如并行调查）</td></tr>
+<tr><td>输出很短（状态、摘要）</td><td>输出是只读一次的详细报告</td></tr>
+</table>
+<p>常见模式：一个斜杠命令编排多个子代理调用。<code>/audit</code> 可能并行调用安全审查者、性能审查者、文档审查者，然后综合结果。</p>`
+    },
+    {
+      heading: ".claude/hooks/——围绕工具调用做自动化",
+      body: `<p>Hooks 是在 Claude Code 生命周期事件触发的 shell 命令。它们配置在 <code>settings.json</code>（或个人 hooks 用 <code>.claude/settings.local.json</code>）的 <code>hooks</code> 键下：</p>
+<pre><code>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/format.sh" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<p>这会在每次 <code>Edit</code>、<code>Write</code>、<code>MultiEdit</code> 工具调用之后跑 <code>.claude/hooks/format.sh</code>——典型用例：在改动文件上跑 Prettier，让 AI 输出始终格式化好。</p>
+<h4>可用事件</h4>
+<ul>
+<li><code>PreToolUse</code>——工具运行之前触发。可以非零退出来阻止调用。适合做护栏。</li>
+<li><code>PostToolUse</code>——工具运行之后触发。适合清理或格式化。</li>
+<li><code>UserPromptSubmit</code>——用户提交 prompt 时触发。适合添加上下文。</li>
+<li><code>Stop</code>——Claude 完成响应时触发。适合通知。</li>
+<li><code>SessionStart</code> / <code>SessionEnd</code>——适合预热缓存或保存遥测。</li>
+</ul>
+<h4>真实示例：自动格式化编辑过的文件</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/format.sh
+# 从 stdin 读 JSON 事件，提取改动文件路径，跑 Prettier。
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+if [[ -n "$FILE" && -f "$FILE" ]]; then
+  case "$FILE" in
+    *.ts|*.tsx|*.js|*.jsx|*.json|*.md)
+      npx prettier --write "$FILE" 2>/dev/null
+      ;;
+  esac
+fi</code></pre>
+<p>给它执行权限（<code>chmod +x</code>）、提交，现在团队每个成员的编辑都自动格式化。再也没有 "Claude 写代码不带末尾逗号" 的 PR 评论。</p>`
+    },
+    {
+      heading: "在团队中共享 .claude/ 文件夹",
+      body: `<p>团队共享模型只有一条规则：<strong>提交 settings.json，gitignore settings.local.json</strong>。其他一切由此推出。</p>
+<h4>什么放哪里</h4>
+<table>
+<tr><th>文件 / 目录</th><th>提交到 Git？</th><th>为什么</th></tr>
+<tr><td><code>CLAUDE.md</code></td><td>是</td><td>项目知识属于团队</td></tr>
+<tr><td><code>.claude/settings.json</code></td><td>是</td><td>权限、hooks、env——团队基线</td></tr>
+<tr><td><code>.claude/settings.local.json</code></td><td>否（gitignore）</td><td>个人偏好、机器特定路径</td></tr>
+<tr><td><code>.claude/commands/</code></td><td>是</td><td>斜杠命令是工作流资产</td></tr>
+<tr><td><code>.claude/agents/</code></td><td>是</td><td>子代理定义是团队资产</td></tr>
+<tr><td><code>.claude/hooks/*.sh</code></td><td>是</td><td>Hooks 必须在跨机器可复现</td></tr>
+</table>
+<h4>必须的 .gitignore 条目</h4>
+<pre><code># 在仓库根的 .gitignore 里：
+.claude/settings.local.json</code></pre>
+<p>这条不可商量。<code>settings.local.json</code> 是开发者放个人调整的地方，这些不应影响队友：更宽松的 allow-list、不同的模型偏好、机器特定的工具路径。提交它会泄露个人配置，而且每次改动都引发合并冲突。</p>
+<h4>settings.local.json 覆盖模式</h4>
+<p>Claude Code 在会话开始时合并 <code>settings.json</code> 和 <code>settings.local.json</code>，冲突时本地文件赢。意图是：<strong>团队基线 + 个人覆盖</strong>。常见用法：</p>
+<pre><code>// .claude/settings.json（提交）
+{
+  "permissions": {
+    "allow": ["Bash(npm run *)", "Read(./src/**)", "Edit(./src/**)"],
+    "deny": ["Bash(rm -rf *)"]
+  }
+}
+
+// .claude/settings.local.json（gitignored）
+{
+  "permissions": {
+    "allow": ["Bash(docker *)", "Bash(kubectl *)"]
+  }
+}</code></pre>
+<p>这样团队每个人都得到安全基线，真正用 Docker 的开发者可以在自己机器上选择性加权限，而不强加给别人。</p>`
+    },
+    {
+      heading: "八个常见错误以及修复方式",
+      body: `<p>跨团队 Claude Code 配置审查中常见的模式。每个都是用现在一点配置疼痛换以后大量工具调用疼痛。</p>
+<h4>1. CLAUDE.md 是 500 行的可推导信息墙</h4>
+<p>修复：删掉 Claude 能从 package.json、tsconfig、README 读到的一切。只留你希望新人入职第一天就背下来的。</p>
+<h4>2. settings.json 没有 permissions 块</h4>
+<p>修复：至少为最常跑的五个命令加 <code>permissions.allow</code> 列表。你的手腕会感谢你。</p>
+<h4>3. settings.local.json 提交到 Git</h4>
+<p>修复：<code>git rm --cached .claude/settings.local.json</code>，加到 <code>.gitignore</code>，告诉团队重建个人版。</p>
+<h4>4. 重复 shell 命令的斜杠命令</h4>
+<p>如果 <code>/test</code> 只是跑 <code>npm test</code>，你不需要斜杠命令。把它们留给涉及多步骤或判断的流程。</p>
+<h4>5. 拥有所有工具的子代理</h4>
+<p>违背初衷。pr-reviewer 子代理不该在 <code>tools</code> 列表里有 <code>Edit</code> 或 <code>Write</code>——审查是只读的。</p>
+<h4>6. 静默改写 Claude 输入或输出的 hook</h4>
+<p>Hook 应该观察与把关，不要重写。静默重写隐藏 Claude 的真实行为，对信任和调试都不利。</p>
+<h4>7. settings.json 里的环境变量含真 secrets</h4>
+<p>修复：永远别。用密钥管理器或用户的 shell 环境。<code>settings.json</code> 是要提交的。</p>
+<h4>8. 没有 CLAUDE.md 更新流程</h4>
+<p>最阴险的一个。CLAUDE.md 几周内就过时如果没人负责。加一个季度日历提醒，或更好：把 "review CLAUDE.md" 加进发版 checklist。</p>`
+    },
+    {
+      heading: "一个真实团队工作流示例",
+      body: `<p>这是一个假想的中等规模 React + Node 团队的完整 <code>.claude/</code> 配置。六个文件，全部提交（除了 settings.local.json），共约 250 行。</p>
+<pre><code>repo/
+├── CLAUDE.md                              # 60 行——命令、架构、约定
+├── .gitignore                             # 含：.claude/settings.local.json
+└── .claude/
+    ├── settings.json                       # 40 行——权限、hooks、env
+    ├── commands/
+    │   ├── deploy.md                       # /deploy——预检 + 生产推送
+    │   ├── new-component.md                # /new-component &lt;name&gt;
+    │   └── audit.md                        # /audit——调用 3 个子代理
+    ├── agents/
+    │   ├── security-reviewer.md            # 聚焦认证、注入、密钥
+    │   ├── performance-reviewer.md         # 聚焦查询、渲染
+    │   └── docs-reviewer.md                # 聚焦 README 与内联文档
+    └── hooks/
+        ├── format.sh                       # PostToolUse: Prettier 编辑过的文件
+        └── pre-push-check.sh               # PreToolUse: 检查不过就阻止 git push</code></pre>
+<p>时间投入：一名工程师初版大约半天，之后随模式涌现 30 分钟一次增量。回报：团队每个开发者自动获得同样规范的 Claude 配置。新人第一天就有产出。同样的 <code>/deploy</code> 在每台机器上工作。</p>
+<p>关于其他 CLI 命令系统看我们的 <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet 命令速查表</a>，关于 Claude Code v2.1.97 下线 buddy 功能后失去了什么看 <a href="/">Buddy Checker</a>。</p>`
+    },
+    {
+      heading: "常见问题",
+      body: `<h4>Claude Code 在哪找 .claude 文件夹？</h4>
+<p>它从当前工作目录向上找 <code>.claude/</code> 或 <code>CLAUDE.md</code>。第一个匹配赢，意味着项目本地配置压过任何全局配置。也有一个全局配置在 <code>~/.claude/</code>，做跨项目默认值。</p>
+<h4>能有一个适用于所有项目的全局 CLAUDE.md 吗？</h4>
+<p>能——放在 <code>~/.claude/CLAUDE.md</code>。它会在每个 Claude Code 会话加载。用这个放个人偏好（喜欢的响应风格、常用缩写），而不是项目特定指令。</p>
+<h4>.claude/ 应该提交到 Git 吗？</h4>
+<p><code>settings.json</code>、斜杠命令、agents、hooks、CLAUDE.md 应该。<code>settings.local.json</code> 不应该——那个进 <code>.gitignore</code>。提交的文件成为团队资产；本地文件保持个人。</p>
+<h4>怎么在多个项目间共享权限而不复制粘贴？</h4>
+<p>把通用权限放进 <code>~/.claude/settings.json</code>（你的全局配置）。项目级 <code>.claude/settings.json</code> 在上面加项目特定权限。两者在会话开始合并，项目级冲突时赢。</p>
+<h4>斜杠命令和子代理有什么区别？</h4>
+<p>斜杠命令在主会话跑、消耗你的上下文窗口。子代理在自己的隔离上下文会话跑。流程性工作希望对话可见用斜杠命令；探索性工作只想要结论用子代理。对比表见第 5 节。</p>
+<h4>能为单个命令禁用 hooks 吗？</h4>
+<p>不容易——hooks 在每个匹配事件都触发。变通方法是让 hook 自己根据事件载荷做出 no-op 决策（比如文件在 vendor 目录就跳过 Prettier）。在 hook 脚本里从 stdin 读 JSON 自己决定是否运行。</p>
+<h4>为什么我的自定义斜杠命令没出现？</h4>
+<p>三件事检查：(1) 文件在 <code>.claude/commands/</code> 且扩展名是 <code>.md</code>，(2) 文件名没有空格或特殊字符，(3) 添加后重启 Claude Code（部分版本在会话开始时缓存命令列表）。</p>
+<p><em>相关阅读：<a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet 与 /hatch 速查表</a> · <a href="/blog/claude-buddy-retired-migration-guide">Claude Buddy 下线后的迁移指南</a> · <a href="/">Claude Buddy 查询器</a></em></p>`
+    }
+  ]
+};
+
+const CLAUDE_FOLDER_KO: ArticleContent = {
+  title: "Claude Code .claude 폴더 완벽 가이드 — 팀 워크플로우용 Claude Code 설정 (2026)",
+  metaTitle: "Claude Code .claude 폴더 완벽 설정 가이드 (2026)",
+  metaDescription: "Claude Code .claude 폴더 안의 모든 파일 해설: CLAUDE.md, settings.json, 커스텀 슬래시 명령, 서브에이전트, hooks. 2026년 실제 팀 워크플로우 예시.",
+  excerpt: "Claude Code .claude 폴더는 일반 AI 어시스턴트를 당신 프로젝트의 전문가로 바꾸는 핵심입니다. 각 파일의 역할, 팀이 Git으로 공유하는 방법, 이 폴더를 함정으로 만드는 일곱 가지 실수를 모두 다룹니다.",
+  sections: [
+    {
+      heading: ".claude/ 폴더 안에 있는 것",
+      body: `<p>잘 설정된 Claude Code 프로젝트를 열면 저장소 루트에 <code>.claude/</code> 폴더가 있습니다. 일반 AI 어시스턴트를 당신 프로젝트의 전문가로 바꾸는 곳입니다 — 코드베이스 관례를 알고, 올바른 도구에 접근하며, 팀 워크플로우 규칙을 따릅니다. <strong>Claude Code .claude 폴더를 제대로 설정하는 것은 팀이 할 수 있는 가장 레버리지가 큰 일회성 투자</strong>이지만, 공식 문서는 정보를 6~7개 페이지에 흩뿌려 놓았습니다. 이 가이드는 모든 것을 한 곳에 모았습니다.</p>
+<p>전체 목록입니다:</p>
+<pre><code>.claude/
+├── settings.json              # 팀 공유, Git에 커밋
+├── settings.local.json        # 개인용, gitignored
+├── commands/                  # 커스텀 슬래시 명령
+│   ├── deploy.md
+│   └── review.md
+├── agents/                    # 커스텀 서브에이전트
+│   ├── pr-reviewer.md
+│   └── test-writer.md
+├── hooks/                     # 이벤트로 트리거되는 셸 스크립트
+│   └── post-edit.sh
+└── CLAUDE.md                  # 여기도 유효하지만 보통 저장소 루트에 둠</code></pre>
+<p>저장소 루트에서 <code>.claude/</code>와 함께 작동하는 것:</p>
+<pre><code>CLAUDE.md                     # 프로젝트 메모리와 상시 지침
+.gitignore                    # .claude/settings.local.json 반드시 포함</code></pre>
+<p>각 파일은 다른 역할을 합니다. 다음 섹션은 가장 자주 만지는 순서로 안내합니다: 먼저 <a href="#section-1">CLAUDE.md</a>(모든 프로젝트), 다음 <a href="#section-2">settings.json</a>(권한과 hooks), 그 다음 파워 유저용 <a href="#section-3">commands/</a>, <a href="#section-4">agents/</a>, <a href="#section-5">hooks/</a> 디렉토리. <a href="#section-6">팀 공유 패턴</a>과 <a href="#section-7">흔한 함정</a>으로 마무리합니다.</p>`
+    },
+    {
+      heading: "CLAUDE.md — 프로젝트 메모리와 상시 지침",
+      body: `<p><code>CLAUDE.md</code>는 Claude Code 설정에서 가장 중요한 단일 파일입니다. 모든 세션에 상시 지침으로 로드됩니다 — AI는 첫 메시지에 답하기 전에 이를 읽고 그 내용을 구속력 있는 컨텍스트로 취급합니다.</p>
+<p>파일은 기본적으로 저장소 루트에 위치합니다(Claude Code가 거기를 먼저 찾습니다). <code>.claude/</code> 안에도 둘 수 있습니다. 대부분의 팀은 저장소 루트를 사용합니다 — 사람이 프로젝트를 둘러볼 때 더 잘 보이기 때문입니다.</p>
+<h4>CLAUDE.md에 무엇을 넣을까</h4>
+<p>세 종류의 내용이 자리값을 합니다:</p>
+<ol>
+<li><strong>일반 명령어</strong> — 개발자들이 실제로 실행하는 5~6개의 셸 명령(<code>npm run dev</code>, <code>pytest</code>, <code>cargo check</code>). 플래그 포함. Claude는 비슷하지만 틀린 것을 만들어내는 대신 이걸 사용합니다.</li>
+<li><strong>아키텍처 개요</strong> — 진입점, 라우팅 레이어, 상태 관리 방식, 핵심 디렉토리. 3~5개 불릿; 전체 아키텍처 문서가 아닙니다.</li>
+<li><strong>관례</strong> — 명명, import 경로, 새 파일 위치. Claude가 파일 3개를 읽어서 도출할 수 없는 패턴.</li>
+</ol>
+<h4>무엇을 빼야 하나</h4>
+<p>Claude가 실제 코드를 읽어서 도출할 수 있는 모든 것. 타입 정의, 함수 시그니처, 의존성 목록 — Claude는 <code>package.json</code>과 <code>tsconfig.json</code>을 읽을 수 있습니다. 도출 가능한 정보로 CLAUDE.md를 채우면 모든 세션이 부풀고, 정작 유용한 지침이 아래로 밀립니다.</p>
+<h4>실제 예시</h4>
+<pre><code># MyApp
+
+## Common Commands
+
+\`\`\`bash
+npm run dev        # Vite dev 서버, 포트 3000
+npm run build      # tsc + vite build → dist/
+npm run check      # tsc --noEmit
+npm run test       # vitest run
+\`\`\`
+
+## Architecture
+
+- React 19 SPA, 라우팅에 Wouter (React Router 아님)
+- Tailwind v4 Vite 플러그인 (PostCSS 없음, tailwind.config.js 없음)
+- 모든 상태는 client/src/stores/의 Zustand 스토어
+- 경로 별칭: @/* → client/src/*
+
+## Conventions
+
+- 새 컴포넌트 → client/src/components/
+- shadcn/ui 컴포넌트는 client/src/components/ui/, 수정 금지
+- 모든 사용자용 문자열은 I18nContext의 t() 훅 사용</code></pre>
+<p>이런 CLAUDE.md는 한 세션에서 본전이 나옵니다. 누구도 읽지 않고 어떤 에이전트도 혜택을 못 보는 200줄짜리 괴물과 비교하세요.</p>`
+    },
+    {
+      heading: "settings.json — 권한, Hooks, 환경",
+      body: `<p><code>CLAUDE.md</code>가 두뇌라면 <code>.claude/settings.json</code>은 운영 매뉴얼입니다. Claude가 어떤 도구를 쓸 수 있는지, 어떤 hook이 어떤 도구 이벤트에서 발동되는지, 어떤 환경 변수가 로드되는지, 그리고 몇몇 삶의 질 옵션을 제어합니다.</p>
+<p>스키마는 <code>https://json.schemastore.org/claude-code-settings.json</code>에 문서화되어 있습니다 — 에디터를 거기로 향하면 자동완성이 됩니다.</p>
+<h4>권한 Permissions</h4>
+<p>가장 중요한 필드는 <code>permissions.allow</code> — Claude가 묻지 않고 실행할 수 있는 패턴 목록입니다. 명시적 allow가 없으면 Claude는 모든 셸 명령에 묻고, 금세 지칩니다.</p>
+<pre><code>{
+  "permissions": {
+    "allow": [
+      "Bash(npm run *)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(pytest:*)",
+      "Read(./src/**)",
+      "Edit(./src/**)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(git push:*)",
+      "Bash(git reset --hard:*)"
+    ]
+  }
+}</code></pre>
+<p>패턴 문법은 경로에는 glob 스타일, 셸 명령에는 prefix 스타일입니다. <code>Bash(npm run *)</code>은 모든 <code>npm run</code> 호출을 매칭; <code>Bash(git diff:*)</code>는 인자가 있는 모든 <code>git diff</code>를 매칭.</p>
+<p><strong>읽기 작업은 후하게, 쓰기 작업은 보수적으로</strong>. 매번 <code>git diff</code>를 확인하는 짜증은 진짜고, 원치 않는 <code>git diff</code>의 위험은 0입니다. <code>git push</code>는 같지 않습니다.</p>
+<h4>환경 변수</h4>
+<pre><code>{
+  "env": {
+    "NODE_ENV": "development",
+    "DEBUG": "myapp:*"
+  }
+}</code></pre>
+<p>이것들은 Claude의 도구 호출 환경에 export됩니다. 팀 전체에서 일관되어야 하는 비밀이 아닌 설정에 적합합니다. <strong>실제 secrets는 절대 넣지 마세요</strong> — <code>settings.json</code>은 Git에 커밋됩니다.</p>
+<h4>삶의 질 설정</h4>
+<pre><code>{
+  "model": "claude-opus-4-5",
+  "outputStyle": "concise",
+  "statusLine": {
+    "type": "command",
+    "command": "echo $(git branch --show-current) | tr -d '\\n'"
+  }
+}</code></pre>
+<p><code>statusLine</code> 필드는 과소평가됐습니다 — Claude Code UI 하단에 무엇이든 표시할 수 있게 합니다(현재 브랜치, 가동 시간, 배포 환경). 한 부류의 실수를 막는 저렴한 컨텍스트입니다.</p>`
+    },
+    {
+      heading: ".claude/commands/ — 커스텀 슬래시 명령",
+      body: `<p>커스텀 슬래시 명령은 <code>.claude/commands/</code>에 Markdown 파일로 존재합니다. 파일명이 명령명이 됩니다: <code>.claude/commands/deploy.md</code>가 <code>/deploy</code>를 정의합니다.</p>
+<p>각 파일에는 명령 실행 시 Claude가 실행할 prompt를 씁니다. 표준 frontmatter는 명령이 사용할 수 있는 도구를 선택적으로 제한합니다:</p>
+<pre><code>---
+description: 전체 배포 전 체크 실행
+allowed-tools: Bash, Read
+---
+
+이 체크들을 순서대로 실행. 하나라도 실패하면 멈춤:
+
+1. \`npm run check\` — TypeScript 0 에러로 통과해야 함
+2. \`npm run test\` — 모든 테스트 통과해야 함
+3. \`npm run build\` — 프로덕션 빌드 성공해야 함
+4. .env 파일에 커밋되지 않은 변경 없는지 확인
+5. main 브랜치에 있는지 확인
+
+전부 통과하면 \`READY TO DEPLOY\` 출력. 아니면 실패한 정확한 명령 출력.</code></pre>
+<p>이제 팀 누구나 Claude Code에서 <code>/deploy</code>를 입력해 동일한 5단계 사전 체크를 실행할 수 있습니다. 편의가 다가 아닙니다 — 배포 절차가 이제 <em>Git에 버전 관리됩니다</em>. 신규 팀원이 무료로 받습니다.</p>
+<h4>인자</h4>
+<p>인자 전달에 <code>$ARGUMENTS</code>를 사용:</p>
+<pre><code>---
+description: 지정한 테이블의 마이그레이션 생성
+---
+
+이 테이블의 데이터베이스 마이그레이션 생성: $ARGUMENTS
+
+scripts/migration-template.sql의 마이그레이션 템플릿 사용. 새 파일을
+db/migrations/에 \`{timestamp}_{table}.sql\` 명명 규약으로 배치.</code></pre>
+<p>그러면 <code>/migrate users</code>가 <code>users</code> 테이블 마이그레이션을 생성합니다.</p>
+<h4>무엇을 슬래시 명령으로 만들까</h4>
+<p>3번 이상 하는 모든 것. 배포 전 체크, 보일러플레이트 생성(새 컴포넌트, 새 테스트 파일, 새 API 라우트), 복잡한 검토 시작(보안 검토, 성능 감사). 일회성 작업은 일반 대화에 두세요.</p>`
+    },
+    {
+      heading: ".claude/agents/ — 커스텀 서브에이전트",
+      body: `<p>서브에이전트는 메인 세션에서 위임할 수 있는 특화된 Claude 페르소나입니다. <code>.claude/agents/</code>에 Markdown 파일로 frontmatter와 함께 존재합니다:</p>
+<pre><code>---
+name: pr-reviewer
+description: pull request 변경의 보안, 성능, 스타일을 검토
+tools: Read, Grep, Bash
+model: claude-opus-4-5
+---
+
+당신은 pull request를 검토하는 경험 많은 엔지니어입니다.
+
+집중:
+1. 보안 취약점(인증 우회, 인젝션, 코드 내 secrets)
+2. 성능 회귀(N+1 쿼리, hot path의 블로킹 I/O)
+3. 변경된 라인의 테스트 커버리지
+4. 프로젝트 CLAUDE.md 관례 준수
+
+직접적으로. PR이 괜찮으면 한 문장으로 말하세요. 아니면 우선순위 순으로
+file:line 참조와 함께 문제를 나열하세요.</code></pre>
+<p>메인 세션은 Agent 도구로 호출합니다. 서브에이전트는 자신의 컨텍스트 윈도우에서 실행되고, 집중된 결과를 반환하며, 메인 대화를 중간 탐색으로 오염시키지 않습니다.</p>
+<h4>서브에이전트 vs 슬래시 명령</h4>
+<table>
+<tr><th>슬래시 명령을 쓸 때…</th><th>서브에이전트를 쓸 때…</th></tr>
+<tr><td>작업이 절차적(X 실행, Y 실행, Z 실행)</td><td>작업에 판단과 탐색이 필요</td></tr>
+<tr><td>대화가 메인 세션에 머무르길 원함</td><td>격리된 컨텍스트 원함(예: 병렬 조사)</td></tr>
+<tr><td>출력이 짧음(상태, 요약)</td><td>출력이 한 번 읽을 상세 보고서</td></tr>
+</table>
+<p>일반 패턴: 여러 서브에이전트 호출을 오케스트레이션하는 슬래시 명령. <code>/audit</code>는 보안 검토자, 성능 검토자, 문서 검토자를 병렬로 호출한 후 결과를 종합할 수 있습니다.</p>`
+    },
+    {
+      heading: ".claude/hooks/ — 도구 호출 주변 자동화",
+      body: `<p>Hooks는 Claude Code 라이프사이클 이벤트에서 발동되는 셸 명령입니다. <code>settings.json</code>(또는 개인 hooks용 <code>.claude/settings.local.json</code>)의 <code>hooks</code> 키 아래에 있습니다:</p>
+<pre><code>{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": ".claude/hooks/format.sh" }
+        ]
+      }
+    ]
+  }
+}</code></pre>
+<p>이는 모든 <code>Edit</code>, <code>Write</code>, <code>MultiEdit</code> 도구 호출 후 <code>.claude/hooks/format.sh</code>를 실행합니다 — 일반 사용 사례: 변경된 파일에 Prettier를 실행해 AI 출력이 항상 포맷팅되어 도착하도록.</p>
+<h4>사용 가능한 이벤트</h4>
+<ul>
+<li><code>PreToolUse</code> — 도구 실행 전 발동. 0이 아닌 종료로 호출을 차단할 수 있음. 가드레일에 적합.</li>
+<li><code>PostToolUse</code> — 도구 실행 후 발동. 정리나 포맷팅에 적합.</li>
+<li><code>UserPromptSubmit</code> — 사용자가 prompt 제출 시 발동. 컨텍스트 추가에 적합.</li>
+<li><code>Stop</code> — Claude가 응답을 마칠 때 발동. 알림에 적합.</li>
+<li><code>SessionStart</code> / <code>SessionEnd</code> — 캐시 워밍이나 텔레메트리 저장에 적합.</li>
+</ul>
+<h4>실제 예시: 편집된 파일 자동 포맷</h4>
+<pre><code>#!/usr/bin/env bash
+# .claude/hooks/format.sh
+# stdin에서 JSON 이벤트를 읽고, 편집된 파일 경로를 추출해 Prettier 실행.
+
+INPUT=$(cat)
+FILE=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
+
+if [[ -n "$FILE" && -f "$FILE" ]]; then
+  case "$FILE" in
+    *.ts|*.tsx|*.js|*.jsx|*.json|*.md)
+      npx prettier --write "$FILE" 2>/dev/null
+      ;;
+  esac
+fi</code></pre>
+<p>실행 권한 부여(<code>chmod +x</code>), 커밋, 이제 모든 팀원의 편집이 자동으로 포맷팅됩니다. "Claude가 트레일링 콤마 없이 작성했다" PR 코멘트는 더 이상 없습니다.</p>`
+    },
+    {
+      heading: "팀 전체에서 .claude/ 폴더 공유",
+      body: `<p>팀 공유 모델에는 한 가지 규칙이 있습니다: <strong>settings.json은 커밋, settings.local.json은 gitignore</strong>. 다른 모든 것이 여기서 흘러나옵니다.</p>
+<h4>무엇이 어디로</h4>
+<table>
+<tr><th>파일 / 디렉토리</th><th>Git에 커밋?</th><th>이유</th></tr>
+<tr><td><code>CLAUDE.md</code></td><td>예</td><td>프로젝트 지식은 팀의 것</td></tr>
+<tr><td><code>.claude/settings.json</code></td><td>예</td><td>권한, hooks, env — 팀 베이스라인</td></tr>
+<tr><td><code>.claude/settings.local.json</code></td><td>아니요(gitignore)</td><td>개인 선호, 머신별 경로</td></tr>
+<tr><td><code>.claude/commands/</code></td><td>예</td><td>슬래시 명령은 워크플로우 자산</td></tr>
+<tr><td><code>.claude/agents/</code></td><td>예</td><td>서브에이전트 정의는 팀 자산</td></tr>
+<tr><td><code>.claude/hooks/*.sh</code></td><td>예</td><td>Hooks는 머신 간 재현 가능해야 함</td></tr>
+</table>
+<h4>필수 .gitignore 항목</h4>
+<pre><code># 저장소 루트 .gitignore에:
+.claude/settings.local.json</code></pre>
+<p>이는 협상 불가입니다. <code>settings.local.json</code>은 개발자가 팀원에게 영향을 주지 않아야 하는 개인 조정을 두는 곳입니다: 더 관대한 allow 리스트, 다른 모델 선호, 머신별 도구 경로. 커밋하면 개인 설정이 새어나가고 변경마다 머지 충돌을 일으킵니다.</p>
+<h4>settings.local.json 오버라이드 패턴</h4>
+<p>Claude Code는 세션 시작 시 <code>settings.json</code>과 <code>settings.local.json</code>을 머지하며, 충돌 시 로컬 파일이 이깁니다. 의도: <strong>팀 베이스라인 + 개인 오버라이드</strong>. 일반 사용:</p>
+<pre><code>// .claude/settings.json (커밋)
+{
+  "permissions": {
+    "allow": ["Bash(npm run *)", "Read(./src/**)", "Edit(./src/**)"],
+    "deny": ["Bash(rm -rf *)"]
+  }
+}
+
+// .claude/settings.local.json (gitignored)
+{
+  "permissions": {
+    "allow": ["Bash(docker *)", "Bash(kubectl *)"]
+  }
+}</code></pre>
+<p>이제 팀 모두가 안전한 베이스라인을 받고, 실제로 Docker를 쓰는 개발자는 다른 사람에게 강요하지 않고 자기 머신에서 그 권한을 옵트인할 수 있습니다.</p>`
+    },
+    {
+      heading: "여덟 가지 흔한 실수와 수정 방법",
+      body: `<p>팀별 Claude Code 설정 감사에서 보는 패턴들. 각각 지금의 약간의 설정 통증을 나중의 많은 도구 호출 통증과 맞바꿉니다.</p>
+<h4>1. CLAUDE.md가 500줄짜리 도출 가능 정보 벽</h4>
+<p>수정: Claude가 package.json, tsconfig, README에서 읽을 수 있는 모든 것을 삭제. 신규 입사자가 첫날에 외우기를 바라는 것만 남기세요.</p>
+<h4>2. permissions 블록이 없는 settings.json</h4>
+<p>수정: 가장 자주 실행하는 5개 명령에 최소한 <code>permissions.allow</code> 리스트 추가. 손목이 고마워할 것입니다.</p>
+<h4>3. Git에 커밋된 settings.local.json</h4>
+<p>수정: <code>git rm --cached .claude/settings.local.json</code>, <code>.gitignore</code>에 추가, 팀에 개인 버전을 다시 만들라고 알리세요.</p>
+<h4>4. 셸 명령을 중복하는 슬래시 명령</h4>
+<p><code>/test</code>가 그저 <code>npm test</code>를 실행한다면 슬래시 명령이 필요 없습니다. 다단계 또는 판단을 포함하는 절차를 위해 남겨두세요.</p>
+<h4>5. 모든 도구에 접근하는 서브에이전트</h4>
+<p>목적을 무력화합니다. pr-reviewer 서브에이전트는 <code>tools</code> 리스트에 <code>Edit</code>이나 <code>Write</code>가 없어야 합니다 — 검토는 읽기 전용입니다.</p>
+<h4>6. Claude의 입력이나 출력을 조용히 변형하는 hook</h4>
+<p>Hook은 관찰하고 게이트해야지 다시 작성하지 말아야 합니다. 조용한 재작성은 Claude의 실제 행동을 사용자에게 숨겨, 신뢰와 디버깅 모두에 나쁩니다.</p>
+<h4>7. settings.json의 환경 변수에 실제 secrets</h4>
+<p>수정: 절대로. secrets 매니저 또는 사용자의 셸 환경을 사용. <code>settings.json</code>은 커밋됩니다.</p>
+<h4>8. CLAUDE.md 업데이트 프로세스 없음</h4>
+<p>가장 음흉한 것. 아무도 책임지지 않으면 CLAUDE.md는 몇 주 안에 낡습니다. 분기별 캘린더 알림을 추가하거나, 더 좋게는: 릴리스 체크리스트에 "review CLAUDE.md"를 포함하세요.</p>`
+    },
+    {
+      heading: "실제 팀 워크플로우 예시",
+      body: `<p>가상의 중간 규모 React + Node 팀의 완전한 <code>.claude/</code> 설정입니다. 6개 파일, 모두 커밋(settings.local.json 제외), 총 약 250줄.</p>
+<pre><code>repo/
+├── CLAUDE.md                              # 60줄 — 명령, 아키텍처, 관례
+├── .gitignore                             # 포함: .claude/settings.local.json
+└── .claude/
+    ├── settings.json                       # 40줄 — 권한, hooks, env
+    ├── commands/
+    │   ├── deploy.md                       # /deploy — 사전 체크 + 프로덕션 푸시
+    │   ├── new-component.md                # /new-component &lt;name&gt;
+    │   └── audit.md                        # /audit — 3개 서브에이전트 호출
+    ├── agents/
+    │   ├── security-reviewer.md            # 인증, 인젝션, secrets에 집중
+    │   ├── performance-reviewer.md         # 쿼리, 렌더링에 집중
+    │   └── docs-reviewer.md                # README와 인라인 docs에 집중
+    └── hooks/
+        ├── format.sh                       # PostToolUse: 편집된 파일에 Prettier
+        └── pre-push-check.sh               # PreToolUse: 체크 실패 시 git push 차단</code></pre>
+<p>시간 투입: 한 엔지니어가 초기 세트 작성에 약 반나절, 이후 패턴이 등장할 때마다 30분 단위 증분. 보상: 팀의 모든 개발자가 동일하게 규율 잡힌 Claude 설정을 자동으로 받습니다. 신규 입사자는 첫날부터 생산적입니다. 동일한 <code>/deploy</code>가 모든 머신에서 작동합니다.</p>
+<p>다른 CLI의 명령 시스템에 대해서는 <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet 명령 치트 시트</a>를, Claude Code v2.1.97이 buddy 기능을 종료했을 때 잃은 것에 대해서는 <a href="/">Buddy Checker</a>를 참조하세요.</p>`
+    },
+    {
+      heading: "자주 묻는 질문",
+      body: `<h4>Claude Code는 .claude 폴더를 어디서 찾나요?</h4>
+<p>현재 작업 디렉토리에서 위로 올라가며 <code>.claude/</code> 또는 <code>CLAUDE.md</code>를 찾습니다. 첫 매치가 이깁니다 — 즉, 프로젝트의 로컬 설정이 글로벌보다 우선합니다. <code>~/.claude/</code>에 크로스 프로젝트 기본값을 위한 글로벌 설정도 있습니다.</p>
+<h4>모든 프로젝트에 적용되는 글로벌 CLAUDE.md를 가질 수 있나요?</h4>
+<p>네 — <code>~/.claude/CLAUDE.md</code>에 두세요. 모든 Claude Code 세션에 로드됩니다. 프로젝트별 지침이 아닌 개인 선호(선호 응답 스타일, 일반 약어)에 사용하세요.</p>
+<h4>.claude/를 Git에 커밋해야 하나요?</h4>
+<p><code>settings.json</code>, 슬래시 명령, agents, hooks, CLAUDE.md는 예. <code>settings.local.json</code>은 아니오 — 그것은 <code>.gitignore</code>에 들어갑니다. 커밋된 파일은 팀 자산이 되고, 로컬 파일은 개인적입니다.</p>
+<h4>여러 프로젝트에서 권한을 복붙 없이 어떻게 공유하나요?</h4>
+<p>공통 권한을 <code>~/.claude/settings.json</code>(글로벌 설정)에 두세요. 프로젝트 수준 <code>.claude/settings.json</code>이 위에 프로젝트별 권한을 추가합니다. 둘은 세션 시작 시 머지되며 프로젝트 수준이 충돌 시 이깁니다.</p>
+<h4>슬래시 명령과 서브에이전트의 차이는?</h4>
+<p>슬래시 명령은 메인 세션에서 실행되며 컨텍스트 윈도우를 소비합니다. 서브에이전트는 격리된 컨텍스트를 가진 자체 세션에서 실행됩니다. 대화가 보이길 원하는 절차적 작업에는 슬래시 명령을, 결론만 원하는 탐색적 작업에는 서브에이전트를 사용하세요. 비교 표는 5절을 참조.</p>
+<h4>단일 명령에 대해 hooks를 비활성화할 수 있나요?</h4>
+<p>쉽지 않습니다 — hooks는 매 매칭 이벤트에서 발동됩니다. 우회는 hook 자체가 이벤트 페이로드에 따라 no-op하도록 똑똑하게 만드는 것입니다(예: 파일이 vendor 디렉토리면 Prettier 건너뜀). hook 스크립트에서 stdin의 JSON을 읽고 실행 여부를 결정하세요.</p>
+<h4>왜 내 커스텀 슬래시 명령이 나타나지 않나요?</h4>
+<p>세 가지 확인: (1) 파일이 <code>.claude/commands/</code>에 있고 <code>.md</code> 확장자, (2) 파일명에 공백이나 특수 문자 없음, (3) 추가 후 Claude Code 재시작(일부 버전이 세션 시작 시 명령 리스트를 캐싱).</p>
+<p><em>관련 글: <a href="/blog/codex-pet-hatch-command-cheat-sheet">Codex /pet과 /hatch 치트 시트</a> · <a href="/blog/claude-buddy-retired-migration-guide">Claude Buddy 종료 — 마이그레이션 가이드</a> · <a href="/">Claude Buddy 체커</a></em></p>`
+    }
+  ]
+};
+
 export const BLOG_ARTICLES: BlogArticle[] = [
+  {
+    slug: "claude-code-folder-complete-guide",
+    publishedAt: "2026-05-05",
+    readingTime: 14,
+    tags: ["claude-code", "configuration", "tutorial", "setup", "team-workflow", "settings", "hooks"],
+    discussionCategory: 'guides',
+    pillar: 'claude-code',
+    content: {
+      en: CLAUDE_FOLDER_EN,
+      zh: CLAUDE_FOLDER_ZH,
+      ko: CLAUDE_FOLDER_KO,
+    },
+  },
   {
     slug: "claude-buddy-retired-migration-guide",
     publishedAt: "2026-05-05",
