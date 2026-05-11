@@ -26,7 +26,7 @@ import {
   type BuddyResult,
 } from "@/lib/buddy-engine";
 import { useI18n } from "@/contexts/I18nContext";
-import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
 import PageSchema from "@/components/PageSchema";
@@ -109,11 +109,11 @@ export default function ComparePage() {
     return params.get("b") ?? "";
   });
 
-  useHreflangLinks(`${SITE_URL}/compare`);
-
-  useEffect(() => {
-    document.title = "Buddy Compare — claudebuddy.art";
-  }, []);
+  usePageMeta({
+    url: `${SITE_URL}/compare`,
+    title: "Buddy Compare — Claude Code Buddy Side-by-Side Comparison",
+    description: "Compare two Claude Code Buddies side-by-side. See stats, rarity, species, and cosmetics on a radar chart to find out which UUID rolls a stronger buddy.",
+  });
 
   // Compute buddies only when both UUIDs are filled
   const buddyA = uuidA.trim() ? rollBuddy(uuidA.trim()) : null;

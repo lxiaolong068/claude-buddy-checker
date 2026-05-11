@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { SITE_URL } from "@/lib/constants";
 import { Link, useLocation } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
@@ -153,18 +153,11 @@ export default function SpeciesIndex() {
     { key: "Enter", label: "Compare" },
   ];
 
-  // Update document title and meta description
-  useEffect(() => {
-    document.title = t("speciesIndex.title");
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute("content", t("speciesIndex.metaDesc"));
-    }
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute("href", `${SITE_URL}/species`);
-  }, [t, locale]);
-
-  useHreflangLinks(`${SITE_URL}/species`);
+  usePageMeta({
+    url: `${SITE_URL}/species`,
+    title: t("speciesIndex.title"),
+    description: t("speciesIndex.metaDesc"),
+  });
 
   const filtered = ALL_SPECIES_SLUGS.filter((s) => {
     const matchCat = filter === "all" || SPECIES_DATA[s].category === filter;

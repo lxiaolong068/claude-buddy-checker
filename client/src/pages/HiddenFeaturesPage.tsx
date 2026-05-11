@@ -7,7 +7,7 @@
 import { useEffect } from "react";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
-import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
 import PageSchema from "@/components/PageSchema";
@@ -205,13 +205,11 @@ const PAGE_DESC  = "Everything found in Claude Code's March 2026 source leak: BU
 export default function HiddenFeaturesPage() {
   const { locale } = useI18n();
 
-  useHreflangLinks(`${SITE_URL}/hidden-features`);
-
-  useEffect(() => {
-    document.title = PAGE_TITLE;
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", PAGE_DESC);
-  }, [locale]);
+  usePageMeta({
+    url: `${SITE_URL}/hidden-features`,
+    title: PAGE_TITLE,
+    description: PAGE_DESC,
+  });
 
   const removedCount  = FEATURES.filter(f => f.status === "removed").length;
   const internalCount = FEATURES.filter(f => f.status === "internal").length;

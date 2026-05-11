@@ -6,7 +6,7 @@
  */
 
 import { useState, useRef, useCallback, useEffect, useMemo } from "react";
-import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { SITE_URL } from "@/lib/constants";
 import { Link } from "wouter";
 import { rollBuddy, type BuddyResult, SPECIES } from "@/lib/buddy-engine";
@@ -92,16 +92,11 @@ export default function Home() {
     }
   }, []);
 
-  // Update document title and meta description when locale changes
-  useEffect(() => {
-    document.title = t("meta.title");
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) {
-      metaDesc.setAttribute("content", t("meta.description"));
-    }
-  }, [locale, t]);
-
-  useHreflangLinks(`${SITE_URL}/`);
+  usePageMeta({
+    url: `${SITE_URL}/`,
+    title: t("meta.title"),
+    description: t("meta.description"),
+  });
 
   const handleCheck = useCallback(() => {
     const trimmed = uuid.trim();

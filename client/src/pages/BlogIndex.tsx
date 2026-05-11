@@ -6,7 +6,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { SITE_URL } from "@/lib/constants";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
@@ -370,15 +370,11 @@ export default function BlogIndex() {
     }
   }, [searchedArticles, sortMode, locale]);
 
-  useEffect(() => {
-    document.title = t("blog.indexTitle");
-    const metaDesc = document.querySelector('meta[name="description"]');
-    if (metaDesc) metaDesc.setAttribute("content", t("blog.indexMetaDesc"));
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute("href", `${SITE_URL}/blog`);
-  }, [locale, t]);
-
-  useHreflangLinks(`${SITE_URL}/blog`);
+  usePageMeta({
+    url: `${SITE_URL}/blog`,
+    title: t("blog.indexTitle"),
+    description: t("blog.indexMetaDesc"),
+  });
 
   const handleTagClick = (tag: string) => {
     setActiveTag(activeTag === tag ? null : tag);

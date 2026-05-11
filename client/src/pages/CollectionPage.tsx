@@ -9,7 +9,7 @@ import {
 } from "@/lib/buddy-engine";
 import { getCollection, type CollectionEntry } from "@/lib/storage";
 import { useI18n } from "@/contexts/I18nContext";
-import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
 import PageSchema from "@/components/PageSchema";
@@ -67,13 +67,11 @@ export default function CollectionPage() {
   const { t, locale } = useI18n();
   const [entries, setEntries] = useState<CollectionEntry[]>([]);
 
-  useHreflangLinks(`${SITE_URL}/collection`);
-
-  useEffect(() => {
-    document.title = t("collection.pageTitle");
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", t("collection.metaDesc"));
-  }, [locale, t]);
+  usePageMeta({
+    url: `${SITE_URL}/collection`,
+    title: t("collection.pageTitle"),
+    description: t("collection.metaDesc"),
+  });
 
   const loadCollection = useCallback(() => {
     setEntries(getCollection().entries);

@@ -13,7 +13,7 @@ import {
   savePowerupProgress,
 } from "@/lib/storage";
 import { useI18n } from "@/contexts/I18nContext";
-import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
 import PageSchema from "@/components/PageSchema";
@@ -164,11 +164,11 @@ export default function PowerupTrackerPage() {
   const [startedAt, setStartedAt]       = useState<string | null>(null);
   const [timestamps, setTimestamps]     = useState<Record<string, string>>({});
 
-  useHreflangLinks(`${SITE_URL}/powerup-tracker`);
-
-  useEffect(() => {
-    document.title = "/powerup Tracker — claudebuddy.art";
-  }, []);
+  usePageMeta({
+    url: `${SITE_URL}/powerup-tracker`,
+    title: "/powerup Tracker — Track Your Claude Code Learning Progress",
+    description: "Track your /powerup lesson completion in Claude Code. Streak counter, timestamps, and completion progress for all 21 lessons — stored locally in your browser.",
+  });
 
   const loadProgress = useCallback(() => {
     const progress = getPowerupProgress();

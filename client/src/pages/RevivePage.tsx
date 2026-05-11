@@ -7,7 +7,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { Link } from "wouter";
 import { useI18n } from "@/contexts/I18nContext";
-import { useHreflangLinks } from "@/hooks/useHreflangLinks";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
 import PageSchema from "@/components/PageSchema";
@@ -131,13 +131,11 @@ export default function RevivePage() {
   const { t, locale } = useI18n();
   const [copied, setCopied] = useState<string | null>(null);
 
-  useHreflangLinks(`${SITE_URL}/revive`);
-
-  useEffect(() => {
-    document.title = t("revive.pageTitle");
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) meta.setAttribute("content", t("revive.metaDesc"));
-  }, [locale, t]);
+  usePageMeta({
+    url: `${SITE_URL}/revive`,
+    title: t("revive.pageTitle"),
+    description: t("revive.metaDesc"),
+  });
 
   const handleCopy = useCallback((text: string, id: string) => {
     navigator.clipboard.writeText(text).catch(() => {
