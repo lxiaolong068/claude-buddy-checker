@@ -119,7 +119,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 function SectionTitle({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <span className="text-xs font-bold text-crt-green tracking-widest font-mono">{label}</span>
+      <h2 className="text-xs font-bold text-crt-green tracking-widest font-mono">{label}</h2>
       <div className="flex-1 h-px bg-crt-green/15" />
     </div>
   );

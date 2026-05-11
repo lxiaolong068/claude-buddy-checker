@@ -161,9 +161,9 @@ function FeatureCard({ feature }: { feature: Feature }) {
       <div className="flex items-start justify-between gap-3 px-5 py-4 border-b border-border/20">
         <div className="min-w-0">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className={`text-sm font-bold tracking-widest font-mono ${cfg.color}`}>
+            <h3 className={`text-sm font-bold tracking-widest font-mono ${cfg.color}`}>
               {feature.codename}
-            </span>
+            </h3>
             <StatusBadge status={feature.status} />
           </div>
           <p className="text-[11px] text-muted-foreground">{feature.tagline}</p>
@@ -264,7 +264,7 @@ export default function HiddenFeaturesPage() {
 
         {/* ── Timeline ── */}
         <div className="mb-8 border border-border/30 bg-card/10 px-4 py-3">
-          <p className="text-[9px] uppercase tracking-widest text-crt-green/50 mb-3">// TIMELINE</p>
+          <h2 className="text-[9px] uppercase tracking-widest text-crt-green/50 mb-3">// TIMELINE</h2>
           <div className="space-y-2">
             {[
               { date: "2026-03-31", event: "Source leak via npm — 512K lines exposed for ~6 hours", color: "text-crt-amber" },
@@ -284,7 +284,7 @@ export default function HiddenFeaturesPage() {
         {/* ── Feature cards ── */}
         <div className="mb-8">
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-xs font-bold text-crt-green tracking-widest">// FEATURES ({FEATURES.length})</span>
+            <h2 className="text-xs font-bold text-crt-green tracking-widest">// FEATURES ({FEATURES.length})</h2>
             <div className="flex-1 h-px bg-crt-green/15" />
           </div>
           <div className="space-y-4">
@@ -294,7 +294,7 @@ export default function HiddenFeaturesPage() {
 
         {/* ── 44 flags note ── */}
         <div className="mb-8 border border-border/30 bg-card/10 px-4 py-4">
-          <p className="text-[9px] uppercase tracking-widest text-crt-green/50 mb-2">// 44 FEATURE FLAGS</p>
+          <h2 className="text-[9px] uppercase tracking-widest text-crt-green/50 mb-2">// 44 FEATURE FLAGS</h2>
           <p className="text-xs text-muted-foreground leading-relaxed mb-3">
             The leaked source contained 44 internal feature flags in <code className="text-crt-green/60">flags/feature-flags.ts</code>.
             {" "}Most are single-word identifiers with no implementation details visible (obfuscated or behind separate flag-server calls).
@@ -318,7 +318,7 @@ export default function HiddenFeaturesPage() {
 
         {/* ── CTA: Buddy ── */}
         <div className="mb-8 border border-crt-green/30 bg-crt-green/5 px-5 py-4">
-          <p className="text-[9px] uppercase tracking-widest text-crt-green/50 mb-2">// BUDDY WAS REAL — YOURS STILL EXISTS</p>
+          <h2 className="text-[9px] uppercase tracking-widest text-crt-green/50 mb-2">// BUDDY WAS REAL — YOURS STILL EXISTS</h2>
           <p className="text-xs text-muted-foreground leading-relaxed mb-3">
             BUDDY was the only leaked feature that shipped publicly. Even though Anthropic removed it in v2.1.97,
             the deterministic algorithm survives. Every UUID still maps to a unique companion.
@@ -341,7 +341,7 @@ export default function HiddenFeaturesPage() {
 
         {/* ── Sources ── */}
         <div className="mb-8 border border-border/20 px-4 py-3 text-[10px] text-muted-foreground/50">
-          <p className="uppercase tracking-widest mb-2">// SOURCES</p>
+          <h2 className="uppercase tracking-widest mb-2">// SOURCES</h2>
           <div className="space-y-1">
             {[
               ["VentureBeat", "https://venturebeat.com/technology/claude-codes-source-code-appears-to-have-leaked-heres-what-we-know"],
