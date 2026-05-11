@@ -4077,8 +4077,8 @@ const CODEX_VS_BUDDY_KO: ArticleContent = {
 // === Codex /pet & /hatch Cheat Sheet ===
 const CODEX_CHEATSHEET_EN: ArticleContent = {
   title: "Codex /pet and /hatch Cheat Sheet — Every Command, Built-in, and Status Signal (2026)",
-  metaTitle: "Codex /pet and /hatch Command Cheat Sheet (2026)",
-  metaDescription: "Complete reference for Codex Pets in 2026: every command, all 8 built-in pets, status signal meanings, and how to install Petdex companions in one line.",
+  metaTitle: "Codex Pets Cheat Sheet — All 8 Built-ins, Petdex & /pet /hatch (2026)",
+  metaDescription: "Codex Pets reference: all 8 built-in pets, the Petdex one-line install, every /pet and /hatch command, and what each status signal means. Updated 2026.",
   excerpt: "A printable reference for everything Codex Pets can do. Commands, built-ins, status signals, and the Petdex install path — all on one page.",
   sections: [
     {
@@ -4168,8 +4168,8 @@ const CODEX_CHEATSHEET_EN: ArticleContent = {
 
 const CODEX_CHEATSHEET_ZH: ArticleContent = {
   title: "Codex /pet 与 /hatch 速查表——所有命令、内置宠物与状态信号 (2026)",
-  metaTitle: "Codex /pet 与 /hatch 命令速查表 (2026)",
-  metaDescription: "2026 年 Codex Pets 完整参考：每个命令、全部 8 种内置宠物、状态信号含义，以及 Petdex 一行安装命令。",
+  metaTitle: "Codex Pets 速查表 — 8 种内置宠物、Petdex 安装、/pet 与 /hatch (2026)",
+  metaDescription: "Codex Pets 参考手册：8 种内置宠物、Petdex 一行安装命令、/pet 与 /hatch 全部命令，以及每个状态信号的含义。2026 年更新版。",
   excerpt: "Codex Pets 全部能做的事的可打印参考。命令、内置、状态信号，以及 Petdex 安装路径——一页之内。",
   sections: [
     {
@@ -4259,8 +4259,8 @@ const CODEX_CHEATSHEET_ZH: ArticleContent = {
 
 const CODEX_CHEATSHEET_KO: ArticleContent = {
   title: "Codex /pet과 /hatch 치트 시트 — 모든 명령, 빌트인, 상태 시그널 (2026)",
-  metaTitle: "Codex /pet과 /hatch 명령어 치트 시트 (2026)",
-  metaDescription: "2026년 Codex Pets 완전 참조: 모든 명령, 8개 빌트인 펫, 상태 시그널 의미, Petdex 한 줄 설치 방법.",
+  metaTitle: "Codex Pets 치트 시트 — 8개 빌트인, Petdex 설치, /pet과 /hatch (2026)",
+  metaDescription: "Codex Pets 참조: 8개 빌트인 펫, Petdex 한 줄 설치, /pet과 /hatch 모든 명령어, 그리고 각 상태 시그널의 의미. 2026 업데이트.",
   excerpt: "Codex Pets가 할 수 있는 모든 것의 인쇄 가능한 참조. 명령, 빌트인, 상태 시그널, Petdex 설치 경로 — 한 페이지에.",
   sections: [
     {
