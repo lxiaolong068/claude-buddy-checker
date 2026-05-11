@@ -64,10 +64,16 @@ function MiniSprite({ entry }: { entry: CollectionEntry }) {
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function CollectionPage() {
-  const { t } = useI18n();
+  const { t, locale } = useI18n();
   const [entries, setEntries] = useState<CollectionEntry[]>([]);
 
   useHreflangLinks(`${SITE_URL}/collection`);
+
+  useEffect(() => {
+    document.title = t("collection.pageTitle");
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.setAttribute("content", t("collection.metaDesc"));
+  }, [locale, t]);
 
   const loadCollection = useCallback(() => {
     setEntries(getCollection().entries);

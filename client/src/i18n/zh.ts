@@ -468,6 +468,8 @@ export const zh: typeof en = {
     openSource: "开源仓库 →",
   },
   collection: {
+    pageTitle: "我的 Claude Buddy 收藏 — 追踪你发现的每个物种",
+    metaDesc: "保存并追踪你发现的每一只 Claude Code Buddy：物种图鉴进度、稀有度分布、闪光发现，全部本地存储在浏览器中的专属收藏夹。",
     title: "我的收藏",
     subtitle: "追踪你的 UUID 查询揭示的物种",
     speciesProgress: "物种图鉴",

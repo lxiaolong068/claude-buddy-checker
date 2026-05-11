@@ -468,6 +468,8 @@ export const ja: typeof en = {
     openSource: "オープンソースリポジトリ →",
   },
   collection: {
+    pageTitle: "My Claude Buddy Collection — 発見した種族をすべて記録",
+    metaDesc: "発見したすべての Claude Code Buddy を保存・追跡。種族の進捗、レアリティ分布、シャイニーの発見まで、ブラウザにローカル保存される個人コレクション。",
     title: "マイコレクション",
     subtitle: "UUID クエリで発見した種族を管理",
     speciesProgress: "種族グリッド",

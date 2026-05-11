@@ -468,6 +468,8 @@ export const ko: typeof en = {
     openSource: "오픈소스 저장소 →",
   },
   collection: {
+    pageTitle: "내 Claude Buddy 컬렉션 — 발견한 모든 종족 추적",
+    metaDesc: "발견한 모든 Claude Code Buddy를 저장하고 추적하세요. 종족 진행률, 희귀도 분포, 반짝이 발견까지 — 브라우저에 로컬 저장되는 나만의 컬렉션.",
     title: "내 컬렉션",
     subtitle: "UUID 조회로 발견한 종들을 추적하세요",
     speciesProgress: "종 도감",

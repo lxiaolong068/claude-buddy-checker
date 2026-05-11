@@ -466,6 +466,8 @@ export const en = {
     openSource: "Open-source repo →",
   },
   collection: {
+    pageTitle: "My Claude Buddy Collection — Track Every Species You've Discovered",
+    metaDesc: "Save and track every Claude Code Buddy you've discovered. Species progress, rarity distribution, shiny finds — your personal collection, stored locally in your browser.",
     title: "MY COLLECTION",
     subtitle: "Track the species your UUID queries have revealed",
     speciesProgress: "SPECIES GRID",
