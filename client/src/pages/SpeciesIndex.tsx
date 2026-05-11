@@ -14,7 +14,7 @@ import { BODIES, type Species } from "@/lib/buddy-engine";
 import ComparePanel from "@/components/ComparePanel";
 import DailySpecies from "@/components/DailySpecies";
 import SiteHeader from "@/components/SiteHeader";
-import PageSchema from "@/components/PageSchema";
+import SpeciesListSchema from "@/components/SpeciesListSchema";
 import { useKeyboardShortcuts } from "@/hooks/useKeyboardShortcuts";
 import KeyboardShortcutsHelp from "@/components/KeyboardShortcutsHelp";
 
@@ -172,14 +172,9 @@ export default function SpeciesIndex() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-[#33ff33] font-mono relative overflow-hidden">
-      <PageSchema
-        pageUrl={`${SITE_URL}/species`}
-        name={t("speciesIndex.title")}
-        description={t("speciesIndex.metaDesc")}
-        breadcrumbs={[
-          { name: "Home", path: "" },
-          { name: "All Species", path: "/species" },
-        ]}
+      <SpeciesListSchema
+        pageName={t("speciesIndex.title")}
+        pageDescription={t("speciesIndex.metaDesc")}
       />
       {/* Scanline overlay */}
       <div className="pointer-events-none fixed inset-0 z-50 bg-[repeating-linear-gradient(0deg,rgba(0,0,0,0.15)_0px,rgba(0,0,0,0.15)_1px,transparent_1px,transparent_2px)]" />
