@@ -65,6 +65,19 @@ async function makePuppeteerAdapter() {
     async newPage() {
       const page = await browser.newPage();
       await page.setUserAgent(USER_AGENT);
+      // Block analytics so build-time snapshots never hit GA4.
+      // The index.html hostname guard already skips on 127.0.0.1, this is belt-and-braces.
+      await page.setRequestInterception(true);
+      page.on("request", (req) => {
+        const u = req.url();
+        if (
+          u.includes("googletagmanager.com") ||
+          u.includes("google-analytics.com")
+        ) {
+          return req.abort();
+        }
+        return req.continue();
+      });
       return page;
     },
     async close() {
@@ -80,6 +93,12 @@ async function makePlaywrightAdapter() {
     userAgent: USER_AGENT,
     viewport: VIEWPORT,
   });
+  // Block analytics so build-time snapshots never hit GA4.
+  // The index.html hostname guard already skips on 127.0.0.1, this is belt-and-braces.
+  await context.route(
+    /googletagmanager\.com|google-analytics\.com/,
+    (route) => route.abort()
+  );
   return {
     backend: "playwright",
     waitUntil: "networkidle",

@@ -79,13 +79,24 @@
 
     <!-- JSON-LD Structured Data is dynamically injected by React components (WebAppSchema, ArticleSchema, FAQSchema) -->
 
-    <!-- Google Analytics 4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-J48MHW03F3"></script>
+    <!-- Google Analytics 4 — production-host only.
+         Skip on 127.0.0.1 / localhost (Vite dev, prerender's static server,
+         Vercel preview URLs) so build-time Playwright/Puppeteer page loads
+         don't pollute the GA4 property with hundreds of synthetic page_views. -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-J48MHW03F3');
+      (function () {
+        var h = location.hostname;
+        if (h !== 'www.claudebuddy.art' && h !== 'claudebuddy.art') return;
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-J48MHW03F3';
+        document.head.appendChild(s);
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        gtag('config', 'G-J48MHW03F3');
+      })();
     </script>
   </head>
 
