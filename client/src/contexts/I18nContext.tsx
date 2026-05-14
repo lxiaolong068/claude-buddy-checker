@@ -9,6 +9,7 @@ import { en } from "@/i18n/en";
 import { zh } from "@/i18n/zh";
 import { ko } from "@/i18n/ko";
 import { ja } from "@/i18n/ja";
+import { trackEvent } from "@/lib/analytics";
 
 export type Locale = "en" | "zh" | "ko" | "ja";
 
@@ -70,7 +71,12 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(detectLocale);
 
   const setLocale = useCallback((newLocale: Locale) => {
-    setLocaleState(newLocale);
+    setLocaleState((prev) => {
+      if (prev !== newLocale) {
+        trackEvent("locale_switch", { from: prev, to: newLocale });
+      }
+      return newLocale;
+    });
     localStorage.setItem("buddy-locale", newLocale);
     document.documentElement.lang = newLocale === "zh" ? "zh-CN" : newLocale;
   }, []);

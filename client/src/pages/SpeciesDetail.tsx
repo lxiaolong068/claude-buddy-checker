@@ -10,6 +10,7 @@ import { SITE_URL } from "@/lib/constants";
 import { useEffect, useState, useMemo, useCallback } from "react";
 import { useI18n } from "@/contexts/I18nContext";
 import { SPECIES_DATA, ALL_SPECIES_SLUGS, type SpeciesInfo } from "@/lib/species-data";
+import { trackEvent } from "@/lib/analytics";
 import {
   BODIES,
   RARITIES,
@@ -99,7 +100,8 @@ export default function SpeciesDetail() {
 
   useEffect(() => {
     setMounted(true);
-  }, []);
+    if (info) trackEvent("species_view", { species: slug });
+  }, [slug, info]);
 
   // Update document title and meta for SEO
   useEffect(() => {
@@ -153,6 +155,7 @@ export default function SpeciesDetail() {
 
   const handleShare = useCallback(() => {
     if (!info || !demoBuddy) return;
+    trackEvent("buddy_share", { source: "species_page", species: slug });
     const data: ShareCardSpeciesData = {
       type: "species",
       species: slug,

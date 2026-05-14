@@ -14,6 +14,7 @@ import {
 } from "@/lib/storage";
 import { useI18n } from "@/contexts/I18nContext";
 import { usePageMeta } from "@/hooks/usePageMeta";
+import { trackEvent } from "@/lib/analytics";
 import { SITE_URL } from "@/lib/constants";
 import SiteHeader from "@/components/SiteHeader";
 import PageSchema from "@/components/PageSchema";
@@ -190,6 +191,12 @@ export default function PowerupTrackerPage() {
         uncompletePowerupLesson(id);
       } else {
         completePowerupLesson(id);
+        const lesson = LESSONS.find((l) => l.id === id);
+        trackEvent("powerup_complete", {
+          lesson_id: id,
+          xp: lesson?.xp ?? 0,
+          chapter: lesson?.chapter,
+        });
       }
       loadProgress();
     },

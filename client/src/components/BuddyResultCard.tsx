@@ -7,6 +7,7 @@
 import { useState, useCallback } from "react";
 import { type BuddyResult, RARITY_STARS, SPECIES_DISPLAY, STAT_NAMES } from "@/lib/buddy-engine";
 import { useI18n } from "@/contexts/I18nContext";
+import { trackEvent } from "@/lib/analytics";
 import type { ShareCardBuddyData } from "@/lib/share-card-renderer";
 import BuddySprite from "./BuddySprite";
 import StatBar from "./StatBar";
@@ -40,6 +41,11 @@ export default function BuddyResultCard({ buddy }: BuddyResultCardProps) {
   const rarityDisplayName = t(`rarity.${buddy.rarity}`);
 
   const handleShare = useCallback(() => {
+    trackEvent("buddy_share", {
+      source: "result_card",
+      species: buddy.species,
+      rarity: buddy.rarity,
+    });
     const data: ShareCardBuddyData = {
       type: "buddy",
       buddy,

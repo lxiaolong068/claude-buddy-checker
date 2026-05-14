@@ -10,6 +10,7 @@ import { usePageMeta } from "@/hooks/usePageMeta";
 import { SITE_URL } from "@/lib/constants";
 import { Link } from "wouter";
 import { rollBuddy, type BuddyResult, SPECIES } from "@/lib/buddy-engine";
+import { trackEvent } from "@/lib/analytics";
 import { getAllArticles, getArticleContent } from "@/lib/blog-data";
 import BuddyResultCard from "@/components/BuddyResultCard";
 import TypewriterText from "@/components/TypewriterText";
@@ -117,6 +118,12 @@ export default function Home() {
       recordQuery(trimmed, result.species, result.rarity);
       addToCollection({ uuid: trimmed, species: result.species, rarity: result.rarity, shiny: result.shiny, hat: result.hat, eye: result.eye, stats: result.stats, discoveredAt: new Date().toISOString() });
       window.dispatchEvent(new CustomEvent("buddy-query"));
+      trackEvent("buddy_check", {
+        method: "uuid",
+        species: result.species,
+        rarity: result.rarity,
+        shiny: result.shiny,
+      });
       setTimeout(() => {
         resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
@@ -137,6 +144,12 @@ export default function Home() {
       recordQuery(randomUuid, result.species, result.rarity);
       addToCollection({ uuid: randomUuid, species: result.species, rarity: result.rarity, shiny: result.shiny, hat: result.hat, eye: result.eye, stats: result.stats, discoveredAt: new Date().toISOString() });
       window.dispatchEvent(new CustomEvent("buddy-query"));
+      trackEvent("buddy_check", {
+        method: "random",
+        species: result.species,
+        rarity: result.rarity,
+        shiny: result.shiny,
+      });
       setTimeout(() => {
         resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
       }, 100);
